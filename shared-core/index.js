@@ -429,6 +429,142 @@ class NeuroLintCore {
   }
 
   /**
+   * Apply fixes to code using the 7-layer transformation system
+   * Delegates to fix-master.js executeLayers for proper orchestration with:
+   * - Layer dependency ordering
+   * - Rollback capabilities (for CLI platform)
+   * - Unified error handling
+   * - Validation between layers
+   * 
+   * For VS Code: Uses dryRun=true since VS Code manages its own undo/redo stack
+   * For CLI: Supports full backup/rollback via fix-master BackupManager
+   */
+  async applyFixes(code, issues, options = {}) {
+    if (!this.initialized) {
+      await this.initialize(options);
+    }
+
+    const startTime = Date.now();
+    
+    try {
+      const {
+        layers = [1, 2, 3, 4, 5, 6, 7],
+        filename = 'unknown',
+        verbose = false,
+        platform = 'cli',
+        strictTs = false,
+        apiRoutes = false,
+        ecommerce = false,
+        nextjs155 = false,
+        noDeps = false
+      } = options;
+
+      // For VS Code platform, always use dryRun=true since VS Code manages undo/redo
+      // For CLI platform, use the provided dryRun option for full backup support
+      const dryRun = platform === 'vscode' ? true : (options.dryRun || false);
+
+      // Track fix attempt
+      this.analytics.trackCommand('applyFixes', {
+        platform,
+        layers,
+        issueCount: issues?.length || 0
+      });
+
+      // Delegate to fix-master.js executeLayers for proper orchestration
+      // This ensures same layer ordering, dependency resolution, and validation as CLI
+      const fixMaster = require('../fix-master');
+      
+      const result = await fixMaster.executeLayers(code, layers, {
+        dryRun,
+        verbose,
+        filePath: filename,
+        strictTs,
+        apiRoutes,
+        ecommerce,
+        nextjs155,
+        noDeps
+      });
+
+      // Convert fix-master result format to shared-core format
+      const appliedFixes = [];
+      let totalChanges = 0;
+      
+      if (result.results && Array.isArray(result.results)) {
+        for (const layerResult of result.results) {
+          // Count changes from successful layers
+          const changes = layerResult.changes || layerResult.changeCount || 0;
+          if (layerResult.success && changes > 0) {
+            totalChanges += typeof changes === 'number' ? changes : changes.length || 0;
+            
+            if (Array.isArray(layerResult.changes)) {
+              appliedFixes.push(...layerResult.changes.map(change => ({
+                ...change,
+                layer: layerResult.layer
+              })));
+            } else {
+              appliedFixes.push({
+                layer: layerResult.layer,
+                description: `Layer ${layerResult.layer} applied ${changes} fix(es)`,
+                location: { line: 1, column: 1 }
+              });
+            }
+          }
+        }
+      }
+
+      // Derive success from fix-master's result (successfulLayers > 0)
+      const success = result.success === true || (result.successfulLayers && result.successfulLayers > 0);
+
+      // Track successful fix
+      this.analytics.trackCommand('applyFixes', {
+        platform,
+        success,
+        fixCount: totalChanges,
+        executionTime: Date.now() - startTime
+      });
+
+      // Collect errors from failed layers
+      const errors = result.results?.filter(r => !r.success && r.error).map(r => ({
+        layer: r.layer,
+        error: r.error
+      }));
+
+      return {
+        success,
+        code: result.finalCode || code,
+        originalCode: code,
+        appliedFixes,
+        totalFixes: totalChanges,
+        successfulLayers: result.successfulLayers || 0,
+        errors: errors && errors.length > 0 ? errors : undefined,
+        metadata: {
+          platform,
+          layers: layers.sort((a, b) => a - b),
+          executionTime: Date.now() - startTime,
+          dryRun
+        }
+      };
+
+    } catch (error) {
+      // Track error
+      this.analytics.trackCommand('applyFixes', {
+        platform: options.platform || 'cli',
+        success: false,
+        error: error.message,
+        executionTime: Date.now() - startTime
+      });
+
+      return {
+        success: false,
+        code,
+        originalCode: code,
+        appliedFixes: [],
+        error: error.message
+      };
+    }
+  }
+
+  /**
    * Shutdown and cleanup
    */
   async shutdown() {
@@ -474,6 +610,7 @@ module.exports = {
   
   // Convenience methods
   analyze: (code, options) => neurolintCore.analyze(code, options),
+  applyFixes: (code, issues, options) => neurolintCore.applyFixes(code, issues, options),
   analyzeAndRecommend: (code, filePath) => SmartLayerSelector.analyzeAndRecommend(code, filePath),
   getConfig: (key) => neurolintCore.getConfig(key),
   setConfig: (key, value) => neurolintCore.setConfig(key, value),

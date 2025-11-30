@@ -656,7 +656,7 @@ async function login(): Promise<void> {
     vscode.window.showInformationMessage(
       "Visit neurolint.dev to create an account and get your API key",
       "Open Website"
-    ).then(action => {
+    ).then((action: string | undefined) => {
       if (action === "Open Website") {
         vscode.env.openExternal(vscode.Uri.parse("https://app.neurolint.dev/dashboard"));
       }

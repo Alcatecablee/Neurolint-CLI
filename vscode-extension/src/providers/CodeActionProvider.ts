@@ -116,11 +116,10 @@ export class NeuroLintCodeActionProvider implements vscode.CodeActionProvider {
    */
   private createEmptyStateAction(): vscode.CodeAction {
     const action = new vscode.CodeAction(
-      'NeuroLint: No issues found',
+      'NeuroLint: No issues found - code analysis completed',
       vscode.CodeActionKind.Empty
     );
     action.isPreferred = false;
-    action.detail = 'Code analysis completed - no issues detected';
     return action;
   }
 
@@ -252,10 +251,9 @@ export class NeuroLintCodeActionProvider implements vscode.CodeActionProvider {
         for (const issue of analysisResult.issues) {
           try {
             const action = new vscode.CodeAction(
-              `NeuroLint: Fix ${issue.description}`,
+              `NeuroLint: Fix ${issue.description} (Layer ${issue.layer})`,
               vscode.CodeActionKind.QuickFix,
             );
-            action.detail = `Layer ${issue.layer}: ${issue.message}`;
             action.isPreferred = true;
             
             // Add command to apply the fix
