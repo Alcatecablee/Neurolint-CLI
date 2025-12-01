@@ -1966,14 +1966,14 @@ const sidebarItems = [
                       Auto-Detect
                     </button>
                     <button
-                      className={`control-btn ${dashboardState.selectedLayers.length === 6 ? "active" : ""}`}
+                      className={`control-btn ${dashboardState.selectedLayers.length === 7 ? "active" : ""}`}
                       onClick={() =>
                         setDashboardState((prev) => ({
                           ...prev,
-                          selectedLayers: [1, 2, 3, 4, 5, 6],
+                          selectedLayers: [1, 2, 3, 4, 5, 6, 7],
                         }))
                       }
-                      aria-pressed={dashboardState.selectedLayers.length === 6}
+                      aria-pressed={dashboardState.selectedLayers.length === 7}
                       aria-describedby="all-layers-description"
                     >
                       All Layers
@@ -1983,7 +1983,7 @@ const sidebarItems = [
                     Let NeuroLint automatically select appropriate layers
                   </div>
                   <div id="all-layers-description" className="sr-only">
-                    Run all 6 layers of analysis and fixes
+                    Run all 7 layers of analysis and fixes
                   </div>
                                     <div
                     className="layer-checkboxes"

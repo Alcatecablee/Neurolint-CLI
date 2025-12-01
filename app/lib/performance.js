@@ -1137,12 +1137,12 @@ class PerformanceOptimizer {
     ];
 
     const warmingPromises = allPatterns.map(async (pattern, index) => {
-      const cacheKey = this.generateCacheKey(pattern, [1, 2, 3, 4, 5, 6]);
+      const cacheKey = this.generateCacheKey(pattern, [1, 2, 3, 4, 5, 6, 7]);
 
       if (!this.cache.has(cacheKey)) {
         try {
           // Pre-process pattern to warm the cache
-          const result = await this.executeOptimized(pattern, [1, 2, 3, 4, 5, 6], {
+          const result = await this.executeOptimized(pattern, [1, 2, 3, 4, 5, 6, 7], {
             useCache: true,
             skipUnnecessary: true,
             warmingMode: true

@@ -166,7 +166,7 @@ export default function CollaborativeDebugger({
    */
   const quickAnalysis = {
     "Quick Scan": () => runAnalysis([1, 2, 3], true),
-    "Full Analysis": () => runAnalysis([1, 2, 3, 4, 5, 6], true),
+    "Full Analysis": () => runAnalysis([1, 2, 3, 4, 5, 6, 7], true),
     "Component Focus": () => runAnalysis([3, 6], true),
     "Next.js Focus": () => runAnalysis([4, 5], true),
     "Auto-Detect": () => runAnalysis(undefined, true),
@@ -470,7 +470,7 @@ export default function CollaborativeDebugger({
 
             <div style={{ display: "flex", gap: "0.5rem" }}>
               <button
-                onClick={() => setSelectedLayers([1, 2, 3, 4, 5, 6])}
+                onClick={() => setSelectedLayers([1, 2, 3, 4, 5, 6, 7])}
                 style={{
                   padding: "0.5rem 0.75rem",
                   background: "rgba(255, 255, 255, 0.05)",

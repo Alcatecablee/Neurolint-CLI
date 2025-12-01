@@ -598,7 +598,7 @@ export default function CollaboratePage() {
   // Quick analysis presets
   const quickAnalysis = {
     "Quick Scan": () => runAnalysis([1, 2, 3], true),
-    "Full Analysis": () => runAnalysis([1, 2, 3, 4, 5, 6], true),
+    "Full Analysis": () => runAnalysis([1, 2, 3, 4, 5, 6, 7], true),
     "Component Focus": () => runAnalysis([3, 6], true),
     "Next.js Focus": () => runAnalysis([4, 5], true),
     "Auto-Detect": () => runAnalysis(undefined, true),

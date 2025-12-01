@@ -707,7 +707,7 @@ export default function PricingPage() {
                         flexWrap: "wrap",
                       }}
                     >
-                      {[1, 2, 3, 4, 5, 6].map((layer) => (
+                      {[1, 2, 3, 4, 5, 6, 7].map((layer) => (
                         <div
                           key={layer}
                           style={{

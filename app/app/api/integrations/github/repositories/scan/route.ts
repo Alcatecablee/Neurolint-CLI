@@ -704,14 +704,14 @@ function getPlanLimits(plan: string) {
     },
     enterprise: {
       maxFilesPerScan: -1,
-      availableLayers: [1, 2, 3, 4, 5, 6], // Enterprise: All layers, custom rules
+      availableLayers: [1, 2, 3, 4, 5, 6, 7], // Enterprise: All layers, custom rules
       monthlyFixLimit: -1, // Unlimited
       costPerFix: 0.005,
       description: "Unlimited fixes, all layers, custom rules"
     },
     premium: {
       maxFilesPerScan: -1,
-      availableLayers: [1, 2, 3, 4, 5, 6], // Premium: Unlimited, white-glove support
+      availableLayers: [1, 2, 3, 4, 5, 6, 7], // Premium: Unlimited, white-glove support
       monthlyFixLimit: -1, // Unlimited
       costPerFix: 0.003,
       description: "Unlimited fixes, white-glove support"

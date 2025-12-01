@@ -75,7 +75,7 @@ export class ReportGenerator {
         filename: analysisResult.filename || 'Unknown File',
         frameworkDetected: 'React/Next.js',
         complexity: 'Medium',
-        layersAnalyzed: [1, 2, 3, 4, 5, 6]
+        layersAnalyzed: [1, 2, 3, 4, 5, 6, 7]
       }
     });
 

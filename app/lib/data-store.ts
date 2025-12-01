@@ -272,8 +272,8 @@ export const dataUtils = {
       starter: [1, 2],
       professional: [1, 2, 3, 4],
       business: [1, 2, 3, 4, 5],
-      enterprise: [1, 2, 3, 4, 5, 6],
-      premium: [1, 2, 3, 4, 5, 6],
+      enterprise: [1, 2, 3, 4, 5, 6, 7],
+      premium: [1, 2, 3, 4, 5, 6, 7],
     };
 
     const allowedLayers =

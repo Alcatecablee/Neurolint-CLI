@@ -200,7 +200,7 @@ export class NeuroLintCore {
         analysis: {
           detectedIssues,
           confidence: analysisResult.confidence || 0.8,
-          recommendedLayers: analysisResult.recommendedLayers || mergedConfig.layers || [1, 2, 3, 4, 5, 6],
+          recommendedLayers: analysisResult.recommendedLayers || mergedConfig.layers || [1, 2, 3, 4, 5, 6, 7],
           legacyPatterns: analysisResult.legacyPatterns || [],
           modernPatterns: analysisResult.modernPatterns || [],
           frameworkVersions: analysisResult.frameworkVersions || {

@@ -108,7 +108,7 @@ const validators = {
   },
   
   layers: (layers: number[]): boolean => {
-    return Array.isArray(layers) && layers.every(l => Number.isInteger(l) && l >= 1 && l <= 6);
+    return Array.isArray(layers) && layers.every(l => Number.isInteger(l) && l >= 1 && l <= 7);
   }
 };
 

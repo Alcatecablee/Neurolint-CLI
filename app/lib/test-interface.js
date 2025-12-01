@@ -13,6 +13,7 @@ const fixLayer3Components = require('../scripts/fix-layer-3-components.js');
 const fixLayer4Hydration = require('../scripts/fix-layer-4-hydration.js');
 const fixLayer5NextJS = require('../scripts/fix-layer-5-nextjs.js');
 const fixLayer6Testing = require('../scripts/fix-layer-6-testing.js');
+const fixLayer7Adaptive = require('../scripts/fix-layer-7-adaptive.js');
 
 class NeuroLintTestInterface {
   constructor() {
@@ -22,11 +23,12 @@ class NeuroLintTestInterface {
       3: this.processLayer3.bind(this),
       4: this.processLayer4.bind(this),
       5: this.processLayer5.bind(this),
-      6: this.processLayer6.bind(this)
+      6: this.processLayer6.bind(this),
+      7: this.processLayer7.bind(this)
     };
   }
 
-  async processCode(code, filename, dryRun = false, layerIds = [1,2,3,4,5,6], options = {}) {
+  async processCode(code, filename, dryRun = false, layerIds = [1,2,3,4,5,6,7], options = {}) {
     let result = {
       success: true,
       original: code,
@@ -1653,6 +1655,62 @@ export default ${componentName}Client;`;
     };
   }
 
+  async processLayer7(code, filename, options = {}) {
+    // Layer 7: Adaptive Pattern Learning
+    const issues = [];
+    const fixes = [];
+    let transformed = code;
+
+    try {
+      // Use the transform function from fix-layer-7-adaptive.js
+      const result = await fixLayer7Adaptive.transform(code, {
+        dryRun: options.dryRun || false,
+        filename: filename,
+        learnPatterns: true
+      });
+
+      if (result && result.code) {
+        transformed = result.code;
+        
+        if (result.issues) {
+          issues.push(...result.issues.map(issue => ({
+            ...issue,
+            layer: 7
+          })));
+        }
+        
+        if (result.fixes) {
+          fixes.push(...result.fixes.map(fix => ({
+            ...fix,
+            layer: 7
+          })));
+        }
+      }
+
+      return {
+        success: true,
+        transformed,
+        detectedIssues: issues,
+        appliedFixes: fixes,
+        layer: 7
+      };
+    } catch (error) {
+      // Fallback - just pass through code unchanged
+      return {
+        success: true,
+        transformed: code,
+        detectedIssues: [{
+          type: 'adaptive',
+          severity: 'info',
+          description: 'Layer 7 adaptive learning skipped: ' + error.message,
+          layer: 7
+        }],
+        appliedFixes: [],
+        layer: 7
+      };
+    }
+  }
+
   applyComprehensiveComponentFixes(content, filename, options = {}) {
     let fixedContent = content;
     const issues = [];
@@ -2092,7 +2150,7 @@ function $1(props: $1Props) {`
 // Export both class and function interface for compatibility
 const testInterface = new NeuroLintTestInterface();
 
-module.exports = async function NeuroLintProEnhanced(code, filename, dryRun = false, layers = [1,2,3,4,5,6], options = {}) {
+module.exports = async function NeuroLintProEnhanced(code, filename, dryRun = false, layers = [1,2,3,4,5,6,7], options = {}) {
   return await testInterface.processCode(code, filename, dryRun, layers, options);
 };
 

@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Configure analysis based on type and tier
-    let layersToUse: number[] = [1, 2, 3, 4, 5, 6]; // All layers for modernization
+    let layersToUse: number[] = [1, 2, 3, 4, 5, 6, 7]; // All layers for modernization
     let analysisOptions = {
       isApi: true,
       singleFile: true,

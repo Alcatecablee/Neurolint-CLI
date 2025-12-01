@@ -53,7 +53,7 @@ jobs:
 
       - name: Run NeuroLint Analysis
         run: |
-          neurolint analyze . --layers=1,2,3,4,5,6 --format=json --output=neurolint-report.json
+          neurolint analyze . --layers=1,2,3,4,5,6,7 --format=json --output=neurolint-report.json
         env:
           NEUROLINT_API_KEY: \${{ secrets.NEUROLINT_API_KEY }}
 

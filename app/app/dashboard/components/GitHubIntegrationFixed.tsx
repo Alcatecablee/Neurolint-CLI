@@ -818,19 +818,19 @@ export default function GitHubIntegrationFixed() {
       professional: {
         repositories: "Unlimited",
         filesPerScan: "1,000 files",
-        layers: "All Layers 1-6 (Full suite)",
+        layers: "All Layers 1-7 (Full suite)",
         note: "Unlimited fixes, API access, CI/CD integration",
       },
       business: {
         repositories: "Unlimited",
         filesPerScan: "2,000 files",
-        layers: "All Layers 1-6 (Team features)",
+        layers: "All Layers 1-7 (Team features)",
         note: "Unlimited fixes, team management, enhanced API",
       },
       enterprise: {
         repositories: "Unlimited",
         filesPerScan: "Unlimited",
-        layers: "All Layers 1-6 (Custom rules)",
+        layers: "All Layers 1-7 (Custom rules)",
         note: "Unlimited fixes, custom rules, priority support",
       },
     };
