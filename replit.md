@@ -63,16 +63,15 @@ The landing page is a static React + Vite application that showcases NeuroLint's
 
 ## Licensing Structure
 
-NeuroLint uses a dual licensing model:
+All code in this repository is open-source under Apache 2.0:
 
 | Component | License | Directory |
 |-----------|---------|-----------|
-| CLI & Core Engine | Apache 2.0 (Open Source) | `cli.js`, `src/`, `scripts/`, `shared-core/` |
-| VS Code Extension | Apache 2.0 (Open Source) | `vscode-extension/` |
-| Landing Page | Apache 2.0 (Open Source) | `landing/` |
-| SaaS Application | Proprietary | `app/`, `lib/`, `components/` |
+| CLI & Core Engine | Apache 2.0 | `cli.js`, `src/`, `scripts/`, `shared-core/` |
+| VS Code Extension | Apache 2.0 | `vscode-extension/` |
+| Landing Page | Apache 2.0 | `landing/` |
 
-The CLI is free and open-source under Apache 2.0, allowing anyone to use, modify, and distribute it commercially. The SaaS application (dashboard, billing, team features) is proprietary and requires a commercial license.
+The SaaS application (dashboard, billing, team features) is maintained in a separate private repository.
 
 See `LICENSE_STRUCTURE.md` for full details.
 

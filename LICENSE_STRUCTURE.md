@@ -1,10 +1,10 @@
 # NeuroLint Licensing Structure
 
-This repository contains code under two different licenses:
+This repository contains open-source code under the Apache 2.0 license.
 
 ## Apache 2.0 Licensed (Open Source)
 
-The following directories are licensed under the Apache License 2.0:
+All code in this repository is licensed under the Apache License 2.0:
 
 - `/cli.js` - Command-line interface
 - `/src/` - Core transformation engine
@@ -18,29 +18,22 @@ The following directories are licensed under the Apache License 2.0:
 You are free to use, modify, and distribute this code under the terms of
 the Apache 2.0 license. See the root `LICENSE` file for details.
 
-## Proprietary (All Rights Reserved)
+## Proprietary SaaS (Separate Repository)
 
-The following directories are proprietary and NOT covered by Apache 2.0:
-
-- `/app/` - SaaS application (dashboard, billing, team features)
-- `/lib/` - SaaS-specific libraries
-- `/components/` - SaaS UI components
-- `/supabase/` - Database schemas and migrations
-
-This code is the intellectual property of NeuroLint and may not be used,
-copied, modified, or distributed without explicit permission.
-See `app/LICENSE` for details.
+The NeuroLint SaaS application (dashboard, billing, team features) is
+maintained in a separate private repository and is NOT part of this
+open-source project. The SaaS is proprietary software.
 
 ## Summary
 
-| Component | License | Can Use Commercially? |
-|-----------|---------|----------------------|
-| CLI | Apache 2.0 | Yes, freely |
-| Core Engine | Apache 2.0 | Yes, freely |
-| VS Code Extension | Apache 2.0 | Yes, freely |
-| Migration Tools | Apache 2.0 | Yes, freely |
-| SaaS Application | Proprietary | No, requires license |
-| SaaS Components | Proprietary | No, requires license |
+| Component | License | Location |
+|-----------|---------|----------|
+| CLI | Apache 2.0 | This repo |
+| Core Engine | Apache 2.0 | This repo |
+| VS Code Extension | Apache 2.0 | This repo |
+| Migration Tools | Apache 2.0 | This repo |
+| Landing Page | Apache 2.0 | This repo |
+| SaaS Application | Proprietary | Private repo |
 
 ## Questions?
 
