@@ -92,7 +92,7 @@ const runOriginalNeuroLint = async (
       
       // Step 2: Use fix-master for proven transformations
       const fixMaster = require('../../fix-master');
-      const layersToExecute = layers || analysisResult.summary?.recommendedLayers || [2, 3, 4, 5, 6, 7];
+      const layersToExecute = layers || analysisResult.summary?.recommendedLayers || [1, 2, 3, 4, 5, 6, 7];
       
       const fixResult = await fixMaster.executeLayers(code, layersToExecute, {
         dryRun: dryRun,
@@ -159,13 +159,13 @@ const runOriginalNeuroLint = async (
        
        // Handle layer selection more safely
        if (layers && Array.isArray(layers) && layers.length > 0) {
-         const validLayers = layers.filter(l => Number.isInteger(l) && l >= 1 && l <= 6);
+         const validLayers = layers.filter(l => Number.isInteger(l) && l >= 1 && l <= 7);
          if (validLayers.length < layers.length) {
            console.warn(`[ORIGINAL NEUROLINT] ${requestId} Invalid layers filtered out`);
          }
          
          if (validLayers.length > 0) {
-           const skipLayers = [1, 2, 3, 4, 5, 6].filter(l => !validLayers.includes(l));
+           const skipLayers = [1, 2, 3, 4, 5, 6, 7].filter(l => !validLayers.includes(l));
            if (skipLayers.length > 0) {
              cmd += ` --skip-layers ${skipLayers.join(',')}`;
            }

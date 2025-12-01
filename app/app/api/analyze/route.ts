@@ -205,10 +205,10 @@ export async function POST(request: NextRequest) {
       // Auto-detect layers - all users can scan with auto-detection
       layersToUse = null;
     } else if (layers === "all") {
-      requestedLayers = [1, 2, 3, 4, 5, 6];
+      requestedLayers = [1, 2, 3, 4, 5, 6, 7];
     } else if (Array.isArray(layers)) {
       requestedLayers = layers.filter(
-        (l) => typeof l === "number" && l >= 1 && l <= 6,
+        (l) => typeof l === "number" && l >= 1 && l <= 7,
       );
     }
 
