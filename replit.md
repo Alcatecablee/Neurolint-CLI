@@ -84,6 +84,42 @@ See `LICENSE_STRUCTURE.md` for full details.
 
 ## Recent Changes (December 1, 2025)
 
+### SaaS API Security & Analysis Pipeline Improvements (v1.4.0)
+- **Authentication Guard Enhancement:**
+  - Created `app/lib/auth-guard.ts` with comprehensive auth enforcement
+  - Supports Bearer token and API key authentication
+  - Tier-based feature access control (free/premium/enterprise)
+  - Integrates with existing rate limiter for production-ready rate limiting
+  - X-RateLimit headers added to all API responses
+  - Path traversal protection on all routes accepting projectPath
+  - File size limits (500KB max for code analysis)
+
+- **Analysis Pipeline Refactoring:**
+  - Created `app/lib/analysis-job-queue.ts` for async job queue infrastructure
+  - `runSynchronousAnalysis()` for immediate analysis (primary path)
+  - `AnalysisJobQueueClient` for job queuing with RLS protection
+  - SQL migration for `analysis_jobs` table with proper indexes and policies
+  - Jobs use authenticated Supabase client (user's token) for RLS enforcement
+  - No service role key exposure in request handlers
+
+- **Command API Routes Updated (9 routes):**
+  - All protected with `createProtectedHandler`
+  - assess-router, check-compiler, check-deps, check-turbopack
+  - detect-react192, migrate-nextjs16, migrate-react19
+  - simplify, validate, migrate-biome
+  - Tier-based restrictions: dryRun for all tiers, applyFixes for premium+
+
+- **Rate Limiting:**
+  - Production-ready rate limiter with tier-specific limits
+  - Free: 10/min, 100/hour, 500/day
+  - Premium: 30/min, 500/hour, 2000/day
+  - Enterprise: 100/min, 2000/hour, 10000/day
+
+- **Future: Async Job Processing:**
+  - Job queue infrastructure ready for background worker integration
+  - Requires Supabase Edge Function or Vercel Cron for true async processing
+  - Sync mode is primary path, async available for future scaling
+
 ### Dashboard Component Refactoring
 - **Major Refactoring:** Reduced dashboard page from 3,907 lines to 2,886 lines (1,021 lines removed)
 - **New Components Created:**
