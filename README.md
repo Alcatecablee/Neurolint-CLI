@@ -349,22 +349,39 @@ Manual fixes are slow, error-prone, and expensive. NeuroLint processes hundreds 
 
 ## License
 
-**Apache License 2.0**
+This repository uses a **dual licensing structure**:
 
-NeuroLint CLI is free and open-source software licensed under Apache 2.0.
+### Open Source (Apache 2.0)
 
-- ✅ **Free forever** — No fees, no restrictions, no license changes
-- ✅ **Commercial use allowed** — Use in your company, startup, or enterprise
-- ✅ **Modify and distribute** — Fork, customize, and share as needed
-- ✅ **Patent protection** — Includes explicit patent grant
+The following components are free and open-source under Apache 2.0:
 
-**This license will never change.** The NeuroLint CLI will remain free and open-source under Apache 2.0 indefinitely.
+| Component | Description |
+|-----------|-------------|
+| CLI (`cli.js`, `src/`, `scripts/`) | Command-line tool and transformation engine |
+| VS Code Extension (`vscode-extension/`) | Editor integration |
+| Core Engine (`shared-core/`) | Shared transformation utilities |
 
-[Read the full license](./LICENSE)
+- Free forever — No fees, no restrictions
+- Commercial use allowed — Use in your company or enterprise
+- Modify and distribute — Fork, customize, and share as needed
+- Patent protection — Includes explicit patent grant
 
----
+[Read the Apache 2.0 license](./LICENSE)
 
-**Future:** We're building advanced team collaboration features, real-time editing, and enterprise tools as a separate product. The CLI will always remain free and open-source.
+### Proprietary (All Rights Reserved)
+
+The SaaS application code is proprietary and NOT covered by Apache 2.0:
+
+| Component | Description |
+|-----------|-------------|
+| SaaS App (`app/`) | Dashboard, billing, team features |
+| SaaS Libraries (`lib/`, `components/`) | SaaS-specific code |
+
+This code may not be used, copied, or distributed without permission.
+
+[Read the proprietary license](./app/LICENSE)
+
+[Full licensing details](./LICENSE_STRUCTURE.md)
 
 ---
 

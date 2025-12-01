@@ -61,12 +61,27 @@ The landing page is a static React + Vite application that showcases NeuroLint's
 - **UI/UX Decisions:** CLI output is designed for professional environments, replacing emojis with bracketed status indicators like `[SUCCESS]`, `[FAILED]`, etc.
 - **Testing:** Comprehensive Jest test suite covers all CLI functionalities, AST transformations, backup management, and specific migration tools, ensuring high code quality and reliability.
 
+## Licensing Structure
+
+NeuroLint uses a dual licensing model:
+
+| Component | License | Directory |
+|-----------|---------|-----------|
+| CLI & Core Engine | Apache 2.0 (Open Source) | `cli.js`, `src/`, `scripts/`, `shared-core/` |
+| VS Code Extension | Apache 2.0 (Open Source) | `vscode-extension/` |
+| Landing Page | Apache 2.0 (Open Source) | `landing/` |
+| SaaS Application | Proprietary | `app/`, `lib/`, `components/` |
+
+The CLI is free and open-source under Apache 2.0, allowing anyone to use, modify, and distribute it commercially. The SaaS application (dashboard, billing, team features) is proprietary and requires a commercial license.
+
+See `LICENSE_STRUCTURE.md` for full details.
+
 ## External Dependencies
 
 - **npm:** The `@neurolint/cli` package is published and distributed via npm.
 - **Jest:** Used for comprehensive automated testing.
 - **React, Next.js, TypeScript, JavaScript:** Target technologies for code transformation and analysis.
-- **Apache License 2.0:** The project's open-source licensing model, enabling maximum adoption, enterprise use, commercial use, and community contributions without restrictions.
+- **Apache License 2.0:** The CLI's open-source license, enabling maximum adoption and commercial use without restrictions.
 
 ## Recent Changes (December 1, 2025)
 
