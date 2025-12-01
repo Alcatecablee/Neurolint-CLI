@@ -171,12 +171,16 @@ export class SharedCoreAdapter implements IAnalysisClient {
 
   /**
    * Perform the actual analysis with proper error handling
+   * Enhanced to pass full file paths for better layer heuristics
    */
   private async performAnalysis(code: string, options?: any): Promise<AnalysisResponse> {
     try {
+      const filename = options?.filename || 'untitled.tsx';
+      
       const analysisOptions = {
         layers: options?.layers || [1, 2, 3, 4, 5, 6, 7],
-        filename: options?.filename || 'untitled.tsx',
+        filename: filename,
+        filePath: this.resolveFullPath(filename),
         platform: 'vscode',
         verbose: options?.verbose || false,
         timeout: options?.timeout || 30000
@@ -217,11 +221,14 @@ export class SharedCoreAdapter implements IAnalysisClient {
 
   /**
    * Enhanced applyFixes method with comprehensive error handling
+   * Accepts filename and filePath for proper layer heuristics
    */
   public async applyFixes(code: string, issues: AnalysisIssue[], options?: {
     dryRun?: boolean;
     verbose?: boolean;
     timeout?: number;
+    filename?: string;
+    filePath?: string;
   }): Promise<FixResponse> {
     try {
       // Validate inputs
@@ -276,13 +283,19 @@ export class SharedCoreAdapter implements IAnalysisClient {
 
   /**
    * Perform the actual fixes with proper error handling
+   * Enhanced to pass full file paths for better layer heuristics
    */
   private async performFixes(code: string, issues: AnalysisIssue[], options?: any): Promise<FixResponse> {
     try {
+      const filename = options?.filename || 'untitled.tsx';
+      const filePath = options?.filePath || this.resolveFullPath(filename);
+      
       const fixOptions = {
         dryRun: options?.dryRun || false,
         verbose: options?.verbose || false,
-        platform: 'vscode'
+        platform: 'vscode',
+        filename: filename,
+        filePath: filePath
       };
 
       const result = await this.neurolintCore.applyFixes(code, issues, fixOptions);
@@ -671,6 +684,22 @@ export class SharedCoreAdapter implements IAnalysisClient {
       default:
         return 'info';
     }
+  }
+
+  /**
+   * Resolve full file path for better layer heuristics
+   * Handles both absolute and relative paths
+   */
+  private resolveFullPath(filename: string): string {
+    if (!filename || filename === 'untitled.tsx') {
+      return path.join(this.workspaceRoot, 'untitled.tsx');
+    }
+    
+    if (path.isAbsolute(filename)) {
+      return filename;
+    }
+    
+    return path.join(this.workspaceRoot, filename);
   }
 
   /**

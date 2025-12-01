@@ -326,6 +326,109 @@ export class ApiClient {
     }
   }
 
+  /**
+   * Enhanced analyze method matching IAnalysisClient interface
+   */
+  public async analyze(code: string, options?: {
+    filename?: string;
+    layers?: number[];
+    verbose?: boolean;
+    timeout?: number;
+  }): Promise<any> {
+    try {
+      const response = await this.client.post("/analyze", {
+        code,
+        filename: options?.filename || "untitled.tsx",
+        layers: Array.isArray(options?.layers)
+          ? options.layers.join(",")
+          : "auto",
+        applyFixes: false,
+        dryRun: true,
+        metadata: {
+          source: "vscode-extension",
+          version: "1.0.11",
+          verbose: options?.verbose || false,
+        },
+      });
+
+      const result = response.data;
+      const issues = (result.changes || []).map((change: any) => ({
+        type: change.severity || 'warning',
+        message: change.message,
+        description: change.message,
+        layer: change.layer || 1,
+        location: { line: change.line || 1, column: change.column || 1 },
+        ruleName: change.rule || 'unknown'
+      }));
+
+      return {
+        issues,
+        summary: {
+          totalIssues: issues.length,
+          issuesByLayer: this.groupIssuesByLayer(issues),
+          filename: options?.filename || 'untitled.tsx'
+        }
+      };
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  /**
+   * Apply fixes method matching IAnalysisClient interface
+   * Accepts filename and filePath for layer heuristics
+   */
+  public async applyFixes(code: string, issues: any[], options?: {
+    dryRun?: boolean;
+    verbose?: boolean;
+    timeout?: number;
+    filename?: string;
+    filePath?: string;
+  }): Promise<any> {
+    try {
+      const response = await this.client.post("/analyze", {
+        code,
+        filename: options?.filename || options?.filePath || "untitled.tsx",
+        layers: "auto",
+        applyFixes: true,
+        dryRun: options?.dryRun || false,
+        metadata: {
+          source: "vscode-extension",
+          version: "1.0.11",
+          verbose: options?.verbose || false,
+          filePath: options?.filePath,
+        },
+      });
+
+      const result = response.data;
+      return {
+        success: result.success !== false,
+        code: result.transformedCode || code,
+        appliedFixes: result.changes || [],
+        totalFixes: result.changes?.length || 0
+      };
+    } catch (error) {
+      return {
+        success: false,
+        code,
+        appliedFixes: [],
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  /**
+   * Helper to group issues by layer
+   */
+  private groupIssuesByLayer(issues: any[]): Record<number, any[]> {
+    return issues.reduce((acc: Record<number, any[]>, issue: any) => {
+      const layer = issue.layer || 1;
+      if (!acc[layer]) acc[layer] = [];
+      acc[layer].push(issue);
+      return acc;
+    }, {});
+  }
+
   private createAxiosInstance(): AxiosInstance {
     const instance = axios.create({
       baseURL: this.configManager.getApiUrl(),

@@ -58,6 +58,8 @@ export interface FixRequest {
     dryRun?: boolean;
     verbose?: boolean;
     timeout?: number;
+    filename?: string;
+    filePath?: string;
   };
 }
 
@@ -110,6 +112,8 @@ export interface IAnalysisClient {
     dryRun?: boolean;
     verbose?: boolean;
     timeout?: number;
+    filename?: string;
+    filePath?: string;
   }): Promise<FixResponse>;
   
   getUserInfo(): Promise<UserInfo | null>;

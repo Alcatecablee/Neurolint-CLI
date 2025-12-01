@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import * as path from "path";
 import { IAnalysisClient, AnalysisIssue } from "../utils/IAnalysisClient";
 
 /**
@@ -123,6 +124,57 @@ export class NeuroLintCodeActionProvider implements vscode.CodeActionProvider {
     return action;
   }
 
+  /**
+   * Layer name mapping for user-friendly display
+   */
+  private readonly layerNames: Record<number, string> = {
+    1: 'Configuration',
+    2: 'Pattern Fixes',
+    3: 'Component Fixes',
+    4: 'Hydration/SSR',
+    5: 'Next.js/React 19',
+    6: 'Testing',
+    7: 'Adaptive Learning'
+  };
+
+  /**
+   * Format quick-fix title with detailed change description
+   */
+  private formatQuickFixTitle(issue: AnalysisIssue): string {
+    const layerName = this.layerNames[issue.layer] || `Layer ${issue.layer}`;
+    const description = issue.description || issue.message;
+    
+    if (description.length <= 60) {
+      return `Fix: ${description} [${layerName}]`;
+    }
+    
+    return `Fix: ${description.substring(0, 57)}... [${layerName}]`;
+  }
+
+  /**
+   * Format detailed tooltip for quick-fix action
+   */
+  private formatQuickFixTooltip(issue: AnalysisIssue): string {
+    const layerName = this.layerNames[issue.layer] || `Layer ${issue.layer}`;
+    const parts: string[] = [];
+    
+    parts.push(`Apply ${layerName} fix`);
+    
+    if (issue.ruleName && issue.ruleName !== 'unknown') {
+      parts.push(`Rule: ${issue.ruleName}`);
+    }
+    
+    if (issue.description) {
+      parts.push(issue.description);
+    }
+    
+    if (issue.location) {
+      parts.push(`Line ${issue.location.line}, Col ${issue.location.column}`);
+    }
+    
+    return parts.join(' | ');
+  }
+
   public provideCodeActions(
     document: vscode.TextDocument,
     range: vscode.Range | vscode.Selection,
@@ -149,12 +201,21 @@ export class NeuroLintCodeActionProvider implements vscode.CodeActionProvider {
 
       const actions: vscode.CodeAction[] = [];
 
-      // Add quick fix for NeuroLint diagnostics
+      // Add quick fix for NeuroLint diagnostics with detailed descriptions
       for (const diagnostic of context.diagnostics) {
         if (diagnostic.source === "NeuroLint") {
           try {
+            const layerMatch = diagnostic.message.match(/\[Layer (\d+)\]/);
+            const layerNum = layerMatch ? parseInt(layerMatch[1]) : 0;
+            const layerName = this.layerNames[layerNum] || '';
+            
+            const cleanMessage = diagnostic.message.replace(/\[Layer \d+\]\s*/, '');
+            const actionTitle = layerName 
+              ? `Fix: ${cleanMessage} [${layerName}]`
+              : `NeuroLint: Fix ${cleanMessage}`;
+            
             const action = new vscode.CodeAction(
-              `NeuroLint: Fix ${diagnostic.message}`,
+              actionTitle,
               vscode.CodeActionKind.QuickFix,
             );
             action.diagnostics = [diagnostic];
@@ -251,15 +312,15 @@ export class NeuroLintCodeActionProvider implements vscode.CodeActionProvider {
         for (const issue of analysisResult.issues) {
           try {
             const action = new vscode.CodeAction(
-              `NeuroLint: Fix ${issue.description} (Layer ${issue.layer})`,
+              this.formatQuickFixTitle(issue),
               vscode.CodeActionKind.QuickFix,
             );
             action.isPreferred = true;
             
-            // Add command to apply the fix
+            // Add command to apply the fix with detailed tooltip
             action.command = {
               command: 'neurolint.applyFix',
-              title: `Apply fix for ${issue.description}`,
+              title: this.formatQuickFixTooltip(issue),
               arguments: [document.uri, issue]
             };
             
@@ -301,15 +362,20 @@ export class NeuroLintCodeActionProvider implements vscode.CodeActionProvider {
         return false;
       }
 
-      // Apply fix with progress indicator
+      // Apply fix with progress indicator, passing full document path for layer heuristics
       const fixResult = await this.withProgress(
         `NeuroLint: Applying fix for ${issue.description}...`,
         async () => {
           try {
             const code = document.getText();
+            const documentPath = document.uri.fsPath;
+            const filename = path.basename(documentPath);
+            
             const result = await this.apiClient.applyFixes(code, [issue], {
               dryRun: false,
-              verbose: true
+              verbose: true,
+              filename: filename,
+              filePath: documentPath
             });
 
             if (result.error) {
@@ -335,16 +401,23 @@ export class NeuroLintCodeActionProvider implements vscode.CodeActionProvider {
         const success = await vscode.workspace.applyEdit(edit);
         
         if (success) {
-          vscode.window.showInformationMessage(
-            `NeuroLint: Successfully applied fix for ${issue.description}`
-          );
+          const layerName = this.layerNames[issue.layer] || `Layer ${issue.layer}`;
+          const fixCount = fixResult.appliedFixes?.length || 1;
+          const fixDetails = fixResult.appliedFixes?.map((f: any) => f.description).filter(Boolean).join(', ');
+          
+          const message = fixDetails
+            ? `[${layerName}] Applied ${fixCount} fix(es): ${fixDetails}`
+            : `[${layerName}] Successfully applied fix: ${issue.description}`;
+          
+          vscode.window.showInformationMessage(`NeuroLint: ${message}`);
           return true;
         } else {
           throw new Error('Failed to apply edit to document');
         }
       } else {
+        const layerName = this.layerNames[issue.layer] || `Layer ${issue.layer}`;
         vscode.window.showInformationMessage(
-          `NeuroLint: No changes needed for ${issue.description}`
+          `NeuroLint: [${layerName}] No changes needed - ${issue.description}`
         );
         return true;
       }
