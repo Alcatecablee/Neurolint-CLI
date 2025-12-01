@@ -2,7 +2,7 @@
 
 ## Overview
 
-NeuroLint CLI is a deterministic, rule-based code transformation tool designed for TypeScript, JavaScript, React, and Next.js projects. It automates fixing common code issues such as ESLint errors, hydration bugs, and missing React keys through a progressive 7-layer architecture. Originally developed to address widespread code quality issues, NeuroLint aims to provide intelligent, predictable code fixes without relying on AI/LLM for stability and reliability. The project is positioned for public release, Y Combinator application, and aims to be the go-to solution for maintaining high code quality in modern web development. All its powerful fixing layers are now completely free to use, fostering community adoption and enterprise opportunities under the Apache License 2.0.
+NeuroLint CLI is a deterministic, rule-based code transformation tool for TypeScript, JavaScript, React, and Next.js projects. It automates fixes for common code issues like ESLint errors, hydration bugs, and missing React keys using a progressive 7-layer architecture. NeuroLint aims to provide intelligent, predictable code fixes without relying on AI/LLM, ensuring stability and reliability. It is positioned for public release and aims to be the go-to solution for maintaining high code quality in modern web development. All its powerful fixing layers are free to use under the Apache License 2.0.
 
 ## User Preferences
 
@@ -10,204 +10,30 @@ Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
-NeuroLint employs a 7-layer progressive and safe architecture for code transformation, where each layer builds upon the previous one. This architecture ensures deterministic, predictable fixes through rule-based transformations, Abstract Syntax Tree (AST) parsing, and pattern recognition. The CLI is built with `cli.js` as the main entry point, `fix-master.js` orchestrating the fix layers, and supporting modules like `ast-transformer.js`, `backup-manager.js`, `validator.js`, and `selector.js`. Core functionalities like analytics, configuration management, and the rule engine are housed in `shared-core/`. The system is extensively tested with a comprehensive Jest test suite covering CLI commands, AST transformations, backup management, and various migration tools.
+NeuroLint employs a 7-layer progressive and safe architecture for code transformation, ensuring deterministic, predictable fixes through rule-based transformations, Abstract Syntax Tree (AST) parsing, and pattern recognition. The CLI uses `cli.js` as its entry point, `fix-master.js` for orchestrating fix layers, and supporting modules for AST transformation, backup management, validation, and selection. Core functionalities like analytics, configuration, and the rule engine are in `shared-core/`. The system includes a comprehensive Jest test suite.
 
-The landing page is a static React + Vite application that showcases NeuroLint's capabilities with an interactive demo using pre-defined scenarios, professional video player-style CLI demonstration (enhanced GIF with controls overlay), and comprehensive documentation of all 7 layers.
+The landing page is a static React + Vite application featuring an interactive demo, a professional video player-style CLI demonstration, and documentation of the 7 layers. CLI output replaces emojis with bracketed status indicators like `[SUCCESS]`.
 
 **Key Features & Implementations:**
 
-- **7-Layer Fixing System:**
+-   **7-Layer Fixing System:**
     1.  **Configuration:** Optimizes `tsconfig.json`, `next.config.js`, `package.json`.
-    2.  **Patterns (Production-Ready, Orchestration-Compliant):** 
-        - AST-first transformation strategy with validated regex fallback
-        - Handles HTML entities in string literals
-        - AST-based console.log/alert/confirm/prompt removal with context-aware replacements
-        - Detects arrow function contexts using Babel path ancestry
-        - Preserves NeuroLint comments in all transformation contexts (100% comment coverage)
-        - Expression-bodied arrows: `() => {} /* [NeuroLint] comment */`
-        - Block-bodied arrows & standalone: EmptyStatement with leading comments
-        - Unused import removal
-        - Syntax validation prevents invalid output from reaching production
-        - Regex fallback for pattern transformations when AST parsing fails
-    3.  **Components (Production-Ready, All Edge Cases Validated):** 
-        - AST-first transformation strategy with validated regex fallback
-        - Handles ALL parameter patterns: default params `(item = {})`, empty callbacks `()`, destructuring `({ id })`, nested destructuring `({ data: { id } })`, multiple defaults `(item = {}, idx = 0)`
-        - Supports both paired tags `<Tag>...</Tag>` and self-closing tags `<Tag />`
-        - Syntax validation prevents invalid output from reaching production
-        - Comprehensive test coverage with 10/10 edge case validation
-        - Addresses React keys, accessibility, prop types
-    4.  **Hydration (Production-Ready, Orchestration-Compliant):** 
-        - AST-first transformation strategy with validated regex fallback
-        - Implements SSR/hydration guards for global objects (`localStorage`, `window`, `document`)
-        - Syntax validation prevents invalid output from reaching production
-        - Regex fallback for hydration guards when AST parsing fails
-        - Automatic event listener cleanup in useEffect hooks
-    5.  **Next.js (Production-Ready):** 
-        - Detects React hooks (including aliased/destructured imports like `const { useState: useCount } = React` and namespace calls like `React.useEffect()`)
-        - Adds `"use client"` directive when hooks detected
-        - Converts `ReactDOM.render()` → `createRoot().render()`
-        - Converts `ReactDOM.hydrate()` → `hydrateRoot()` with correct parameter order
-        - Uses AST-based import management with deduplication for `react-dom/client` imports
-        - Includes smart SSR guard detection (`isAlreadySSRGuarded()` helper)
-        - All transformations preserve existing AST mutations through proper AST reuse
+    2.  **Patterns:** AST-first transformations with regex fallback, handles HTML entities, context-aware `console.log` removal, preserves NeuroLint comments, unused import removal, and syntax validation.
+    3.  **Components:** AST-first transformations with regex fallback, handles all parameter patterns, supports paired and self-closing tags, addresses React keys, accessibility, and prop types.
+    4.  **Hydration:** AST-first transformations with regex fallback, implements SSR/hydration guards for global objects, and automatic event listener cleanup.
+    5.  **Next.js:** Detects React hooks and adds `"use client"` directive, converts `ReactDOM.render()` to `createRoot().render()`, handles `ReactDOM.hydrate()`, and manages `react-dom/client` imports.
     6.  **Testing:** Enhances testing with error boundaries and test generation.
     7.  **Adaptive:** Supports pattern learning and custom rule generation.
-- **Next.js 16 Migration Tools:** Includes auto-conversion for directives like `'use cache'`, async parameter conversion, `await` for `cookies()`/`headers()`, smart `cacheLife` integration, and `updateTag()` suggestions.
-- **React 19 Compatibility Tools:** Features a dependency checker that scans `package.json` for incompatibilities, provides automated fixes, and suggests `package.json` overrides.
-- **Turbopack Migration Assistant:** Detects Webpack-specific configurations, identifies incompatibilities, and suggests SWC migration.
-- **React Compiler Detector:** Identifies manual memoization patterns and recommends React Compiler for optimization.
-- **Router Complexity Assessor:** Analyzes route complexity and provides recommendations for architecture choices.
-- **React 19.2 Feature Detector:** Identifies opportunities for `View Transitions`, `useEffectEvent`, and `Activity components`.
-- **UI/UX Decisions:** CLI output is designed for professional environments, replacing emojis with bracketed status indicators like `[SUCCESS]`, `[FAILED]`, etc.
-- **Testing:** Comprehensive Jest test suite covers all CLI functionalities, AST transformations, backup management, and specific migration tools, ensuring high code quality and reliability.
-
-## Licensing Structure
-
-All code in this repository is open-source under Apache 2.0:
-
-| Component | License | Directory |
-|-----------|---------|-----------|
-| CLI & Core Engine | Apache 2.0 | `cli.js`, `src/`, `scripts/`, `shared-core/` |
-| VS Code Extension | Apache 2.0 | `vscode-extension/` |
-| Landing Page | Apache 2.0 | `landing/` |
-
-The SaaS application (dashboard, billing, team features) is maintained in a separate private repository.
-
-See `LICENSE_STRUCTURE.md` for full details.
+-   **Next.js 16 Migration Tools:** Auto-conversion for directives, async parameter conversion, `await` for `cookies()`/`headers()`, and `updateTag()` suggestions.
+-   **React 19 Compatibility Tools:** Dependency checker for `package.json` incompatibilities, automated fixes, and `package.json` override suggestions.
+-   **Turbopack Migration Assistant:** Detects Webpack configurations, identifies incompatibilities, and suggests SWC migration.
+-   **React Compiler Detector:** Identifies manual memoization and recommends React Compiler.
+-   **Router Complexity Assessor:** Analyzes route complexity and provides architectural recommendations.
+-   **React 19.2 Feature Detector:** Identifies opportunities for `View Transitions`, `useEffectEvent`, and `Activity components`.
 
 ## External Dependencies
 
-- **npm:** The `@neurolint/cli` package is published and distributed via npm.
-- **Jest:** Used for comprehensive automated testing.
-- **React, Next.js, TypeScript, JavaScript:** Target technologies for code transformation and analysis.
-- **Apache License 2.0:** The CLI's open-source license, enabling maximum adoption and commercial use without restrictions.
-
-## Recent Changes (December 1, 2025)
-
-### SaaS API Security & Analysis Pipeline Improvements (v1.4.0)
-- **Authentication Guard Enhancement:**
-  - Created `app/lib/auth-guard.ts` with comprehensive auth enforcement
-  - Supports Bearer token and API key authentication
-  - Tier-based feature access control (free/premium/enterprise)
-  - Integrates with existing rate limiter for production-ready rate limiting
-  - X-RateLimit headers added to all API responses
-  - Path traversal protection on all routes accepting projectPath
-  - File size limits (500KB max for code analysis)
-
-- **Analysis Pipeline Refactoring:**
-  - Created `app/lib/analysis-job-queue.ts` for async job queue infrastructure
-  - `runSynchronousAnalysis()` for immediate analysis (primary path)
-  - `AnalysisJobQueueClient` for job queuing with RLS protection
-  - SQL migration for `analysis_jobs` table with proper indexes and policies
-  - Jobs use authenticated Supabase client (user's token) for RLS enforcement
-  - No service role key exposure in request handlers
-
-- **Command API Routes Updated (9 routes):**
-  - All protected with `createProtectedHandler`
-  - assess-router, check-compiler, check-deps, check-turbopack
-  - detect-react192, migrate-nextjs16, migrate-react19
-  - simplify, validate, migrate-biome
-  - Tier-based restrictions: dryRun for all tiers, applyFixes for premium+
-
-- **Rate Limiting:**
-  - Production-ready rate limiter with tier-specific limits
-  - Free: 10/min, 100/hour, 500/day
-  - Premium: 30/min, 500/hour, 2000/day
-  - Enterprise: 100/min, 2000/hour, 10000/day
-
-- **Future: Async Job Processing:**
-  - Job queue infrastructure ready for background worker integration
-  - Requires Supabase Edge Function or Vercel Cron for true async processing
-  - Sync mode is primary path, async available for future scaling
-
-### Dashboard Component Refactoring
-- **Major Refactoring:** Reduced dashboard page from 3,907 lines to 2,886 lines (1,021 lines removed)
-- **New Components Created:**
-  - `SidebarShell.tsx` (~520 lines) - Sidebar navigation, brand, toggle, user section
-  - `IntegrationsHub.tsx` (~120 lines) - CI/CD, Webhooks, Team notifications, API Access sections
-  - `ProjectsManager.tsx` (~115 lines) - Projects tab with create/delete/list functionality
-  - `AnalysisResultsPanel.tsx` (~470 lines) - Results display with insights, code comparison, issues
-  - `MigrationConfigurator.tsx` (~275 lines) - Analysis configuration (available for future integration)
-- **Component Integration:**
-  - All components receive state via props and communicate via callbacks
-  - State management preserved through callback props pattern
-  - No functionality lost in refactoring
-- **WebSocket Infrastructure:** Already exists in `app/lib/websocket-server.ts` for real-time collaboration
-- **Architecture:** Components in `app/app/dashboard/components/` follow React best practices
-
-### VS Code Extension - Enhanced CLI Parity & Testing
-- **CLI Parity Testing Infrastructure:**
-  - Created `scripts/run-cli-analysis.js` CLI harness for authentic parity testing
-  - Harness spawns actual CLI and returns JSON with issues, issueCount, summary
-  - E2E tests compare extension output against authentic CLI output
-  - Divergence detection validates test infrastructure works correctly
-- **Interface Updates:**
-  - IAnalysisClient: Added filename/filePath options to applyFixes signature
-  - ApiClient: Added analyze() and applyFixes() methods with metadata support
-  - SharedCoreAdapter: Added resolveFullPath helper for file path resolution
-- **CodeActionProvider Enhancements:**
-  - Added layerNames mapping for user-friendly layer display
-  - Added formatQuickFixTitle and formatQuickFixTooltip helper methods
-  - Enhanced success messages with layer names and fix details
-
-## Previous Changes (November 30, 2025)
-
-### VS Code Extension v1.0.15 - Full CLI Parity Update
-- **Layer System Updated:** Fixed layer names and added Layer 7 (Adaptive Learning)
-  - Layer 1: Configuration Modernization
-  - Layer 2: Pattern Standardization  
-  - Layer 3: Accessibility & Components
-  - Layer 4: SSR/Hydration Safety
-  - Layer 5: Next.js App Router
-  - Layer 6: Testing & Error Handling
-  - Layer 7: Adaptive Learning (NEW)
-- **New Migration Commands Added:**
-  - `neurolint.migrateReact19` - React 19 migration
-  - `neurolint.migrateNextjs16` - Next.js 16 migration
-  - `neurolint.migrateBiome` - Biome migration
-  - `neurolint.checkDeps` - React 19 dependency checker
-  - `neurolint.checkTurbopack` - Turbopack compatibility check
-  - `neurolint.checkCompiler` - React Compiler detection
-  - `neurolint.assessRouter` - Router complexity assessment
-  - `neurolint.detectReact192` - React 19.2 feature detection
-  - `neurolint.simplify` - Code simplification
-  - `neurolint.showLayers` - Layer documentation
-  - `neurolint.validate` - Code validation
-  - `neurolint.showStats` - Statistics display
-- **Free for All:** Removed premium gating from fixFile and fixWorkspace (matches CLI Apache 2.0 license)
-- **SharedCoreAdapter:** Updated to expose all CLI capabilities with migration methods
-- **ConfigurationManager:** Updated layer validation to support layers 1-7
-
-## Previous Changes (November 28, 2025)
-
-- Implemented comprehensive SEO for landing page (neurolint.dev)
-- Added Open Graph and Twitter Card meta tags for social sharing
-- Created JSON-LD structured data (SoftwareApplication, Organization, FAQPage, WebSite schemas)
-- Generated OG image (1200x630) for social media previews
-- Created robots.txt and sitemap.xml for search engine crawling
-- Added per-page SEO for Quick Start page with dynamic title/description updates
-- Created Product Hunt launch materials (PRODUCT_HUNT_LAUNCH.md, LAUNCH_DAY_QUICK_REF.md)
-- Created SEO documentation (SEO_IMPLEMENTATION.md)
-
-## Previous Changes (November 25, 2025)
-
-- Added community CTAs to CLI for GitHub star prompts, documentation links, and issue reporting
-- CTAs appear in: --help output (footer), --version output, after successful operations, and on first-run
-- CTAs are suppressed with --quiet/-q flag
-- Centralized CTA helper function with context-aware messaging
-
-## Earlier Changes (November 24, 2025)
-
-- Added separate Quick Start page with React Router for multi-page navigation
-- Created `/quick-start` route with standalone page layout and navigation
-- Quick Start page based on CLI_TEST_COMMANDS.md, simplified for non-technical users
-- Includes Windows and Mac command examples with copy-to-clipboard functionality
-- Organized into sections: Installation, Check Code (Safe), Preview Changes, Fix Code, Backup Management
-- Navigation updated: replaced "Features" link with "Quick Start" link to separate page
-- Enhanced CLI demo section with professional video player-style interface
-- Terminal-themed wrapper with macOS-style window controls
-- Interactive hover controls overlay (play/pause, progress bar, speed control, fullscreen)
-- Feature indicators showing Interactive Player, Pause & Resume, Speed Control, and Fullscreen Mode
-- Polished visual presentation with gradient effects and subtle glow on hover
-- Helper text guiding users on how to interact with the demo
-- Removed asciinema-player integration (compatibility issues with .cast file format)
+-   **npm:** Used for publishing and distributing the `@neurolint/cli` package.
+-   **Jest:** Employed for comprehensive automated testing.
+-   **React, Next.js, TypeScript, JavaScript:** The primary target technologies for code transformation and analysis.
+-   **Apache License 2.0:** The open-source license for the CLI, enabling broad adoption.
