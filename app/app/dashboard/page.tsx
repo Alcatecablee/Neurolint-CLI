@@ -30,6 +30,11 @@ import CollaborationDashboard from "./components/CollaborationDashboard";
 import OnboardingWelcome from "./components/OnboardingWelcome";
 import TeamDashboard from "../../components/TeamDashboard";
 import CommandsPanel from "./components/CommandsPanel";
+import SidebarShell from "./components/SidebarShell";
+import MigrationConfigurator from "./components/MigrationConfigurator";
+import IntegrationsHub from "./components/IntegrationsHub";
+import ProjectsManager from "./components/ProjectsManager";
+import AnalysisResultsPanel from "./components/AnalysisResultsPanel";
 
 // Import the same result interfaces from the demo
 interface DemoResult {
@@ -1352,452 +1357,35 @@ export default function Dashboard() {
     return null;
   }
 
-  // [NeuroLint] Replace mock data with API fetch:
-const sidebarItems = [
-    {
-      id: "overview",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M3 3h18v4H3z" />
-          <path d="M3 10h18v4H3z" />
-          <path d="M3 17h18v4H3z" />
-        </svg>
-      ),
-      label: "Overview",
-      description: "Summary & recent activity",
-    },
-    {
-      id: "editor",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <polyline points="16,18 22,12 16,6" />
-          <polyline points="8,6 2,12 8,18" />
-        </svg>
-      ),
-      label: "Code Analysis",
-      description: "Upload and analyze files",
-    },
-    {
-      id: "bulk",
-      icon: (
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-        </svg>
-      ),
-      label: "GitHub Integration",
-      description: "Connect & scan repositories",
-    },
-    {
-      id: "migration",
-      icon: (
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-          <path d="M12 11v6"/>
-          <path d="M15 14l-3-3-3 3"/>
-        </svg>
-      ),
-      label: "One-Time Migration",
-      description: "Enterprise migration service",
-    },
-    {
-      id: "commands",
-      icon: (
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 17l6-6-6-6"/>
-          <path d="M12 19h8"/>
-        </svg>
-      ),
-      label: "CLI Commands",
-      description: "Migration & analysis tools",
-    },
-    {
-      id: "analytics",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
-        </svg>
-      ),
-      label: "Analytics",
-      description: "View insights & trends",
-    },
-    {
-      id: "api-keys",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 11-7.778 7.778 5.5 5.5 0 017.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
-        </svg>
-      ),
-      label: "API Keys",
-      description: "Manage API access",
-    },
-    {
-      id: "collaborate",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 00-3-3.87" />
-          <path d="M16 3.13a4 4 0 010 7.75" />
-        </svg>
-      ),
-      label: "Collaborate",
-      description: "Real-time code editing",
-    },
-    {
-      id: "integrations",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
-          <polyline points="7.5,4.21 12,6.81 16.5,4.21" />
-          <polyline points="7.5,19.79 7.5,14.6 3,12" />
-          <polyline points="21,12 16.5,14.6 16.5,19.79" />
-          <polyline points="12,22.08 12,17" />
-        </svg>
-      ),
-      label: "Integrations",
-      description: "CI/CD & webhooks",
-    },
-    {
-      id: "projects",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
-        </svg>
-      ),
-      label: "Projects",
-      description: "Organize your work",
-    },
-    {
-      id: "history",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12,6 12,12 16,14" />
-        </svg>
-      ),
-      label: "Analysis History",
-      description: "Previous analyses",
-    },
-    {
-      id: "samples",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-          <polyline points="14,2 14,8 20,8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10,9 9,9 8,9" />
-        </svg>
-      ),
-      label: "Sample Files",
-      description: "Test with examples",
-    },
-    
-    {
-      id: "account",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-      ),
-      label: "User Account",
-      description: "Profile & billing",
-    },
-    {
-      id: "docs",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" />
-          <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
-        </svg>
-      ),
-      label: "Documentation",
-      description: "Guides & API reference",
-      isExternal: true,
-      href: "/docs",
-    },
-    {
-      id: "settings",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          width="20"
-          height="20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <circle cx="12" cy="12" r="3" />
-          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
-        </svg>
-      ),
-      label: "Settings",
-      description: "Configure preferences",
-    },
-  ];
-
   return (
     <ModalProvider>
       <div className="dashboard-container">
       {/* Sidebar */}
-      <aside
-        className={`dashboard-sidebar ${dashboardState.sidebarCollapsed ? "collapsed" : ""} ${userExpandedSidebar ? "user-expanded" : ""}`}
-        aria-label="Main navigation"
-        role="navigation"
-      >
-        <div className="sidebar-header">
-          <div className="brand">
-            <a
-              href="/"
-              className="brand-logo"
-              aria-label="NeuroLint Logo - Go to homepage"
-            >
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets%2Fbcdfdb608d38407b88c1584fe3705961%2F1b38a4a385ed4a0bb404148fae0ce80e?format=webp&width=800"
-                alt="NeuroLint"
-                width="32"
-                height="32"
-              />
-            </a>
-          </div>
-          <button
-            className="sidebar-toggle"
-            onClick={() => {
-              const newCollapsed = !dashboardState.sidebarCollapsed;
-              setDashboardState((prev) => ({
-                ...prev,
-                sidebarCollapsed: newCollapsed,
-              }));
-              setUserExpandedSidebar(!newCollapsed);
-            }}
-            aria-label={
-              dashboardState.sidebarCollapsed
-                ? "Expand sidebar"
-                : "Collapse sidebar"
-            }
-            aria-expanded={!dashboardState.sidebarCollapsed}
-          >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              {dashboardState.sidebarCollapsed ? (
-                <path d="M9 18l6-6-6-6" />
-              ) : (
-                <path d="M15 18l-6-6 6-6" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        <nav className="sidebar-nav" role="menu">
-          {sidebarItems.map((item, index) => {
-            if (item.isExternal) {
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className="nav-item"
-                  role="menuitem"
-                  aria-label={`${item.label}: ${item.description}`}
-                  tabIndex={0}
-                  style={{
-                    animationDelay: `${index * 0.1}s`,
-                    display: "flex",
-                    alignItems: "center",
-                    textDecoration: "none",
-                  }}
-                >
-                  <span className="nav-icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                  {!dashboardState.sidebarCollapsed && (
-                    <div className="nav-content">
-                      <span className="nav-label">{item.label}</span>
-                      <span className="nav-description">
-                        {item.description}
-                      </span>
-                    </div>
-                  )}
-                </Link>
-              );
-            }
-
-            return (
-              <button
-                key={item.id}
-                className={`nav-item nav-item-animated ${dashboardState.activeSection === item.id ? "active" : ""}`}
-                onClick={() =>
-                  setDashboardState((prev) => ({
-                    ...prev,
-                    activeSection: item.id,
-                    // Auto-hide results when switching tabs
-                    showResults:
-                      item.id === "editor" || item.id === "samples"
-                        ? prev.showResults
-                        : false,
-                  }))
-                }
-                role="menuitem"
-                aria-current={
-                  dashboardState.activeSection === item.id ? "page" : undefined
-                }
-                aria-label={`${item.label}: ${item.description}`}
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setDashboardState((prev) => ({
-                      ...prev,
-                      activeSection: item.id,
-                      // Auto-hide results when switching tabs via keyboard
-                      showResults:
-                        item.id === "editor" || item.id === "samples"
-                          ? prev.showResults
-                          : false,
-                    }));
-                  }
-                }}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <span className="nav-icon" aria-hidden="true">
-                  {item.icon}
-                </span>
-                {!dashboardState.sidebarCollapsed && (
-                  <div className="nav-content">
-                    <span className="nav-label">{item.label}</span>
-                    <span className="nav-description">{item.description}</span>
-                  </div>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div
-          className={`sidebar-footer ${dashboardState.sidebarCollapsed ? "collapsed" : ""}`}
-        >
-          <div className="user-section">
-            <div className="user-avatar" aria-label="User profile">
-              <svg
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="currentColor"
-              >
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-              </svg>
-            </div>
-            {!dashboardState.sidebarCollapsed && (
-              <div className="user-info">
-                <span className="user-name">
-                  {user?.firstName
-                    ? `${user.firstName} ${user.lastName}`
-                    : user?.email}
-                </span>
-                <span className="user-plan">
-                  {user?.plan?.charAt(0).toUpperCase() + user?.plan?.slice(1) ||
-                    "Free"}{" "}
-                  Plan
-                </span>
-                <div className="flex items-center space-x-2 mt-1">
-                  <Link
-                    href="/profile"
-                    className="text-xs text-gray-400 hover:text-white"
-                    title="Profile settings"
-                  >
-                    Profile
-                  </Link>
-                  <span className="text-gray-600">•</span>
-                  <button
-                    onClick={signOut}
-                    className="text-xs text-gray-400 hover:text-white"
-                    title="Sign out"
-                  >
-                    Sign out
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </aside>
+      <SidebarShell
+        sidebarCollapsed={dashboardState.sidebarCollapsed}
+        userExpandedSidebar={userExpandedSidebar}
+        activeSection={dashboardState.activeSection}
+        user={user}
+        onToggleSidebar={() => {
+          const newCollapsed = !dashboardState.sidebarCollapsed;
+          setDashboardState((prev) => ({
+            ...prev,
+            sidebarCollapsed: newCollapsed,
+          }));
+          setUserExpandedSidebar(!newCollapsed);
+        }}
+        onSectionChange={(sectionId) => {
+          setDashboardState((prev) => ({
+            ...prev,
+            activeSection: sectionId,
+            showResults:
+              sectionId === "editor" || sectionId === "samples"
+                ? prev.showResults
+                : false,
+          }));
+        }}
+        onSignOut={signOut}
+      />
 
       {/* Main Content */}
       <main className="dashboard-main">
@@ -2496,127 +2084,14 @@ const sidebarItems = [
 
           {/* Integrations Tab */}
           {dashboardState.activeSection === "integrations" && (
-            <div className="tab-content">
-              <div className="integrations-overview">
-                <h3>Integrations & Automations</h3>
-                <p className="tab-description">
-                  Connect NeuroLint with your development workflow.
-                </p>
-
-                <div className="integration-categories">
-                  <div className="integration-category">
-                    <div className="category-header">
-                      <h4>CI/CD Pipelines</h4>
-                      <span
-                        className="category-status"
-                        data-status="coming-soon"
-                      >
-                        Coming Soon
-                      </span>
-                    </div>
-                    <p>
-                      Automatically analyze code in your CI/CD pipeline with
-                      GitHub Actions, GitLab CI, Jenkins, and more.
-                    </p>
-                    <div className="supported-platforms">
-                      <span className="platform-badge">GitHub Actions</span>
-                      <span className="platform-badge">GitLab CI</span>
-                      <span className="platform-badge">Jenkins</span>
-                      <span className="platform-badge">Azure DevOps</span>
-                    </div>
-                  </div>
-
-                  <div className="integration-category">
-                    <div className="category-header">
-                      <h4>Webhooks</h4>
-                      <span className="category-status" data-status="available">
-                        Available
-                      </span>
-                    </div>
-                    <p>
-                      Receive real-time notifications when analyses complete or
-                      issues are detected.
-                    </p>
-                    <div className="webhook-features">
-                      <div className="feature-item">
-                        Analysis completion notifications
-                      </div>
-                      <div className="feature-item">Error alerts</div>
-                      <div className="feature-item">
-                        Custom payload formatting
-                      </div>
-                      <div className="feature-item">Retry mechanisms</div>
-                    </div>
-                  </div>
-
-                  <div className="integration-category">
-                    <div className="category-header">
-                      <h4>Team Notifications</h4>
-                      <span className="category-status" data-status="available">
-                        Available
-                      </span>
-                    </div>
-                    <p>
-                      Keep your team informed with Slack and Microsoft Teams
-                      integrations.
-                    </p>
-                    <div className="notification-channels">
-                      <div className="channel-item">
-                        <span>Slack Channels</span>
-                      </div>
-                      <div className="channel-item">
-                        <span>Email Notifications</span>
-                      </div>
-                      <div className="channel-item">
-                        <span>Microsoft Teams</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="integration-category">
-                    <div className="category-header">
-                      <h4>API Access</h4>
-                      <span className="category-status" data-status="available">
-                        Available
-                      </span>
-                    </div>
-                    <p>
-                      Programmatic access to NeuroLint analysis engine with
-                      comprehensive REST API.
-                    </p>
-                    <div className="api-features">
-                      <div className="feature-item">API key authentication</div>
-                      <div className="feature-item">Rate limiting</div>
-                      <div className="feature-item">OpenAPI documentation</div>
-                      <div className="feature-item">SDKs coming soon</div>
-                    </div>
-                    <div className="api-actions">
-                      <button
-                        className="btn btn-primary"
-                        onClick={() =>
-                          window.open("/api/docs?format=html", "_blank")
-                        }
-                        aria-label="Open API documentation in new tab"
-                      >
-                        View API Docs
-                      </button>
-                      <button
-                        className="btn btn-secondary"
-                        onClick={() =>
-                          setDashboardState((prev) => ({
-                            ...prev,
-                            activeSection: "api-keys",
-                          }))
-                        }
-                        aria-label="Navigate to API keys management section"
-                      >
-                        Manage API Keys
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <IntegrationsHub
+              onNavigateToApiKeys={() =>
+                setDashboardState((prev) => ({
+                  ...prev,
+                  activeSection: "api-keys",
+                }))
+              }
+            />
           )}
 
           {/* Code Analysis Tab */}
@@ -2679,186 +2154,93 @@ const sidebarItems = [
 
           {/* Projects Tab */}
           {dashboardState.activeSection === "projects" && (
-            <div className="tab-content">
-              <div className="projects-header">
-                <h3>Your Projects</h3>
-                <LoadingButton
-                  isLoading={isLoading.createProject}
-                  variant="primary"
-                  onClick={async () => {
-                    const projectName = await showProjectNameDialog();
-                    if (!projectName) return;
+            <ProjectsManager
+              projects={dashboardState.projects}
+              isLoading={isLoading.createProject}
+              isLoadingDashboardData={isLoading.dashboardData}
+              onCreateProject={async () => {
+                const projectName = await showProjectNameDialog();
+                if (!projectName) return;
 
+                if (!user?.id) {
+                  showError("You must be logged in to create projects");
+                  return;
+                }
+
+                setIsLoading(prev => ({ ...prev, createProject: true }));
+
+                try {
+                  const savedProject = await productionDb.createProject(user.id, {
+                    name: projectName,
+                    description: "",
+                    files: []
+                  });
+
+                  const newProject: Project = {
+                    id: savedProject.id,
+                    name: savedProject.name,
+                    description: savedProject.description || "",
+                    files: savedProject.files || [],
+                    createdAt: new Date(savedProject.created_at),
+                    lastAnalyzed: savedProject.last_analyzed ? new Date(savedProject.last_analyzed) : undefined,
+                  };
+
+                  setDashboardState((prev) => ({
+                    ...prev,
+                    projects: [...prev.projects, newProject],
+                  }));
+
+                  showSuccess(`Project "${projectName}" created successfully!`);
+                } catch (error) {
+                  if (error instanceof ValidationError) {
+                    showError(`Invalid project name: ${error.message}`);
+                  } else if (error instanceof DatabaseError) {
+                    showError(`Database error: ${error.message}`);
+                  } else {
+                    showError("Failed to create project. Please try again.");
+                  }
+                } finally {
+                  setIsLoading(prev => ({ ...prev, createProject: false }));
+                }
+              }}
+              onDeleteProject={async (projectId, projectName) => {
+                showConfirm(
+                  `Are you sure you want to delete "${projectName}"? This action cannot be undone.`,
+                  async () => {
                     if (!user?.id) {
-                      showError("You must be logged in to create projects");
+                      showError("You must be logged in to delete projects");
                       return;
                     }
 
-                    setIsLoading(prev => ({ ...prev, createProject: true }));
+                    setIsLoading(prev => ({ ...prev, [`deleteProject_${projectId}`]: true }));
 
                     try {
-                      const savedProject = await productionDb.createProject(user.id, {
-                        name: projectName,
-                        description: "",
-                        files: []
-                      });
-
-                      const newProject: Project = {
-                        id: savedProject.id,
-                        name: savedProject.name,
-                        description: savedProject.description || "",
-                        files: savedProject.files || [],
-                        createdAt: new Date(savedProject.created_at),
-                        lastAnalyzed: savedProject.last_analyzed ? new Date(savedProject.last_analyzed) : undefined,
-                      };
-
+                      await productionDb.deleteProject(user.id, projectId);
+                      
                       setDashboardState((prev) => ({
                         ...prev,
-                        projects: [...prev.projects, newProject],
+                        projects: prev.projects.filter((p) => p.id !== projectId),
                       }));
 
-                      showSuccess(`Project "${projectName}" created successfully!`);
+                      showSuccess(`Project "${projectName}" deleted successfully`);
                     } catch (error) {
-                      if (error instanceof ValidationError) {
-                        showError(`Invalid project name: ${error.message}`);
-                      } else if (error instanceof DatabaseError) {
-                        showError(`Database error: ${error.message}`);
+                      if (error instanceof DatabaseError) {
+                        showError(`Failed to delete project: ${error.message}`);
                       } else {
-                        showError("Failed to create project. Please try again.");
+                        showError("Failed to delete project. Please try again.");
                       }
                     } finally {
-                      setIsLoading(prev => ({ ...prev, createProject: false }));
+                      setIsLoading(prev => ({ ...prev, [`deleteProject_${projectId}`]: false }));
                     }
-                  }}
-                >
-                  New Project
-                </LoadingButton>
-              </div>
-
-              {isLoading.dashboardData ? (
-                <SectionLoader message="Loading your projects..." />
-              ) : dashboardState.projects.length === 0 ? (
-                <div className="empty-state">
-                  <div className="text-center py-12">
-                    <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v2M7 13h10l-4-8H7l-4 8z" />
-                    </svg>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No projects yet</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      Create your first project to organize your code analysis and track improvements over time.
-                    </p>
-                    <LoadingButton
-                      isLoading={isLoading.createProject}
-                      variant="primary"
-                      onClick={async () => {
-                        const projectName = await showProjectNameDialog();
-                        if (!projectName) return;
-
-                        if (!user?.id) {
-                          showError("You must be logged in to create projects");
-                          return;
-                        }
-
-                        setIsLoading(prev => ({ ...prev, createProject: true }));
-
-                        try {
-                          const savedProject = await productionDb.createProject(user.id, {
-                            name: projectName,
-                            description: "",
-                            files: []
-                          });
-
-                          const newProject: Project = {
-                            id: savedProject.id,
-                            name: savedProject.name,
-                            description: savedProject.description || "",
-                            files: savedProject.files || [],
-                            createdAt: new Date(savedProject.created_at),
-                            lastAnalyzed: savedProject.last_analyzed ? new Date(savedProject.last_analyzed) : undefined,
-                          };
-
-                          setDashboardState((prev) => ({
-                            ...prev,
-                            projects: [...prev.projects, newProject],
-                          }));
-
-                          showSuccess(`Project "${projectName}" created successfully!`);
-                        } catch (error) {
-                          if (error instanceof ValidationError) {
-                            showError(`Invalid project name: ${error.message}`);
-                          } else if (error instanceof DatabaseError) {
-                            showError(`Database error: ${error.message}`);
-                          } else {
-                            showError("Failed to create project. Please try again.");
-                          }
-                        } finally {
-                          setIsLoading(prev => ({ ...prev, createProject: false }));
-                        }
-                      }}
-                    >
-                      Create Your First Project
-                    </LoadingButton>
-                  </div>
-                </div>
-              ) : (
-                <div className="projects-grid">
-                  {dashboardState.projects.map((project) => (
-                    <div key={project.id} className="project-card">
-                      <h4>{project.name}</h4>
-                      <p className="project-meta">
-                        Created {project.createdAt.toLocaleDateString()}
-                      </p>
-                      <p className="project-stats">
-                        {project.files.length} files
-                      </p>
-                      <div className="project-actions">
-                        <button className="btn btn-sm">Open</button>
-                        <LoadingButton
-                          isLoading={isLoading[`deleteProject_${project.id}`]}
-                          variant="danger"
-                          className="btn-sm"
-                          onClick={() => {
-                            showConfirm(
-                              `Are you sure you want to delete "${project.name}"? This action cannot be undone.`,
-                              async () => {
-                                if (!user?.id) {
-                                  showError("You must be logged in to delete projects");
-                                  return;
-                                }
-
-                                setIsLoading(prev => ({ ...prev, [`deleteProject_${project.id}`]: true }));
-
-                                try {
-                                  await productionDb.deleteProject(user.id, project.id);
-                                  
-                                  setDashboardState((prev) => ({
-                                    ...prev,
-                                    projects: prev.projects.filter((p) => p.id !== project.id),
-                                  }));
-
-                                  showSuccess(`Project "${project.name}" deleted successfully`);
-                                } catch (error) {
-                                  if (error instanceof DatabaseError) {
-                                    showError(`Failed to delete project: ${error.message}`);
-                                  } else {
-                                    showError("Failed to delete project. Please try again.");
-                                  }
-                                } finally {
-                                  setIsLoading(prev => ({ ...prev, [`deleteProject_${project.id}`]: false }));
-                                }
-                              },
-                              "Delete Project"
-                            );
-                          }}
-                                                  >
-                            Delete
-                          </LoadingButton>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  },
+                  "Delete Project"
+                );
+              }}
+              onOpenProject={(projectId) => {
+                console.log("Opening project:", projectId);
+              }}
+              getDeleteLoadingState={(projectId) => isLoading[`deleteProject_${projectId}`] || false}
+            />
           )}
 
           {/* Analysis History Tab */}
@@ -3447,446 +2829,43 @@ const sidebarItems = [
 
           {/* Results Section - Inline Display */}
           {dashboardState.showResults && (
-            <div className="results-inline-section" ref={resultsSectionRef}>
-              <div className="results-inline-container">
-                <div className="results-inline-header">
-                  <h2>Analysis Results - {dashboardState.currentFile}</h2>
-                  <div className="results-inline-actions">
-                    <button
-                      className="control-btn"
-                      onClick={() =>
-                        setDashboardState((prev) => ({
-                          ...prev,
-                          showResults: false,
-                          result: null,
-                          currentFile: null,
-                          isLoading: false,
-                          progressStatus: "",
-                          uploadProgress: 0,
-                        }))
-                      }
-                      aria-label="Clear analysis results and start over"
-                    >
-                      Clear Results
-                    </button>
-                    <button
-                      className="results-close"
-                      onClick={() => {
-                        setDashboardState((prev) => ({
-                          ...prev,
-                          showResults: false,
-                        }));
-                      }}
-                      aria-label="Close results"
-                    >
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="results-inline-content">
-                  {dashboardState.isLoading ? (
-                    <div className="loading-state">
-                      <div className="loading-spinner"></div>
-                      <p>Analyzing code with NeuroLint...</p>
-                    </div>
-                  ) : dashboardState.result?.error ? (
-                    <div className="error-state">
-                      <h3>Analysis Failed</h3>
-                      <p>{dashboardState.result.error}</p>
-                    </div>
-                  ) : (
-                    dashboardState.result && (
-                      <div className="analysis-results">
-                    {/* Premium Business Insights */}
-                    {dashboardState.result.analysis && (
-                      <div className="business-insights">
-                        <h3>Technical Impact Analysis</h3>
-                        <div className="insights-grid">
-                          <div className="insight-card">
-                            <div className="insight-label">
-                              Potential Savings
-                            </div>
-                            <div className="insight-value">
-                              ~
-                              {Math.round(
-                                dashboardState.result.analysis.detectedIssues
-                                  .length * 2.5,
-                              )}{" "}
-                              hours dev time
-                            </div>
-                          </div>
-                          <div className="insight-card">
-                            <div className="insight-label">
-                              Performance Gain
-                            </div>
-                            <div className="insight-value">
-                              {dashboardState.result.analysis.estimatedImpact
-                                .level === "high"
-                                ? "15-25%"
-                                : "5-15%"}{" "}
-                              faster
-                            </div>
-                          </div>
-                          <div className="insight-card">
-                            <div className="insight-label">Risk Reduction</div>
-                            <div className="insight-value">
-                              {
-                                dashboardState.result.analysis.detectedIssues.filter(
-                                  (i) =>
-                                    i.severity === "high" ||
-                                    i.severity === "critical",
-                                ).length
-                              }{" "}
-                              critical issues
-                            </div>
-                          </div>
-                          <div className="insight-card">
-                            <div className="insight-label">
-                              Standards Compliance
-                            </div>
-                            <div className="insight-value">
-                              {Math.round(
-                                dashboardState.result.analysis.confidence * 100,
-                              )}
-                              % best practices
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Analysis Overview */}
-                    {dashboardState.result.analysis && (
-                      <div className="analysis-overview">
-                        <h3>Analysis Overview</h3>
-                        <div className="overview-stats">
-                          <div className="stat">
-                            <span className="stat-value">
-                              {
-                                dashboardState.result.analysis.detectedIssues
-                                  .length
-                              }
-                            </span>
-                            <span className="stat-label">Issues Found</span>
-                          </div>
-                          <div className="stat">
-                            <span className="stat-value">
-                              {dashboardState.result.analysis.confidence}%
-                            </span>
-                            <span className="stat-label">Analysis Score</span>
-                          </div>
-                          <div className="stat">
-                            <span className="stat-value">
-                              {
-                                dashboardState.result.analysis.estimatedImpact
-                                  .level
-                              }
-                            </span>
-                            <span className="stat-label">Impact Level</span>
-                          </div>
-                          <div className="stat">
-                            <span className="stat-value">
-                              {formatProcessingTime(
-                                dashboardState.result.metadata
-                                  ?.processingTimeMs || 0,
-                              )}
-                            </span>
-                            <span className="stat-label">Processing Time</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Before/After Code Comparison */}
-                    {dashboardState.result.originalCode &&
-                      dashboardState.result.transformed && (
-                        <div className="code-comparison">
-                          <h3>
-                            {dashboardState.result.dryRun
-                              ? "Code Preview (Dry Run)"
-                              : "Applied Changes"}
-                          </h3>
-
-                          {dashboardState.result.originalCode ===
-                          dashboardState.result.transformed ? (
-                            <div className="no-changes">
-                              <p>
-                                No changes needed - your code is already
-                                optimized!
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="comparison-grid">
-                              <div className="code-panel">
-                                <div className="code-panel-header">
-                                  <h4>Original Code</h4>
-                                  <div className="code-actions">
-                                    <button
-                                      className="code-action-btn"
-                                      onClick={() =>
-                                        copyToClipboard(
-                                          dashboardState.result?.originalCode ||
-                                            "",
-                                          "Original",
-                                        )
-                                      }
-                                      title="Copy original code"
-                                      aria-label="Copy original code to clipboard"
-                                    >
-                                      <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <rect
-                                          x="9"
-                                          y="9"
-                                          width="13"
-                                          height="13"
-                                          rx="2"
-                                          ry="2"
-                                        ></rect>
-                                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
-                                      </svg>
-                                    </button>
-                                    <button
-                                      className="code-action-btn"
-                                      onClick={() =>
-                                        downloadCode(
-                                          dashboardState.result?.originalCode ||
-                                            "",
-                                          `${dashboardState.currentFile || "original-code"}.backup.tsx`,
-                                        )
-                                      }
-                                      title="Download original code"
-                                      aria-label="Download original code as file"
-                                    >
-                                      <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
-                                        <polyline points="7,10 12,15 17,10"></polyline>
-                                        <line
-                                          x1="12"
-                                          y1="15"
-                                          x2="12"
-                                          y2="3"
-                                        ></line>
-                                      </svg>
-                                    </button>
-                                  </div>
-                                </div>
-                                <pre className="code-block">
-                                  <code>
-                                    {dashboardState.result.originalCode}
-                                  </code>
-                                </pre>
-                              </div>
-                              <div className="code-panel">
-                                <div className="code-panel-header">
-                                  <h4>
-                                    {dashboardState.result.dryRun
-                                      ? "Preview Changes"
-                                      : "Fixed Code"}
-                                  </h4>
-                                  <div className="code-actions">
-                                    <button
-                                      className="code-action-btn"
-                                      onClick={() =>
-                                        copyToClipboard(
-                                          dashboardState.result?.transformed ||
-                                            "",
-                                          "Fixed",
-                                        )
-                                      }
-                                      title="Copy fixed code"
-                                      aria-label="Copy fixed code to clipboard"
-                                    >
-                                      <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <rect
-                                          x="9"
-                                          y="9"
-                                          width="13"
-                                          height="13"
-                                          rx="2"
-                                          ry="2"
-                                        ></rect>
-                                        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
-                                      </svg>
-                                    </button>
-                                    <button
-                                      className="code-action-btn"
-                                      onClick={() =>
-                                        downloadCode(
-                                          dashboardState.result?.transformed ||
-                                            "",
-                                          `${dashboardState.currentFile || "fixed-code"}.tsx`,
-                                        )
-                                      }
-                                      title="Download fixed code"
-                                      aria-label="Download fixed code as file"
-                                    >
-                                      <svg
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                      >
-                                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
-                                        <polyline points="7,10 12,15 17,10"></polyline>
-                                        <line
-                                          x1="12"
-                                          y1="15"
-                                          x2="12"
-                                          y2="3"
-                                        ></line>
-                                      </svg>
-                                    </button>
-                                  </div>
-                                </div>
-                                <pre className="code-block">
-                                  <code>
-                                    {dashboardState.result.transformed}
-                                  </code>
-                                </pre>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                    {/* Issues Details */}
-                    {dashboardState.result.analysis?.detectedIssues &&
-                      dashboardState.result.analysis.detectedIssues.length >
-                        0 && (
-                        <div className="issues-section">
-                          <h3>Detected Issues</h3>
-                          <div className="issues-list">
-                            {dashboardState.result.analysis.detectedIssues.map(
-                              (issue, index) => (
-                                <div
-                                  key={`layer-${issue.layer || index}-${index}`}
-                                  className="issue-item severity-medium"
-                                >
-                                  <div className="issue-header">
-                                    <span className="issue-type">Layer {issue.layer} Issue</span>
-                                    <span className="issue-severity">medium</span>
-                                  </div>
-                                  <p className="issue-description">{issue.reason || issue.description || "No description available"}</p>
-                                  <div className="issue-meta">
-                                    <span>
-                                      Fixed by Layer {issue.layer}
-                                    </span>
-                                    {issue.count && (
-                                      <span>{issue.count} occurrences</span>
-                                    )}
-                                  </div>
-                                </div>
-                              ),
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                    {/* Layer Execution Details */}
-                    {dashboardState.result.layerResults && (
-                      <div className="layers-section">
-                        <h3>Layer Execution</h3>
-                        <div className="layers-list">
-                          {dashboardState.result.layerResults.map((layer, layerIndex) => {
-                            // Determine layer status based on execution results
-                            const getLayerStatus = (layer) => {
-                              if (layer.success && (layer.changeCount > 0 || layer.improvements?.length > 0)) {
-                                return { className: "success", text: "Success" };
-                              } else if (!layer.success && layer.error === "No changes were made") {
-                                return { className: "no-changes", text: "No changes needed" };
-                              } else if (!layer.success && layer.error) {
-                                return { className: "failed", text: "Failed" };
-                              } else if (layer.success && layer.changeCount === 0) {
-                                return { className: "no-changes", text: "No changes needed" };
-                              } else {
-                                return { className: "skipped", text: "Skipped" };
-                              }
-                            };
-                            
-                            const status = getLayerStatus(layer);
-                            
-                            return (
-                            <div
-                              key={`layer-${layer.layerId || `index-${layerIndex}`}`}
-                              className={`layer-item ${status.className}`}
-                            >
-                              <div className="layer-header">
-                                <span className="layer-id">
-                                  Layer {layer.layerId}
-                                </span>
-                                <span className="layer-time">
-                                  {formatProcessingTime(layer.executionTime || Math.round((dashboardState.result.executionTime || 2000) / (dashboardState.result.layerResults?.length || 1)))}
-                                </span>
-                                <span
-                                  className={`layer-status ${status.className}`}
-                                >
-                                  {status.text}
-                                </span>
-                              </div>
-                              {layer.improvements && (
-                                <ul className="layer-improvements">
-                                  {layer.improvements.map(
-                                    (improvement, idx) => (
-                                      <li key={`layer-${layer.layerId || `index-${layerIndex}`}-improvement-${idx}`}>{improvement}</li>
-                                    ),
-                                  )}
-                                </ul>
-                              )}
-                              {layer.error && layer.error !== "No changes were made" && (
-                                <p className="layer-error">
-                                  Error: {layer.error}
-                                </p>
-                              )}
-                              {layer.revertReason && (
-                                <p className="layer-revert">
-                                  Reverted: {layer.revertReason}
-                                </p>
-                              )}
-                            </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )
-              )}
-                </div>
-              </div>
-            </div>
+            <AnalysisResultsPanel
+              result={dashboardState.result}
+              currentFile={dashboardState.currentFile}
+              isLoading={dashboardState.isLoading}
+              resultsSectionRef={resultsSectionRef}
+              onClearResults={() =>
+                setDashboardState((prev) => ({
+                  ...prev,
+                  showResults: false,
+                  result: null,
+                  currentFile: null,
+                  isLoading: false,
+                  progressStatus: "",
+                  uploadProgress: 0,
+                }))
+              }
+              onCloseResults={() =>
+                setDashboardState((prev) => ({
+                  ...prev,
+                  showResults: false,
+                }))
+              }
+              onCopyCode={(code, type) => {
+                navigator.clipboard.writeText(code);
+                showSuccess(`${type} code copied to clipboard!`);
+              }}
+              onDownloadCode={(code, filename) => {
+                const blob = new Blob([code], { type: "text/plain" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+                showSuccess(`Downloaded ${filename}`);
+              }}
+            />
           )}
         </div>
       </main>
