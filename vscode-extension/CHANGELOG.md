@@ -5,6 +5,16 @@ All notable changes to the NeuroLint VS Code Extension will be documented in thi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2025-12-01
+
+### Added
+- Extension icon now properly displays on VS Code Marketplace
+- Added `icon` field to package.json configuration
+
+### Changed
+- Version sync with CLI release 1.4.0
+- Updated all documentation version references
+
 ## [1.3.9] - 2025-11-25
 
 ### Changed

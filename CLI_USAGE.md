@@ -1,6 +1,6 @@
 # NeuroLint CLI - Complete Usage Guide
 
-> **Version 1.3.9** | Last Updated: November 25, 2025
+> **Version 1.4.0** | Last Updated: December 1, 2025
 
 Comprehensive guide for using NeuroLint CLI to automatically fix React, Next.js, and TypeScript code issues using deterministic AST transformations.
 

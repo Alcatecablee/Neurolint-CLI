@@ -2,7 +2,7 @@
   "name": "neurolint-vscode",
   "displayName": "NeuroLint",
   "description": "Deterministic code fixing for TypeScript, JavaScript, React, and Next.js with Next.js 16, React 19, and Turbopack support",
-  "version": "1.3.9",
+  "version": "1.4.0",
   "publisher": "neurolint",
   "license": "Apache-2.0",
   "icon": "media/icon.png",

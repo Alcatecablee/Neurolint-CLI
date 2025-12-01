@@ -21,6 +21,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No restrictions on commercial use
 - Enables partnerships and integrations
 
+## [1.4.0] - 2025-12-01
+
+### Added
+- VS Code extension icon now properly displays on marketplace
+- Updated all version references across documentation
+
+### Changed
+- Version bump to 1.4.0 for marketplace release
+- Synchronized CLI and VS Code extension versions
+
 ## [1.3.9] - 2025-11-25
 
 ### Changed
@@ -33,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Verified all 297 tests passing
 - Landing page fully functional
 
-## [1.4.0] - 2025-11-21
+## [1.3.0] - 2025-11-21
 
 ### Added
 

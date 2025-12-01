@@ -2,7 +2,7 @@
 
 > Deterministic code fixing for TypeScript, JavaScript, React, and Next.js
 
-[![Version](https://img.shields.io/badge/version-1.3.9-blue.svg)](https://marketplace.visualstudio.com/items?itemName=neurolint.neurolint-vscode)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](https://marketplace.visualstudio.com/items?itemName=neurolint.neurolint-vscode)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue.svg)](https://marketplace.visualstudio.com/items?itemName=neurolint.neurolint-vscode)
 
