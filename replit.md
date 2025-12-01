@@ -68,7 +68,24 @@ The landing page is a static React + Vite application that showcases NeuroLint's
 - **React, Next.js, TypeScript, JavaScript:** Target technologies for code transformation and analysis.
 - **Apache License 2.0:** The project's open-source licensing model, enabling maximum adoption, enterprise use, commercial use, and community contributions without restrictions.
 
-## Recent Changes (November 30, 2025)
+## Recent Changes (December 1, 2025)
+
+### VS Code Extension - Enhanced CLI Parity & Testing
+- **CLI Parity Testing Infrastructure:**
+  - Created `scripts/run-cli-analysis.js` CLI harness for authentic parity testing
+  - Harness spawns actual CLI and returns JSON with issues, issueCount, summary
+  - E2E tests compare extension output against authentic CLI output
+  - Divergence detection validates test infrastructure works correctly
+- **Interface Updates:**
+  - IAnalysisClient: Added filename/filePath options to applyFixes signature
+  - ApiClient: Added analyze() and applyFixes() methods with metadata support
+  - SharedCoreAdapter: Added resolveFullPath helper for file path resolution
+- **CodeActionProvider Enhancements:**
+  - Added layerNames mapping for user-friendly layer display
+  - Added formatQuickFixTitle and formatQuickFixTooltip helper methods
+  - Enhanced success messages with layer names and fix details
+
+## Previous Changes (November 30, 2025)
 
 ### VS Code Extension v1.0.15 - Full CLI Parity Update
 - **Layer System Updated:** Fixed layer names and added Layer 7 (Adaptive Learning)
