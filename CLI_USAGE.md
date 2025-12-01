@@ -1426,18 +1426,17 @@ For complete version history and detailed release notes, see [CHANGELOG.md](./CH
 
 ### Latest Release
 
-**Version 1.3.9** - Repository cleanup and launch preparation for Reddit and Product Hunt.
+**Version 1.4.0** - Marketplace release with VS Code extension icon fix and synchronized versions.
 
 Key features:
 - 7-layer progressive architecture
 - React 19 migration support
-- Next.js 15.5 optimization
+- Next.js 16 migration tools
 - Hydration error detection and fixes
 - Accessibility compliance (WCAG 2.1 AA)
 - 297 passing tests
 - Deterministic AST transformations
-
-**Upcoming in 1.4.0:** Next.js 16 migration, React 19 dependency checker, Turbopack assistant, and more.
+- VS Code extension with marketplace icon
 
 See [CHANGELOG.md](./CHANGELOG.md) for full details.
 
@@ -1634,4 +1633,4 @@ New to NeuroLint? Follow this checklist:
 
 **Built for developers who want deterministic, rule-based code quality - not AI-driven unpredictability.**
 
-**Version 1.3.9** | Apache License 2.0 | Built for the React and Next.js community
+**Version 1.4.0** | Apache License 2.0 | Built for the React and Next.js community

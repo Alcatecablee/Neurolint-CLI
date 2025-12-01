@@ -624,7 +624,7 @@ module.exports = {
       const pkg = require('../package.json');
       return pkg.version;
     } catch {
-      return '1.3.9';
+      return '1.4.0';
     }
   },
   description: 'NeuroLint Shared Core - Unified code modernization engine'

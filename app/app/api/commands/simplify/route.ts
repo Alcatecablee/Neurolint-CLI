@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       dryRun,
       executionTime: Date.now() - startTime,
       metadata: {
-        version: "1.3.9",
+        version: "1.4.0",
         timestamp: new Date().toISOString(),
       },
     });
