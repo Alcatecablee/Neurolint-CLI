@@ -16,21 +16,38 @@ export async function POST(request: NextRequest) {
 
     const startTime = Date.now();
 
-    const TransformationValidator = require("../../../../validator");
-    const result = TransformationValidator.validateCode(code, {
+    const sharedCore = require("../../../../shared-core");
+    await sharedCore.core.initialize({ platform: "web" });
+    
+    const analysisResult = await sharedCore.analyze(code, {
       filename: filename || "unknown.tsx",
+      platform: "web",
+      layers: [1, 2, 3, 4, 5, 6, 7],
       verbose: options.verbose || false,
-      ...options,
     });
+
+    const issues = analysisResult.issues || analysisResult.detectedIssues || [];
+    const errors = issues.filter((i: any) => i.severity === "critical" || i.severity === "error");
+    const warnings = issues.filter((i: any) => i.severity === "warning" || i.severity === "medium" || i.severity === "high");
 
     return NextResponse.json({
       success: true,
       command: "validate",
-      isValid: result.isValid || false,
-      errors: result.errors || [],
-      warnings: result.warnings || [],
-      syntaxValid: result.syntaxValid || false,
-      semanticValid: result.semanticValid || false,
+      isValid: errors.length === 0,
+      errors: errors.map((i: any) => ({
+        type: i.type,
+        description: i.description || i.reason,
+        line: i.line,
+        column: i.column,
+      })),
+      warnings: warnings.map((i: any) => ({
+        type: i.type,
+        description: i.description || i.reason,
+        line: i.line,
+        column: i.column,
+      })),
+      syntaxValid: !errors.some((e: any) => e.type === "syntax"),
+      totalIssues: issues.length,
       executionTime: Date.now() - startTime,
       metadata: {
         version: "1.3.9",
@@ -38,20 +55,28 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        error: "Validation failed",
-        message: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
+    const message = error instanceof Error ? error.message : "Unknown error";
+    const isSyntaxError = message.includes("SyntaxError") || message.includes("Unexpected");
+    
+    return NextResponse.json({
+      success: true,
+      command: "validate",
+      isValid: false,
+      errors: [{
+        type: isSyntaxError ? "syntax" : "validation",
+        description: message,
+      }],
+      warnings: [],
+      syntaxValid: !isSyntaxError,
+      executionTime: 0,
+    });
   }
 }
 
 export async function GET() {
   return NextResponse.json({
     command: "validate",
-    description: "Validate files without applying fixes",
+    description: "Validate files without applying fixes - checks for issues across all 7 layers",
     method: "POST",
     parameters: {
       code: "string (required) - The code to validate",

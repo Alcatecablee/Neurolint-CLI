@@ -5,32 +5,32 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { code, filename, options = {} } = body;
+    const { projectPath, options = {} } = body;
 
-    if (!code || typeof code !== "string") {
+    if (!projectPath || typeof projectPath !== "string") {
       return NextResponse.json(
-        { error: "Code is required and must be a string" },
+        { error: "projectPath is required for security - cannot use server working directory" },
         { status: 400 }
       );
     }
 
     const startTime = Date.now();
 
-    const detectReact192 = require("../../../../scripts/detect-react192");
-    const result = await detectReact192.detect(code, {
-      filename: filename || "unknown.tsx",
+    const { React192FeatureDetector } = require("../../../../scripts/react192-feature-detector");
+    const detector = new React192FeatureDetector({
       verbose: options.verbose || false,
-      ...options,
+      projectPath,
     });
+    
+    const result = await detector.detect();
 
     return NextResponse.json({
       success: true,
       command: "detect-react192",
-      opportunities: result.opportunities || [],
       viewTransitions: result.viewTransitions || [],
       useEffectEvent: result.useEffectEvent || [],
-      activityComponents: result.activityComponents || [],
-      totalOpportunities: result.totalOpportunities || 0,
+      activity: result.activity || [],
+      totalOpportunities: result.total || 0,
       executionTime: Date.now() - startTime,
       metadata: {
         version: "1.3.9",
@@ -54,9 +54,8 @@ export async function GET() {
     description: "Detect React 19.2 feature opportunities (View Transitions, useEffectEvent, Activity)",
     method: "POST",
     parameters: {
-      code: "string (required) - The code to analyze",
-      filename: "string (optional) - The filename",
-      options: "object (optional) - Additional options",
+      projectPath: "string (required) - Absolute path to the project to analyze",
+      options: "object (optional) - Additional options like verbose: true",
     },
   });
 }

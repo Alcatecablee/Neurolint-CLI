@@ -16,23 +16,24 @@ export async function POST(request: NextRequest) {
 
     const startTime = Date.now();
 
-    const simplify = require("../../../../scripts/simplify");
-    const result = await simplify.simplifyCode(code, {
+    const fixMaster = require("../../../../fix-master");
+    const result = await fixMaster.executeLayers(code, [1, 2, 3, 4, 5, 6, 7], {
       dryRun,
-      filename: filename || "unknown.tsx",
       verbose: options.verbose || false,
-      ...options,
+      filePath: filename || "unknown.tsx",
     });
 
+    const totalChanges = result.results?.reduce((sum: number, r: any) => sum + (r.changes || 0), 0) || 0;
+    
     return NextResponse.json({
-      success: true,
+      success: result.success !== false,
       command: "simplify",
       originalCode: code,
-      simplifiedCode: result.code || code,
-      changes: result.changes || [],
-      changeCount: result.changeCount || 0,
-      complexityBefore: result.complexityBefore || 0,
-      complexityAfter: result.complexityAfter || 0,
+      simplifiedCode: result.finalCode || code,
+      changes: result.results?.filter((r: any) => r.success && r.changes > 0) || [],
+      changeCount: totalChanges,
+      complexityBefore: code.length,
+      complexityAfter: result.finalCode?.length || code.length,
       dryRun,
       executionTime: Date.now() - startTime,
       metadata: {
@@ -54,7 +55,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     command: "simplify",
-    description: "Simplify project complexity (convert Next.js to React, etc.)",
+    description: "Simplify code by running all 7 layers of transformation",
     method: "POST",
     parameters: {
       code: "string (required) - The code to simplify",

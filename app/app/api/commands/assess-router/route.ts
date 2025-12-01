@@ -5,26 +5,31 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { projectStructure, files, options = {} } = body;
+    const { projectPath, options = {} } = body;
+
+    if (!projectPath || typeof projectPath !== "string") {
+      return NextResponse.json(
+        { error: "projectPath is required for security - cannot use server working directory" },
+        { status: 400 }
+      );
+    }
 
     const startTime = Date.now();
 
-    const assessRouter = require("../../../../scripts/assess-router");
-    const result = await assessRouter.assess({
-      projectStructure,
-      files,
+    const { RouterComplexityAssessor } = require("../../../../scripts/router-complexity-assessor");
+    const assessor = new RouterComplexityAssessor({
       verbose: options.verbose || false,
-      ...options,
+      projectPath,
     });
+    
+    const result = await assessor.assess();
 
     return NextResponse.json({
       success: true,
       command: "assess-router",
-      complexityScore: result.complexityScore || 0,
-      routerType: result.routerType || "unknown",
-      recommendation: result.recommendation || "",
-      simplificationOpportunities: result.simplificationOpportunities || [],
-      features: result.features || {},
+      metrics: result.metrics || {},
+      recommendations: result.recommendations || [],
+      complexityLevel: result.level || "unknown",
       executionTime: Date.now() - startTime,
       metadata: {
         version: "1.3.9",
@@ -48,9 +53,8 @@ export async function GET() {
     description: "Assess Next.js router complexity and recommend optimal setup",
     method: "POST",
     parameters: {
-      projectStructure: "object (optional) - Project directory structure",
-      files: "array (optional) - List of files to analyze",
-      options: "object (optional) - Additional options",
+      projectPath: "string (required) - Absolute path to the project to assess",
+      options: "object (optional) - Additional options like verbose: true",
     },
   });
 }

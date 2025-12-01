@@ -5,29 +5,30 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { code, filename, options = {} } = body;
+    const { projectPath, options = {} } = body;
 
-    if (!code || typeof code !== "string") {
+    if (!projectPath || typeof projectPath !== "string") {
       return NextResponse.json(
-        { error: "Code is required and must be a string" },
+        { error: "projectPath is required for security - cannot use server working directory" },
         { status: 400 }
       );
     }
 
     const startTime = Date.now();
 
-    const checkCompiler = require("../../../../scripts/check-compiler");
-    const result = await checkCompiler.check(code, {
-      filename: filename || "unknown.tsx",
+    const { ReactCompilerDetector } = require("../../../../scripts/react-compiler-detector");
+    const detector = new ReactCompilerDetector({
       verbose: options.verbose || false,
-      ...options,
+      projectPath,
     });
+    
+    const result = await detector.analyze();
 
     return NextResponse.json({
       success: true,
       command: "check-compiler",
-      opportunities: result.opportunities || [],
-      opportunityCount: result.opportunityCount || 0,
+      totalFindings: result.totalFindings || 0,
+      findings: result.findings || [],
       recommendCompiler: result.recommendCompiler || false,
       potentialSavings: result.potentialSavings || {},
       executionTime: Date.now() - startTime,
@@ -50,12 +51,11 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     command: "check-compiler",
-    description: "Detect React Compiler optimization opportunities",
+    description: "Detect React Compiler optimization opportunities (manual useMemo/useCallback patterns)",
     method: "POST",
     parameters: {
-      code: "string (required) - The code to analyze",
-      filename: "string (optional) - The filename",
-      options: "object (optional) - Additional options",
+      projectPath: "string (required) - Absolute path to the project to analyze",
+      options: "object (optional) - Additional options like verbose: true",
     },
   });
 }

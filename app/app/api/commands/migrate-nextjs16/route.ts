@@ -5,32 +5,31 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { code, filename, dryRun = true, options = {} } = body;
+    const { projectPath, dryRun = true, options = {} } = body;
 
-    if (!code || typeof code !== "string") {
+    if (!projectPath || typeof projectPath !== "string") {
       return NextResponse.json(
-        { error: "Code is required and must be a string" },
+        { error: "projectPath is required for security - cannot use server working directory" },
         { status: 400 }
       );
     }
 
     const startTime = Date.now();
 
-    const migrateNextjs16 = require("../../../../scripts/migrate-nextjs-16");
-    const result = await migrateNextjs16.migrate(code, {
+    const { NextJS16Migrator } = require("../../../../scripts/migrate-nextjs-16");
+    const migrator = new NextJS16Migrator({
       dryRun,
-      filename: filename || "unknown.tsx",
       verbose: options.verbose || false,
-      ...options,
     });
+    
+    const result = await migrator.migrate(projectPath);
 
     return NextResponse.json({
-      success: true,
+      success: result.success !== false,
       command: "migrate-nextjs16",
-      originalCode: code,
-      transformedCode: result.code || code,
       changes: result.changes || [],
-      changeCount: result.changeCount || 0,
+      changeCount: result.changes?.length || 0,
+      summary: result.summary || "",
       dryRun,
       executionTime: Date.now() - startTime,
       metadata: {
@@ -52,11 +51,10 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     command: "migrate-nextjs16",
-    description: "Migrate project to Next.js 16 compatibility",
+    description: "Migrate project to Next.js 16 compatibility (middleware->proxy, PPR->Cache, async APIs)",
     method: "POST",
     parameters: {
-      code: "string (required) - The code to migrate",
-      filename: "string (optional) - The filename",
+      projectPath: "string (required) - Absolute path to the project to migrate",
       dryRun: "boolean (default: true) - Preview changes without applying",
       options: "object (optional) - Additional migration options",
     },

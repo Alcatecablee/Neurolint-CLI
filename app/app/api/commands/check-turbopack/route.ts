@@ -5,23 +5,30 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { nextConfig, webpackConfig, options = {} } = body;
+    const { projectPath, options = {} } = body;
+
+    if (!projectPath || typeof projectPath !== "string") {
+      return NextResponse.json(
+        { error: "projectPath is required for security - cannot use server working directory" },
+        { status: 400 }
+      );
+    }
 
     const startTime = Date.now();
 
-    const checkTurbopack = require("../../../../scripts/check-turbopack");
-    const result = await checkTurbopack.check({
-      nextConfig,
-      webpackConfig,
+    const { TurbopackMigrationAssistant } = require("../../../../scripts/turbopack-migration-assistant");
+    const assistant = new TurbopackMigrationAssistant({
       verbose: options.verbose || false,
-      ...options,
+      projectPath,
     });
+    
+    const result = await assistant.analyze();
 
     return NextResponse.json({
       success: true,
       command: "check-turbopack",
-      compatible: result.compatible || false,
-      incompatibilities: result.incompatibilities || [],
+      compatible: result.compatible !== false,
+      issues: result.issues || [],
       suggestions: result.suggestions || [],
       migrationSteps: result.migrationSteps || [],
       executionTime: Date.now() - startTime,
@@ -47,9 +54,8 @@ export async function GET() {
     description: "Analyze Turbopack migration compatibility",
     method: "POST",
     parameters: {
-      nextConfig: "string (optional) - next.config.js content",
-      webpackConfig: "string (optional) - webpack.config.js content",
-      options: "object (optional) - Additional options",
+      projectPath: "string (required) - Absolute path to the project to analyze",
+      options: "object (optional) - Additional options like verbose: true",
     },
   });
 }

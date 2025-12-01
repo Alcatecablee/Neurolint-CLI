@@ -5,32 +5,31 @@ export const dynamic = "force-dynamic";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { packageJson, fix = false, options = {} } = body;
+    const { packageJson, options = {} } = body;
 
-    if (!packageJson) {
+    if (!packageJson || typeof packageJson !== "object") {
       return NextResponse.json(
-        { error: "packageJson is required" },
+        { error: "packageJson object is required" },
         { status: 400 }
       );
     }
 
     const startTime = Date.now();
 
-    const checkDeps = require("../../../../scripts/check-deps");
-    const result = await checkDeps.check(packageJson, {
-      fix,
+    const { React19DependencyChecker } = require("../../../../scripts/react19-dependency-checker");
+    const checker = new React19DependencyChecker({
       verbose: options.verbose || false,
-      ...options,
     });
+    
+    const result = await checker.checkPackageJson(packageJson);
 
     return NextResponse.json({
       success: true,
       command: "check-deps",
-      compatible: result.compatible || false,
+      compatible: result.compatible !== false,
       incompatibleDeps: result.incompatibleDeps || [],
       suggestions: result.suggestions || [],
       fixes: result.fixes || [],
-      fixApplied: fix,
       executionTime: Date.now() - startTime,
       metadata: {
         version: "1.3.9",
@@ -54,9 +53,8 @@ export async function GET() {
     description: "Check React 19 dependency compatibility",
     method: "POST",
     parameters: {
-      packageJson: "object (required) - The package.json content",
-      fix: "boolean (default: false) - Apply fixes automatically",
-      options: "object (optional) - Additional options",
+      packageJson: "object (required) - The package.json content as JSON object",
+      options: "object (optional) - Additional options like verbose: true",
     },
   });
 }

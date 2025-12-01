@@ -16,26 +16,32 @@ export async function POST(request: NextRequest) {
 
     const startTime = Date.now();
 
-    const migrateReact19 = require("../../../../scripts/migrate-react19");
-    const result = await migrateReact19.migrate(code, {
+    const fixMaster = require("../../../../fix-master");
+    const result = await fixMaster.executeLayers(code, [7], {
       dryRun,
-      filename: filename || "unknown.tsx",
       verbose: options.verbose || false,
-      ...options,
+      filePath: filename || "unknown.tsx",
     });
 
+    const changes = result.results?.filter((r: any) => r.success && r.changes > 0) || [];
+    
     return NextResponse.json({
-      success: true,
+      success: result.success !== false,
       command: "migrate-react19",
       originalCode: code,
-      transformedCode: result.code || code,
-      changes: result.changes || [],
-      changeCount: result.changeCount || 0,
+      transformedCode: result.finalCode || code,
+      changes: changes.map((r: any) => ({
+        layer: r.layer,
+        changeCount: r.changes,
+        description: `Layer ${r.layer} applied ${r.changes} fix(es)`,
+      })),
+      changeCount: changes.reduce((sum: number, r: any) => sum + (r.changes || 0), 0),
       dryRun,
       executionTime: Date.now() - startTime,
       metadata: {
         version: "1.3.9",
         timestamp: new Date().toISOString(),
+        description: "React 19 migration via Layer 7 (Adaptive Learning)",
       },
     });
   } catch (error) {
@@ -52,7 +58,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     command: "migrate-react19",
-    description: "Migrate project to React 19 compatibility",
+    description: "Migrate project to React 19 compatibility using Layer 7 (Adaptive Learning)",
     method: "POST",
     parameters: {
       code: "string (required) - The code to migrate",
