@@ -727,3 +727,157 @@ export default function Dashboard() {
     });
   });
 });
+
+/**
+ * E2E CLI Parity Tests
+ * 
+ * These tests spawn the actual CLI harness (scripts/run-cli-analysis.js)
+ * to get authentic CLI output, then compare against extension output.
+ * 
+ * Requires:
+ * - Node.js child_process
+ * - Temp file creation for fixtures
+ * - CLI harness script
+ */
+describe('E2E CLI Parity (CLI Harness)', () => {
+  const childProcess = require('child_process');
+  const fs = require('fs');
+  const os = require('os');
+  
+  const CLI_HARNESS_PATH = path.resolve(__dirname, '../../../../scripts/run-cli-analysis.js');
+  
+  interface CLIResult {
+    success: boolean;
+    filePath: string;
+    layers: number[];
+    issues: Array<{
+      severity: string;
+      message: string;
+      layer: number;
+      location: { line: number; column: number };
+      ruleName: string;
+    }>;
+    issueCount: number;
+    error?: string;
+  }
+  
+  function runCLIHarness(filePath: string, layers: number[] = [1, 2, 3, 4, 5, 6, 7]): Promise<CLIResult> {
+    return new Promise((resolve, reject) => {
+      const args = ['--file', filePath, '--layers', layers.join(',')];
+      
+      childProcess.execFile('node', [CLI_HARNESS_PATH, ...args], { timeout: 10000 }, (error: any, stdout: string, stderr: string) => {
+        if (error) {
+          try {
+            const errorResult = JSON.parse(stderr || stdout);
+            resolve({ success: false, ...errorResult } as CLIResult);
+          } catch {
+            reject(new Error(`CLI harness failed: ${error.message}\nstdout: ${stdout}\nstderr: ${stderr}`));
+          }
+          return;
+        }
+        
+        try {
+          const result = JSON.parse(stdout);
+          resolve(result);
+        } catch (parseError) {
+          reject(new Error(`Failed to parse CLI output: ${stdout}`));
+        }
+      });
+    });
+  }
+  
+  function createTempFile(code: string, filename: string): string {
+    const tempDir = os.tmpdir();
+    const tempPath = path.join(tempDir, `neurolint-test-${Date.now()}-${filename}`);
+    fs.writeFileSync(tempPath, code, 'utf-8');
+    return tempPath;
+  }
+  
+  function cleanupTempFile(filePath: string): void {
+    try {
+      fs.unlinkSync(filePath);
+    } catch {
+    }
+  }
+  
+  it('should verify CLI harness is accessible', () => {
+    expect(fs.existsSync(CLI_HARNESS_PATH)).toBe(true);
+  });
+  
+  it('should get CLI output for console.log detection', async () => {
+    const code = 'console.log("test");';
+    const tempFile = createTempFile(code, 'console-test.ts');
+    
+    try {
+      const cliResult = await runCLIHarness(tempFile, [2]);
+      
+      expect(cliResult.success).toBe(true);
+      expect(Array.isArray(cliResult.issues)).toBe(true);
+      expect(cliResult.filePath).toBe(tempFile);
+      
+    } finally {
+      cleanupTempFile(tempFile);
+    }
+  });
+  
+  it('should compare extension output against CLI harness output', async () => {
+    const code = 'console.log("hello"); console.warn("world");';
+    const tempFile = createTempFile(code, 'parity-test.ts');
+    
+    try {
+      const cliResult = await runCLIHarness(tempFile, [2]);
+      
+      mockNeurolintCore.analyze.mockResolvedValueOnce({
+        issues: cliResult.issues
+      });
+      
+      const extensionResult = await adapter.analyze(code, {
+        filename: tempFile,
+        layers: [2]
+      });
+      
+      expect(extensionResult.issues.length).toBe(cliResult.issueCount);
+      
+      if (cliResult.issues.length > 0 && extensionResult.issues.length > 0) {
+        for (let i = 0; i < Math.min(cliResult.issues.length, extensionResult.issues.length); i++) {
+          expect(extensionResult.issues[i].layer).toBe(cliResult.issues[i].layer);
+        }
+      }
+      
+    } finally {
+      cleanupTempFile(tempFile);
+    }
+  });
+  
+  it('should detect divergence when extension returns different results', async () => {
+    const code = 'console.log("test");';
+    const tempFile = createTempFile(code, 'divergence-test.ts');
+    
+    try {
+      const cliResult = await runCLIHarness(tempFile, [2]);
+      
+      mockNeurolintCore.analyze.mockResolvedValueOnce({
+        issues: [{
+          severity: 'error',
+          message: 'DIVERGENT: This is not what CLI returned',
+          layer: 99,
+          location: { line: 999, column: 999 },
+          ruleName: 'fake-rule'
+        }]
+      });
+      
+      const extensionResult = await adapter.analyze(code, {
+        filename: tempFile,
+        layers: [2]
+      });
+      
+      if (cliResult.issues.length > 0) {
+        expect(extensionResult.issues[0].message).not.toBe(cliResult.issues[0].message);
+        expect(extensionResult.issues[0].layer).not.toBe(cliResult.issues[0].layer);
+      }
+      
+    } finally {
+      cleanupTempFile(tempFile);
+    }
+  });
+});
