@@ -12,8 +12,6 @@ export async function GET(
   { params }: { params: { sessionId: string } }
 ) {
   try {
-    console.log("[DEBUG] Comments GET request for session:", params.sessionId);
-    
     const authHeader = request.headers.get("authorization");
     const hasBearer = !!authHeader?.startsWith("Bearer ");
     const token = hasBearer ? authHeader!.replace("Bearer ", "") : null;
@@ -21,34 +19,25 @@ export async function GET(
     const guestUserId = request.headers.get("x-user-id");
     const guestUserName = request.headers.get("x-user-name");
 
-    console.log("[DEBUG] Comments auth headers:", { hasBearer: !!hasBearer, guestUserId, guestUserName });
-
     if (!hasBearer && !(guestUserId && guestUserName)) {
-      console.log("[DEBUG] No auth provided for comments");
       return NextResponse.json(
         { error: "Authentication required" },
         { status: 401 }
       );
     }
 
-    // If bearer was provided, validate for strict auth; guests are allowed read access
     if (hasBearer && token) {
       const { data: { user }, error: authError } = await supabase.auth.getUser(token);
       if (authError || !user) {
-        console.log("[DEBUG] Bearer auth failed for comments:", authError);
         return NextResponse.json(
           { error: "Invalid authentication" },
           { status: 401 }
         );
       }
-      console.log("[DEBUG] Authenticated user for comments:", user.id);
     }
 
     const { sessionId } = params;
-    console.log("[DEBUG] Fetching comments for session:", sessionId);
-    
     const comments = await teamCollaboration.getComments(sessionId);
-    console.log("[DEBUG] Comments fetched:", comments?.length || 0);
 
     return NextResponse.json({ comments });
   } catch (error) {

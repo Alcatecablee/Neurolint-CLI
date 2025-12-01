@@ -76,9 +76,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Skip participant check for now to avoid access issues
-    console.log("[ANALYZE POST] User:", userId, "Session:", sessionId);
-
     // Get session from Supabase
     const { data: session, error: sessionError } = await supabaseSr
       .from('collaboration_sessions')
@@ -87,7 +84,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (sessionError || !session) {
-      console.log("[ANALYZE] Session not found!");
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
     }
 
@@ -172,10 +168,8 @@ export async function POST(request: NextRequest) {
         triggered_by: userId,
         triggered_by_name: guestUserName,
       });
-      console.log("[DEBUG] Analysis record stored successfully");
     } catch (insertError) {
-      console.log("[DEBUG] Failed to store analysis record (table may not exist):", insertError);
-      // Continue without storing the record
+      // Continue without storing the record if table doesn't exist
     }
 
     return NextResponse.json({ result: resultPayload });
@@ -193,18 +187,13 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get("sessionId");
 
-    console.log("[DEBUG] Analyze GET request for session:", sessionId);
-
     const authHeader = request.headers.get("authorization");
     const hasBearer = !!authHeader?.startsWith("Bearer ");
     const token = hasBearer ? authHeader!.replace("Bearer ", "") : null;
 
     const guestUserId = request.headers.get("x-user-id");
 
-    console.log("[DEBUG] Analyze auth headers:", { hasBearer: !!hasBearer, guestUserId });
-
     if (!hasBearer && !guestUserId) {
-      console.log("[DEBUG] No auth provided for analyze");
       return NextResponse.json(
         { error: "Authentication required" },
         { status: 401 },
@@ -212,15 +201,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (!sessionId) {
-      console.log("[DEBUG] No sessionId provided for analyze");
       return NextResponse.json(
         { error: "Session ID required" },
         { status: 400 },
       );
     }
-
-    // Skip participant check for now to avoid access issues during polling
-    console.log("[ANALYZE GET] Fetching analyses for session:", sessionId);
 
     // Get analysis results for session from DB
     // Handle missing table gracefully
@@ -232,17 +217,12 @@ export async function GET(request: NextRequest) {
         .eq('session_id', sessionId)
         .order('created_at', { ascending: false });
 
-      console.log("[DEBUG] Analyze query result:", { analysesCount: data?.length || 0, error });
-
       if (error) {
-        console.log("[DEBUG] Analyze query failed (table may not exist):", error);
-        // Return empty array instead of error for missing table
         analyses = [];
       } else {
         analyses = data || [];
       }
     } catch (tableError) {
-      console.log("[DEBUG] Table collaboration_analyses may not exist:", tableError);
       analyses = [];
     }
 

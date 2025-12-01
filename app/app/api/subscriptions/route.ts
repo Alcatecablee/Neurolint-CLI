@@ -13,6 +13,86 @@ if (supabaseUrl && supabaseServiceKey) {
   console.error("Missing Supabase environment variables for subscriptions API");
 }
 
+const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;
+const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
+const PAYPAL_ENVIRONMENT = process.env.PAYPAL_ENVIRONMENT || 'production';
+const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === 'production'
+  ? 'https://api-m.paypal.com'
+  : 'https://api-m.sandbox.paypal.com';
+
+async function getPayPalAccessToken(): Promise<string | null> {
+  if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
+    console.error('PayPal credentials not configured');
+    return null;
+  }
+
+  try {
+    const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString('base64');
+    const response = await fetch(`${PAYPAL_BASE_URL}/v1/oauth2/token`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${auth}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'grant_type=client_credentials',
+    });
+
+    if (!response.ok) {
+      console.error('PayPal auth failed:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    return data.access_token || null;
+  } catch (error) {
+    console.error('PayPal auth error:', error);
+    return null;
+  }
+}
+
+async function verifyPayPalSubscription(subscriptionId: string): Promise<{ verified: boolean; status: string; planId?: string; isActive: boolean }> {
+  const accessToken = await getPayPalAccessToken();
+  if (!accessToken) {
+    return { verified: false, status: 'auth_failed', isActive: false };
+  }
+
+  try {
+    const response = await fetch(`${PAYPAL_BASE_URL}/v1/billing/subscriptions/${subscriptionId}`, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('PayPal subscription lookup failed:', response.status);
+      return { verified: false, status: 'not_found', isActive: false };
+    }
+
+    const subscription = await response.json();
+    
+    if (!subscription.id) {
+      return { verified: false, status: 'invalid', isActive: false };
+    }
+
+    // Only ACTIVE status means the subscription is fully activated
+    // APPROVED means payment approved but not yet activated
+    const isActive = subscription.status === 'ACTIVE';
+    const isValid = subscription.status === 'ACTIVE' || subscription.status === 'APPROVED';
+    
+    return { 
+      verified: isValid, 
+      status: subscription.status?.toLowerCase() || 'unknown',
+      planId: subscription.plan_id,
+      isActive: isActive
+    };
+  } catch (error) {
+    console.error('PayPal subscription verification error:', error);
+    return { verified: false, status: 'error', isActive: false };
+  }
+}
+
 interface Subscription {
   id: string;
   userId: string;
@@ -29,6 +109,13 @@ interface Subscription {
 // Get user's subscriptions
 export const GET = createAuthenticatedHandler(async (request, user) => {
   try {
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Database connection not available" },
+        { status: 503 },
+      );
+    }
+
     // Get subscriptions from Supabase
     const { data: subscriptions, error } = await supabase
       .from("subscriptions")
@@ -60,6 +147,13 @@ export const GET = createAuthenticatedHandler(async (request, user) => {
 // Create new subscription or upgrade plan
 export const POST = createAuthenticatedHandler(async (request, user) => {
   try {
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Database connection not available" },
+        { status: 503 },
+      );
+    }
+
     const { plan, paypalSubscriptionId, paypalPayerId } = await request.json();
 
     if (!plan || !["pro", "enterprise"].includes(plan)) {
@@ -69,18 +163,29 @@ export const POST = createAuthenticatedHandler(async (request, user) => {
       );
     }
 
-    // Verify PayPal subscription if provided
+    // Verify PayPal subscription with PayPal API
     let verified = false;
+    let paypalStatus = 'pending';
+    let isFullyActive = false;
     if (paypalSubscriptionId) {
-      // TODO: Verify with PayPal API
-      // For now, assume verification passes
-      verified = true;
+      const verification = await verifyPayPalSubscription(paypalSubscriptionId);
+      verified = verification.verified;
+      paypalStatus = verification.status;
+      isFullyActive = verification.isActive;
+      
+      if (!verified && paypalStatus !== 'auth_failed') {
+        return NextResponse.json(
+          { error: `PayPal subscription verification failed: ${paypalStatus}` },
+          { status: 400 },
+        );
+      }
     }
 
+    // Only set active if PayPal status is ACTIVE (not just APPROVED)
     const subscriptionData = {
       user_id: user.id,
       plan,
-      status: verified ? "active" : "pending",
+      status: isFullyActive ? "active" : "pending",
       paypal_subscription_id: paypalSubscriptionId || null,
       paypal_payer_id: paypalPayerId || null,
       current_period_start: new Date().toISOString(),
@@ -106,7 +211,17 @@ export const POST = createAuthenticatedHandler(async (request, user) => {
       );
     }
 
-    // Update user's plan in profiles table
+    // Only update user's plan if subscription is fully active (ACTIVE, not just APPROVED)
+    if (!isFullyActive) {
+      return NextResponse.json({
+        success: true,
+        subscription,
+        message: `${plan} subscription created and pending activation`,
+        status: 'pending',
+      });
+    }
+
+    // Update user's plan in profiles table only when fully active
     const { error: profileError } = await supabase
       .from("profiles")
       .update({
@@ -123,7 +238,7 @@ export const POST = createAuthenticatedHandler(async (request, user) => {
     return NextResponse.json({
       success: true,
       subscription,
-      message: `Successfully ${verified ? "activated" : "created"} ${plan} subscription`,
+      message: `Successfully activated ${plan} subscription`,
     });
   } catch (error) {
     console.error("Subscription creation API error:", error);
@@ -137,6 +252,13 @@ export const POST = createAuthenticatedHandler(async (request, user) => {
 // Update subscription (cancel, reactivate, etc.)
 export const PUT = createAuthenticatedHandler(async (request, user) => {
   try {
+    if (!supabase) {
+      return NextResponse.json(
+        { error: "Database connection not available" },
+        { status: 503 },
+      );
+    }
+
     const { subscriptionId, status, paypalData } = await request.json();
 
     if (!subscriptionId) {

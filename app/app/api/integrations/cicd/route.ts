@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({
         integration,
         runs,
-        webhookUrl: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}${generateWebhookUrl(integrationId)}`,
+        webhookUrl: `${process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "https://app.neurolint.dev"}${generateWebhookUrl(integrationId)}`,
       });
     }
 
@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         integration,
-        webhookUrl: `${process.env.NEXTAUTH_URL || "http://localhost:3000"}${generateWebhookUrl(integrationId)}`,
+        webhookUrl: `${process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "https://app.neurolint.dev"}${generateWebhookUrl(integrationId)}`,
         webhookSecret,
         setupInstructions: getSetupInstructions(type, integration),
       },
@@ -249,7 +249,7 @@ export async function DELETE(request: NextRequest) {
 
 // Utility function to get setup instructions
 const getSetupInstructions = (type: string, integration: CICDIntegration) => {
-  const webhookUrl = `${process.env.NEXTAUTH_URL || "http://localhost:3000"}${integration.webhook.url}`;
+  const webhookUrl = `${process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || "https://app.neurolint.dev"}${integration.webhook.url}`;
 
   switch (type) {
     case "github":

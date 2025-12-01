@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Set up redirect URL - use callback page to handle OAuth response
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://app.neurolint.dev';
     const redirectUrl = `${baseUrl}/auth/callback`;
 
     // Initiate OAuth flow

@@ -12,37 +12,27 @@ export async function GET(
   { params }: { params: { sessionId: string } }
 ) {
   try {
-    console.log("[DEBUG] Session GET request for:", params.sessionId);
-    
     const authHeader = request.headers.get("authorization");
     const hasBearer = !!authHeader?.startsWith("Bearer ");
     const token = hasBearer ? authHeader!.replace("Bearer ", "") : null;
 
-    // Support guest collaboration fallback via headers
     const guestUserId = request.headers.get("x-user-id");
     const guestUserName = request.headers.get("x-user-name");
-
-    console.log("[DEBUG] Auth headers:", { hasBearer: !!hasBearer, guestUserId, guestUserName });
 
     let userId: string | null = null;
 
     if (hasBearer && token) {
       const { data: { user }, error: authError } = await supabase.auth.getUser(token);
       if (authError || !user) {
-        console.log("[DEBUG] Bearer auth failed:", authError);
         return NextResponse.json(
           { error: "Invalid authentication" },
           { status: 401 }
         );
       }
       userId = user.id;
-      console.log("[DEBUG] Authenticated user:", userId);
     } else if (guestUserId && guestUserName) {
-      // Treat as guest participant
       userId = guestUserId;
-      console.log("[DEBUG] Guest user:", userId);
     } else {
-      console.log("[DEBUG] No auth provided");
       return NextResponse.json(
         { error: "Authentication required" },
         { status: 401 }
@@ -51,15 +41,10 @@ export async function GET(
 
     const { sessionId } = params;
 
-    // For bearer users, enforce access via teamCollaboration which validates membership.
-    // For guests, do a permissive check that session exists and is active.
     let session: any = null;
     if (hasBearer && userId) {
-      console.log("[DEBUG] Using teamCollaboration for authenticated user");
       session = await teamCollaboration.getCollaborationSession(sessionId, userId);
     } else {
-      console.log("[DEBUG] Using direct Supabase query for guest");
-      // Try both id and session_id columns
       const { data, error } = await supabase
         .from('collaboration_sessions')
         .select('*')
@@ -67,16 +52,12 @@ export async function GET(
         .eq('is_active', true)
         .single();
       
-      console.log("[DEBUG] Supabase query result:", { data, error });
-      
       if (error) {
-        console.log("[DEBUG] Session not found in DB:", error);
         return NextResponse.json(
           { error: "Session not found or access denied" },
           { status: 404 }
         );
       }
-      // Map DB fields to expected response shape
       session = {
         ...data,
         document_filename: data.filename,
@@ -86,22 +67,16 @@ export async function GET(
     }
     
     if (!session) {
-      console.log("[DEBUG] No session returned");
       return NextResponse.json(
         { error: "Session not found or access denied" },
         { status: 404 }
       );
     }
 
-    console.log("[DEBUG] Session found, fetching participants and comments");
-
-    // Get participants and comments
     const [participants, comments] = await Promise.all([
       teamCollaboration.getSessionPresence(sessionId),
       teamCollaboration.getComments(sessionId)
     ]);
-
-    console.log("[DEBUG] Returning session data");
 
     return NextResponse.json({
       session,
