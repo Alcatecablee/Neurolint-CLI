@@ -24,10 +24,10 @@ import {
 } from "lucide-react";
 import { InstallCTA } from "./components/InstallCTA";
 
-// Beta Banner Component - Floating notification style
+// Beta Banner Component - Floating notification style (mobile-first)
 const BetaBanner = ({ onClose }: { onClose: () => void }) => {
   return (
-    <div className="fixed bottom-6 left-6 z-50 max-w-sm animate-slide-in-up">
+    <div className="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto z-50 max-w-sm animate-slide-in-up">
       <div className="bg-zinc-900/95 backdrop-blur-md border border-black rounded-xl p-4 shadow-2xl">
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center border border-black">
@@ -137,8 +137,8 @@ const TypewriterHeadline = () => {
   }, [currentIndex, currentText, currentWordIndex, words]);
 
   return (
-    <div className="mb-12">
-      <h1 className="text-5xl md:text-7xl font-black mb-8 tracking-tight text-white min-h-[1.2em]">
+    <div className="mb-8 md:mb-12">
+      <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white min-h-[1.2em]">
         {currentText}
       </h1>
     </div>
@@ -343,6 +343,7 @@ export default function Index() {
   const [copied, setCopied] = React.useState(false);
   const [bannerVisible, setBannerVisible] = React.useState(true);
   const [demoModalOpen, setDemoModalOpen] = React.useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   // Lazy loading refs for each section
   const [demoSectionRef, demoSectionInView] = useInView(0.1);
@@ -391,31 +392,49 @@ export default function Index() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/3 h-1/3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Navigation Header */}
+      {/* Navigation Header - Mobile First */}
       <nav 
         className="fixed top-0 w-full z-50 bg-zinc-900/80 backdrop-blur-xl border-b border-black transition-all duration-300"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14 md:h-16">
             <a href="/" className="flex items-center group">
-              <img src="/logo.png" alt="NeuroLint" className="h-9 transition-transform duration-200 group-hover:scale-105" />
+              <img src="/logo.png" alt="NeuroLint" className="h-8 md:h-9 transition-transform duration-200 group-hover:scale-105" />
             </a>
-            <div className="flex items-center gap-1">
+            
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 touch-manipulation"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
               <a 
                 href="#comprehensive-demo" 
-                className="px-4 py-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 Demo
               </a>
               <a 
                 href="/quick-start" 
-                className="px-4 py-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 Quick Start
               </a>
               <a 
                 href="#faq" 
-                className="px-4 py-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 FAQ
               </a>
@@ -423,7 +442,7 @@ export default function Index() {
                 href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 Docs
               </a>
@@ -432,7 +451,7 @@ export default function Index() {
                 href="https://github.com/Alcatecablee/Neurolint-CLI"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+                className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
                 aria-label="GitHub"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -443,9 +462,70 @@ export default function Index() {
                 href="https://www.npmjs.com/package/@neurolint/cli"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ml-2 px-5 py-2 bg-white text-black rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 text-sm"
+                className="ml-2 px-5 py-2 min-h-[44px] flex items-center bg-white text-black rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 text-sm"
               >
                 Install
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        {/* Mobile Menu Dropdown */}
+        <div 
+          className={`md:hidden transition-all duration-300 ease-out overflow-hidden ${
+            mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="px-4 py-4 space-y-2 bg-zinc-900/95 backdrop-blur-xl border-t border-zinc-800">
+            <a 
+              href="#comprehensive-demo" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+            >
+              Demo
+            </a>
+            <a 
+              href="/quick-start" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+            >
+              Quick Start
+            </a>
+            <a 
+              href="#faq" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+            >
+              FAQ
+            </a>
+            <a 
+              href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+            >
+              Docs
+            </a>
+            <div className="border-t border-zinc-800 my-3"></div>
+            <div className="flex items-center gap-3 px-4">
+              <a 
+                href="https://github.com/Alcatecablee/Neurolint-CLI"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 min-h-[48px] min-w-[48px] flex items-center justify-center text-gray-300 hover:text-white bg-white/5 rounded-lg transition-all duration-200 touch-manipulation"
+                aria-label="GitHub"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                </svg>
+              </a>
+              <a 
+                href="https://www.npmjs.com/package/@neurolint/cli"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 px-5 py-3 min-h-[48px] flex items-center justify-center bg-white text-black rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 text-base touch-manipulation"
+              >
+                Install CLI
               </a>
             </div>
           </div>
@@ -550,20 +630,20 @@ export default function Index() {
         </div>
       </section>
 
-      {/* CLI Demo Video Section - Enterprise Edition */}
-      <section className="py-20 md:py-32 px-4 relative">
+      {/* CLI Demo Video Section - Enterprise Edition (mobile-first) */}
+      <section className="py-12 sm:py-16 md:py-24 lg:py-32 px-4 relative">
         {/* Subtle background glow */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-gradient-to-r from-emerald-500/5 via-cyan-500/5 to-blue-500/5 rounded-full blur-3xl" />
         </div>
 
         <div className="max-w-6xl mx-auto relative">
-          <div className="text-center mb-12 md:mb-16">
+          <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-black rounded-full mb-6">
               <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
               <span className="text-emerald-400 text-sm font-medium">Live Demo</span>
             </div>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tight text-white">
+            <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 sm:mb-6 tracking-tight text-white">
               See It In Action
             </h2>
             <p className="text-lg sm:text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto">
