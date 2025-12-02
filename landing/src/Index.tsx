@@ -624,7 +624,7 @@ export default function Index() {
           </div>
 
           {/* Badges Row */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4 animate-slide-in-up animate-delay-900">
+          <div className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-3 sm:gap-4 animate-slide-in-up animate-delay-900">
             <a 
               href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
               target="_blank"
