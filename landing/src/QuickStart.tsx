@@ -9,9 +9,9 @@ const BetaBanner = ({ onClose }: { onClose: () => void }) => {
       role="banner"
       aria-label="Beta announcement"
     >
-      <div className="bg-zinc-900/95 backdrop-blur-md border border-white/10 rounded-xl p-4 shadow-2xl">
+      <div className="bg-zinc-900/95 backdrop-blur-md border border-black rounded-xl p-4 shadow-2xl">
         <div className="flex items-start gap-3">
-          <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center border border-white/10">
+          <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center border border-black">
             <span className="text-sm">Beta</span>
           </div>
           <div className="flex-1 min-w-0">
@@ -95,7 +95,7 @@ export function QuickStart() {
     command: string; 
     id: string;
   }) => (
-    <div className="max-w-2xl mx-auto bg-zinc-900/90 border border-zinc-700/50 rounded-xl p-4 md:p-5 backdrop-blur-sm relative group hover:border-zinc-600 hover:bg-zinc-800/90 hover:shadow-lg hover:shadow-zinc-900/50 transition-all duration-300 ease-out mb-4 transform hover:scale-[1.01]">
+    <div className="max-w-2xl mx-auto bg-zinc-900/90 border border-black rounded-xl p-4 md:p-5 backdrop-blur-sm relative group hover:border-black hover:bg-zinc-800/90 hover:shadow-lg hover:shadow-zinc-900/50 transition-all duration-300 ease-out mb-4 transform hover:scale-[1.01]">
       <code className="text-blue-400 font-mono text-xs sm:text-sm md:text-base block pr-12 md:pr-14 break-all">
         {command}
       </code>
@@ -128,7 +128,7 @@ export function QuickStart() {
 
       {/* Navigation Header */}
       <nav 
-        className="fixed top-0 w-full z-50 bg-zinc-900/80 backdrop-blur-xl border-b border-white/5 transition-all duration-300"
+        className="fixed top-0 w-full z-50 bg-zinc-900/80 backdrop-blur-xl border-b border-black transition-all duration-300"
         role="navigation"
         aria-label="Main navigation"
       >
@@ -209,7 +209,7 @@ export function QuickStart() {
           {mobileMenuOpen && (
             <div 
               id="mobile-menu"
-              className="md:hidden py-4 border-t border-white/10 animate-fadeIn"
+              className="md:hidden py-4 border-t border-black animate-fadeIn"
               role="menu"
             >
               <div className="flex flex-col gap-3">
@@ -461,7 +461,7 @@ export function QuickStart() {
       </section>
 
       {/* Footer */}
-      <footer className="relative border-t border-zinc-800 py-12 px-4 text-center text-gray-400">
+      <footer className="relative border-t border-black py-12 px-4 text-center text-gray-400">
         <div className="max-w-7xl mx-auto">
           <p className="mb-6">© 2024 NeuroLint. All rights reserved.</p>
           <div className="flex justify-center gap-8 text-sm">

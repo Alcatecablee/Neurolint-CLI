@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 export function LandingHeader() {
   return (
-    <header className="sticky top-0 z-40 w-full bg-black/80 border-b border-[#292939] backdrop-blur-lg px-4 py-2 flex items-center justify-between">
+    <header className="sticky top-0 z-40 w-full bg-black/80 border-b border-black backdrop-blur-lg px-4 py-2 flex items-center justify-between">
       {/* Brand with uploaded logo */}
       <a href="/" className="flex items-center gap-2">
         <img

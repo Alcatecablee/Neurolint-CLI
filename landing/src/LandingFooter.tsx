@@ -1,6 +1,6 @@
 export function LandingFooter() {
   return (
-    <footer className="w-full py-8 px-6 bg-zinc-900 border-t border-zinc-800">
+    <footer className="w-full py-8 px-6 bg-zinc-900 border-t border-black">
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-3 gap-8">
           <div>
@@ -57,7 +57,7 @@ export function LandingFooter() {
           </div>
         </div>
 
-        <div className="border-t border-zinc-800 mt-8 pt-6 text-center">
+        <div className="border-t border-black mt-8 pt-6 text-center">
           <p className="text-zinc-400 text-sm">
             &copy; {new Date().getFullYear()} NeuroLint. All rights reserved.
           </p>

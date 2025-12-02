@@ -91,7 +91,7 @@ export function LandingFeatures() {
             </span>
           </div>
           <Button
-            className="bg-[#292939] text-white text-base border border-[#342d66] hover:bg-[#393b44]"
+            className="bg-[#292939] text-white text-base border border-black hover:bg-[#393b44]"
             asChild
           >
             <a
@@ -120,7 +120,7 @@ export function LandingFeatures() {
                 variant={getGlowVariant()}
                 color={layer.status === "live" ? "green" : "white"}
               >
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-[#1a1b21] border border-[#292939] w-full relative">
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-[#1a1b21] border border-black w-full relative">
                   <Badge
                     variant={layer.status === "live" ? "default" : "secondary"}
                     className={
@@ -175,7 +175,7 @@ export function LandingFeatures() {
         </div>
 
         {/* Current Implementation Notice */}
-        <div className="bg-zinc-900 border border-zinc-700 text-zinc-200 rounded-lg p-4 mb-6 text-sm flex items-center gap-2">
+        <div className="bg-zinc-900 border border-black text-zinc-200 rounded-lg p-4 mb-6 text-sm flex items-center gap-2">
           <AlertTriangle className="w-5 h-5 text-zinc-400" />
           <div>
             <b>Current Implementation:</b> NeuroLint currently uses
@@ -223,7 +223,7 @@ export function LandingFeatures() {
           How it Works
         </h2>
         <GlowingBorder variant="pulse" color="blue">
-          <div className="bg-zinc-900/80 rounded-xl border border-zinc-800 p-8 text-gray-200 hover-glow transition-all duration-300">
+          <div className="bg-zinc-900/80 rounded-xl border border-black p-8 text-gray-200 hover-glow transition-all duration-300">
             <ol className="list-decimal ml-5 space-y-2 text-sm">
               <li>
                 Upload your TypeScript/Next.js project or configs—no setup

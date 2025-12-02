@@ -15,10 +15,10 @@ export function InstallCTA({ className = '' }: InstallCTAProps) {
   };
 
   return (
-    <div className={`mt-8 pt-6 border-t border-white/10 ${className}`}>
+    <div className={`mt-8 pt-6 border-t border-black ${className}`}>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
         <span className="text-sm text-gray-400 font-medium">Ready to fix your code?</span>
-        <div className="flex items-center gap-2 bg-zinc-900/80 border border-zinc-700/50 rounded-xl px-4 py-2.5 group hover:border-zinc-600/50 transition-colors duration-300">
+        <div className="flex items-center gap-2 bg-zinc-900/80 border border-black rounded-xl px-4 py-2.5 group hover:border-black transition-colors duration-300">
           <code className="text-blue-400 font-mono text-sm">
             $ npm install -g @neurolint/cli
           </code>

@@ -681,7 +681,7 @@ export function LayersDocSection() {
                 </h4>
                 <div className="space-y-6">
                   {selectedLayerData.examples.map((example, idx) => (
-                    <div key={idx} className="bg-black/60 rounded-xl p-4 border border-white/10">
+                    <div key={idx} className="bg-black/60 rounded-xl p-4 border border-black">
                       <button
                         onClick={() => toggleSection(`example-${idx}`)}
                         className="w-full flex items-center justify-between text-left mb-3"

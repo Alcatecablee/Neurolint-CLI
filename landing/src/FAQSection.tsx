@@ -123,7 +123,7 @@ const FAQItem: React.FC<{
   onToggle: () => void;
 }> = ({ faq, isOpen, onToggle }) => {
   return (
-    <div className="border border-zinc-800 rounded-xl overflow-hidden">
+    <div className="border border-black rounded-xl overflow-hidden">
       <button
         className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-zinc-900/50 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-inset"
         onClick={onToggle}
@@ -142,7 +142,7 @@ const FAQItem: React.FC<{
       </button>
       {isOpen && (
         <div className="px-6 pb-4">
-          <div className="pt-2 border-t border-zinc-800">
+          <div className="pt-2 border-t border-black">
             <p className="text-zinc-300 leading-relaxed">{faq.answer}</p>
           </div>
         </div>
@@ -195,7 +195,7 @@ export const FAQSection: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-zinc-800/50 rounded-xl backdrop-blur-sm mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-black rounded-xl backdrop-blur-sm mb-6">
               <HelpCircle className="w-4 h-4 text-white" />
               <span className="text-sm font-medium text-zinc-400">
                 Frequently Asked Questions
@@ -229,7 +229,7 @@ export const FAQSection: React.FC = () => {
 
           {/* Additional Help */}
           <div className="mt-16 text-center">
-            <div className="p-8 bg-zinc-900/40 border border-zinc-800/50 rounded-2xl backdrop-blur-sm">
+            <div className="p-8 bg-zinc-900/40 border border-black rounded-2xl backdrop-blur-sm">
               <h3 className="text-xl font-semibold text-white mb-4">
                 Need more help?
               </h3>
@@ -247,7 +247,7 @@ export const FAQSection: React.FC = () => {
                 </a>
                 <a
                   href="mailto:clivemakazhu@gmail.com"
-                  className="inline-flex items-center px-6 py-3 bg-zinc-800 text-white font-semibold rounded-xl border border-zinc-700 hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center px-6 py-3 bg-zinc-800 text-white font-semibold rounded-xl border border-black hover:bg-zinc-700 transition-colors"
                 >
                   Email Support
                 </a>

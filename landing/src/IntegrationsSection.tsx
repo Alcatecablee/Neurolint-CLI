@@ -109,7 +109,7 @@ export function IntegrationsSection() {
             return (
               <div
                 key={index}
-                className="group bg-gray-800/50 border border-gray-700 rounded-xl p-6 hover:border-zinc-500/50 transition-all duration-300 hover:transform hover:scale-105"
+                className="group bg-gray-800/50 border border-black rounded-xl p-6 hover:border-black transition-all duration-300 hover:transform hover:scale-105"
               >
                 <div className="w-12 h-12 bg-zinc-700 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <IconComponent className="w-6 h-6 text-white" />
@@ -139,7 +139,7 @@ export function IntegrationsSection() {
             {workflows.map((workflow, index) => (
               <div
                 key={index}
-                className="bg-gray-800/30 border border-gray-700 rounded-xl p-6"
+                className="bg-gray-800/30 border border-black rounded-xl p-6"
               >
                 <h4 className="text-xl font-semibold mb-3 text-white">
                   {workflow.title}
@@ -168,7 +168,7 @@ export function IntegrationsSection() {
             <h3 className="text-2xl font-semibold mb-6 text-white">
               GitHub Actions Example
             </h3>
-            <div className="bg-gray-900/90 border border-gray-700 rounded-xl p-6">
+            <div className="bg-gray-900/90 border border-black rounded-xl p-6">
               <pre className="font-mono text-sm text-gray-300 overflow-x-auto">
                 <code>{`name: NeuroLint Analysis
 
