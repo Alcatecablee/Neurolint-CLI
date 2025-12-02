@@ -39,6 +39,14 @@ export function LandingFooter() {
                   FAQ
                 </a>
               </li>
+              <li>
+                <a
+                  href="/blog"
+                  className="text-zinc-400 hover:text-white transition-colors"
+                >
+                  Blog
+                </a>
+              </li>
             </ul>
           </div>
 

@@ -1,0 +1,1124 @@
+import React from "react";
+import { Link, useParams, Navigate } from "react-router-dom";
+import { LandingFooter } from "./LandingFooter";
+import { Calendar, Clock, ArrowLeft, ArrowRight, User, X, Check, Copy } from "lucide-react";
+
+interface TableOfContentsItem {
+  id: string;
+  title: string;
+  level: number;
+}
+
+const HydrationErrorsPost: React.FC = () => {
+  const [copied, setCopied] = React.useState(false);
+
+  const copyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const toc: TableOfContentsItem[] = [
+    { id: "what-are-hydration-errors", title: "What Are Hydration Errors?", level: 1 },
+    { id: "common-causes", title: "Common Causes of Hydration Mismatches", level: 1 },
+    { id: "window-not-defined", title: "Fixing 'window is not defined'", level: 2 },
+    { id: "document-not-defined", title: "Fixing 'document is not defined'", level: 2 },
+    { id: "localstorage-errors", title: "Fixing localStorage/sessionStorage Errors", level: 2 },
+    { id: "date-time-mismatches", title: "Fixing Date/Time Mismatches", level: 2 },
+    { id: "automated-fixing", title: "Automated Fixing with NeuroLint", level: 1 },
+    { id: "best-practices", title: "Best Practices for SSR-Safe Code", level: 1 },
+    { id: "conclusion", title: "Conclusion", level: 1 },
+  ];
+
+  return (
+    <article className="max-w-none">
+      <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-black rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span className="text-red-400 text-lg">!</span>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold mb-2">TL;DR - Quick Fix</h4>
+            <p className="text-gray-300 mb-3 text-base">
+              Run this command to automatically fix hydration errors in your project:
+            </p>
+            <div className="bg-zinc-900/80 border border-black rounded-lg p-3 relative group">
+              <code className="text-green-400 font-mono text-sm">npx @neurolint/cli fix --layers 4,5 ./src</code>
+              <button
+                onClick={() => copyCommand('npx @neurolint/cli fix --layers 4,5 ./src')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-white/10 rounded transition-colors"
+                aria-label="Copy command"
+              >
+                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-12">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          Table of Contents
+        </h3>
+        <ul className="space-y-2">
+          {toc.map((item) => (
+            <li key={item.id} className={`${item.level === 2 ? 'ml-4' : ''}`}>
+              <a 
+                href={`#${item.id}`}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
+              >
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-blue-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal prose-pre:bg-zinc-900/80 prose-pre:border prose-pre:border-black">
+        <p className="text-xl text-gray-300 leading-relaxed">
+          If you've ever seen the dreaded <code>Hydration failed because the initial UI does not match what was rendered on the server</code> error in your React or Next.js application, you're not alone. Hydration errors are one of the most common and frustrating issues developers face when building server-side rendered (SSR) applications.
+        </p>
+
+        <p>
+          In this comprehensive guide, we'll explore exactly what hydration errors are, why they happen, and most importantly, how to fix them - both manually and automatically using tools like <a href="https://www.neurolint.dev">NeuroLint</a>.
+        </p>
+
+        <h2 id="what-are-hydration-errors" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          What Are Hydration Errors?
+        </h2>
+
+        <p>
+          <strong>Hydration</strong> is the process where React takes the static HTML generated by the server and "hydrates" it with JavaScript to make it interactive. During this process, React compares the server-rendered HTML with what the client would render. If there's a mismatch, you get a hydration error.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">How SSR + Hydration Works</h4>
+          <ol className="space-y-3 text-gray-300">
+            <li><strong className="text-white">1. Server Render:</strong> Next.js renders your component to HTML on the server</li>
+            <li><strong className="text-white">2. Send to Client:</strong> The HTML is sent to the browser for fast initial load</li>
+            <li><strong className="text-white">3. Hydration:</strong> React "attaches" event handlers and state to the existing HTML</li>
+            <li><strong className="text-white">4. Mismatch Detection:</strong> React compares server HTML with client render - if different, ERROR!</li>
+          </ol>
+        </div>
+
+        <h2 id="common-causes" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Common Causes of Hydration Mismatches
+        </h2>
+
+        <p>
+          Hydration errors occur when there's a difference between what the server rendered and what the client tries to render. Here are the most common culprits:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4 my-8 not-prose">
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">Browser-Only APIs</h4>
+            <p className="text-gray-400 text-sm">
+              Using <code className="text-blue-400 bg-zinc-800 px-1 rounded">window</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">document</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">localStorage</code> without checking if they exist
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">Date/Time Values</h4>
+            <p className="text-gray-400 text-sm">
+              Server and client have different timestamps when rendering
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">Random Values</h4>
+            <p className="text-gray-400 text-sm">
+              Using <code className="text-blue-400 bg-zinc-800 px-1 rounded">Math.random()</code> or <code className="text-blue-400 bg-zinc-800 px-1 rounded">uuid()</code> during render
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">User Agent Detection</h4>
+            <p className="text-gray-400 text-sm">
+              Conditionally rendering based on browser or device type
+            </p>
+          </div>
+        </div>
+
+        <h3 id="window-not-defined" className="text-2xl font-bold text-white mt-10 mb-4 scroll-mt-24">
+          Fixing 'window is not defined'
+        </h3>
+
+        <p>
+          This is the most common hydration error. It happens when you try to access the <code>window</code> object during server-side rendering, where <code>window</code> doesn't exist.
+        </p>
+
+        <div className="bg-red-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-red-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-red-500/20 rounded flex items-center justify-center text-xs">✗</span>
+            Bad Code (Causes Error)
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`function MyComponent() {
+  // This runs on the server where window doesn't exist!
+  const width = window.innerWidth;
+  
+  return <div>Width: {width}</div>;
+}`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-green-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-xs">✓</span>
+            Fixed Code (SSR-Safe)
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`function MyComponent() {
+  const [width, setWidth] = useState(0);
+  
+  useEffect(() => {
+    // This only runs on the client!
+    setWidth(window.innerWidth);
+    
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  
+  return <div>Width: {width}</div>;
+}`}</code>
+          </pre>
+        </div>
+
+        <h3 id="document-not-defined" className="text-2xl font-bold text-white mt-10 mb-4 scroll-mt-24">
+          Fixing 'document is not defined'
+        </h3>
+
+        <p>
+          Similar to <code>window</code>, the <code>document</code> object only exists in the browser. Common offenders include <code>document.getElementById()</code>, <code>document.querySelector()</code>, and direct DOM manipulation.
+        </p>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-green-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-xs">✓</span>
+            The Fix: Guard with typeof check
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`// Option 1: Guard with typeof
+if (typeof document !== 'undefined') {
+  const element = document.getElementById('myElement');
+}
+
+// Option 2: Use useEffect (recommended for React)
+useEffect(() => {
+  const element = document.getElementById('myElement');
+  // Now it's safe!
+}, []);
+
+// Option 3: Dynamic import (for third-party libraries)
+const MyLibrary = dynamic(() => import('browser-only-lib'), {
+  ssr: false
+});`}</code>
+          </pre>
+        </div>
+
+        <h3 id="localstorage-errors" className="text-2xl font-bold text-white mt-10 mb-4 scroll-mt-24">
+          Fixing localStorage/sessionStorage Errors
+        </h3>
+
+        <p>
+          Storage APIs are browser-only. Using them during render causes hydration mismatches because the server doesn't have access to stored values.
+        </p>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-green-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-xs">✓</span>
+            The Fix: Lazy initialization
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`function useLocalStorage<T>(key: string, initialValue: T) {
+  // Start with initial value (same on server and client)
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
+  
+  // Sync with localStorage after hydration
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const item = localStorage.getItem(key);
+      if (item) {
+        setStoredValue(JSON.parse(item));
+      }
+    }
+  }, [key]);
+  
+  const setValue = (value: T) => {
+    setStoredValue(value);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  };
+  
+  return [storedValue, setValue] as const;
+}`}</code>
+          </pre>
+        </div>
+
+        <h3 id="date-time-mismatches" className="text-2xl font-bold text-white mt-10 mb-4 scroll-mt-24">
+          Fixing Date/Time Mismatches
+        </h3>
+
+        <p>
+          When you render a date/time, the server and client may have different timestamps, causing a mismatch.
+        </p>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-green-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-xs">✓</span>
+            The Fix: Suppress hydration for dynamic content
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`// Option 1: Use suppressHydrationWarning
+<time suppressHydrationWarning>
+  {new Date().toLocaleString()}
+</time>
+
+// Option 2: Render on client only
+function CurrentTime() {
+  const [time, setTime] = useState<string>('');
+  
+  useEffect(() => {
+    setTime(new Date().toLocaleString());
+  }, []);
+  
+  return <time>{time}</time>;
+}`}</code>
+          </pre>
+        </div>
+
+        <h2 id="automated-fixing" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Automated Fixing with NeuroLint
+        </h2>
+
+        <p>
+          Manually hunting down and fixing hydration errors is tedious and error-prone. <a href="https://www.neurolint.dev">NeuroLint</a> automates this process using AST-based transformations.
+        </p>
+
+        <div className="bg-blue-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-blue-400 font-semibold mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            How NeuroLint Fixes Hydration Errors
+          </h4>
+          <p className="text-gray-300 mb-4">
+            NeuroLint's Layer 4 (Hydration) and Layer 5 (Next.js) specifically target SSR issues:
+          </p>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span>Detects unguarded <code className="text-blue-400 bg-zinc-800 px-1 rounded">window</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">document</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">localStorage</code> usage</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span>Automatically wraps browser APIs in <code className="text-blue-400 bg-zinc-800 px-1 rounded">typeof</code> guards or <code className="text-blue-400 bg-zinc-800 px-1 rounded">useEffect</code></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span>Adds missing <code className="text-blue-400 bg-zinc-800 px-1 rounded">'use client'</code> directives for Next.js App Router</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span>Creates backups before any changes - fully reversible</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Quick Start Commands</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm mb-4">
+            <code className="text-gray-300">{`# Install NeuroLint CLI
+npm install -g @neurolint/cli
+
+# Analyze your project for hydration issues
+neurolint analyze ./src --layers 4,5
+
+# Automatically fix hydration errors
+neurolint fix --layers 4,5 ./src
+
+# Preview fixes without applying (dry run)
+neurolint fix --layers 4,5 --dry-run ./src`}</code>
+          </pre>
+          <p className="text-gray-400 text-sm">
+            Learn more in the <a href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">CLI documentation</a>.
+          </p>
+        </div>
+
+        <h2 id="best-practices" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Best Practices for SSR-Safe Code
+        </h2>
+
+        <div className="space-y-4 my-8 not-prose">
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">1. Always use useEffect for browser APIs</h4>
+            <p className="text-gray-400 text-sm">
+              Any code that accesses <code className="text-blue-400 bg-zinc-800 px-1 rounded">window</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">document</code>, or browser-only APIs should be inside a <code className="text-blue-400 bg-zinc-800 px-1 rounded">useEffect</code> hook.
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">2. Use dynamic imports with ssr: false</h4>
+            <p className="text-gray-400 text-sm">
+              For components that absolutely cannot be server-rendered, use Next.js <code className="text-blue-400 bg-zinc-800 px-1 rounded">dynamic()</code> with <code className="text-blue-400 bg-zinc-800 px-1 rounded">ssr: false</code>.
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">3. Initialize state with consistent values</h4>
+            <p className="text-gray-400 text-sm">
+              Use the same initial value on server and client, then update with actual values after hydration.
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">4. Mark client components in Next.js App Router</h4>
+            <p className="text-gray-400 text-sm">
+              Add <code className="text-blue-400 bg-zinc-800 px-1 rounded">'use client'</code> at the top of components that use hooks or browser APIs.
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">5. Run automated checks in CI/CD</h4>
+            <p className="text-gray-400 text-sm">
+              Integrate NeuroLint into your CI pipeline to catch hydration issues before they reach production.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="conclusion" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Conclusion
+        </h2>
+
+        <p>
+          Hydration errors can be frustrating, but they're entirely preventable with the right patterns. The key is understanding that server and client environments are different, and writing code that accounts for this.
+        </p>
+
+        <p>
+          For existing codebases with hydration issues, tools like <a href="https://www.neurolint.dev">NeuroLint</a> can automatically detect and fix these problems, saving hours of manual debugging.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Ready to fix your hydration errors?</h4>
+          <p className="text-gray-300 mb-4">
+            Get started with NeuroLint in 30 seconds:
+          </p>
+          <div className="bg-zinc-900/80 border border-black rounded-lg p-3 mb-4">
+            <code className="text-green-400 font-mono text-sm">npm install -g @neurolint/cli && neurolint fix --layers 4,5 ./src</code>
+          </div>
+          <a
+            href="https://www.npmjs.com/package/@neurolint/cli"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition-colors"
+          >
+            Install NeuroLint
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+const SevenLayerPost: React.FC = () => {
+  const toc: TableOfContentsItem[] = [
+    { id: "introduction", title: "Introduction", level: 1 },
+    { id: "why-layers", title: "Why a Layered Approach?", level: 1 },
+    { id: "layer-1", title: "Layer 1: Configuration", level: 1 },
+    { id: "layer-2", title: "Layer 2: Pattern Fixes", level: 1 },
+    { id: "layer-3", title: "Layer 3: Component Intelligence", level: 1 },
+    { id: "layer-4", title: "Layer 4: Hydration Safety", level: 1 },
+    { id: "layer-5", title: "Layer 5: Next.js Optimization", level: 1 },
+    { id: "layer-6", title: "Layer 6: Testing & Accessibility", level: 1 },
+    { id: "layer-7", title: "Layer 7: Adaptive Learning", level: 1 },
+    { id: "how-it-works", title: "How It Works Under the Hood", level: 1 },
+    { id: "getting-started", title: "Getting Started", level: 1 },
+  ];
+
+  return (
+    <article className="max-w-none">
+      <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold mb-2">Quick Overview</h4>
+            <p className="text-gray-300 text-base">
+              NeuroLint uses 7 progressive layers to systematically fix React/Next.js code: Configuration → Patterns → Components → Hydration → Next.js → Testing → Adaptive Learning.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <nav className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-12">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          Table of Contents
+        </h3>
+        <ul className="space-y-2">
+          {toc.map((item) => (
+            <li key={item.id}>
+              <a 
+                href={`#${item.id}`}
+                className="text-gray-400 hover:text-blue-400 transition-colors text-sm"
+              >
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-blue-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal prose-pre:bg-zinc-900/80 prose-pre:border prose-pre:border-black">
+        <h2 id="introduction" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Introduction
+        </h2>
+
+        <p className="text-xl text-gray-300 leading-relaxed">
+          Unlike AI-based code fixers that can hallucinate or produce unpredictable results, <a href="https://www.neurolint.dev">NeuroLint</a> uses a deterministic, 7-layer pipeline to systematically analyze and transform your React and Next.js code. Each layer builds on the previous, ensuring comprehensive and safe fixes.
+        </p>
+
+        <p>
+          In this deep dive, we'll explore each layer, understand what it fixes, and see how the AST-based transformation engine works under the hood.
+        </p>
+
+        <h2 id="why-layers" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Why a Layered Approach?
+        </h2>
+
+        <p>
+          Code issues have dependencies. For example, you shouldn't try to fix hydration errors before ensuring your TypeScript configuration is correct. The layered approach ensures:
+        </p>
+
+        <div className="grid md:grid-cols-3 gap-4 my-8 not-prose">
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5 text-center">
+            <div className="text-4xl font-black text-blue-400 mb-2">1</div>
+            <h4 className="text-white font-semibold mb-2">Dependency Order</h4>
+            <p className="text-gray-400 text-sm">Each layer's fixes are prerequisites for the next</p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5 text-center">
+            <div className="text-4xl font-black text-green-400 mb-2">2</div>
+            <h4 className="text-white font-semibold mb-2">Safe Rollback</h4>
+            <p className="text-gray-400 text-sm">Backups at each layer enable granular rollback</p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5 text-center">
+            <div className="text-4xl font-black text-purple-400 mb-2">3</div>
+            <h4 className="text-white font-semibold mb-2">Validation</h4>
+            <p className="text-gray-400 text-sm">Each layer validates its transformations</p>
+          </div>
+        </div>
+
+        <h2 id="layer-1" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 1: Configuration
+        </h2>
+
+        <p>
+          The foundation layer that ensures your project configuration is modern and compatible.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-white font-semibold mb-4">What Layer 1 Fixes</h4>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">tsconfig.json:</strong> Updates target to ES2022+, enables strict mode, configures paths</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">next.config.js:</strong> Enables App Router features, configures images, sets up redirects</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">package.json:</strong> Checks for outdated dependencies, suggests upgrades</span>
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="layer-2" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 2: Pattern Fixes
+        </h2>
+
+        <p>
+          Bulk pattern transformations that clean up common code issues across your entire codebase.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-white font-semibold mb-4">What Layer 2 Fixes</h4>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">HTML Entities:</strong> Converts <code className="text-blue-400 bg-zinc-800 px-1 rounded">&amp;quot;</code> → <code className="text-blue-400 bg-zinc-800 px-1 rounded">"</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">&amp;amp;</code> → <code className="text-blue-400 bg-zinc-800 px-1 rounded">&</code></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Console Statements:</strong> Removes or comments out <code className="text-blue-400 bg-zinc-800 px-1 rounded">console.log</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">console.error</code>, etc.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Variable Declarations:</strong> Converts <code className="text-blue-400 bg-zinc-800 px-1 rounded">var</code> → <code className="text-blue-400 bg-zinc-800 px-1 rounded">const</code>/<code className="text-blue-400 bg-zinc-800 px-1 rounded">let</code></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Browser Dialogs:</strong> Flags <code className="text-blue-400 bg-zinc-800 px-1 rounded">alert()</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">confirm()</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">prompt()</code> for replacement</span>
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="layer-3" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 3: Component Intelligence
+        </h2>
+
+        <p>
+          React-specific fixes that improve component quality and eliminate common ESLint errors.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-white font-semibold mb-4">What Layer 3 Fixes</h4>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Missing Keys:</strong> Adds <code className="text-blue-400 bg-zinc-800 px-1 rounded">key</code> props to <code className="text-blue-400 bg-zinc-800 px-1 rounded">.map()</code> rendered elements</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Image Alt Text:</strong> Adds <code className="text-blue-400 bg-zinc-800 px-1 rounded">alt</code> attributes to <code className="text-blue-400 bg-zinc-800 px-1 rounded">&lt;img&gt;</code> tags</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Button Accessibility:</strong> Adds <code className="text-blue-400 bg-zinc-800 px-1 rounded">aria-label</code> to icon-only buttons</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Component Props:</strong> Validates and fixes common prop issues</span>
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="layer-4" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 4: Hydration Safety
+        </h2>
+
+        <p>
+          The critical SSR safety layer that prevents the dreaded "window is not defined" errors.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-white font-semibold mb-4">What Layer 4 Fixes</h4>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Window Guards:</strong> Wraps <code className="text-blue-400 bg-zinc-800 px-1 rounded">window</code> access in <code className="text-blue-400 bg-zinc-800 px-1 rounded">typeof window !== 'undefined'</code></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Document Guards:</strong> Protects <code className="text-blue-400 bg-zinc-800 px-1 rounded">document</code> API usage</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Storage Safety:</strong> Makes <code className="text-blue-400 bg-zinc-800 px-1 rounded">localStorage</code>/<code className="text-blue-400 bg-zinc-800 px-1 rounded">sessionStorage</code> SSR-safe</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Theme Providers:</strong> Fixes theme flash issues in SSR</span>
+            </li>
+          </ul>
+        </div>
+
+        <p>
+          For a deeper dive into hydration errors, see our comprehensive guide: <Link to="/blog/fix-react-nextjs-hydration-errors-complete-guide" className="text-blue-400 hover:text-blue-300">How to Fix React & Next.js Hydration Errors</Link>.
+        </p>
+
+        <h2 id="layer-5" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 5: Next.js Optimization
+        </h2>
+
+        <p>
+          Next.js-specific transformations for App Router optimization and React 19 compatibility.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-white font-semibold mb-4">What Layer 5 Fixes</h4>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Client Directives:</strong> Adds <code className="text-blue-400 bg-zinc-800 px-1 rounded">'use client'</code> where hooks are used</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">React 19 APIs:</strong> Converts <code className="text-blue-400 bg-zinc-800 px-1 rounded">ReactDOM.render</code> → <code className="text-blue-400 bg-zinc-800 px-1 rounded">createRoot</code></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Type-Safe Routing:</strong> Adds TypeScript interfaces for route params</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Import Updates:</strong> Fixes <code className="text-blue-400 bg-zinc-800 px-1 rounded">react-dom/test-utils</code> → <code className="text-blue-400 bg-zinc-800 px-1 rounded">react</code> for <code className="text-blue-400 bg-zinc-800 px-1 rounded">act()</code></span>
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="layer-6" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 6: Testing & Accessibility
+        </h2>
+
+        <p>
+          Quality improvements for better testing and accessibility compliance.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-white font-semibold mb-4">What Layer 6 Fixes</h4>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Error Boundaries:</strong> Suggests wrapping components in error boundaries</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">ARIA Attributes:</strong> Adds missing accessibility attributes</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Semantic HTML:</strong> Suggests improvements for screen readers</span>
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="layer-7" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 7: Adaptive Learning
+        </h2>
+
+        <p>
+          The most advanced layer - it learns from transformations applied in previous layers and applies those patterns across your codebase.
+        </p>
+
+        <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-purple-400 font-semibold mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Adaptive Pattern Learning
+          </h4>
+          <p className="text-gray-300 mb-4">
+            Layer 7 observes what fixes were applied by layers 1-6 and learns reusable patterns:
+          </p>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="text-purple-400">→</span>
+              <span>If Layer 5 added <code className="text-blue-400 bg-zinc-800 px-1 rounded">'use client'</code> to files with React hooks, Layer 7 learns this pattern</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-purple-400">→</span>
+              <span>Patterns are stored in <code className="text-blue-400 bg-zinc-800 px-1 rounded">.neurolint/learned-rules.json</code></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-purple-400">→</span>
+              <span>Future runs apply learned patterns with confidence scores</span>
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="how-it-works" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          How It Works Under the Hood
+        </h2>
+
+        <p>
+          NeuroLint uses <a href="https://babeljs.io/" target="_blank" rel="noopener noreferrer">Babel</a> for AST (Abstract Syntax Tree) parsing and transformation. This approach ensures:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <ol className="space-y-4 text-gray-300">
+            <li>
+              <strong className="text-white">1. Parse:</strong> Your code is parsed into an AST using <code className="text-blue-400 bg-zinc-800 px-1 rounded">@babel/parser</code>
+            </li>
+            <li>
+              <strong className="text-white">2. Traverse:</strong> <code className="text-blue-400 bg-zinc-800 px-1 rounded">@babel/traverse</code> walks the tree to find patterns
+            </li>
+            <li>
+              <strong className="text-white">3. Transform:</strong> <code className="text-blue-400 bg-zinc-800 px-1 rounded">@babel/types</code> creates new AST nodes
+            </li>
+            <li>
+              <strong className="text-white">4. Generate:</strong> <code className="text-blue-400 bg-zinc-800 px-1 rounded">@babel/generator</code> converts AST back to code
+            </li>
+            <li>
+              <strong className="text-white">5. Validate:</strong> The validator ensures the transformation is safe
+            </li>
+          </ol>
+        </div>
+
+        <h2 id="getting-started" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Getting Started
+        </h2>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Installation & Usage</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm mb-4">
+            <code className="text-gray-300">{`# Install globally
+npm install -g @neurolint/cli
+
+# Run all 7 layers
+neurolint fix --all-layers ./src
+
+# Run specific layers
+neurolint fix --layers 1,2,3 ./src
+
+# Analyze without fixing
+neurolint analyze ./src
+
+# Dry run (preview changes)
+neurolint fix --all-layers --dry-run ./src`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Ready to transform your codebase?</h4>
+          <p className="text-gray-300 mb-4">
+            Join thousands of developers using NeuroLint to automate code quality.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <a
+              href="https://www.npmjs.com/package/@neurolint/cli"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              Install NeuroLint
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <a
+              href="https://github.com/Alcatecablee/Neurolint-CLI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors border border-black"
+            >
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+const blogPostsData: Record<string, { 
+  title: string; 
+  description: string; 
+  date: string; 
+  readTime: string;
+  author: string;
+  category: string;
+  tags: string[];
+  Component: React.FC 
+}> = {
+  "fix-react-nextjs-hydration-errors-complete-guide": {
+    title: "How to Fix React & Next.js Hydration Errors: The Complete 2025 Guide",
+    description: "Learn why hydration mismatches happen, how to identify them, and the proven strategies to fix 'window is not defined', 'document is not defined', and other SSR errors automatically.",
+    date: "2025-01-15",
+    readTime: "12 min read",
+    author: "NeuroLint Team",
+    category: "Tutorials",
+    tags: ["React", "Next.js", "Hydration", "SSR", "Debugging"],
+    Component: HydrationErrorsPost,
+  },
+  "7-layer-code-fixing-pipeline-explained": {
+    title: "The 7-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
+    description: "A deep dive into how NeuroLint's 7-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to adaptive pattern learning.",
+    date: "2025-01-10",
+    readTime: "15 min read",
+    author: "NeuroLint Team",
+    category: "Deep Dives",
+    tags: ["AST", "Code Transformation", "Architecture", "React", "Next.js"],
+    Component: SevenLayerPost,
+  },
+};
+
+export const BlogPost: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const post = slug ? blogPostsData[slug] : null;
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  if (!post) {
+    return <Navigate to="/blog" replace />;
+  }
+
+  const { Component: PostContent, title, description, date, readTime, author, tags, category } = post;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "description": description,
+    "datePublished": date,
+    "dateModified": date,
+    "author": {
+      "@type": "Organization",
+      "name": author,
+      "url": "https://www.neurolint.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "NeuroLint",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.neurolint.dev/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://www.neurolint.dev/blog/${slug}`
+    },
+    "keywords": tags.join(", ")
+  };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(`https://www.neurolint.dev/blog/${slug}`);
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
+      <div className="min-h-screen bg-black text-white">
+        <nav className="fixed top-0 w-full z-50 bg-zinc-900/80 backdrop-blur-xl border-b border-black transition-all duration-300">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-14 md:h-16">
+              <Link to="/" className="flex items-center group">
+                <img src="/logo.png" alt="NeuroLint" className="h-8 md:h-9 transition-transform duration-200 group-hover:scale-105" />
+              </Link>
+              
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 touch-manipulation"
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
+              </button>
+
+              <div className="hidden md:flex items-center gap-1">
+                <Link 
+                  to="/"
+                  className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                >
+                  Home
+                </Link>
+                <a 
+                  href="/#comprehensive-demo" 
+                  className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                >
+                  Demo
+                </a>
+                <a 
+                  href="/#faq" 
+                  className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                >
+                  FAQ
+                </a>
+                <Link 
+                  to="/blog"
+                  className="px-4 py-2 min-h-[44px] flex items-center text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                >
+                  Blog
+                </Link>
+                <a 
+                  href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                >
+                  Docs
+                </a>
+                <div className="w-px h-6 bg-white/10 mx-2"></div>
+                <a 
+                  href="https://github.com/Alcatecablee/Neurolint-CLI"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
+                  aria-label="GitHub"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                  </svg>
+                </a>
+                <a 
+                  href="https://www.npmjs.com/package/@neurolint/cli"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-2 px-5 py-2 min-h-[44px] flex items-center bg-white text-black rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 text-sm"
+                >
+                  Install
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <div 
+            className={`md:hidden transition-all duration-300 ease-out overflow-hidden ${
+              mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
+            }`}
+          >
+            <div className="px-4 py-4 space-y-2 bg-zinc-900/95 backdrop-blur-xl border-t border-black">
+              <Link 
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              >
+                Home
+              </Link>
+              <Link 
+                to="/blog"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 min-h-[48px] text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              >
+                Blog
+              </Link>
+              <a 
+                href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              >
+                Docs
+              </a>
+              <div className="border-t border-black my-3"></div>
+              <div className="flex items-center gap-3 px-4">
+                <a 
+                  href="https://github.com/Alcatecablee/Neurolint-CLI"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 min-h-[48px] min-w-[48px] flex items-center justify-center text-gray-300 hover:text-white bg-white/5 rounded-lg transition-all duration-200 touch-manipulation"
+                  aria-label="GitHub"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                  </svg>
+                </a>
+                <a 
+                  href="https://www.npmjs.com/package/@neurolint/cli"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 px-5 py-3 min-h-[48px] flex items-center justify-center bg-white text-black rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 text-base touch-manipulation"
+                >
+                  Install CLI
+                </a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <main className="relative pt-32 pb-20 px-4">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-green-500/5 to-blue-600/5 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="max-w-3xl mx-auto relative z-10">
+            <Link 
+              to="/blog" 
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-8"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Blog
+            </Link>
+
+            <header className="mb-12">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="px-3 py-1 bg-blue-500/20 text-blue-400 text-sm font-medium rounded-full border border-black">
+                  {category}
+                </span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 leading-tight">
+                {title}
+              </h1>
+              <p className="text-lg sm:text-xl text-gray-400 mb-6">
+                {description}
+              </p>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400 border-b border-black pb-6">
+                <span className="flex items-center gap-1">
+                  <User className="w-4 h-4" />
+                  {author}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Calendar className="w-4 h-4" />
+                  {new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  {readTime}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 mt-6">
+                <span className="text-gray-500 text-sm">Share:</span>
+                <a 
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(`https://www.neurolint.dev/blog/${slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors border border-black"
+                  aria-label="Share on Twitter"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+                <a 
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://www.neurolint.dev/blog/${slug}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors border border-black"
+                  aria-label="Share on LinkedIn"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </a>
+                <button 
+                  onClick={copyLink}
+                  className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors border border-black"
+                  aria-label="Copy link"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                </button>
+              </div>
+            </header>
+
+            <PostContent />
+
+            <footer className="mt-16 pt-8 border-t border-black">
+              <div className="flex flex-wrap gap-2 mb-8">
+                {tags.map((tag) => (
+                  <span key={tag} className="px-3 py-1 bg-zinc-800 text-gray-400 text-sm rounded-full border border-black">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+              <div className="flex justify-between items-center">
+                <Link to="/blog" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors">
+                  <ArrowLeft className="w-4 h-4" />
+                  All Posts
+                </Link>
+              </div>
+            </footer>
+          </div>
+        </main>
+
+        <LandingFooter />
+      </div>
+    </>
+  );
+};
+
+export default BlogPost;
