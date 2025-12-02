@@ -707,6 +707,41 @@ html {
   overflow-x: auto;
 }
 
+/* Asciinema Player Enterprise Styling */
+.asciinema-terminal {
+  background: linear-gradient(180deg, #0d1117 0%, #161b22 100%) !important;
+  border-radius: 0 !important;
+}
+
+.asciinema-player {
+  background: transparent !important;
+}
+
+.asciinema-player .asciinema-terminal {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace !important;
+  letter-spacing: 0.02em;
+}
+
+/* Hide default asciinema controls - we use custom ones */
+.asciinema-player .control-bar {
+  display: none !important;
+}
+
+.asciinema-player .start-prompt {
+  display: none !important;
+}
+
+/* Terminal text glow effect for commands */
+.asciinema-terminal .fg-2 {
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+}
+
+/* Cursor styling */
+.asciinema-terminal .cursor {
+  background: rgba(74, 222, 128, 0.8) !important;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+}
+
 .terminal-header {
   display: flex;
   align-items: center;
