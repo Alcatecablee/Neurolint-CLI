@@ -23,6 +23,22 @@ const faqData: FAQItem[] = [
     ],
   },
   {
+    question: "What are the 7 layers?",
+    answer:
+      "NeuroLint uses a sophisticated 7-layer pipeline for comprehensive code fixes: (1) Configuration - TypeScript and Next.js config modernization, (2) Patterns - HTML entities, console cleanup, var to const/let, (3) Components - missing keys, accessibility, prop validation, (4) Hydration - SSR safety guards for localStorage/window, (5) Next.js - App Router optimization and React 19 API migrations, (6) Testing - accessibility and error boundary improvements, (7) Adaptive - machine learning that learns patterns from your codebase and applies them project-wide.",
+    keywords: [
+      "layers",
+      "pipeline",
+      "configuration",
+      "patterns",
+      "components",
+      "hydration",
+      "Next.js",
+      "testing",
+      "adaptive",
+    ],
+  },
+  {
     question: "Will NeuroLint break my code?",
     answer:
       "No. NeuroLint creates automatic backups before making any changes. Every fix is deterministic and rule-based (not AI), so you get consistent, predictable results. You can review all changes and roll back instantly if needed. We prioritize safety over speed.",
@@ -38,7 +54,7 @@ const faqData: FAQItem[] = [
   {
     question: "Does NeuroLint use AI?",
     answer:
-      "No. NeuroLint uses proven rule-based transformations, not AI. This means you get deterministic, consistent fixes every time - no hallucinations, no guesswork, no unpredictable results. We fix your code based on established patterns and best practices.",
+      "No. NeuroLint uses proven AST-based (Abstract Syntax Tree) transformations with Babel, not AI. This means you get deterministic, consistent fixes every time - no hallucinations, no guesswork, no unpredictable results. We parse and transform your code based on established patterns and best practices.",
     keywords: [
       "no AI",
       "rule-based",
@@ -46,12 +62,14 @@ const faqData: FAQItem[] = [
       "consistent",
       "proven patterns",
       "no hallucinations",
+      "AST",
+      "Babel",
     ],
   },
   {
     question: "What frameworks and versions are supported?",
     answer:
-      "NeuroLint works with React 16+, React 18, React 19, Next.js 12-15, and TypeScript codebases. We fix common issues like hydration crashes (window is not defined), missing React keys, ESLint errors, accessibility problems, and Next.js App Router migration issues.",
+      "NeuroLint works with React 16+, React 18, React 19, Next.js 13.4 - 15.5, and TypeScript codebases. We fix common issues like hydration crashes (window is not defined), missing React keys, ESLint errors, accessibility problems, and Next.js App Router migration issues.",
     keywords: [
       "React",
       "Next.js",
@@ -60,6 +78,33 @@ const faqData: FAQItem[] = [
       "React 19",
       "Next.js 15",
       "App Router",
+    ],
+  },
+  {
+    question: "Does NeuroLint help migrate to React 19?",
+    answer:
+      "Yes! NeuroLint automatically converts deprecated React 19 APIs: ReactDOM.render() to createRoot(), ReactDOM.hydrate() to hydrateRoot(), and updates react-dom/test-utils imports. It also warns about removed APIs like findDOMNode and unmountComponentAtNode with migration suggestions.",
+    keywords: [
+      "React 19",
+      "migration",
+      "createRoot",
+      "hydrateRoot",
+      "ReactDOM",
+      "deprecated APIs",
+      "upgrade",
+    ],
+  },
+  {
+    question: "Is there a VS Code extension?",
+    answer:
+      "Yes! NeuroLint integrates directly into VS Code with real-time diagnostics, code actions, hover information, and a dedicated tree view for issues. The extension mirrors all CLI capabilities and works seamlessly with VS Code's undo/redo system. Download the .vsix from our GitHub releases.",
+    keywords: [
+      "VS Code",
+      "extension",
+      "IDE",
+      "diagnostics",
+      "code actions",
+      "editor",
     ],
   },
   {
@@ -77,7 +122,7 @@ const faqData: FAQItem[] = [
   {
     question: "What are the system requirements?",
     answer:
-      "NeuroLint requires Node.js 16+ and npm 7+ (Node.js 18+ recommended). Works on macOS, Linux, and Windows. Supports CI/CD environments including GitHub Actions, GitLab CI, CircleCI, and Jenkins. Compatible with monorepos, turborepo, and nx workspaces.",
+      "NeuroLint requires Node.js 16+ and npm 7+ (Node.js 20+ recommended for best compatibility). Works on macOS, Linux, and Windows. Supports CI/CD environments including GitHub Actions, GitLab CI, CircleCI, and Jenkins. Compatible with monorepos, turborepo, and nx workspaces.",
     keywords: [
       "Node.js",
       "npm",
@@ -92,7 +137,7 @@ const faqData: FAQItem[] = [
   {
     question: "How do backups and rollbacks work?",
     answer:
-      "Before making any changes, NeuroLint automatically creates timestamped backups in .neurolint-backups/. Each backup includes all modified files. To restore, run 'neurolint restore' and select the backup timestamp. Backups are never modified or deleted automatically - you have full control.",
+      "Before making any changes, NeuroLint automatically creates timestamped backups in .neurolint-backups/. Each layer creates its own backup, so you can rollback to any point. The centralized backup manager tracks all changes across your project. To restore, run 'neurolint restore' and select the backup timestamp. Backups are never modified or deleted automatically - you have full control.",
     keywords: [
       "backup",
       "restore",
@@ -100,19 +145,20 @@ const faqData: FAQItem[] = [
       "safety",
       "undo changes",
       "recovery",
+      "layer backups",
     ],
   },
   {
-    question: "Does NeuroLint collect any data or require telemetry?",
+    question: "Does NeuroLint collect any data?",
     answer:
-      "No. NeuroLint runs 100% locally on your machine. Zero telemetry, zero analytics, zero data collection. Your code never leaves your computer. Works completely offline. No API keys, accounts, or internet connection required after installation.",
+      "NeuroLint runs 100% locally on your machine. Any usage analytics are stored only on your machine to help track quality improvements - nothing is ever sent to external servers. Your code never leaves your computer. Works completely offline. No API keys, accounts, or internet connection required after installation.",
     keywords: [
       "privacy",
-      "telemetry",
+      "local analytics",
       "offline",
       "local",
       "security",
-      "no tracking",
+      "no external tracking",
     ],
   },
 ];
