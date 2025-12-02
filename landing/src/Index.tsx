@@ -496,6 +496,24 @@ export default function Index() {
               </svg>
             </a>
           </div>
+
+          {/* Product Hunt Badge */}
+          <div className="mt-8 animate-slide-in-up animate-delay-900">
+            <a 
+              href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block hover:opacity-90 transition-opacity"
+            >
+              <img 
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
+                alt="NeuroLint CLI - Rule-based code fixes. No AI hallucinations. Just results. | Product Hunt" 
+                width="250" 
+                height="54"
+                className="w-[200px] h-auto sm:w-[250px]"
+              />
+            </a>
+          </div>
         </div>
       </section>
 

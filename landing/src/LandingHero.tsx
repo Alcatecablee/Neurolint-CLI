@@ -43,6 +43,21 @@ export function LandingHero() {
         <ArrowRight className="mr-3 w-5 h-5" aria-hidden="true" />
         Install Free CLI
       </Button>
+      
+      <a 
+        href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-8 hover:opacity-90 transition-opacity"
+      >
+        <img 
+          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
+          alt="NeuroLint CLI - Rule-based code fixes. No AI hallucinations. Just results. | Product Hunt" 
+          style={{ width: '250px', height: '54px' }}
+          width="250" 
+          height="54" 
+        />
+      </a>
     </section>
   );
 }
