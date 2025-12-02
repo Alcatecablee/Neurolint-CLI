@@ -33,7 +33,8 @@ class BackupManager {
       '**/.git/**',
       '**/coverage/**',
       '**/.neurolint-backups/**',
-      '**/*.backup-*'
+      '**/*.backup-*',
+      '**/states-*.json'
     ];
     this.includePatterns = options.includePatterns || [
       '**/*.js',
