@@ -137,8 +137,8 @@ const TypewriterHeadline = () => {
   }, [currentIndex, currentText, currentWordIndex, words]);
 
   return (
-    <div className="mb-8 md:mb-12">
-      <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white min-h-[1.2em]">
+    <div className="mb-8 md:mb-12 h-[48px] xs:h-[56px] sm:h-[72px] md:h-[84px] lg:h-[100px] flex items-center justify-center">
+      <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white whitespace-nowrap">
         {currentText}
       </h1>
     </div>
