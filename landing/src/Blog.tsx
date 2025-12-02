@@ -95,6 +95,14 @@ const BlogCard: React.FC<{ post: BlogPost }> = ({ post }) => {
 export const Blog: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    document.title = "Blog | NeuroLint - React & Next.js Code Fixing Guides";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute('content', 'Expert guides on fixing React & Next.js bugs, understanding hydration errors, and automating code quality improvements with NeuroLint.');
+    }
+  }, []);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Blog",

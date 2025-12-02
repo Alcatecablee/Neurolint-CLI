@@ -841,6 +841,16 @@ export const BlogPost: React.FC = () => {
   const post = slug ? blogPostsData[slug] : null;
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    if (post) {
+      document.title = `${post.title} | NeuroLint Blog`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute('content', post.description);
+      }
+    }
+  }, [post]);
+
   if (!post) {
     return <Navigate to="/blog" replace />;
   }
