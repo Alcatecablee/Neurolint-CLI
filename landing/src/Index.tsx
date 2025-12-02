@@ -684,44 +684,44 @@ export default function Index() {
               {/* Terminal content preview - clickable */}
               <button
                 onClick={() => setDemoModalOpen(true)}
-                className="w-full relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-inset"
+                className="w-full relative cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-inset touch-manipulation"
                 aria-label="Open demo video"
               >
-                <div className="relative bg-[#0d1117] p-6 md:p-10 lg:p-12 min-h-[280px] md:min-h-[320px]">
+                <div className="relative bg-[#0d1117] p-4 sm:p-6 md:p-10 lg:p-12 min-h-[200px] sm:min-h-[240px] md:min-h-[320px]">
                   {/* Scanline effect */}
                   <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.05)_50%)] bg-[length:100%_4px] pointer-events-none opacity-30" />
                   
-                  {/* Terminal Preview Lines - Based on real CLI output */}
-                  <div className="font-mono text-xs sm:text-sm md:text-base space-y-2 text-left max-w-3xl opacity-70 group-hover:opacity-50 transition-opacity duration-300">
-                    <div className="flex items-center gap-2">
+                  {/* Terminal Preview Lines - Mobile optimized */}
+                  <div className="font-mono text-[10px] xs:text-xs sm:text-sm md:text-base space-y-1 sm:space-y-2 text-left max-w-3xl opacity-70 group-hover:opacity-50 transition-opacity duration-300 overflow-hidden">
+                    <div className="flex items-center gap-1 sm:gap-2">
                       <span className="text-emerald-400">$</span>
-                      <span className="text-white">npm install -g @neurolint/cli</span>
+                      <span className="text-white truncate">npm install -g @neurolint/cli</span>
                     </div>
-                    <div className="text-zinc-500 text-xs">added 132 packages in 37s</div>
-                    <div className="mt-4 flex items-center gap-2">
+                    <div className="text-zinc-500 text-[10px] xs:text-xs hidden xs:block">added 132 packages in 37s</div>
+                    <div className="mt-2 sm:mt-4 flex items-center gap-1 sm:gap-2">
                       <span className="text-emerald-400">$</span>
-                      <span className="text-white">neurolint analyze . --verbose</span>
+                      <span className="text-white truncate">neurolint analyze . --verbose</span>
                     </div>
-                    <div className="text-zinc-400">Processing <span className="text-cyan-400">288 files</span>...</div>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-zinc-400">
+                    <div className="text-zinc-400 truncate">Processing <span className="text-cyan-400">288 files</span>...</div>
+                    <div className="hidden sm:flex flex-wrap gap-x-4 gap-y-1 text-zinc-400">
                       <span>[ANALYZED] <span className="text-zinc-300">src/hooks/use-local-storage.ts</span></span>
                     </div>
-                    <div className="text-zinc-400 pl-4">Issues Found: <span className="text-amber-400 font-medium">10</span> | Layers: <span className="text-cyan-400">4, 5</span></div>
-                    <div className="flex items-center gap-2 mt-2">
+                    <div className="text-zinc-400 pl-2 sm:pl-4 text-[10px] xs:text-xs sm:text-sm">Issues: <span className="text-amber-400 font-medium">10</span> | Layers: <span className="text-cyan-400">4, 5</span></div>
+                    <div className="flex items-center gap-1 sm:gap-2 mt-1 sm:mt-2">
                       <span className="text-emerald-400">$</span>
-                      <span className="text-white">neurolint fix . --all-layers</span>
+                      <span className="text-white truncate">neurolint fix . --all-layers</span>
                     </div>
-                    <div className="text-emerald-400">[SUCCESS] <span className="text-white">156 transformations</span> in 2.3s</div>
+                    <div className="text-emerald-400 text-[10px] xs:text-xs sm:text-sm">[SUCCESS] <span className="text-white">156 fixes</span> in 2.3s</div>
                   </div>
                   
-                  {/* Premium Play Button Overlay */}
+                  {/* Premium Play Button Overlay - Mobile optimized */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="relative">
                       {/* Pulsing ring */}
-                      <div className="absolute inset-0 w-20 h-20 md:w-24 md:h-24 bg-white/10 rounded-full animate-ping opacity-20" />
+                      <div className="absolute inset-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white/10 rounded-full animate-ping opacity-20" />
                       {/* Main button */}
-                      <div className="relative w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md rounded-full flex items-center justify-center border border-black group-hover:from-white/30 group-hover:to-white/10 group-hover:scale-110 transition-all duration-300 shadow-2xl">
-                        <svg className="w-8 h-8 md:w-10 md:h-10 text-white ml-1 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+                      <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md rounded-full flex items-center justify-center border border-black group-hover:from-white/30 group-hover:to-white/10 group-hover:scale-110 transition-all duration-300 shadow-2xl">
+                        <svg className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white ml-0.5 sm:ml-1 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z"/>
                         </svg>
                       </div>
@@ -729,11 +729,11 @@ export default function Index() {
                   </div>
                 </div>
                 
-                {/* Bottom status bar */}
-                <div className="bg-[#161b22] border-t border-black px-4 py-3 flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-sm text-zinc-500">
-                    <span className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Bottom status bar - Mobile optimized */}
+                <div className="bg-[#161b22] border-t border-black px-3 sm:px-4 py-2 sm:py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-zinc-500">
+                    <span className="flex items-center gap-1 sm:gap-2">
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <span className="font-mono">1:00</span>
@@ -745,9 +745,9 @@ export default function Index() {
                       <span>Real CLI Recording</span>
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-white group-hover:text-emerald-400 transition-colors">
-                    <span className="text-sm font-medium">Watch Demo</span>
-                    <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-1 sm:gap-2 text-white group-hover:text-emerald-400 transition-colors">
+                    <span className="text-xs sm:text-sm font-medium">Watch Demo</span>
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
