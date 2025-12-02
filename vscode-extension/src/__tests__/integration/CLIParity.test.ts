@@ -744,6 +744,23 @@ describe('E2E CLI Parity (CLI Harness)', () => {
   const fs = require('fs');
   const os = require('os');
   
+  let adapter: SharedCoreAdapter;
+  
+  beforeEach(() => {
+    const mockOutputChannel = {
+      appendLine: jest.fn(),
+      append: jest.fn(),
+      clear: jest.fn(),
+      show: jest.fn(),
+      hide: jest.fn(),
+      dispose: jest.fn(),
+      name: 'NeuroLint',
+      replace: jest.fn()
+    } as unknown as vscode.OutputChannel;
+    
+    adapter = new SharedCoreAdapter(mockOutputChannel, '/mock/workspace');
+  });
+  
   const CLI_HARNESS_PATH = path.resolve(__dirname, '../../../../scripts/run-cli-analysis.js');
   
   interface CLIResult {
