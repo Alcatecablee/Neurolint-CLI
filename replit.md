@@ -110,7 +110,7 @@ Each layer builds on the previous, ensuring safe and comprehensive transformatio
 | 4 | Hydration | SSR guards for localStorage, window, document |
 | 5 | Next.js | 'use client' directives, Server Components, imports |
 | 6 | Testing | Error boundaries, test file generation |
-| 7 | Adaptive | Custom pattern learning, project conventions |
+| 7 | Adaptive | Learns patterns from previous fixes and reapplies them to new files |
 
 ## Key Commands
 

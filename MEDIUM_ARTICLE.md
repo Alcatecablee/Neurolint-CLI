@@ -68,7 +68,7 @@ NeuroLint doesn't just throw fixes at your code randomly. It uses a **progressiv
 | **4. Hydration** | Adds SSR guards for localStorage, window, document |
 | **5. Next.js** | Adds 'use client' directives, optimizes Server Components |
 | **6. Testing** | Generates error boundaries and test scaffolding |
-| **7. Adaptive** | Enforces custom project conventions from your ESLint/Airbnb rules |
+| **7. Adaptive** | Learns patterns from previous fixes and reapplies them to new files |
 
 You can apply all layers at once or target specific ones:
 
