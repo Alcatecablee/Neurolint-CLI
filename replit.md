@@ -61,8 +61,10 @@ NeuroLint's critical differentiator is its 5-step fail-safe orchestration system
 │
 ├── landing/                    # React + Vite landing page
 │   ├── src/
-│   │   ├── main.jsx           # Entry point
+│   │   ├── main.jsx           # Entry point with routing
 │   │   ├── Index.tsx          # Main page component
+│   │   ├── Blog.tsx           # Blog list page
+│   │   ├── BlogPost.tsx       # Individual blog post page
 │   │   ├── LandingHero.tsx    # Hero section
 │   │   ├── LandingHeader.tsx  # Header/navigation
 │   │   ├── LandingFooter.tsx  # Footer
