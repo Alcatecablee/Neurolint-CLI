@@ -29,6 +29,14 @@ const fixMaster = require('./fix-master.js');
 const TransformationValidator = require('./validator.js');
 const BackupManager = require('./backup-manager');
 const { ProductionBackupManager } = require('./backup-manager-production');
+const { 
+  CVE_2025_55182,
+  isVulnerableReactVersion,
+  getPatchedReactVersion,
+  isVulnerableNextVersion,
+  getPatchedNextVersion,
+  formatPatchedVersionsList
+} = require('./shared-core/security-constants');
 
 // Backup Manager Factory
 function createBackupManager(options = {}) {
@@ -4796,84 +4804,47 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
   const vulnerablePackages = [];
   const fixes = [];
   
-  // Vulnerable React versions
-  const vulnerableReactVersions = ['19.0.0', '19.1.0', '19.1.1', '19.2.0'];
-  const patchedReactVersions = {
-    '19.0': '19.0.1',
-    '19.1': '19.1.2',
-    '19.2': '19.2.1'
-  };
-  
-  // Check React version
+  // Check React version using centralized constants
   const reactVersion = deps['react'];
   if (reactVersion) {
-    const cleanVersion = reactVersion.replace(/[\^~>=<]/g, '');
-    if (vulnerableReactVersions.some(v => cleanVersion.startsWith(v.split('.').slice(0, 2).join('.')) && cleanVersion !== patchedReactVersions[cleanVersion.split('.').slice(0, 2).join('.')])) {
-      const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
-      const patchedVersion = patchedReactVersions[majorMinor] || '19.2.1';
+    if (isVulnerableReactVersion(reactVersion)) {
+      const patchedVersion = getPatchedReactVersion(reactVersion);
       vulnerablePackages.push({ name: 'react', current: reactVersion, patched: patchedVersion });
       fixes.push({ package: 'react', version: patchedVersion });
       fixes.push({ package: 'react-dom', version: patchedVersion });
     }
   }
   
-  // Check react-server-dom packages
-  const serverDomPackages = [
-    'react-server-dom-webpack',
-    'react-server-dom-parcel', 
-    'react-server-dom-turbopack'
-  ];
-  
-  for (const pkg of serverDomPackages) {
+  // Check react-server-dom packages using centralized constants
+  for (const pkg of CVE_2025_55182.serverDomPackages) {
     if (deps[pkg]) {
-      const cleanVersion = deps[pkg].replace(/[\^~>=<]/g, '');
-      if (cleanVersion.startsWith('19.0') || cleanVersion.startsWith('19.1') || cleanVersion.startsWith('19.2')) {
-        const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
-        const patchedVersion = patchedReactVersions[majorMinor] || '19.2.1';
-        if (!vulnerableReactVersions.some(v => cleanVersion === v)) continue;
+      if (isVulnerableReactVersion(deps[pkg])) {
+        const patchedVersion = getPatchedReactVersion(deps[pkg]);
         vulnerablePackages.push({ name: pkg, current: deps[pkg], patched: patchedVersion });
         fixes.push({ package: pkg, version: patchedVersion });
       }
     }
   }
   
-  // Check Next.js version
+  // Check Next.js version using centralized constants
   const nextVersion = deps['next'];
   if (nextVersion) {
-    const cleanVersion = nextVersion.replace(/[\^~>=<]/g, '');
-    const patchedNextVersions = {
-      '15.0': '15.0.5',
-      '15.1': '15.1.9',
-      '15.2': '15.2.6',
-      '15.3': '15.3.6',
-      '15.4': '15.4.8',
-      '15.5': '15.5.5',
-      '16.0': '16.0.2',
-      '16.1': '16.1.0',
-      '16.2': '16.2.1'
-    };
-    
-    const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
-    if (patchedNextVersions[majorMinor]) {
-      const currentPatch = parseInt(cleanVersion.split('.')[2] || '0');
-      const patchedPatch = parseInt(patchedNextVersions[majorMinor].split('.')[2]);
-      
-      if (currentPatch < patchedPatch) {
-        vulnerablePackages.push({ name: 'next', current: nextVersion, patched: patchedNextVersions[majorMinor] });
-        fixes.push({ package: 'next', version: patchedNextVersions[majorMinor] });
-      }
+    if (isVulnerableNextVersion(nextVersion)) {
+      const patchedVersion = getPatchedNextVersion(nextVersion);
+      vulnerablePackages.push({ name: 'next', current: nextVersion, patched: patchedVersion });
+      fixes.push({ package: 'next', version: patchedVersion });
     }
   }
   
   // Display results
   if (vulnerablePackages.length === 0) {
     spinner.succeed('No vulnerable packages detected!');
-    console.log('\n\x1b[32mYour project appears to be safe from CVE-2025-55182.\x1b[0m');
+    console.log(`\n\x1b[32mYour project appears to be safe from ${CVE_2025_55182.id}.\x1b[0m`);
     console.log('\n\x1b[1mNote:\x1b[0m React 18 and earlier are NOT affected by this vulnerability.');
     console.log('SPAs (Single Page Applications) without React Server Components are also NOT affected.');
     console.log('\nTo verify, check that you are using:');
-    console.log('  - React: 19.0.1, 19.1.2, or 19.2.1+');
-    console.log('  - Next.js: 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, or 16.2.1+');
+    console.log(`  - React: ${formatPatchedVersionsList('react')}`);
+    console.log(`  - Next.js: ${formatPatchedVersionsList('nextjs')}`);
     return;
   }
   
