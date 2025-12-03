@@ -884,11 +884,11 @@ export default function Index() {
               className="hover:opacity-80 transition-opacity duration-200"
             >
               <img 
-                src="https://startupfa.me/badges/featured-badge-small.webp" 
+                src="https://startupfa.me/badges/featured/dark-small-rounded.webp" 
                 alt="NeuroLint CLI - Featured on Startup Fame" 
-                width="224" 
-                height="36"
-                className="w-[180px] h-auto sm:w-[200px]"
+                width="240" 
+                height="37"
+                className="w-[180px] h-auto sm:w-[210px]"
               />
             </a>
             
