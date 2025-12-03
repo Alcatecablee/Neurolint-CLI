@@ -923,6 +923,20 @@ export default function Index() {
             </a>
             
             <a 
+              href="https://findly.tools/neurolint-cli?utm_source=neurolint-cli" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity duration-200"
+            >
+              <img 
+                src="https://findly.tools/badges/findly-tools-badge-light.svg" 
+                alt="Featured on findly.tools" 
+                width="150"
+                className="w-[120px] h-auto sm:w-[150px]"
+              />
+            </a>
+            
+            <a 
               href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
               target="_blank"
               rel="noopener noreferrer"
