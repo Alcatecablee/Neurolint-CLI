@@ -4847,8 +4847,10 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
       '15.2': '15.2.6',
       '15.3': '15.3.6',
       '15.4': '15.4.8',
-      '15.5': '15.5.7',
-      '16.0': '16.0.7'
+      '15.5': '15.5.5',
+      '16.0': '16.0.2',
+      '16.1': '16.1.0',
+      '16.2': '16.2.1'
     };
     
     const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
@@ -4867,9 +4869,11 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
   if (vulnerablePackages.length === 0) {
     spinner.succeed('No vulnerable packages detected!');
     console.log('\n\x1b[32mYour project appears to be safe from CVE-2025-55182.\x1b[0m');
+    console.log('\n\x1b[1mNote:\x1b[0m React 18 and earlier are NOT affected by this vulnerability.');
+    console.log('SPAs (Single Page Applications) without React Server Components are also NOT affected.');
     console.log('\nTo verify, check that you are using:');
     console.log('  - React: 19.0.1, 19.1.2, or 19.2.1+');
-    console.log('  - Next.js: 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, or 16.0.7+');
+    console.log('  - Next.js: 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, or 16.2.1+');
     return;
   }
   

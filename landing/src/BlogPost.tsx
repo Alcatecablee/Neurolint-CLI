@@ -908,6 +908,28 @@ const CVE202555182Post: React.FC = () => {
           Am I Affected?
         </h2>
 
+        <div className="bg-green-500/10 border border-black rounded-xl p-5 mb-6 not-prose">
+          <h4 className="text-green-400 font-semibold mb-3 flex items-center gap-2">
+            <span className="w-6 h-6 bg-green-500/20 rounded flex items-center justify-center text-sm">&#10003;</span>
+            React 18 is NOT Affected
+          </h4>
+          <p className="text-gray-300 text-sm">
+            This vulnerability <strong className="text-white">only affects React 19</strong> apps using React Server Components (RSC). 
+            If you're using React 18 or earlier, you are not affected by CVE-2025-55182.
+          </p>
+        </div>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-5 mb-6 not-prose">
+          <h4 className="text-green-400 font-semibold mb-3 flex items-center gap-2">
+            <span className="w-6 h-6 bg-green-500/20 rounded flex items-center justify-center text-sm">&#10003;</span>
+            SPAs (Single Page Applications) are NOT Affected
+          </h4>
+          <p className="text-gray-300 text-sm">
+            If your React application runs <strong className="text-white">purely on the client-side</strong> (no server rendering, no RSC), 
+            you are not affected. This includes traditional Create React App and Vite SPAs without server components.
+          </p>
+        </div>
+
         <div className="grid md:grid-cols-2 gap-4 my-8 not-prose">
           <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
             <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
@@ -915,7 +937,7 @@ const CVE202555182Post: React.FC = () => {
               You ARE Affected If:
             </h4>
             <ul className="space-y-2 text-gray-300 text-sm">
-              <li>Using React 19.0.0 - 19.2.0</li>
+              <li>Using React 19.0.0 - 19.2.0 with RSC</li>
               <li>Using Next.js 15.x or 16.x with App Router</li>
               <li>Using React Router with RSC mode</li>
               <li>Using Vite with @vitejs/plugin-rsc</li>
@@ -930,8 +952,9 @@ const CVE202555182Post: React.FC = () => {
             <ul className="space-y-2 text-gray-300 text-sm">
               <li>Your app doesn't use React Server Components</li>
               <li>You're using React 18 or earlier</li>
-              <li>Your React code runs purely client-side</li>
+              <li>Your React code runs purely client-side (SPAs)</li>
               <li>You're already on patched versions</li>
+              <li>Using Next.js Pages Router (not App Router)</li>
             </ul>
           </div>
         </div>
@@ -1010,11 +1033,11 @@ npm install`}</code>
         <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
           <h4 className="text-white font-semibold mb-4">Step 2: Update Next.js (if applicable)</h4>
           <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
-            <code className="text-gray-300">{`# For Next.js 15.x
-npm install next@15.0.5
+            <code className="text-gray-300">{`# For Next.js 15.x (pick your minor version)
+npm install next@15.0.5  # or 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.5
 
 # For Next.js 16.x
-npm install next@16.0.7`}</code>
+npm install next@16.0.2  # or 16.1.0, 16.2.1`}</code>
           </pre>
         </div>
 
@@ -1036,7 +1059,7 @@ npm install next@16.0.7`}</code>
           <code className="text-gray-300">{`# Check React version (should be 19.0.1, 19.1.2, or 19.2.1)
 npm list react
 
-# Check Next.js version (should be 15.0.5+ or 16.0.7+)
+# Check Next.js version (should be 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, or 16.2.1+)
 npm list next`}</code>
         </pre>
 
