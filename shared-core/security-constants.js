@@ -52,8 +52,32 @@ const CVE_2025_55182 = {
 };
 
 function isVulnerableReactVersion(version) {
+  if (!version || typeof version !== 'string') return false;
+  
+  const hasGreaterThan = version.includes('>') && !version.includes('>=');
+  if (hasGreaterThan) {
+    return false;
+  }
+  
   const cleanVersion = version.replace(/[\^~>=<]/g, '');
-  return CVE_2025_55182.react.vulnerable.includes(cleanVersion);
+  const parts = cleanVersion.split('.');
+  
+  if (parts.length < 2) return false;
+  
+  const major = parseInt(parts[0]);
+  const minor = parseInt(parts[1]);
+  const patch = parseInt(parts[2] || '0');
+  
+  if (isNaN(major) || isNaN(minor) || major !== 19) return false;
+  
+  const majorMinor = `${major}.${minor}`;
+  const patchedVersion = CVE_2025_55182.react.patched[majorMinor];
+  
+  if (!patchedVersion) return false;
+  
+  const patchedPatch = parseInt(patchedVersion.split('.')[2]);
+  
+  return patch < patchedPatch;
 }
 
 function getPatchedReactVersion(version) {

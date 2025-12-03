@@ -21,6 +21,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No restrictions on commercial use
 - Enables partnerships and integrations
 
+## [1.4.2] - 2025-12-03
+
+### Changed
+- Centralized CVE-2025-55182 version mappings into `shared-core/security-constants.js`
+- Removed hardcoded version numbers from `cli.js` in favor of centralized constants
+- Added helper functions for vulnerability detection and patched version retrieval
+- Improved maintainability for future security patch updates
+
+### Added
+- New `shared-core/security-constants.js` module with:
+  - `CVE_2025_55182` constant object with all version mappings
+  - `isVulnerableReactVersion()` - detects vulnerable React versions
+  - `getPatchedReactVersion()` - returns correct patched version
+  - `isVulnerableNextVersion()` - detects vulnerable Next.js versions  
+  - `getPatchedNextVersion()` - returns correct patched version
+  - `formatPatchedVersionsList()` - formats version lists for display
+- Edge case tests for security vulnerability detection
+
+### Fixed
+- Security command now uses centralized constants instead of inline version arrays
+
 ## [1.4.1] - 2025-12-03
 
 ### Added
