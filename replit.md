@@ -23,6 +23,14 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 3, 2025** - CVE-2025-55182 Constants Centralization (v1.4.2)
+- Centralized all CVE-2025-55182 version mappings into `shared-core/security-constants.js`
+- Added helper functions: `isVulnerableReactVersion()`, `getPatchedReactVersion()`, etc.
+- Removed hardcoded version numbers from `cli.js` for improved maintainability
+- Added edge case tests for security vulnerability detection
+- Fixed vulnerability detection to handle semver operators correctly
+- Version bumped to 1.4.2
+
 **December 3, 2025** - CVE-2025-55182 Security Update (v1.4.1)
 - Added `security:cve-2025-55182` command for patching critical React Server Components RCE vulnerability
 - Updated CLI with complete Next.js patched version matrix (15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.5, 16.0.2, 16.1.0, 16.2.1)
