@@ -623,51 +623,6 @@ export default function Index() {
             </a>
           </div>
 
-          {/* Badges Row */}
-          <div className="mt-12 sm:mt-16 flex flex-wrap items-center justify-center gap-3 sm:gap-4 animate-slide-in-up animate-delay-900">
-            <a 
-              href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-90 transition-opacity"
-            >
-              <img 
-                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
-                alt="NeuroLint CLI - Rule-based code fixes. No AI hallucinations. Just results. | Product Hunt" 
-                width="250" 
-                height="54"
-                className="w-[200px] h-auto sm:w-[250px]"
-              />
-            </a>
-            
-            <a 
-              href="https://dang.ai/" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-90 transition-opacity"
-            >
-              <img 
-                src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png" 
-                alt="Dang.ai" 
-                style={{ width: '150px', height: '54px' }}
-                width="150" 
-                height="54"
-              />
-            </a>
-            
-            <a 
-              href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:opacity-90 transition-opacity"
-            >
-              <img 
-                src="https://img.shields.io/github/stars/Alcatecablee/Neurolint-CLI?style=for-the-badge&logo=github&logoColor=white&labelColor=181717&color=181717" 
-                alt="GitHub Stars" 
-                height="28"
-              />
-            </a>
-          </div>
         </div>
       </section>
 
@@ -899,6 +854,74 @@ export default function Index() {
 
       {/* Layers Documentation Section */}
       <LayersDocSection />
+
+      {/* Featured On Section */}
+      <section className="py-16 md:py-20 px-4 border-t border-zinc-800/50">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-sm uppercase tracking-widest text-zinc-500 font-medium mb-8">
+            Featured On
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
+            <a 
+              href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity duration-200"
+            >
+              <img 
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
+                alt="NeuroLint CLI - Rule-based code fixes. No AI hallucinations. Just results. | Product Hunt" 
+                width="250" 
+                height="54"
+                className="w-[180px] h-auto sm:w-[220px]"
+              />
+            </a>
+            
+            <a 
+              href="https://startupfa.me/s/neurolint-cli?utm_source=neurolint.dev" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity duration-200"
+            >
+              <img 
+                src="https://startupfa.me/badges/featured-badge-small.webp" 
+                alt="NeuroLint CLI - Featured on Startup Fame" 
+                width="224" 
+                height="36"
+                className="w-[180px] h-auto sm:w-[200px]"
+              />
+            </a>
+            
+            <a 
+              href="https://dang.ai/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity duration-200"
+            >
+              <img 
+                src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png" 
+                alt="Featured on Dang.ai" 
+                width="150" 
+                height="54"
+                className="w-[120px] h-auto sm:w-[150px]"
+              />
+            </a>
+            
+            <a 
+              href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity duration-200"
+            >
+              <img 
+                src="https://img.shields.io/github/stars/Alcatecablee/Neurolint-CLI?style=for-the-badge&logo=github&logoColor=white&labelColor=181717&color=181717" 
+                alt="GitHub Stars" 
+                height="28"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
 
       {/* How It Works Section - Simplified and moved up */}
       <section ref={howItWorksSectionRef} className="py-16 md:py-24 px-4" aria-labelledby="how-it-works-heading">

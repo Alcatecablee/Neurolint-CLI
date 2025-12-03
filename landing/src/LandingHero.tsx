@@ -43,51 +43,6 @@ export function LandingHero() {
         <ArrowRight className="mr-3 w-5 h-5" aria-hidden="true" />
         Install Free CLI
       </Button>
-      
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <a 
-          href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-90 transition-opacity"
-        >
-          <img 
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
-            alt="NeuroLint CLI - Rule-based code fixes. No AI hallucinations. Just results. | Product Hunt" 
-            style={{ width: '250px', height: '54px' }}
-            width="250" 
-            height="54" 
-          />
-        </a>
-        
-        <a 
-          href="https://dang.ai/" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-90 transition-opacity"
-        >
-          <img 
-            src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png" 
-            alt="Dang.ai" 
-            style={{ width: '150px', height: '54px' }}
-            width="150" 
-            height="54" 
-          />
-        </a>
-        
-        <a 
-          href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-90 transition-opacity"
-        >
-          <img 
-            src="https://img.shields.io/github/stars/Alcatecablee/Neurolint-CLI?style=for-the-badge&logo=github&logoColor=white&labelColor=181717&color=181717" 
-            alt="GitHub Stars" 
-            height="28" 
-          />
-        </a>
-      </div>
     </section>
   );
 }
