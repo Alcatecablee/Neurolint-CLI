@@ -21,6 +21,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - No restrictions on commercial use
 - Enables partnerships and integrations
 
+## [1.4.1] - 2025-12-03
+
+### Added
+
+#### CVE-2025-55182 Security Fix Command
+- New `security:cve-2025-55182` command for patching critical React Server Components RCE vulnerability
+- Automatically detects vulnerable React versions (19.0.0, 19.1.0, 19.1.1, 19.2.0)
+- Detects vulnerable Next.js versions (15.x-16.x with App Router)
+- Detects vulnerable react-server-dom-webpack, react-server-dom-parcel, react-server-dom-turbopack packages
+- Supports `--dry-run` mode to preview changes before applying
+- Supports `--fix` mode to automatically update package.json
+- Creates automatic backup before applying changes
+- Adds package.json overrides for peer dependency conflicts
+- Clear messaging about React 18/SPAs not being affected
+
+### Changed
+- Updated Next.js patched version matrix: 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.5, 16.0.2, 16.1.0, 16.2.1
+- Updated README.md with NOT Affected clarification (React 18, SPAs, Pages Router)
+- Updated CLI_USAGE.md with security command documentation
+- Landing page blog post updated with React 18/SPA clarification
+
+### Security
+- **CRITICAL:** Addresses CVE-2025-55182 (CVSS 10.0) - Remote Code Execution in React Server Components
+- Disclosed: December 3, 2025
+- Patched versions: React 19.0.1, 19.1.2, 19.2.1
+
 ## [1.4.0] - 2025-12-01
 
 ### Added

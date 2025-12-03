@@ -1,8 +1,33 @@
 # NeuroLint CLI - Complete Usage Guide
 
-> **Version 1.4.0** | Last Updated: December 1, 2025
+> **Version 1.4.1** | Last Updated: December 3, 2025
 
 Comprehensive guide for using NeuroLint CLI to automatically fix React, Next.js, and TypeScript code issues using deterministic AST transformations.
+
+---
+
+## CRITICAL SECURITY ALERT: CVE-2025-55182
+
+A critical Remote Code Execution vulnerability (CVSS 10.0) affects all React 19 apps using Server Components.
+
+```bash
+# Preview changes (recommended first)
+npx @neurolint/cli security:cve-2025-55182 . --dry-run
+
+# Apply the fix
+npx @neurolint/cli security:cve-2025-55182 . --fix
+
+# Install patched dependencies
+npm install
+```
+
+**Affected:** React 19.0.0-19.2.0, Next.js 15.x-16.x with App Router, React Router RSC, Vite RSC, Waku
+
+**NOT Affected:** React 18 and earlier, SPAs without React Server Components, Next.js Pages Router
+
+**Patched versions:** React 19.0.1, 19.1.2, 19.2.1 | Next.js 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, 16.2.1+
+
+[Read the full security advisory](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
 
 ---
 
@@ -26,6 +51,9 @@ Comprehensive guide for using NeuroLint CLI to automatically fix React, Next.js,
 ```bash
 # Install globally
 npm install -g @neurolint/cli
+
+# SECURITY: Patch CVE-2025-55182 (React Server Components RCE)
+npx @neurolint/cli security:cve-2025-55182 . --fix
 
 # Analyze your project
 neurolint analyze src/ --verbose
@@ -324,6 +352,76 @@ neurolint fix-deprecations . --verbose
 - Updates router imports (`next/router` → `next/navigation`)
 - Migrates image components (`next/legacy/image` → `next/image`)
 - Suggests Server Component migration for `getServerSideProps`
+
+---
+
+### Security Commands (NEW in v1.4.1!)
+
+#### `neurolint security:cve-2025-55182 [path]`
+
+Patches the critical CVE-2025-55182 React Server Components RCE vulnerability (CVSS 10.0).
+
+```bash
+# Scan for vulnerable packages
+neurolint security:cve-2025-55182 .
+
+# Preview changes (recommended first)
+neurolint security:cve-2025-55182 . --dry-run
+
+# Apply the security patch
+neurolint security:cve-2025-55182 . --fix
+
+# Install patched dependencies
+npm install
+```
+
+**What it detects:**
+- React versions 19.0.0, 19.1.0, 19.1.1, 19.2.0
+- react-server-dom-webpack vulnerable versions
+- react-server-dom-parcel vulnerable versions
+- react-server-dom-turbopack vulnerable versions
+- Next.js 15.x-16.x with App Router (vulnerable versions)
+
+**What it fixes:**
+- Updates React to patched versions (19.0.1, 19.1.2, 19.2.1)
+- Updates Next.js to patched versions (15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, 16.2.1+)
+- Updates react-server-dom packages to patched versions
+- Adds package.json overrides for peer dependency conflicts
+- Creates automatic backup before applying changes
+
+**NOT Affected (command will confirm you're safe):**
+- React 18 and earlier
+- SPAs without React Server Components
+- Next.js Pages Router applications
+- Client-side only React applications
+
+**Example Output:**
+```
+======================================================================
+   CRITICAL SECURITY VULNERABILITY: CVE-2025-55182
+   React Server Components Remote Code Execution (CVSS 10.0)
+======================================================================
+
+[!] Found 2 vulnerable package(s)!
+
+Vulnerable Packages:
+
+  [VULNERABLE] react
+              Current: ^19.2.0
+              Patched: 19.2.1
+
+  [VULNERABLE] next
+              Current: ^16.0.0
+              Patched: 16.0.2
+
+[DRY RUN] Changes that would be made:
+
+  - Update react to 19.2.1
+  - Update react-dom to 19.2.1
+  - Update next to 16.0.2
+
+Run with --fix to apply these changes.
+```
 
 ---
 
