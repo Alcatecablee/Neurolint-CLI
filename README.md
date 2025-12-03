@@ -11,6 +11,31 @@
 
 ---
 
+## 🚨 CRITICAL SECURITY ALERT: CVE-2025-55182
+
+**A critical Remote Code Execution vulnerability (CVSS 10.0) has been discovered in React Server Components affecting all React 19 apps.**
+
+### One-Command Fix
+
+```bash
+# Preview changes (recommended first)
+npx @neurolint/cli security:cve-2025-55182 . --dry-run
+
+# Apply the fix
+npx @neurolint/cli security:cve-2025-55182 . --fix
+
+# Install patched dependencies
+npm install
+```
+
+**Affected:** React 19.0.0-19.2.0, Next.js 15.x-16.x with App Router, React Router RSC, Vite RSC, Waku, and more.
+
+**Patched versions:** React 19.0.1, 19.1.2, 19.2.1 | Next.js 15.0.5+, 16.0.7+
+
+[Read the full security advisory →](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
+
+---
+
 ## The Problem
 
 Modern React and Next.js development suffers from repetitive, time-consuming code quality issues:

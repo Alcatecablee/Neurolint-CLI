@@ -17,6 +17,17 @@ interface BlogPost {
 
 const blogPosts: BlogPost[] = [
   {
+    slug: "cve-2025-55182-react-server-components-rce",
+    title: "CVE-2025-55182: Critical React Server Components RCE Vulnerability - One-Command Fix",
+    description: "A critical remote code execution vulnerability (CVSS 10.0) affects all React 19 apps using Server Components. Learn how to patch immediately with a single NeuroLint command.",
+    date: "2025-12-03",
+    readTime: "5 min read",
+    author: "NeuroLint Team",
+    category: "Security",
+    tags: ["Security", "CVE", "React 19", "Next.js", "RCE"],
+    featured: true,
+  },
+  {
     slug: "fix-react-nextjs-hydration-errors-complete-guide",
     title: "How to Fix React & Next.js Hydration Errors: The Complete 2025 Guide",
     description: "Learn why hydration mismatches happen, how to identify them, and the proven strategies to fix 'window is not defined', 'document is not defined', and other SSR errors automatically.",
@@ -25,7 +36,7 @@ const blogPosts: BlogPost[] = [
     author: "NeuroLint Team",
     category: "Tutorials",
     tags: ["React", "Next.js", "Hydration", "SSR", "Debugging"],
-    featured: true,
+    featured: false,
   },
   {
     slug: "7-layer-code-fixing-pipeline-explained",
@@ -36,25 +47,27 @@ const blogPosts: BlogPost[] = [
     author: "NeuroLint Team",
     category: "Deep Dives",
     tags: ["AST", "Code Transformation", "Architecture", "React", "Next.js"],
-    featured: true,
+    featured: false,
   },
 ];
 
 const BlogCard: React.FC<{ post: BlogPost }> = ({ post }) => {
+  const isSecurityPost = post.category === "Security";
+  
   return (
     <Link 
       to={`/blog/${post.slug}`}
-      className="group block bg-zinc-900/80 border border-black rounded-xl overflow-hidden hover:border-zinc-700 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/5"
+      className="group block bg-zinc-900/80 border border-black rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-zinc-700 hover:shadow-blue-500/5"
     >
-      <div className="aspect-video bg-gradient-to-br from-blue-500/10 to-purple-500/10 relative overflow-hidden">
+      <div className="aspect-video relative overflow-hidden bg-zinc-800/50">
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-6xl font-black text-white/10 group-hover:text-white/20 transition-colors">
-            {post.category === "Tutorials" ? "01" : "02"}
+            {isSecurityPost ? "CVE" : post.category === "Tutorials" ? "01" : "02"}
           </div>
         </div>
         {post.featured && (
-          <div className="absolute top-4 left-4 px-3 py-1 bg-white text-black text-xs font-bold rounded-full">
-            Featured
+          <div className="absolute top-4 left-4 px-3 py-1 text-xs font-bold rounded-full bg-white text-black">
+            {isSecurityPost ? "Security" : "Featured"}
           </div>
         )}
       </div>

@@ -804,6 +804,271 @@ neurolint fix --all-layers --dry-run ./src`}</code>
   );
 };
 
+const CVE202555182Post: React.FC = () => {
+  const [copied, setCopied] = React.useState(false);
+
+  const copyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const toc = [
+    { id: "what-is-cve-2025-55182", title: "What is CVE-2025-55182?", level: 1 },
+    { id: "am-i-affected", title: "Am I Affected?", level: 1 },
+    { id: "one-command-fix", title: "One-Command Fix with NeuroLint", level: 1 },
+    { id: "manual-fix", title: "Manual Fix Steps", level: 1 },
+    { id: "what-the-fix-does", title: "What the Fix Does", level: 1 },
+    { id: "verification", title: "Verifying Your Fix", level: 1 },
+  ];
+
+  return (
+    <article className="max-w-none">
+      <div className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center flex-shrink-0">
+            <span className="text-white text-lg font-bold">!</span>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold mb-2">CRITICAL - Immediate Action Required</h4>
+            <p className="text-gray-300 mb-3 text-base">
+              Run this command to patch CVE-2025-55182 immediately:
+            </p>
+            <div className="bg-zinc-800 border border-black rounded-lg p-3 relative group">
+              <code className="text-green-400 font-mono text-sm">npx @neurolint/cli security:cve-2025-55182 . --fix</code>
+              <button
+                onClick={() => copyCommand('npx @neurolint/cli security:cve-2025-55182 . --fix')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-white/10 rounded transition-colors"
+                aria-label="Copy command"
+              >
+                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-12">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          Table of Contents
+        </h3>
+        <ul className="space-y-2">
+          {toc.map((item) => (
+            <li key={item.id}>
+              <a href={`#${item.id}`} className="text-gray-400 hover:text-blue-400 transition-colors text-sm">
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-blue-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal">
+        
+        <h2 id="what-is-cve-2025-55182" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          What is CVE-2025-55182?
+        </h2>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="text-white font-semibold mb-2">Vulnerability Details</h4>
+              <ul className="space-y-2 text-gray-300 text-sm">
+                <li><strong className="text-white">CVE ID:</strong> CVE-2025-55182</li>
+                <li><strong className="text-white">CVSS Score:</strong> <span className="text-white font-bold">10.0 (Critical)</span></li>
+                <li><strong className="text-white">Type:</strong> Remote Code Execution (RCE)</li>
+                <li><strong className="text-white">Attack Vector:</strong> Network (Unauthenticated)</li>
+                <li><strong className="text-white">Disclosed:</strong> December 3, 2025</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-white font-semibold mb-2">Affected Packages</h4>
+              <ul className="space-y-2 text-gray-300 text-sm">
+                <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">react-server-dom-webpack</code></li>
+                <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">react-server-dom-parcel</code></li>
+                <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">react-server-dom-turbopack</code></li>
+                <li><strong className="text-white">Versions:</strong> 19.0.0, 19.1.0, 19.1.1, 19.2.0</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          CVE-2025-55182 is a <strong>critical deserialization vulnerability</strong> in React Server Components (RSC) that allows attackers to execute arbitrary code on the server by sending specially crafted HTTP requests.
+        </p>
+
+        <p>
+          The vulnerability exists in the "Flight" protocol used by RSC to handle server-to-client communication. When the server receives a malformed payload, it fails to validate the structure correctly, allowing attacker-controlled data to achieve <strong>unauthenticated remote code execution</strong>.
+        </p>
+
+        <h2 id="am-i-affected" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Am I Affected?
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-4 my-8 not-prose">
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-zinc-800 border border-black rounded flex items-center justify-center text-sm text-white">!</span>
+              You ARE Affected If:
+            </h4>
+            <ul className="space-y-2 text-gray-300 text-sm">
+              <li>Using React 19.0.0 - 19.2.0</li>
+              <li>Using Next.js 15.x or 16.x with App Router</li>
+              <li>Using React Router with RSC mode</li>
+              <li>Using Vite with @vitejs/plugin-rsc</li>
+              <li>Using Waku, RedwoodSDK, or Parcel RSC</li>
+            </ul>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+              <span className="w-6 h-6 bg-zinc-800 border border-black rounded flex items-center justify-center text-sm text-white">&#10003;</span>
+              You Are NOT Affected If:
+            </h4>
+            <ul className="space-y-2 text-gray-300 text-sm">
+              <li>Your app doesn't use React Server Components</li>
+              <li>You're using React 18 or earlier</li>
+              <li>Your React code runs purely client-side</li>
+              <li>You're already on patched versions</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>
+          <strong>Check your dependencies:</strong>
+        </p>
+
+        <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm not-prose">
+          <code className="text-gray-300">{`npm list react-server-dom-webpack react-server-dom-parcel react-server-dom-turbopack`}</code>
+        </pre>
+
+        <h2 id="one-command-fix" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          One-Command Fix with NeuroLint
+        </h2>
+
+        <p>
+          NeuroLint provides an emergency security command that automatically patches your project:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Automatic Patch</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm mb-4">
+            <code className="text-gray-300">{`# Preview changes first (recommended)
+npx @neurolint/cli security:cve-2025-55182 . --dry-run
+
+# Apply the fix
+npx @neurolint/cli security:cve-2025-55182 . --fix
+
+# Run npm install to apply updates
+npm install`}</code>
+          </pre>
+          <p className="text-gray-400 text-sm">
+            The command automatically creates a backup before making changes. Use <code className="text-green-400 bg-zinc-800 px-1 rounded">--dry-run</code> to preview changes without applying them.
+          </p>
+        </div>
+
+        <h3 className="text-2xl font-bold text-white mt-8 mb-4">What NeuroLint's Fix Does:</h3>
+
+        <div className="space-y-3 my-6 not-prose">
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-sm flex-shrink-0">1</span>
+            <span className="text-gray-300">Updates React to patched version (19.0.1, 19.1.2, or 19.2.1)</span>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-sm flex-shrink-0">2</span>
+            <span className="text-gray-300">Updates react-server-dom-webpack/parcel/turbopack to patched versions</span>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-sm flex-shrink-0">3</span>
+            <span className="text-gray-300">Updates Next.js to patched version if detected (15.0.5+, 16.0.7+)</span>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-sm flex-shrink-0">4</span>
+            <span className="text-gray-300">Adds package.json overrides if peer dependency conflicts exist</span>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-green-500/20 rounded flex items-center justify-center text-green-400 text-sm flex-shrink-0">5</span>
+            <span className="text-gray-300">Creates automatic backup for safe rollback if needed</span>
+          </div>
+        </div>
+
+        <h2 id="manual-fix" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Manual Fix Steps
+        </h2>
+
+        <p>If you prefer to patch manually:</p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Step 1: Update React</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`npm install react@19.2.1 react-dom@19.2.1`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Step 2: Update Next.js (if applicable)</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`# For Next.js 15.x
+npm install next@15.0.5
+
+# For Next.js 16.x
+npm install next@16.0.7`}</code>
+          </pre>
+        </div>
+
+        <h2 id="what-the-fix-does" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          What the Fix Does
+        </h2>
+
+        <p>
+          The patched versions fix the deserialization vulnerability in the Flight protocol by properly validating incoming payloads before processing them. This prevents attackers from injecting malicious data that could lead to code execution.
+        </p>
+
+        <h2 id="verification" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Verifying Your Fix
+        </h2>
+
+        <p>After patching, verify your dependencies are updated:</p>
+
+        <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm not-prose">
+          <code className="text-gray-300">{`# Check React version (should be 19.0.1, 19.1.2, or 19.2.1)
+npm list react
+
+# Check Next.js version (should be 15.0.5+ or 16.0.7+)
+npm list next`}</code>
+        </pre>
+
+        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Need Help?</h4>
+          <p className="text-gray-300 mb-4">
+            If you encounter issues while patching, open an issue on GitHub or contact us.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="https://github.com/Alcatecablee/Neurolint/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              Open GitHub Issue
+            </a>
+            <a
+              href="https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              Official React Advisory
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+
 const blogPostsData: Record<string, { 
   title: string; 
   description: string; 
@@ -814,6 +1079,16 @@ const blogPostsData: Record<string, {
   tags: string[];
   Component: React.FC 
 }> = {
+  "cve-2025-55182-react-server-components-rce": {
+    title: "CVE-2025-55182: Critical React Server Components RCE Vulnerability - One-Command Fix",
+    description: "A critical remote code execution vulnerability (CVSS 10.0) affects all React 19 apps using Server Components. Learn how to patch immediately with a single NeuroLint command.",
+    date: "2025-12-03",
+    readTime: "5 min read",
+    author: "NeuroLint Team",
+    category: "Security",
+    tags: ["Security", "CVE", "React 19", "Next.js", "RCE"],
+    Component: CVE202555182Post,
+  },
   "fix-react-nextjs-hydration-errors-complete-guide": {
     title: "How to Fix React & Next.js Hydration Errors: The Complete 2025 Guide",
     description: "Learn why hydration mismatches happen, how to identify them, and the proven strategies to fix 'window is not defined', 'document is not defined', and other SSR errors automatically.",

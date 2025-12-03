@@ -24,6 +24,81 @@ import {
 } from "lucide-react";
 import { InstallCTA } from "./components/InstallCTA";
 
+// Security Alert Modal Component - Critical CVE notification
+const SecurityAlertModal = ({ onClose }: { onClose: () => void }) => {
+  const [copied, setCopied] = React.useState(false);
+  
+  const copyCommand = () => {
+    navigator.clipboard.writeText('npx @neurolint/cli security:cve-2025-55182 . --fix');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+      <div className="relative w-full max-w-lg bg-zinc-900 border border-black rounded-xl shadow-2xl animate-slide-in-up">
+        <div className="p-6">
+          <div className="flex items-start gap-4 mb-6">
+            <div className="flex-shrink-0 w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center">
+              <Shield className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-white mb-1">
+                Critical Security Vulnerability
+              </h2>
+              <p className="text-sm text-gray-400">
+                CVE-2025-55182 | CVSS 10.0
+              </p>
+            </div>
+          </div>
+          
+          <div className="space-y-4 mb-6">
+            <p className="text-gray-300">
+              A critical remote code execution vulnerability affects all React 19 apps using Server Components. Patch immediately.
+            </p>
+            
+            <div className="bg-zinc-800 border border-black rounded-lg p-4">
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">One-Command Fix</p>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 text-sm text-white font-mono">
+                  npx @neurolint/cli security:cve-2025-55182 . --fix
+                </code>
+                <button
+                  onClick={copyCommand}
+                  className="p-2 bg-zinc-700 hover:bg-zinc-600 border border-black rounded-lg transition-colors"
+                  aria-label="Copy command"
+                >
+                  {copied ? (
+                    <Check className="w-4 h-4 text-white" />
+                  ) : (
+                    <Copy className="w-4 h-4 text-gray-400" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href="/blog/cve-2025-55182-react-server-components-rce"
+              className="flex-1 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 border border-black text-white rounded-lg font-medium text-sm text-center transition-colors"
+            >
+              Learn More
+            </a>
+            <button
+              onClick={onClose}
+              className="flex-1 px-4 py-3 bg-white hover:bg-gray-100 text-black rounded-lg font-semibold text-sm transition-colors"
+            >
+              I Understand
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Beta Banner Component - Floating notification style (mobile-first)
 const BetaBanner = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -380,8 +455,13 @@ export default function Index() {
     };
   }, []);
 
+  const [securityBannerVisible, setSecurityBannerVisible] = React.useState(true);
+
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden" id="main-content">
+      {/* Security Alert Modal */}
+      {securityBannerVisible && <SecurityAlertModal onClose={() => setSecurityBannerVisible(false)} />}
+      
       {/* Beta Banner */}
       {bannerVisible && <BetaBanner onClose={() => setBannerVisible(false)} />}
 

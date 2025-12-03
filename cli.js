@@ -2687,6 +2687,9 @@ Analysis Commands:
   validate [path]         Validate files without applying fixes
   init-tests [path]       Generate test files for components
 
+Security Commands:
+  security:cve-2025-55182 [path]  Patch CVE-2025-55182 React Server Components RCE (--fix to apply)
+
 Configuration Commands:
   init-config             Generate or display configuration
   health                  Run a health check to verify configuration
@@ -2841,6 +2844,10 @@ Examples:
           await depChecker.applyFixes(depResult.fixes);
           console.log('\nAutomatic fixes applied. Run npm install to update dependencies.');
         }
+        break;
+      case 'security:cve-2025-55182':
+        // Handle CVE-2025-55182 security fix command
+        await handleCVE202555182(targetPath, options, spinner, args);
         break;
       case 'check-turbopack':
         // Handle Turbopack migration check command
@@ -3055,6 +3062,9 @@ Analysis Commands:
   layers                  Display information about all layers
   validate [path]         Validate files without applying fixes
   init-tests [path]       Generate test files for components
+
+Security Commands:
+  security:cve-2025-55182 [path]  Patch CVE-2025-55182 React Server Components RCE (--fix to apply)
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -4752,5 +4762,188 @@ function displaySimplificationResults(results) {
   }
   
   console.log('\n' + '='.repeat(60));
+}
+
+/**
+ * Handle CVE-2025-55182 Security Fix
+ * Critical React Server Components RCE vulnerability
+ */
+async function handleCVE202555182(targetPath, options, spinner, args) {
+  const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
+  const packageJsonPath = path.join(resolvedPath, 'package.json');
+  const isDryRun = args.includes('--dry-run');
+  const shouldFix = args.includes('--fix');
+  
+  console.log('\n' + '='.repeat(70));
+  console.log('\x1b[1m\x1b[31m   CRITICAL SECURITY VULNERABILITY: CVE-2025-55182\x1b[0m');
+  console.log('   React Server Components Remote Code Execution (CVSS 10.0)');
+  console.log('='.repeat(70) + '\n');
+  
+  spinner.text = 'Scanning for vulnerable React packages...';
+  
+  // Check if package.json exists
+  let packageJson;
+  try {
+    const content = await fs.readFile(packageJsonPath, 'utf8');
+    packageJson = JSON.parse(content);
+  } catch (error) {
+    spinner.fail('Could not find package.json in the specified path');
+    console.log(`\nSearched path: ${resolvedPath}`);
+    return;
+  }
+  
+  const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
+  const vulnerablePackages = [];
+  const fixes = [];
+  
+  // Vulnerable React versions
+  const vulnerableReactVersions = ['19.0.0', '19.1.0', '19.1.1', '19.2.0'];
+  const patchedReactVersions = {
+    '19.0': '19.0.1',
+    '19.1': '19.1.2',
+    '19.2': '19.2.1'
+  };
+  
+  // Check React version
+  const reactVersion = deps['react'];
+  if (reactVersion) {
+    const cleanVersion = reactVersion.replace(/[\^~>=<]/g, '');
+    if (vulnerableReactVersions.some(v => cleanVersion.startsWith(v.split('.').slice(0, 2).join('.')) && cleanVersion !== patchedReactVersions[cleanVersion.split('.').slice(0, 2).join('.')])) {
+      const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
+      const patchedVersion = patchedReactVersions[majorMinor] || '19.2.1';
+      vulnerablePackages.push({ name: 'react', current: reactVersion, patched: patchedVersion });
+      fixes.push({ package: 'react', version: patchedVersion });
+      fixes.push({ package: 'react-dom', version: patchedVersion });
+    }
+  }
+  
+  // Check react-server-dom packages
+  const serverDomPackages = [
+    'react-server-dom-webpack',
+    'react-server-dom-parcel', 
+    'react-server-dom-turbopack'
+  ];
+  
+  for (const pkg of serverDomPackages) {
+    if (deps[pkg]) {
+      const cleanVersion = deps[pkg].replace(/[\^~>=<]/g, '');
+      if (cleanVersion.startsWith('19.0') || cleanVersion.startsWith('19.1') || cleanVersion.startsWith('19.2')) {
+        const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
+        const patchedVersion = patchedReactVersions[majorMinor] || '19.2.1';
+        if (!vulnerableReactVersions.some(v => cleanVersion === v)) continue;
+        vulnerablePackages.push({ name: pkg, current: deps[pkg], patched: patchedVersion });
+        fixes.push({ package: pkg, version: patchedVersion });
+      }
+    }
+  }
+  
+  // Check Next.js version
+  const nextVersion = deps['next'];
+  if (nextVersion) {
+    const cleanVersion = nextVersion.replace(/[\^~>=<]/g, '');
+    const patchedNextVersions = {
+      '15.0': '15.0.5',
+      '15.1': '15.1.9',
+      '15.2': '15.2.6',
+      '15.3': '15.3.6',
+      '15.4': '15.4.8',
+      '15.5': '15.5.7',
+      '16.0': '16.0.7'
+    };
+    
+    const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
+    if (patchedNextVersions[majorMinor]) {
+      const currentPatch = parseInt(cleanVersion.split('.')[2] || '0');
+      const patchedPatch = parseInt(patchedNextVersions[majorMinor].split('.')[2]);
+      
+      if (currentPatch < patchedPatch) {
+        vulnerablePackages.push({ name: 'next', current: nextVersion, patched: patchedNextVersions[majorMinor] });
+        fixes.push({ package: 'next', version: patchedNextVersions[majorMinor] });
+      }
+    }
+  }
+  
+  // Display results
+  if (vulnerablePackages.length === 0) {
+    spinner.succeed('No vulnerable packages detected!');
+    console.log('\n\x1b[32mYour project appears to be safe from CVE-2025-55182.\x1b[0m');
+    console.log('\nTo verify, check that you are using:');
+    console.log('  - React: 19.0.1, 19.1.2, or 19.2.1+');
+    console.log('  - Next.js: 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, or 16.0.7+');
+    return;
+  }
+  
+  spinner.warn(`Found ${vulnerablePackages.length} vulnerable package(s)!`);
+  
+  console.log('\n\x1b[1m\x1b[33mVulnerable Packages:\x1b[0m\n');
+  for (const pkg of vulnerablePackages) {
+    console.log(`  \x1b[31m[VULNERABLE]\x1b[0m ${pkg.name}`);
+    console.log(`              Current: ${pkg.current}`);
+    console.log(`              Patched: ${pkg.patched}\n`);
+  }
+  
+  if (isDryRun) {
+    console.log('\x1b[1m\x1b[36m[DRY RUN] Changes that would be made:\x1b[0m\n');
+    for (const fix of fixes) {
+      console.log(`  - Update ${fix.package} to ${fix.version}`);
+    }
+    console.log('\n\x1b[2mRun with --fix to apply these changes.\x1b[0m');
+    return;
+  }
+  
+  if (!shouldFix) {
+    console.log('\x1b[1mTo fix automatically, run:\x1b[0m');
+    console.log('\n  npx @neurolint/cli security:cve-2025-55182 . --fix\n');
+    console.log('\x1b[2mOr preview changes first with:\x1b[0m');
+    console.log('\n  npx @neurolint/cli security:cve-2025-55182 . --dry-run\n');
+    return;
+  }
+  
+  // Apply fixes
+  spinner.text = 'Creating backup...';
+  
+  const backupManager = createBackupManager({ verbose: options.verbose });
+  const backupPath = await backupManager.createBackup([packageJsonPath]);
+  
+  spinner.text = 'Applying security patches...';
+  
+  // Update package.json
+  for (const fix of fixes) {
+    if (packageJson.dependencies && packageJson.dependencies[fix.package]) {
+      packageJson.dependencies[fix.package] = fix.version;
+    }
+    if (packageJson.devDependencies && packageJson.devDependencies[fix.package]) {
+      packageJson.devDependencies[fix.package] = fix.version;
+    }
+  }
+  
+  // Add overrides for peer dependency conflicts if needed
+  if (!packageJson.overrides) {
+    packageJson.overrides = {};
+  }
+  
+  const reactFix = fixes.find(f => f.package === 'react');
+  if (reactFix) {
+    packageJson.overrides['react'] = reactFix.version;
+    packageJson.overrides['react-dom'] = reactFix.version;
+  }
+  
+  // Write updated package.json
+  await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
+  
+  spinner.succeed('Security patches applied!');
+  
+  console.log('\n\x1b[1m\x1b[32mChanges Applied:\x1b[0m\n');
+  for (const fix of fixes) {
+    console.log(`  \x1b[32m[PATCHED]\x1b[0m ${fix.package} -> ${fix.version}`);
+  }
+  
+  console.log('\n\x1b[1mNext Steps:\x1b[0m');
+  console.log('\n  1. Run \x1b[1mnpm install\x1b[0m to install patched versions');
+  console.log('  2. Test your application');
+  console.log('  3. Deploy the security update');
+  
+  console.log('\n\x1b[2mBackup created at: ' + backupPath + '\x1b[0m');
+  console.log('\x1b[2mUse "neurolint restore" to revert if needed.\x1b[0m\n');
 }
 
