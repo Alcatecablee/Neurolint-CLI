@@ -908,6 +908,21 @@ export default function Index() {
             </a>
             
             <a 
+              href="https://wired.business" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity duration-200"
+            >
+              <img 
+                src="https://wired.business/badge0-dark.svg" 
+                alt="Featured on Wired Business" 
+                width="200" 
+                height="54"
+                className="w-[160px] h-auto sm:w-[180px]"
+              />
+            </a>
+            
+            <a 
               href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
               target="_blank"
               rel="noopener noreferrer"
