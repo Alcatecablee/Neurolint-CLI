@@ -935,96 +935,89 @@ export default function Index() {
       {/* Layers Documentation Section */}
       <LayersDocSection />
 
-      {/* Featured On Section - Animated Carousel */}
-      <section className="py-16 md:py-20 border-t border-zinc-800/50 overflow-hidden">
-        <div className="text-center mb-10">
-          <p className="text-sm uppercase tracking-widest text-zinc-500 font-medium">
-            Featured On
-          </p>
-        </div>
-        
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+      {/* Featured On Section - Static Grid */}
+      <section className="py-16 md:py-24 border-t border-zinc-800/50">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="text-center mb-10 md:mb-12">
+            <p className="text-sm uppercase tracking-widest text-zinc-500 font-medium">
+              Featured On
+            </p>
+          </div>
           
-          <div className="flex animate-marquee hover:[animation-play-state:paused]">
-            {[0, 1].map((setIndex) => (
-              <div key={setIndex} className="flex items-center gap-12 sm:gap-16 px-6 sm:px-8 shrink-0">
-                <a 
-                  href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-70 transition-opacity duration-200 shrink-0"
-                >
-                  <img 
-                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
-                    alt="NeuroLint CLI on Product Hunt" 
-                    width="220" 
-                    height="48"
-                    className="h-10 sm:h-12 w-auto"
-                  />
-                </a>
-                
-                <a 
-                  href="https://startupfa.me/s/neurolint-cli?utm_source=neurolint.dev" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-70 transition-opacity duration-200 shrink-0"
-                >
-                  <img 
-                    src="https://startupfa.me/badges/featured/dark-small-rounded.webp" 
-                    alt="Featured on Startup Fame" 
-                    width="200" 
-                    height="32"
-                    className="h-8 sm:h-9 w-auto"
-                  />
-                </a>
-                
-                <a 
-                  href="https://dang.ai/" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-70 transition-opacity duration-200 shrink-0"
-                >
-                  <img 
-                    src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png" 
-                    alt="Featured on Dang.ai" 
-                    width="140" 
-                    height="48"
-                    className="h-10 sm:h-12 w-auto"
-                  />
-                </a>
-                
-                <a 
-                  href="https://wired.business" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-70 transition-opacity duration-200 shrink-0"
-                >
-                  <img 
-                    src="https://wired.business/badge0-dark.svg" 
-                    alt="Featured on Wired Business" 
-                    width="180" 
-                    height="48"
-                    className="h-10 sm:h-12 w-auto"
-                  />
-                </a>
-                
-                <a 
-                  href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:opacity-70 transition-opacity duration-200 shrink-0"
-                >
-                  <img 
-                    src="https://img.shields.io/github/stars/Alcatecablee/Neurolint-CLI?style=for-the-badge&logo=github&logoColor=white&labelColor=181717&color=181717" 
-                    alt="GitHub Stars" 
-                    height="28"
-                    className="h-7 sm:h-8 w-auto"
-                  />
-                </a>
-              </div>
-            ))}
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:gap-12">
+            <a 
+              href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group transition-all duration-300 hover:scale-105 hover:opacity-90"
+            >
+              <img 
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
+                alt="NeuroLint CLI on Product Hunt" 
+                width="220" 
+                height="48"
+                className="h-10 sm:h-12 w-auto drop-shadow-lg"
+              />
+            </a>
+            
+            <a 
+              href="https://startupfa.me/s/neurolint-cli?utm_source=neurolint.dev" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group transition-all duration-300 hover:scale-105 hover:opacity-90"
+            >
+              <img 
+                src="https://startupfa.me/badges/featured/dark-small-rounded.webp" 
+                alt="Featured on Startup Fame" 
+                width="200" 
+                height="32"
+                className="h-8 sm:h-9 w-auto drop-shadow-lg"
+              />
+            </a>
+            
+            <a 
+              href="https://dang.ai/" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group transition-all duration-300 hover:scale-105 hover:opacity-90"
+            >
+              <img 
+                src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png" 
+                alt="Featured on Dang.ai" 
+                width="140" 
+                height="48"
+                className="h-10 sm:h-12 w-auto drop-shadow-lg"
+              />
+            </a>
+            
+            <a 
+              href="https://wired.business" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group transition-all duration-300 hover:scale-105 hover:opacity-90"
+            >
+              <img 
+                src="https://wired.business/badge0-dark.svg" 
+                alt="Featured on Wired Business" 
+                width="180" 
+                height="48"
+                className="h-10 sm:h-12 w-auto drop-shadow-lg"
+              />
+            </a>
+            
+            <a 
+              href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group transition-all duration-300 hover:scale-105 hover:opacity-90"
+            >
+              <img 
+                src="https://img.shields.io/github/stars/Alcatecablee/Neurolint-CLI?style=for-the-badge&logo=github&logoColor=white&labelColor=181717&color=181717" 
+                alt="GitHub Stars" 
+                height="28"
+                className="h-7 sm:h-8 w-auto drop-shadow-lg"
+              />
+            </a>
           </div>
         </div>
       </section>
