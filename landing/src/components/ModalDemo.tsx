@@ -82,21 +82,21 @@ export function ModalDemo() {
 
         {/* Demo Content */}
         {selectedScenario ? (
-          <div className="p-8">
-            <div className="mb-6">
-              <h3 className="text-2xl font-black text-white mb-2">
+          <div className="p-4 sm:p-6 lg:p-8">
+            <div className="mb-4 sm:mb-6">
+              <h3 className="text-lg sm:text-2xl font-black text-white mb-2">
                 {selectedScenario.title}
               </h3>
-              <p className="text-zinc-300 text-lg">
+              <p className="text-zinc-300 text-sm sm:text-lg">
                 {selectedScenario.description}
               </p>
             </div>
 
             {!hasAnalyzed ? (
               <div className="space-y-6 animate-fade-in">
-                <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 border-2 border-black">
+                <div className="bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-3xl p-4 sm:p-6 border-2 border-black">
                   <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-lg font-black text-white">Sample Code</h4>
+                    <h4 className="text-sm sm:text-lg font-black text-white">Sample Code</h4>
                     <button
                       onClick={() => copyToClipboard(selectedScenario.beforeCode, 'before')}
                       className="p-2 hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2"
@@ -109,20 +109,23 @@ export function ModalDemo() {
                       )}
                     </button>
                   </div>
-                  <div className="bg-black/60 rounded-2xl overflow-hidden border-2 border-white/20">
-                    <SyntaxHighlighter
-                      language="typescript"
-                      style={vscDarkPlus}
-                      customStyle={{
-                        margin: 0,
-                        padding: '1rem',
-                        background: 'transparent',
-                        fontSize: '0.875rem',
-                      }}
-                      showLineNumbers={true}
-                    >
-                      {selectedScenario.beforeCode}
-                    </SyntaxHighlighter>
+                  <div className="bg-black/60 rounded-xl sm:rounded-2xl overflow-auto border-2 border-white/20 max-h-[300px] sm:max-h-[400px]">
+                    <div className="min-w-0 overflow-x-auto">
+                      <SyntaxHighlighter
+                        language="typescript"
+                        style={vscDarkPlus}
+                        customStyle={{
+                          margin: 0,
+                          padding: '0.75rem',
+                          background: 'transparent',
+                          fontSize: '0.7rem',
+                        }}
+                        showLineNumbers={true}
+                        wrapLongLines={false}
+                      >
+                        {selectedScenario.beforeCode}
+                      </SyntaxHighlighter>
+                    </div>
                   </div>
                 </div>
 
@@ -137,23 +140,23 @@ export function ModalDemo() {
                 </div>
               </div>
             ) : (
-                <div className="space-y-6 animate-fade-in">
-                  <div className="bg-white/5 border-2 border-white/20 rounded-2xl p-4 flex items-start gap-3 backdrop-blur-xl transform transition-all duration-300">
-                    <CheckCircle2 className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
+                <div className="space-y-4 sm:space-y-6 animate-fade-in">
+                  <div className="bg-white/5 border-2 border-white/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-start gap-2 sm:gap-3 backdrop-blur-xl transform transition-all duration-300">
+                    <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-green-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <h4 className="text-green-400 font-black mb-1">Analysis Complete</h4>
-                      <p className="text-zinc-300">
+                      <h4 className="text-green-400 font-black text-sm sm:text-base mb-1">Analysis Complete</h4>
+                      <p className="text-zinc-300 text-xs sm:text-sm">
                         Found {selectedScenario.issues.length} issues across{' '}
                         {selectedScenario.layerBreakdown.length} layer(s)
                       </p>
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="transform transition-all duration-500 hover:scale-[1.01]">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="transform transition-all duration-500 md:hover:scale-[1.01]">
                       <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-lg font-black text-white flex items-center gap-2">
-                          <AlertCircle className="w-5 h-5 text-white" />
+                        <h4 className="text-sm sm:text-lg font-black text-white flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                           Before (Issues Detected)
                         </h4>
                         <button
@@ -168,18 +171,19 @@ export function ModalDemo() {
                           )}
                         </button>
                       </div>
-                      <div className="bg-black/60 border-2 border-white/20 rounded-2xl h-[400px] overflow-hidden backdrop-blur-xl">
-                        <div className="h-full overflow-y-auto">
+                      <div className="bg-black/60 border-2 border-white/20 rounded-xl sm:rounded-2xl min-h-[200px] max-h-[300px] sm:max-h-[350px] lg:max-h-[400px] overflow-auto backdrop-blur-xl">
+                        <div className="min-w-0 overflow-x-auto">
                           <SyntaxHighlighter
                             language="typescript"
                             style={vscDarkPlus}
                             customStyle={{
                               margin: 0,
-                              padding: '1rem',
+                              padding: '0.75rem',
                               background: 'transparent',
-                              fontSize: '0.875rem',
+                              fontSize: '0.7rem',
                             }}
                             showLineNumbers={true}
+                            wrapLongLines={false}
                           >
                             {selectedScenario.beforeCode}
                           </SyntaxHighlighter>
@@ -187,10 +191,10 @@ export function ModalDemo() {
                       </div>
                     </div>
 
-                    <div className="transform transition-all duration-500 hover:scale-[1.01]">
+                    <div className="transform transition-all duration-500 md:hover:scale-[1.01]">
                       <div className="flex items-center justify-between mb-3">
-                        <h4 className="text-lg font-black text-white flex items-center gap-2">
-                          <CheckCircle2 className="w-5 h-5 text-green-400" />
+                        <h4 className="text-sm sm:text-lg font-black text-white flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
                           After (Fixed)
                         </h4>
                         <button
@@ -205,18 +209,19 @@ export function ModalDemo() {
                           )}
                         </button>
                       </div>
-                      <div className="bg-black/60 border-2 border-white/20 rounded-2xl h-[400px] overflow-hidden backdrop-blur-xl">
-                        <div className="h-full overflow-y-auto">
+                      <div className="bg-black/60 border-2 border-white/20 rounded-xl sm:rounded-2xl min-h-[200px] max-h-[300px] sm:max-h-[350px] lg:max-h-[400px] overflow-auto backdrop-blur-xl">
+                        <div className="min-w-0 overflow-x-auto">
                           <SyntaxHighlighter
                             language="typescript"
                             style={vscDarkPlus}
                             customStyle={{
                               margin: 0,
-                              padding: '1rem',
+                              padding: '0.75rem',
                               background: 'transparent',
-                              fontSize: '0.875rem',
+                              fontSize: '0.7rem',
                             }}
                             showLineNumbers={true}
+                            wrapLongLines={false}
                           >
                             {selectedScenario.afterCode}
                           </SyntaxHighlighter>
@@ -225,24 +230,24 @@ export function ModalDemo() {
                     </div>
                   </div>
 
-                  <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 border-2 border-black">
-                    <h4 className="text-lg font-black text-white mb-4">Issues Detected</h4>
-                    <div className="space-y-3">
+                  <div className="bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-3xl p-4 sm:p-6 border-2 border-black">
+                    <h4 className="text-sm sm:text-lg font-black text-white mb-3 sm:mb-4">Issues Detected</h4>
+                    <div className="space-y-2 sm:space-y-3">
                       {selectedScenario.issues.map((issue, idx) => (
                         <div
                           key={idx}
-                          className="bg-black/60 border-2 border-white/20 rounded-2xl p-4 flex items-start gap-3 backdrop-blur-xl"
+                          className="bg-black/60 border-2 border-white/20 rounded-xl sm:rounded-2xl p-3 sm:p-4 flex items-start gap-2 sm:gap-3 backdrop-blur-xl"
                         >
-                          <AlertCircle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${getSeverityColor(issue.severity)}`} />
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className={`text-sm font-black ${getSeverityColor(issue.severity)}`}>
+                          <AlertCircle className={`w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5 ${getSeverityColor(issue.severity)}`} />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1 flex-wrap">
+                              <span className={`text-xs sm:text-sm font-black ${getSeverityColor(issue.severity)}`}>
                                 {issue.severity.toUpperCase()}
                               </span>
                               <span className="text-xs text-zinc-500">•</span>
-                              <span className="text-xs text-zinc-500">{issue.type}</span>
+                              <span className="text-xs text-zinc-500 truncate">{issue.type}</span>
                             </div>
-                            <p className="text-zinc-300">{issue.description}</p>
+                            <p className="text-zinc-300 text-xs sm:text-sm">{issue.description}</p>
                             <p className="text-xs text-zinc-500 mt-1">
                               Fixed by Layer {issue.fixedByLayer}
                             </p>
@@ -252,39 +257,39 @@ export function ModalDemo() {
                     </div>
                   </div>
 
-                  <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-6 border-2 border-black">
-                    <h4 className="text-lg font-black text-white mb-4">Layer Breakdown</h4>
-                    <div className="space-y-3">
+                  <div className="bg-white/5 backdrop-blur-xl rounded-xl sm:rounded-3xl p-4 sm:p-6 border-2 border-black">
+                    <h4 className="text-sm sm:text-lg font-black text-white mb-3 sm:mb-4">Layer Breakdown</h4>
+                    <div className="space-y-2 sm:space-y-3">
                       {selectedScenario.layerBreakdown.map((layer) => (
-                        <div key={layer.layerId} className="bg-black/60 border-2 border-white/20 rounded-2xl overflow-hidden backdrop-blur-xl">
+                        <div key={layer.layerId} className="bg-black/60 border-2 border-white/20 rounded-xl sm:rounded-2xl overflow-hidden backdrop-blur-xl">
                           <button
                             onClick={() => toggleLayer(layer.layerId)}
-                            className="w-full p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                            className="w-full p-3 sm:p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
                           >
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-black">
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white rounded-full flex items-center justify-center text-black font-black text-xs sm:text-sm">
                                 {layer.layerId}
                               </div>
                               <div className="text-left">
-                                <h5 className="text-white font-black">{layer.name}</h5>
-                                <p className="text-sm text-zinc-400">
+                                <h5 className="text-white font-black text-sm sm:text-base">{layer.name}</h5>
+                                <p className="text-xs sm:text-sm text-zinc-400">
                                   {layer.issuesFound} issue{layer.issuesFound !== 1 ? 's' : ''} fixed
                                 </p>
                               </div>
                             </div>
                             {expandedLayers.has(layer.layerId) ? (
-                              <ChevronUp className="w-5 h-5 text-zinc-400" />
+                              <ChevronUp className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-400 flex-shrink-0" />
                             ) : (
-                              <ChevronDown className="w-5 h-5 text-zinc-400" />
+                              <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-400 flex-shrink-0" />
                             )}
                           </button>
                           {expandedLayers.has(layer.layerId) && (
-                            <div className="p-4 border-t border-white/20 bg-black/80">
-                              <h6 className="text-sm font-black text-zinc-300 mb-2">Applied Fixes:</h6>
+                            <div className="p-3 sm:p-4 border-t border-white/20 bg-black/80">
+                              <h6 className="text-xs sm:text-sm font-black text-zinc-300 mb-2">Applied Fixes:</h6>
                               <ul className="space-y-2">
                                 {layer.fixes.map((fix, idx) => (
-                                  <li key={idx} className="flex items-start gap-2 text-sm text-zinc-400">
-                                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                                  <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-zinc-400">
+                                    <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-green-400 flex-shrink-0 mt-0.5" />
                                     {fix}
                                   </li>
                                 ))}
