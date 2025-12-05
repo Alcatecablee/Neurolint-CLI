@@ -7,23 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2025-12-05
+
 ### Changed
 - **License migrated from Business Source License 1.1 to Apache License 2.0**
 - NeuroLint CLI is now permanently free and open-source
 - Updated all documentation to reflect Apache 2.0 licensing
 - Updated package.json, README.md, CONTRIBUTING.md, LICENSE_NOTICES.md
 - Added commitment: "This license will never change"
-
-### Why Apache 2.0?
-- Maximum developer trust and adoption
-- Enterprise-friendly with explicit patent grant
-- Compatible with React/Next.js ecosystem (all use permissive licenses)
-- No restrictions on commercial use
-- Enables partnerships and integrations
-
-## [1.4.2] - 2025-12-03
-
-### Changed
 - Centralized CVE-2025-55182 version mappings into `shared-core/security-constants.js`
 - Removed hardcoded version numbers from `cli.js` in favor of centralized constants
 - Added helper functions for vulnerability detection and patched version retrieval
@@ -41,6 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Security command now uses centralized constants instead of inline version arrays
+
+### Why Apache 2.0?
+- Maximum developer trust and adoption
+- Enterprise-friendly with explicit patent grant
+- Compatible with React/Next.js ecosystem (all use permissive licenses)
+- No restrictions on commercial use
+- Enables partnerships and integrations
 
 ## [1.4.1] - 2025-12-03
 
