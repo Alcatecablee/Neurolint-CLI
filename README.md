@@ -32,7 +32,7 @@ npm install
 
 **NOT Affected:** React 18 and earlier, SPAs without React Server Components, Next.js Pages Router.
 
-**Patched versions:** React 19.0.1, 19.1.2, 19.2.1 | Next.js 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, 16.2.1+
+**Patched versions:** React 19.0.1, 19.1.2, 19.2.1 | Next.js 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, 16.0.7+, 16.1.0+, 16.2.1+
 
 [Read the full security advisory →](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
 

@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Clear messaging about React 18/SPAs not being affected
 
 ### Changed
-- Updated Next.js patched version matrix: 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.5, 16.0.2, 16.1.0, 16.2.1
+- Updated Next.js patched version matrix: 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7, 16.0.7, 16.1.0, 16.2.1
 - Updated README.md with NOT Affected clarification (React 18, SPAs, Pages Router)
 - Updated CLI_USAGE.md with security command documentation
 - Landing page blog post updated with React 18/SPA clarification

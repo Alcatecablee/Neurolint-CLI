@@ -25,7 +25,7 @@ npm install
 
 **NOT Affected:** React 18 and earlier, SPAs without React Server Components, Next.js Pages Router
 
-**Patched versions:** React 19.0.1, 19.1.2, 19.2.1 | Next.js 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, 16.2.1+
+**Patched versions:** React 19.0.1, 19.1.2, 19.2.1 | Next.js 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, 16.0.7+, 16.1.0+, 16.2.1+
 
 [Read the full security advisory](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
 
@@ -384,7 +384,7 @@ npm install
 
 **What it fixes:**
 - Updates React to patched versions (19.0.1, 19.1.2, 19.2.1)
-- Updates Next.js to patched versions (15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, 16.2.1+)
+- Updates Next.js to patched versions (15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, 16.0.7+, 16.1.0+, 16.2.1+)
 - Updates react-server-dom packages to patched versions
 - Adds package.json overrides for peer dependency conflicts
 - Creates automatic backup before applying changes
@@ -412,13 +412,13 @@ Vulnerable Packages:
 
   [VULNERABLE] next
               Current: ^16.0.0
-              Patched: 16.0.2
+              Patched: 16.0.7
 
 [DRY RUN] Changes that would be made:
 
   - Update react to 19.2.1
   - Update react-dom to 19.2.1
-  - Update next to 16.0.2
+  - Update next to 16.0.7
 
 Run with --fix to apply these changes.
 ```

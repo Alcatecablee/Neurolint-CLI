@@ -1034,10 +1034,10 @@ npm install`}</code>
           <h4 className="text-white font-semibold mb-4">Step 2: Update Next.js (if applicable)</h4>
           <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
             <code className="text-gray-300">{`# For Next.js 15.x (pick your minor version)
-npm install next@15.0.5  # or 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.5
+npm install next@15.0.5  # or 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7
 
 # For Next.js 16.x
-npm install next@16.0.2  # or 16.1.0, 16.2.1`}</code>
+npm install next@16.0.7  # or 16.1.0, 16.2.1`}</code>
           </pre>
         </div>
 
@@ -1059,7 +1059,7 @@ npm install next@16.0.2  # or 16.1.0, 16.2.1`}</code>
           <code className="text-gray-300">{`# Check React version (should be 19.0.1, 19.1.2, or 19.2.1)
 npm list react
 
-# Check Next.js version (should be 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.5+, 16.0.2+, 16.1.0+, or 16.2.1+)
+# Check Next.js version (should be 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, 16.0.7+, 16.1.0+, or 16.2.1+)
 npm list next`}</code>
         </pre>
 

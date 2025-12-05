@@ -33,7 +33,7 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 **December 3, 2025** - CVE-2025-55182 Security Update (v1.4.1)
 - Added `security:cve-2025-55182` command for patching critical React Server Components RCE vulnerability
-- Updated CLI with complete Next.js patched version matrix (15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.5, 16.0.2, 16.1.0, 16.2.1)
+- Updated CLI with complete Next.js patched version matrix (15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7, 16.0.7, 16.1.0, 16.2.1)
 - Added clarification that React 18 and SPAs are NOT affected
 - Updated blog post, README, CLI_USAGE.md, and CHANGELOG with security information
 - Version bumped to 1.4.1
