@@ -3,7 +3,6 @@ import { FAQSection } from "./FAQSection";
 import { ModalDemo } from "./components/ModalDemo";
 import { LayersDocSection } from "./components/LayersDocSection";
 import { LandingFooter } from "./LandingFooter";
-import 'asciinema-player/dist/bundle/asciinema-player.css';
 
 import {
   Target,
@@ -220,106 +219,95 @@ const TypewriterHeadline = () => {
   );
 };
 
-// CLI Demo Player Component with real asciinema player - Enterprise Edition
-const AsciinemaPlayerComponent = () => {
-  const playerRef = React.useRef<HTMLDivElement>(null);
-  const playerInstance = React.useRef<any>(null);
+// CLI Demo Video Player Component - Real Recording
+const VideoDemoPlayer = () => {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [speed, setSpeed] = React.useState(1);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [duration, setDuration] = React.useState(0);
-  const [player, setPlayer] = React.useState<any>(null);
   const [showControls, setShowControls] = React.useState(true);
+  const [playbackRate, setPlaybackRate] = React.useState(1);
 
-  // Dynamically import the player module
   React.useEffect(() => {
-    import('asciinema-player').then((p) => {
-      setPlayer(p);
-    });
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleTimeUpdate = () => setCurrentTime(video.currentTime);
+    const handleLoadedMetadata = () => setDuration(video.duration || 0);
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
+    video.addEventListener('play', handlePlay);
+    video.addEventListener('pause', handlePause);
+
+    // Handle autoplay - update state based on actual playback
+    const attemptAutoplay = async () => {
+      try {
+        await video.play();
+        setIsPlaying(true);
+      } catch {
+        setIsPlaying(false);
+      }
+    };
+    
+    if (video.readyState >= 2) {
+      attemptAutoplay();
+    } else {
+      video.addEventListener('canplay', attemptAutoplay, { once: true });
+    }
+
+    return () => {
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('pause', handlePause);
+    };
   }, []);
 
-  // Create and dispose player instance
-  React.useEffect(() => {
-    if (!player || !playerRef.current || playerInstance.current) return;
-
-    try {
-      playerInstance.current = player.create(
-        '/demo.cast',
-        playerRef.current,
-        {
-          autoPlay: true,
-          loop: true,
-          speed: speed,
-          fit: 'width',
-          theme: 'monokai',
-          fontSize: 'medium',
-          terminalFontFamily: "'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace",
-        }
-      );
-
-      setIsPlaying(true);
-
-      const intervalId = setInterval(() => {
-        if (playerInstance.current) {
-          setCurrentTime(playerInstance.current.getCurrentTime() || 0);
-          setDuration(playerInstance.current.getDuration() || 0);
-        }
-      }, 100);
-
-      return () => {
-        clearInterval(intervalId);
-        if (playerInstance.current) {
-          try {
-            playerInstance.current.dispose();
-          } catch (e) {
-            // Ignore disposal errors
-          }
-          playerInstance.current = null;
-        }
-      };
-    } catch (error) {
-      console.error('Failed to load asciinema player:', error);
-      return;
-    }
-  }, [player, speed]);
-
   const togglePlayPause = () => {
-    if (!playerInstance.current) return;
+    const video = videoRef.current;
+    if (!video) return;
     
     if (isPlaying) {
-      playerInstance.current.pause();
-      setIsPlaying(false);
+      video.pause();
     } else {
-      playerInstance.current.play();
-      setIsPlaying(true);
+      video.play();
     }
   };
 
   const changeSpeed = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    
     const speeds = [0.5, 1, 1.5, 2];
-    const currentIndex = speeds.indexOf(speed);
-    const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % speeds.length;
-    const nextSpeed = speeds[nextIndex];
-    if (nextSpeed !== undefined) {
-      setSpeed(nextSpeed);
-      if (playerInstance.current) {
-        playerInstance.current.setSpeed(nextSpeed);
-      }
-    }
+    const currentIndex = speeds.indexOf(playbackRate);
+    const nextIndex = (currentIndex + 1) % speeds.length;
+    const newRate = speeds[nextIndex] || 1;
+    setPlaybackRate(newRate);
+    video.playbackRate = newRate;
   };
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!playerInstance.current || !duration) return;
+    const video = videoRef.current;
+    if (!video || !duration) return;
     
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const percentage = x / rect.width;
-    const newTime = percentage * duration;
-    
-    playerInstance.current.seek(newTime);
+    video.currentTime = percentage * duration;
+  };
+
+  const handleReplay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.currentTime = 0;
+    video.play();
   };
 
   const formatTime = (seconds: number) => {
+    if (!seconds || isNaN(seconds)) return '0:00';
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -331,23 +319,31 @@ const AsciinemaPlayerComponent = () => {
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
-      {/* Player Container with enhanced styling */}
-      <div 
-        ref={playerRef} 
-        className="w-full overflow-hidden"
+      {/* Video Player */}
+      <video
+        ref={videoRef}
+        className="w-full"
         style={{ 
           minHeight: '450px',
-          background: 'linear-gradient(180deg, #0d1117 0%, #161b22 100%)',
+          background: '#0d1117',
         }}
-      />
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      >
+        <source src="/cli-demo.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       
-      {/* Enterprise-grade Control Bar */}
+      {/* Control Bar */}
       <div className={`absolute bottom-0 left-0 right-0 transition-all duration-300 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
         
         <div className="relative px-5 py-4">
-          {/* Progress Bar - Sleek design */}
+          {/* Progress Bar */}
           <div 
             className="group/progress flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden cursor-pointer mb-4 hover:h-2 transition-all duration-200"
             onClick={handleSeek}
@@ -356,7 +352,6 @@ const AsciinemaPlayerComponent = () => {
               className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full transition-all duration-100 relative"
               style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
             >
-              {/* Glow effect on progress */}
               <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg shadow-emerald-500/50 opacity-0 group-hover/progress:opacity-100 transition-opacity" />
             </div>
           </div>
@@ -364,7 +359,7 @@ const AsciinemaPlayerComponent = () => {
           <div className="flex items-center justify-between gap-6">
             {/* Left controls */}
             <div className="flex items-center gap-3">
-              {/* Play/Pause Button - Refined */}
+              {/* Play/Pause Button */}
               <button
                 onClick={togglePlayPause}
                 className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all duration-200 hover:scale-105 active:scale-95"
@@ -381,7 +376,16 @@ const AsciinemaPlayerComponent = () => {
                 )}
               </button>
 
-              {/* Time Display - Minimal */}
+              {/* Replay Button */}
+              <button
+                onClick={handleReplay}
+                className="w-10 h-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full transition-all duration-200 hover:scale-105 active:scale-95"
+                aria-label="Replay"
+              >
+                <RefreshCw className="w-4 h-4 text-white" />
+              </button>
+
+              {/* Time Display */}
               <div className="text-white/80 text-sm font-mono tracking-wide">
                 <span className="text-white">{formatTime(currentTime)}</span>
                 <span className="text-white/40 mx-1">/</span>
@@ -391,19 +395,19 @@ const AsciinemaPlayerComponent = () => {
 
             {/* Right controls */}
             <div className="flex items-center gap-3">
-              {/* Speed Control - Pill style */}
+              {/* Speed Control */}
               <button 
                 onClick={changeSpeed}
                 className="px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-white/80 hover:text-white text-xs font-mono transition-all duration-200 border border-black"
-                aria-label={`Playback speed: ${speed}x`}
+                aria-label={`Playback speed: ${playbackRate}x`}
               >
-                {speed}x
+                {playbackRate}x
               </button>
 
-              {/* Live indicator */}
+              {/* Real Recording indicator */}
               <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 rounded-full border border-black">
-                <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                <span className="text-emerald-400 text-xs font-medium">LIVE</span>
+                <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
+                <span className="text-emerald-400 text-xs font-medium">REAL</span>
               </div>
             </div>
           </div>
@@ -899,7 +903,7 @@ export default function Index() {
               
               {/* Player Container */}
               <div className="relative overflow-hidden bg-[#0d1117]">
-                <AsciinemaPlayerComponent />
+                <VideoDemoPlayer />
               </div>
               
               {/* Modal Footer - Minimal */}
