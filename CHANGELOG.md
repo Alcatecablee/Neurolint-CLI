@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.3] - 2025-12-06
+
+### Added
+- **Demo Showcase Project** (`demo-project/`) for live demonstrations
+  - Comprehensive example with intentional issues across all 7 layers
+  - CVE-2025-55182 vulnerable dependencies for security patch demos
+  - Complete README with demo commands and expected fixes
+  - Real-world patterns: TodoList, UserCard, DataTable, Dashboard, Settings
+  - Demonstrates: missing keys, accessibility issues, hydration problems, console.log cleanup
+
+### Changed
+- Version bump to 1.4.3 for npm publish
+- Updated CLI_USAGE.md version header
+
+### Documentation
+- Added demo-project/README.md with step-by-step demonstration guide
+- Documented all 7 layer issues present in demo project
+
 ## [1.4.2] - 2025-12-05
 
 ### Changed
