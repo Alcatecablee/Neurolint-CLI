@@ -23,6 +23,18 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 6, 2025** - Version 1.4.4 + New Demo Recording
+- Updated README tests badge from 297 to 457 passing tests
+- Created new asciinema demo recording (`landing/public/demo.cast`) showing real CLI output
+- Demo shows CVE-2025-55182 security scan and fix on demo-project
+- Added `scripts/generate-demo-cast.js` to regenerate demo recordings
+- Demo project reset to vulnerable state for future demonstrations
+
+**December 6, 2025** - Version 1.4.3 + Demo Showcase Project
+- Created `demo-project/` with intentional issues across all 7 layers
+- CVE-2025-55182 vulnerable dependencies for security patch demos
+- Version bumped to 1.4.3, then 1.4.4
+
 **December 3, 2025** - CVE-2025-55182 Constants Centralization (v1.4.2)
 - Centralized all CVE-2025-55182 version mappings into `shared-core/security-constants.js`
 - Added helper functions: `isVulnerableReactVersion()`, `getPatchedReactVersion()`, etc.

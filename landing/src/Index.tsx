@@ -244,7 +244,7 @@ const AsciinemaPlayerComponent = () => {
 
     try {
       playerInstance.current = player.create(
-        '/demo-new.cast',
+        '/demo.cast',
         playerRef.current,
         {
           autoPlay: true,
