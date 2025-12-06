@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.5] - 2025-12-06
+
+### Fixed
+- Fixed `security:cve-2025-55182` backup creation bug where array was passed instead of string path
+- Fixed backup result display showing `[object Object]` instead of actual backup path
+- Improved error handling for backup failures with proper warning messages
+
 ## [1.4.4] - 2025-12-06
 
 ### Fixed

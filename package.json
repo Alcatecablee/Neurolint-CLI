@@ -1,6 +1,6 @@
 {
   "name": "@neurolint/cli",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "NeuroLint CLI - Deterministic code fixing for TypeScript, JavaScript, React, and Next.js with Next.js 16, React Compiler, and Turbopack support",
   "main": "cli.js",
   "bin": {
