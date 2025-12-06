@@ -4878,7 +4878,7 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
   spinner.text = 'Creating backup...';
   
   const backupManager = createBackupManager({ verbose: options.verbose });
-  const backupPath = await backupManager.createBackup([packageJsonPath]);
+  const backupResult = await backupManager.createBackup(packageJsonPath, 'security-patch');
   
   spinner.text = 'Applying security patches...';
   
@@ -4918,7 +4918,11 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
   console.log('  2. Test your application');
   console.log('  3. Deploy the security update');
   
-  console.log('\n\x1b[2mBackup created at: ' + backupPath + '\x1b[0m');
+  if (backupResult.success) {
+    console.log('\n\x1b[2mBackup created at: ' + backupResult.backupPath + '\x1b[0m');
+  } else {
+    console.log('\n\x1b[33mWarning: Backup could not be created: ' + backupResult.error + '\x1b[0m');
+  }
   console.log('\x1b[2mUse "neurolint restore" to revert if needed.\x1b[0m\n');
 }
 
