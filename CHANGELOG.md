@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.4] - 2025-12-06
+
+### Fixed
+- Updated README tests badge from 297 to 457 passing tests
+- Ensures npm page displays correct test count
+
 ## [1.4.3] - 2025-12-06
 
 ### Added
