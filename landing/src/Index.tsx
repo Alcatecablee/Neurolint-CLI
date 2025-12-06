@@ -222,11 +222,57 @@ const TypewriterHeadline = () => {
 // CLI Demo Video Player Component - Real Recording
 const VideoDemoPlayer = () => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = React.useState(false);
   const [currentTime, setCurrentTime] = React.useState(0);
   const [duration, setDuration] = React.useState(0);
   const [showControls, setShowControls] = React.useState(true);
   const [playbackRate, setPlaybackRate] = React.useState(1);
+  const [hasAttemptedPlay, setHasAttemptedPlay] = React.useState(false);
+
+  // Aggressive autoplay function
+  const attemptAutoplay = React.useCallback(async () => {
+    const video = videoRef.current;
+    if (!video || hasAttemptedPlay) return;
+    
+    setHasAttemptedPlay(true);
+    
+    // Ensure video is muted (required for autoplay)
+    video.muted = true;
+    
+    try {
+      await video.play();
+      setIsPlaying(true);
+    } catch {
+      // Retry after a short delay
+      setTimeout(async () => {
+        try {
+          await video.play();
+          setIsPlaying(true);
+        } catch {
+          setIsPlaying(false);
+        }
+      }, 100);
+    }
+  }, [hasAttemptedPlay]);
+
+  // Intersection Observer - play when visible
+  React.useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.isIntersecting) {
+          attemptAutoplay();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [attemptAutoplay]);
 
   React.useEffect(() => {
     const video = videoRef.current;
@@ -242,20 +288,14 @@ const VideoDemoPlayer = () => {
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
 
-    // Handle autoplay - update state based on actual playback
-    const attemptAutoplay = async () => {
-      try {
-        await video.play();
-        setIsPlaying(true);
-      } catch {
-        setIsPlaying(false);
-      }
-    };
+    // Try autoplay on various events
+    const tryPlay = () => attemptAutoplay();
+    video.addEventListener('canplay', tryPlay);
+    video.addEventListener('loadeddata', tryPlay);
     
-    if (video.readyState >= 2) {
+    // Also try immediately if video is ready
+    if (video.readyState >= 3) {
       attemptAutoplay();
-    } else {
-      video.addEventListener('canplay', attemptAutoplay, { once: true });
     }
 
     return () => {
@@ -263,8 +303,10 @@ const VideoDemoPlayer = () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
+      video.removeEventListener('canplay', tryPlay);
+      video.removeEventListener('loadeddata', tryPlay);
     };
-  }, []);
+  }, [attemptAutoplay]);
 
   const togglePlayPause = () => {
     const video = videoRef.current;
@@ -315,6 +357,7 @@ const VideoDemoPlayer = () => {
 
   return (
     <div 
+      ref={containerRef}
       className="w-full relative group"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
@@ -331,7 +374,7 @@ const VideoDemoPlayer = () => {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
       >
         <source src="/cli-demo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
