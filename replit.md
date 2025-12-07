@@ -23,6 +23,13 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 7, 2025** - Layer 8 Security Forensics Specification
+- Created comprehensive design document for Layer 8: Security Forensics (`docs/LAYER-8-SECURITY-FORENSICS.md`)
+- Layer 8 adds post-exploitation detection, compromise scanning, and incident response capabilities
+- Extends existing security patching (CVE-2025-55182) with forensic analysis
+- New planned commands: `security:scan-compromise`, `security:incident-response`, `security:create-baseline`
+- Architecture designed to integrate with Layer 7 (Adaptive) for security pattern learning
+
 **December 6, 2025** - Version 1.4.5 - Bug Fix
 - Fixed `security:cve-2025-55182` backup creation bug where array was passed instead of string path
 - Fixed backup result display showing `[object Object]` instead of actual backup path
