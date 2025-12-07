@@ -7,11 +7,16 @@
  * IMPORTANT: Layer 8 is READ-ONLY by default. It detects but does not transform
  * unless explicitly requested (quarantine mode). This follows the NeuroLint
  * principle of "never break code".
+ * 
+ * Signature Coverage:
+ * - CVE-2025-55182: React Server Components post-exploitation indicators
+ * - Next.js 13-16 specific attack patterns
+ * - General supply-chain and persistence patterns
  */
 
 'use strict';
 
-const LAYER_8_VERSION = '1.0.0';
+const LAYER_8_VERSION = '2.0.0';
 
 const SEVERITY_LEVELS = {
   CRITICAL: 'critical',
@@ -38,6 +43,7 @@ const IOC_CATEGORIES = {
   OBFUSCATION: 'obfuscation',
   SUPPLY_CHAIN: 'supply-chain',
   RSC_SPECIFIC: 'rsc-specific',
+  NEXTJS_SPECIFIC: 'nextjs-specific',
   WEBSHELL: 'webshell',
   NETWORK: 'network'
 };
@@ -47,6 +53,9 @@ const IOC_SIGNATURES = {
   lastUpdated: '2025-12-07',
   
   signatures: [
+    // ============================================================
+    // CODE INJECTION SIGNATURES (IOC-001 to IOC-010)
+    // ============================================================
     {
       id: 'NEUROLINT-IOC-001',
       name: 'Obfuscated Eval with Base64',
@@ -116,6 +125,51 @@ const IOC_SIGNATURES = {
     },
     {
       id: 'NEUROLINT-IOC-007',
+      name: 'setTimeout/setInterval with String',
+      category: IOC_CATEGORIES.CODE_INJECTION,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /(?:setTimeout|setInterval)\s*\(\s*['"`][^'"`)]+['"]/gi,
+      type: 'regex',
+      description: 'setTimeout/setInterval with string argument - implicit eval',
+      remediation: 'Use function reference instead of string'
+    },
+    {
+      id: 'NEUROLINT-IOC-008',
+      name: 'Document Write with Decode',
+      category: IOC_CATEGORIES.CODE_INJECTION,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /document\.write\s*\(\s*(?:unescape|decodeURIComponent|atob)\s*\(/gi,
+      type: 'regex',
+      description: 'document.write with decoded content - XSS pattern',
+      remediation: 'Avoid document.write with decoded content'
+    },
+    {
+      id: 'NEUROLINT-IOC-009',
+      name: 'Inline Script Injection via innerHTML',
+      category: IOC_CATEGORIES.CODE_INJECTION,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /innerHTML\s*=\s*[^;]*<script/gi,
+      type: 'regex',
+      description: 'Script tag injection via innerHTML',
+      remediation: 'Avoid innerHTML with script tags'
+    },
+    {
+      id: 'NEUROLINT-IOC-010',
+      name: 'Dynamic Import with Variable',
+      category: IOC_CATEGORIES.CODE_INJECTION,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /import\s*\(\s*[^'"`\s][^)]+\)/g,
+      type: 'regex',
+      description: 'Dynamic import with variable path - potential code injection',
+      remediation: 'Use static import paths when possible',
+      contextRequired: true
+    },
+    
+    // ============================================================
+    // OBFUSCATION SIGNATURES (IOC-011 to IOC-015)
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-011',
       name: 'Base64 Encoded Long String',
       category: IOC_CATEGORIES.OBFUSCATION,
       severity: SEVERITY_LEVELS.MEDIUM,
@@ -126,7 +180,7 @@ const IOC_SIGNATURES = {
       contextRequired: true
     },
     {
-      id: 'NEUROLINT-IOC-008',
+      id: 'NEUROLINT-IOC-012',
       name: 'Hexadecimal Escape Sequences',
       category: IOC_CATEGORIES.OBFUSCATION,
       severity: SEVERITY_LEVELS.MEDIUM,
@@ -136,7 +190,7 @@ const IOC_SIGNATURES = {
       remediation: 'Decode and inspect the content'
     },
     {
-      id: 'NEUROLINT-IOC-009',
+      id: 'NEUROLINT-IOC-013',
       name: 'Unicode Escape Obfuscation',
       category: IOC_CATEGORIES.OBFUSCATION,
       severity: SEVERITY_LEVELS.MEDIUM,
@@ -146,8 +200,480 @@ const IOC_SIGNATURES = {
       remediation: 'Decode and inspect the content'
     },
     {
-      id: 'NEUROLINT-IOC-010',
-      name: 'Suspicious Network Request to IP',
+      id: 'NEUROLINT-IOC-014',
+      name: 'Octal Escape Obfuscation',
+      category: IOC_CATEGORIES.OBFUSCATION,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /(?:\\[0-7]{1,3}){10,}/g,
+      type: 'regex',
+      description: 'Multiple octal escape sequences - potential obfuscated code',
+      remediation: 'Decode and inspect the content'
+    },
+    {
+      id: 'NEUROLINT-IOC-015',
+      name: 'JSFuck Style Obfuscation',
+      category: IOC_CATEGORIES.OBFUSCATION,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /\[\s*!\s*\[\s*\]\s*\+\s*\[\s*\]\s*\]/g,
+      type: 'regex',
+      description: 'JSFuck-style obfuscation pattern detected',
+      references: ['MITRE T1027'],
+      remediation: 'Decode and understand the obfuscated code'
+    },
+
+    // ============================================================
+    // RSC-SPECIFIC SIGNATURES (IOC-016 to IOC-030) - CVE-2025-55182
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-016',
+      name: 'Rogue use server with Dangerous Import',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"]\s*;?\s*(?:import|require)\s*\(\s*['"](?:child_process|fs|net|http)/gi,
+      type: 'regex',
+      description: 'Server action importing dangerous modules immediately after directive',
+      references: ['CVE-2025-55182'],
+      remediation: 'Verify this server action is legitimate and necessary',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-017',
+      name: 'Server Action File System Access',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,500}(?:readFileSync|writeFileSync|readFile|writeFile)\s*\(/gi,
+      type: 'regex',
+      description: 'Server action with file system read/write operations',
+      references: ['CVE-2025-55182'],
+      remediation: 'Audit file system access patterns in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-018',
+      name: 'Server Action Database Injection Pattern',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,1000}(?:query|execute|raw)\s*\(\s*`[^`]*\$\{/gi,
+      type: 'regex',
+      description: 'Server action with raw SQL template injection vulnerability',
+      references: ['CVE-2025-55182', 'OWASP SQL Injection'],
+      remediation: 'Use parameterized queries instead of template strings',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-019',
+      name: 'Server Action Eval Pattern',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,500}(?:eval|Function)\s*\(/gi,
+      type: 'regex',
+      description: 'Server action with eval or Function constructor - code execution',
+      references: ['CVE-2025-55182'],
+      remediation: 'Remove eval/Function usage from server actions immediately',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-020',
+      name: 'Server Action Process Spawn',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,1000}(?:spawn|exec|execSync|spawnSync)\s*\(/gi,
+      type: 'regex',
+      description: 'Server action spawning child processes - potential RCE',
+      references: ['CVE-2025-55182', 'MITRE T1059'],
+      remediation: 'Remove process spawning from server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-021',
+      name: 'Server Action Environment Leakage',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,500}return[\s\S]{0,200}process\.env/gi,
+      type: 'regex',
+      description: 'Server action returning process.env - credential exposure',
+      references: ['CVE-2025-55182'],
+      remediation: 'Never return environment variables from server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-022',
+      name: 'Malicious generateMetadata Export',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /export\s+(?:async\s+)?function\s+generateMetadata[\s\S]{0,500}(?:fetch|axios|http\.request)\s*\(\s*['"`]https?:\/\/\d/gi,
+      type: 'regex',
+      description: 'generateMetadata making requests to IP addresses',
+      references: ['CVE-2025-55182'],
+      remediation: 'Audit generateMetadata network requests',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-023',
+      name: 'Malicious generateStaticParams Export',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /export\s+(?:async\s+)?function\s+generateStaticParams[\s\S]{0,500}(?:eval|Function|child_process)/gi,
+      type: 'regex',
+      description: 'generateStaticParams with code execution patterns',
+      references: ['CVE-2025-55182'],
+      remediation: 'Audit generateStaticParams for malicious code',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-024',
+      name: 'use server in Unexpected Directory',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /['"]use server['"]/gi,
+      type: 'regex',
+      pathPattern: /(?:components|lib|utils|hooks|public|static)[\\/]/i,
+      description: 'Server action directive in non-standard location',
+      references: ['CVE-2025-55182'],
+      remediation: 'Server actions should be in app/ or actions/ directories',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-025',
+      name: 'Server Component Exfiltration Pattern',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,1000}fetch\s*\([^)]*JSON\.stringify\s*\([^)]*(?:cookies|headers|session)/gi,
+      type: 'regex',
+      description: 'Server action sending cookies/headers/session to external endpoint',
+      references: ['CVE-2025-55182', 'MITRE T1041'],
+      remediation: 'Remove data exfiltration from server actions immediately',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-026',
+      name: 'Server Action Import Smuggling',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,200}await\s+import\s*\(/gi,
+      type: 'regex',
+      description: 'Dynamic import within server action - potential module smuggling',
+      references: ['CVE-2025-55182'],
+      remediation: 'Use static imports in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-027',
+      name: 'Server Action Prototype Pollution',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,500}(?:__proto__|prototype\s*\[|Object\.setPrototypeOf)/gi,
+      type: 'regex',
+      description: 'Server action with prototype pollution pattern',
+      references: ['CVE-2025-55182'],
+      remediation: 'Remove prototype manipulation from server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-028',
+      name: 'Server Action SSRF Pattern',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,500}fetch\s*\(\s*(?:formData\.get|data\.|params\.)/gi,
+      type: 'regex',
+      description: 'Server action with user-controlled URL - SSRF vulnerability',
+      references: ['CVE-2025-55182', 'OWASP SSRF'],
+      remediation: 'Validate and whitelist URLs in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-029',
+      name: 'Server Action Network Socket',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,500}(?:net\.connect|net\.createConnection|dgram\.createSocket)/gi,
+      type: 'regex',
+      description: 'Server action creating raw network connections',
+      references: ['CVE-2025-55182'],
+      remediation: 'Remove raw socket usage from server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-030',
+      name: 'Server Action Credential Harvesting',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,1000}(?:password|secret|apiKey|api_key|token)[\s\S]{0,200}fetch\s*\(/gi,
+      type: 'regex',
+      description: 'Server action extracting and transmitting credentials',
+      references: ['CVE-2025-55182', 'MITRE T1552'],
+      remediation: 'Audit credential handling in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+
+    // ============================================================
+    // NEXT.JS SPECIFIC SIGNATURES (IOC-031 to IOC-045)
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-031',
+      name: 'Malicious next.config.js Rewrite',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /rewrites\s*:\s*(?:async\s*)?\(\s*\)\s*=>[\s\S]{0,500}destination\s*:\s*['"`]https?:\/\/\d{1,3}\.\d{1,3}/gi,
+      type: 'regex',
+      description: 'next.config.js rewrite pointing to IP address',
+      references: ['MITRE T1071'],
+      remediation: 'Audit all rewrites for C2 redirection',
+      fileTypes: ['.js', '.mjs', '.ts']
+    },
+    {
+      id: 'NEUROLINT-IOC-032',
+      name: 'Malicious next.config.js Redirect',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /redirects\s*:\s*(?:async\s*)?\(\s*\)\s*=>[\s\S]{0,500}destination\s*:\s*['"`]https?:\/\/(?!\w+\.(?:vercel|netlify|github))/gi,
+      type: 'regex',
+      description: 'next.config.js redirect to suspicious external domain',
+      references: ['MITRE T1071'],
+      remediation: 'Audit all redirects for phishing/C2',
+      fileTypes: ['.js', '.mjs', '.ts']
+    },
+    {
+      id: 'NEUROLINT-IOC-033',
+      name: 'Webpack Plugin Injection',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /webpack\s*:\s*\(\s*config[\s\S]{0,500}plugins\.push\s*\(\s*new\s+(?!webpack\.)/gi,
+      type: 'regex',
+      description: 'Custom webpack plugin injection in next.config.js',
+      references: ['MITRE T1195.002'],
+      remediation: 'Audit custom webpack plugins for malicious behavior',
+      fileTypes: ['.js', '.mjs', '.ts']
+    },
+    {
+      id: 'NEUROLINT-IOC-034',
+      name: 'Turbopack Loader Injection',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /turbo\s*:\s*\{[\s\S]{0,500}loaders\s*:\s*\{/gi,
+      type: 'regex',
+      description: 'Custom Turbopack loader configuration - verify legitimacy',
+      remediation: 'Audit custom Turbopack loaders',
+      fileTypes: ['.js', '.mjs', '.ts']
+    },
+    {
+      id: 'NEUROLINT-IOC-035',
+      name: 'Instrumentation File Tampering',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /(?:export\s+(?:async\s+)?function\s+register|onRequestError)[\s\S]{0,500}(?:fetch|axios|http\.request)\s*\(\s*['"`]https?:\/\/\d/gi,
+      type: 'regex',
+      description: 'Instrumentation file sending data to IP address',
+      references: ['MITRE T1041'],
+      remediation: 'Audit instrumentation.ts for data exfiltration',
+      fileTypes: ['.ts', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-036',
+      name: 'Middleware Request Hijacking',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /export\s+(?:async\s+)?function\s+middleware[\s\S]{0,500}NextResponse\.rewrite\s*\(\s*new\s+URL\s*\(\s*['"`]https?:\/\/\d/gi,
+      type: 'regex',
+      description: 'Middleware rewriting requests to external IP',
+      references: ['CVE-2025-55182', 'MITRE T1557'],
+      remediation: 'Remove middleware request hijacking immediately',
+      fileTypes: ['.ts', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-037',
+      name: 'Middleware Cookie Exfiltration',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /export\s+(?:async\s+)?function\s+middleware[\s\S]{0,500}cookies\(\)[\s\S]{0,300}fetch\s*\(/gi,
+      type: 'regex',
+      description: 'Middleware sending cookies to external endpoint',
+      references: ['CVE-2025-55182', 'MITRE T1539'],
+      remediation: 'Audit middleware for credential theft',
+      fileTypes: ['.ts', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-038',
+      name: 'Route Handler Shell Execution',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /export\s+(?:async\s+)?function\s+(?:GET|POST|PUT|DELETE|PATCH)[\s\S]{0,500}(?:exec|execSync|spawn|spawnSync)\s*\(/gi,
+      type: 'regex',
+      description: 'API route handler executing shell commands',
+      references: ['CVE-2025-55182', 'MITRE T1059'],
+      remediation: 'Remove shell execution from API routes',
+      fileTypes: ['.ts', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-039',
+      name: 'Route Handler Environment Exposure',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /export\s+(?:async\s+)?function\s+(?:GET|POST)[\s\S]{0,300}Response\.json\s*\([^)]*process\.env/gi,
+      type: 'regex',
+      description: 'API route returning environment variables',
+      references: ['MITRE T1552'],
+      remediation: 'Never expose environment variables via API',
+      fileTypes: ['.ts', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-040',
+      name: 'Malicious Layout Injection',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /export\s+default\s+(?:async\s+)?function\s+(?:Root)?Layout[\s\S]{0,1000}<script[\s\S]{0,200}dangerouslySetInnerHTML/gi,
+      type: 'regex',
+      description: 'Layout component with dangerouslySetInnerHTML script injection',
+      references: ['CVE-2025-55182', 'OWASP XSS'],
+      remediation: 'Remove script injection from layouts',
+      fileTypes: ['.tsx', '.jsx']
+    },
+    {
+      id: 'NEUROLINT-IOC-041',
+      name: 'Malicious Error Boundary',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /export\s+default\s+function\s+(?:Global)?Error[\s\S]{0,500}fetch\s*\(\s*['"`]https?:\/\/\d/gi,
+      type: 'regex',
+      description: 'Error boundary sending error data to external IP',
+      references: ['MITRE T1041'],
+      remediation: 'Audit error boundary for data leakage',
+      fileTypes: ['.tsx', '.jsx', '.ts', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-042',
+      name: 'Malicious Loading State',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /export\s+default\s+function\s+Loading[\s\S]{0,300}(?:useEffect|componentDidMount)[\s\S]{0,200}fetch\s*\(/gi,
+      type: 'regex',
+      description: 'Loading component with suspicious side effects',
+      remediation: 'Loading components should be static UI only',
+      fileTypes: ['.tsx', '.jsx']
+    },
+    {
+      id: 'NEUROLINT-IOC-043',
+      name: 'Edge Runtime Abuse',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /export\s+const\s+runtime\s*=\s*['"]edge['"][\s\S]{0,500}(?:eval|Function|import\s*\()/gi,
+      type: 'regex',
+      description: 'Edge runtime with code execution patterns',
+      references: ['CVE-2025-55182'],
+      remediation: 'Audit edge functions for code injection',
+      fileTypes: ['.ts', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-044',
+      name: 'Parallel Route Injection',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /@[\w]+\/[\s\S]{0,100}['"]use server['"]/gi,
+      type: 'regex',
+      pathPattern: /app[\\/]@[\w]+[\\/]/i,
+      description: 'Server action in parallel route - verify legitimacy',
+      references: ['CVE-2025-55182'],
+      remediation: 'Audit parallel routes for hidden server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-045',
+      name: 'Intercepting Route Abuse',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /\(\.+\)[\w]+/gi,
+      type: 'regex',
+      pathPattern: /app[\\/]\([.]+\)/i,
+      description: 'Intercepting route detected - verify legitimacy',
+      remediation: 'Audit intercepting routes for request interception',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+
+    // ============================================================
+    // BACKDOOR SIGNATURES (IOC-046 to IOC-052)
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-046',
+      name: 'Reverse Shell Pattern',
+      category: IOC_CATEGORIES.BACKDOOR,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /(?:net\.connect|socket\.connect)\s*\([^)]*\)\s*[^;]*(?:pipe|write)\s*\([^)]*(?:process|child)/gi,
+      type: 'regex',
+      description: 'Potential reverse shell - socket piping to process',
+      references: ['MITRE T1059'],
+      remediation: 'Remove this code immediately - likely backdoor'
+    },
+    {
+      id: 'NEUROLINT-IOC-047',
+      name: 'Hidden Endpoint Pattern',
+      category: IOC_CATEGORIES.BACKDOOR,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /(?:app|router)\s*\.(?:get|post|all)\s*\(\s*['"`]\/(?:\.hidden|_internal|__backdoor|admin_secret|\.well-known\/(?!acme))/gi,
+      type: 'regex',
+      description: 'Suspiciously named hidden API endpoint',
+      remediation: 'Verify this endpoint is legitimate'
+    },
+    {
+      id: 'NEUROLINT-IOC-048',
+      name: 'SSH Key in Code',
+      category: IOC_CATEGORIES.BACKDOOR,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /-----BEGIN\s+(?:RSA|DSA|EC|OPENSSH)\s+PRIVATE\s+KEY-----/g,
+      type: 'regex',
+      description: 'Private SSH key embedded in code',
+      remediation: 'Remove private key from source code immediately'
+    },
+    {
+      id: 'NEUROLINT-IOC-049',
+      name: 'Cron Job Persistence',
+      category: IOC_CATEGORIES.BACKDOOR,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /(?:fs\.writeFile|fs\.appendFile)\s*\(\s*['"`](?:\/var\/spool\/cron|\/etc\/cron)/gi,
+      type: 'regex',
+      description: 'Writing to cron directories - persistence mechanism',
+      references: ['MITRE T1053.003'],
+      remediation: 'Remove unauthorized cron modifications'
+    },
+    {
+      id: 'NEUROLINT-IOC-050',
+      name: 'Webshell Pattern',
+      category: IOC_CATEGORIES.WEBSHELL,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /(?:req|request)\.(?:body|query|params)[\s\S]{0,50}(?:eval|exec|spawn)\s*\(/gi,
+      type: 'regex',
+      description: 'Request parameter directly passed to code execution',
+      references: ['MITRE T1505.003'],
+      remediation: 'Remove webshell code immediately'
+    },
+    {
+      id: 'NEUROLINT-IOC-051',
+      name: 'Docker Escape Pattern',
+      category: IOC_CATEGORIES.BACKDOOR,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /(?:\/var\/run\/docker\.sock|docker\.sock|--privileged)/gi,
+      type: 'regex',
+      description: 'Docker socket access or privileged container pattern',
+      references: ['MITRE T1611'],
+      remediation: 'Audit container escape attempts'
+    },
+    {
+      id: 'NEUROLINT-IOC-052',
+      name: 'Process Memory Access',
+      category: IOC_CATEGORIES.BACKDOOR,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /\/proc\/(?:self\/mem|kcore|kmem)|ptrace\s*\(/gi,
+      type: 'regex',
+      description: 'Accessing process memory or using ptrace',
+      references: ['MITRE T1055'],
+      remediation: 'Remove memory access patterns'
+    },
+
+    // ============================================================
+    // DATA EXFILTRATION SIGNATURES (IOC-053 to IOC-058)
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-053',
+      name: 'Network Request to IP Address',
       category: IOC_CATEGORIES.DATA_EXFILTRATION,
       severity: SEVERITY_LEVELS.HIGH,
       pattern: /(?:fetch|axios|http\.request|https\.request)\s*\(\s*['"`]https?:\/\/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/gi,
@@ -157,8 +683,8 @@ const IOC_SIGNATURES = {
       remediation: 'Verify this endpoint is legitimate'
     },
     {
-      id: 'NEUROLINT-IOC-011',
-      name: 'WebSocket to Unknown Domain',
+      id: 'NEUROLINT-IOC-054',
+      name: 'WebSocket to External Domain',
       category: IOC_CATEGORIES.DATA_EXFILTRATION,
       severity: SEVERITY_LEVELS.MEDIUM,
       pattern: /new\s+WebSocket\s*\(\s*['"`]wss?:\/\/(?!localhost|127\.0\.0\.1)/gi,
@@ -168,28 +694,55 @@ const IOC_SIGNATURES = {
       contextRequired: true
     },
     {
-      id: 'NEUROLINT-IOC-012',
-      name: 'Crypto Mining Library Import',
-      category: IOC_CATEGORIES.CRYPTO_MINING,
+      id: 'NEUROLINT-IOC-055',
+      name: 'Environment Variable Exfiltration',
+      category: IOC_CATEGORIES.DATA_EXFILTRATION,
       severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /require\s*\(\s*['"](?:coinhive|cryptonight|monero-miner|xmrig|stratum)/gi,
+      pattern: /(?:fetch|axios|http\.request)\s*\([^)]*process\.env/gi,
       type: 'regex',
-      description: 'Cryptocurrency mining library detected',
-      references: ['MITRE T1496'],
-      remediation: 'Remove the crypto mining code immediately'
+      description: 'Sending environment variables over network - credential theft',
+      references: ['MITRE T1552.001'],
+      remediation: 'Remove this code immediately - likely credential theft'
     },
     {
-      id: 'NEUROLINT-IOC-013',
-      name: 'Worker-based Mining Pattern',
-      category: IOC_CATEGORIES.CRYPTO_MINING,
+      id: 'NEUROLINT-IOC-056',
+      name: 'AWS Credentials in Code',
+      category: IOC_CATEGORIES.DATA_EXFILTRATION,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /(?:AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}/g,
+      type: 'regex',
+      description: 'AWS access key ID found in code',
+      remediation: 'Remove AWS credentials and rotate immediately'
+    },
+    {
+      id: 'NEUROLINT-IOC-057',
+      name: 'DNS Exfiltration Pattern',
+      category: IOC_CATEGORIES.DATA_EXFILTRATION,
       severity: SEVERITY_LEVELS.HIGH,
-      pattern: /new\s+Worker\s*\([^)]*(?:miner|hash|crypto|coin)/gi,
+      pattern: /dns\.(?:resolve|lookup)\s*\(\s*[`'"][^`'"]*\$\{/gi,
       type: 'regex',
-      description: 'Web Worker with mining-related name',
-      remediation: 'Verify this Worker is legitimate'
+      description: 'DNS query with interpolated data - DNS exfiltration',
+      references: ['MITRE T1048'],
+      remediation: 'Audit DNS queries for data exfiltration'
     },
     {
-      id: 'NEUROLINT-IOC-014',
+      id: 'NEUROLINT-IOC-058',
+      name: 'Beacon/Heartbeat Pattern',
+      category: IOC_CATEGORIES.DATA_EXFILTRATION,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /setInterval\s*\(\s*(?:async\s*)?\(\s*\)\s*=>\s*(?:\{[\s\S]{0,100})?fetch\s*\(/gi,
+      type: 'regex',
+      description: 'Periodic beacon/heartbeat to external server',
+      references: ['MITRE T1071'],
+      remediation: 'Verify periodic requests are legitimate',
+      contextRequired: true
+    },
+
+    // ============================================================
+    // SUPPLY CHAIN SIGNATURES (IOC-059 to IOC-063)
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-059',
       name: 'Postinstall Script Execution',
       category: IOC_CATEGORIES.SUPPLY_CHAIN,
       severity: SEVERITY_LEVELS.HIGH,
@@ -201,52 +754,56 @@ const IOC_SIGNATURES = {
       remediation: 'Inspect the postinstall script carefully'
     },
     {
-      id: 'NEUROLINT-IOC-015',
-      name: 'Environment Variable Exfiltration',
-      category: IOC_CATEGORIES.DATA_EXFILTRATION,
-      severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /(?:fetch|axios|http\.request)\s*\([^)]*process\.env/gi,
-      type: 'regex',
-      description: 'Sending environment variables over network - credential theft',
-      references: ['MITRE T1552.001'],
-      remediation: 'Remove this code immediately - likely credential theft'
-    },
-    {
-      id: 'NEUROLINT-IOC-016',
-      name: 'Rogue use server Directive',
-      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      id: 'NEUROLINT-IOC-060',
+      name: 'NPM Prepare Hook Abuse',
+      category: IOC_CATEGORIES.SUPPLY_CHAIN,
       severity: SEVERITY_LEVELS.HIGH,
-      pattern: /['"]use server['"]\s*;?\s*(?:import|require)\s*\(\s*['"](?:child_process|fs|net|http)/gi,
+      pattern: /"(?:prepare|prepublish|prepublishOnly)"\s*:\s*"[^"]*(?:curl|wget|node\s+-e)/gi,
       type: 'regex',
-      description: 'Server action importing dangerous modules',
-      references: ['CVE-2025-55182'],
-      remediation: 'Verify this server action is legitimate',
-      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+      fileTypes: ['package.json'],
+      description: 'Suspicious prepare hook with network commands',
+      references: ['MITRE T1195.002'],
+      remediation: 'Audit npm lifecycle hooks'
     },
     {
-      id: 'NEUROLINT-IOC-017',
-      name: 'Dynamic Import with Variable',
-      category: IOC_CATEGORIES.CODE_INJECTION,
+      id: 'NEUROLINT-IOC-061',
+      name: 'Git Hook Tampering',
+      category: IOC_CATEGORIES.SUPPLY_CHAIN,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /(?:\.git\/hooks|\.husky)[\s\S]{0,100}(?:curl|wget|nc\s|bash\s+-i)/gi,
+      type: 'regex',
+      description: 'Git hook with suspicious commands',
+      references: ['MITRE T1195.002'],
+      remediation: 'Audit git hooks for malicious commands'
+    },
+    {
+      id: 'NEUROLINT-IOC-062',
+      name: 'Typosquatting Package Import',
+      category: IOC_CATEGORIES.SUPPLY_CHAIN,
       severity: SEVERITY_LEVELS.MEDIUM,
-      pattern: /import\s*\(\s*[^'"`\s][^)]+\)/g,
+      pattern: /(?:require|import)\s*\(\s*['"](?:loadsh|requets|axois|expresss|recat|nextts)['"](?:\s*\))?/gi,
       type: 'regex',
-      description: 'Dynamic import with variable path - potential code injection',
-      remediation: 'Use static import paths when possible',
-      contextRequired: true
+      description: 'Possible typosquatting package import detected',
+      references: ['MITRE T1195.002'],
+      remediation: 'Verify package name is correct'
     },
     {
-      id: 'NEUROLINT-IOC-018',
-      name: 'Reverse Shell Pattern',
-      category: IOC_CATEGORIES.BACKDOOR,
-      severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /(?:net\.connect|socket\.connect)\s*\([^)]*\)\s*[^;]*(?:pipe|write)\s*\([^)]*(?:process|child)/gi,
+      id: 'NEUROLINT-IOC-063',
+      name: 'Malicious Babel/SWC Plugin',
+      category: IOC_CATEGORIES.SUPPLY_CHAIN,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /(?:plugins|presets)\s*:\s*\[[\s\S]{0,200}['"`][^'"`]*(?:obfuscate|inject|backdoor)/gi,
       type: 'regex',
-      description: 'Potential reverse shell - socket piping to process',
-      references: ['MITRE T1059'],
-      remediation: 'Remove this code immediately - likely backdoor'
+      description: 'Suspicious Babel/SWC plugin name',
+      references: ['MITRE T1195.002'],
+      remediation: 'Audit build tool plugins'
     },
+
+    // ============================================================
+    // PERSISTENCE SIGNATURES (IOC-064 to IOC-067)
+    // ============================================================
     {
-      id: 'NEUROLINT-IOC-019',
+      id: 'NEUROLINT-IOC-064',
       name: 'File System Write to System Paths',
       category: IOC_CATEGORIES.PERSISTENCE,
       severity: SEVERITY_LEVELS.CRITICAL,
@@ -257,64 +814,73 @@ const IOC_SIGNATURES = {
       remediation: 'Remove writes to system directories'
     },
     {
-      id: 'NEUROLINT-IOC-020',
-      name: 'Hidden Endpoint Pattern',
-      category: IOC_CATEGORIES.BACKDOOR,
+      id: 'NEUROLINT-IOC-065',
+      name: 'Systemd Service Creation',
+      category: IOC_CATEGORIES.PERSISTENCE,
       severity: SEVERITY_LEVELS.HIGH,
-      pattern: /(?:app|router)\s*\.(?:get|post|all)\s*\(\s*['"`]\/(?:\.hidden|_internal|__backdoor|admin_secret)/gi,
+      pattern: /(?:fs\.writeFile|fs\.appendFile)\s*\(\s*['"`](?:\/etc\/systemd|\/lib\/systemd)/gi,
       type: 'regex',
-      description: 'Suspiciously named hidden API endpoint',
-      remediation: 'Verify this endpoint is legitimate'
+      description: 'Writing to systemd directories - service persistence',
+      references: ['MITRE T1543.002'],
+      remediation: 'Audit systemd service creation'
     },
     {
-      id: 'NEUROLINT-IOC-021',
-      name: 'setTimeout/setInterval with String',
-      category: IOC_CATEGORIES.CODE_INJECTION,
+      id: 'NEUROLINT-IOC-066',
+      name: 'Registry Persistence (Windows)',
+      category: IOC_CATEGORIES.PERSISTENCE,
       severity: SEVERITY_LEVELS.HIGH,
-      pattern: /(?:setTimeout|setInterval)\s*\(\s*['"`][^'"`)]+['"]/gi,
+      pattern: /(?:reg\s+add|HKEY_(?:LOCAL_MACHINE|CURRENT_USER)\\Software\\Microsoft\\Windows\\CurrentVersion\\Run)/gi,
       type: 'regex',
-      description: 'setTimeout/setInterval with string argument - implicit eval',
-      remediation: 'Use function reference instead of string'
+      description: 'Windows registry run key persistence',
+      references: ['MITRE T1547.001'],
+      remediation: 'Remove registry persistence mechanisms'
     },
     {
-      id: 'NEUROLINT-IOC-022',
-      name: 'Document Write Pattern',
-      category: IOC_CATEGORIES.CODE_INJECTION,
-      severity: SEVERITY_LEVELS.MEDIUM,
-      pattern: /document\.write\s*\(\s*(?:unescape|decodeURIComponent|atob)\s*\(/gi,
-      type: 'regex',
-      description: 'document.write with decoded content - XSS pattern',
-      remediation: 'Avoid document.write with decoded content'
-    },
-    {
-      id: 'NEUROLINT-IOC-023',
-      name: 'Inline Script Injection',
-      category: IOC_CATEGORIES.CODE_INJECTION,
+      id: 'NEUROLINT-IOC-067',
+      name: 'Profile/RC File Modification',
+      category: IOC_CATEGORIES.PERSISTENCE,
       severity: SEVERITY_LEVELS.HIGH,
-      pattern: /innerHTML\s*=\s*[^;]*<script/gi,
+      pattern: /(?:fs\.writeFile|fs\.appendFile)\s*\(\s*['"`](?:~?\/\.(?:bash|zsh|profile|bashrc|zshrc))/gi,
       type: 'regex',
-      description: 'Script tag injection via innerHTML',
-      remediation: 'Avoid innerHTML with script tags'
+      description: 'Modifying shell profile files - persistence',
+      references: ['MITRE T1546.004'],
+      remediation: 'Audit shell profile modifications'
     },
+
+    // ============================================================
+    // CRYPTO MINING SIGNATURES (IOC-068 to IOC-070)
+    // ============================================================
     {
-      id: 'NEUROLINT-IOC-024',
-      name: 'SSH Key Pattern in Code',
-      category: IOC_CATEGORIES.BACKDOOR,
+      id: 'NEUROLINT-IOC-068',
+      name: 'Crypto Mining Library Import',
+      category: IOC_CATEGORIES.CRYPTO_MINING,
       severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /-----BEGIN\s+(?:RSA|DSA|EC|OPENSSH)\s+PRIVATE\s+KEY-----/g,
+      pattern: /require\s*\(\s*['"](?:coinhive|cryptonight|monero-miner|xmrig|stratum)/gi,
       type: 'regex',
-      description: 'Private SSH key embedded in code',
-      remediation: 'Remove private key from source code immediately'
+      description: 'Cryptocurrency mining library detected',
+      references: ['MITRE T1496'],
+      remediation: 'Remove the crypto mining code immediately'
     },
     {
-      id: 'NEUROLINT-IOC-025',
-      name: 'AWS Credentials in Code',
-      category: IOC_CATEGORIES.DATA_EXFILTRATION,
-      severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /(?:AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}/g,
+      id: 'NEUROLINT-IOC-069',
+      name: 'Worker-based Mining Pattern',
+      category: IOC_CATEGORIES.CRYPTO_MINING,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /new\s+Worker\s*\([^)]*(?:miner|hash|crypto|coin|monero|xmr)/gi,
       type: 'regex',
-      description: 'AWS access key ID found in code',
-      remediation: 'Remove AWS credentials and rotate immediately'
+      description: 'Web Worker with mining-related name',
+      remediation: 'Verify this Worker is legitimate'
+    },
+    {
+      id: 'NEUROLINT-IOC-070',
+      name: 'Stratum Protocol Pattern',
+      category: IOC_CATEGORIES.CRYPTO_MINING,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /stratum\+tcp:\/\/|mining\.(?:pool|proxy)|(?:xmr|btc)\.(?:pool|mine)/gi,
+      type: 'regex',
+      description: 'Mining pool connection URL detected',
+      references: ['MITRE T1496'],
+      remediation: 'Remove mining pool connections'
     }
   ]
 };
@@ -354,12 +920,12 @@ const MODE_CONFIGURATIONS = {
 };
 
 const FILE_TYPE_ASSOCIATIONS = {
-  '.js': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION', 'CRYPTO_MINING'],
-  '.jsx': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION', 'RSC_SPECIFIC'],
-  '.ts': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION'],
-  '.tsx': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION', 'RSC_SPECIFIC'],
+  '.js': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION', 'CRYPTO_MINING', 'NEXTJS_SPECIFIC'],
+  '.jsx': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION', 'RSC_SPECIFIC', 'NEXTJS_SPECIFIC'],
+  '.ts': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION', 'NEXTJS_SPECIFIC'],
+  '.tsx': ['CODE_INJECTION', 'BACKDOOR', 'OBFUSCATION', 'RSC_SPECIFIC', 'NEXTJS_SPECIFIC'],
   '.json': ['SUPPLY_CHAIN', 'PERSISTENCE'],
-  '.mjs': ['CODE_INJECTION', 'BACKDOOR'],
+  '.mjs': ['CODE_INJECTION', 'BACKDOOR', 'NEXTJS_SPECIFIC'],
   '.cjs': ['CODE_INJECTION', 'BACKDOOR']
 };
 

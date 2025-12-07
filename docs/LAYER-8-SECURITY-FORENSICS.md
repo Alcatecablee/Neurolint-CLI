@@ -1,11 +1,20 @@
 # Layer 8: Security Forensics
 
-## Specification Document v1.0
+## Specification Document v2.0
 
-**Status**: Draft  
+**Status**: Implemented  
 **Author**: NeuroLint Team  
 **Created**: December 2025  
+**Updated**: December 2025 (v2.0 - Expanded IoC Coverage)  
 **Related CVE**: CVE-2025-55182 (CVSS 10.0)
+
+### Version 2.0 Highlights
+
+- **70 IoC Signatures** (expanded from 25) covering 11 categories
+- **15 RSC-Specific Signatures** for React Server Components attack detection
+- **15 Next.js-Specific Signatures** for middleware, route handlers, and config injection
+- **62 Comprehensive Tests** with full coverage for all detection patterns
+- **CLI Reporter** updated to match NeuroLint layer styling conventions
 
 ---
 
@@ -325,40 +334,53 @@ module.exports = {
 | **SSH key injection** | New authorized_keys entries | Critical | System scan |
 | **Environment tampering** | Modified .env files | High | Baseline compare |
 
-### Signature Database Schema
+### Signature Database Schema (v2.0)
+
+**70 IoC Signatures across 11 Categories:**
+
+| Category | Signatures | Examples |
+|----------|------------|----------|
+| Code Injection | 10 | IOC-001 to IOC-010: eval/atob, Buffer.from, Function constructor, setTimeout with string |
+| Obfuscation | 5 | IOC-011 to IOC-015: Base64 encoded strings, hex/unicode escape sequences, JSFuck patterns |
+| RSC-Specific | 15 | IOC-016 to IOC-030: Server action abuse, use server with dangerous imports, credential harvesting |
+| Next.js-Specific | 15 | IOC-031 to IOC-045: Middleware hijacking, route handler abuse, config injection, malicious layouts |
+| Backdoor | 7 | IOC-046 to IOC-052: Reverse shells, hidden endpoints, SSH keys, Docker escape, webshells |
+| Data Exfiltration | 6 | IOC-053 to IOC-058: Network to IP, WebSocket, env var exfiltration, AWS credentials, DNS exfil |
+| Supply Chain | 5 | IOC-059 to IOC-063: Postinstall hooks, git hook tampering, typosquatting, malicious plugins |
+| Persistence | 4 | IOC-064 to IOC-067: System path writes, systemd service, registry persistence, profile modification |
+| Crypto Mining | 3 | IOC-068 to IOC-070: Mining libraries, worker patterns, stratum protocol |
 
 ```javascript
-// constants.js
+// constants.js (v2.0.0)
 const IOC_SIGNATURES = {
-  version: '1.0.0',
+  version: '2.0.0',
   lastUpdated: '2025-12-07',
   
   signatures: [
     {
       id: 'NEUROLINT-IOC-001',
-      name: 'Obfuscated Eval Execution',
+      name: 'Obfuscated Eval with Base64',
       category: 'code-injection',
       severity: 'critical',
-      pattern: /eval\s*\(\s*(atob|Buffer\.from|decodeURIComponent)\s*\(/,
+      pattern: /eval\s*\(\s*atob\s*\(/gi,
       type: 'regex',
-      description: 'Detects eval() with encoding functions, commonly used for payload obfuscation',
-      references: ['CVE-2025-55182'],
-      remediation: 'Remove the eval statement and investigate its source'
+      description: 'eval() with atob() decoding - commonly used for payload obfuscation',
+      references: ['CVE-2025-55182', 'MITRE T1027'],
+      remediation: 'Remove the eval statement and investigate its origin'
     },
     {
-      id: 'NEUROLINT-IOC-002',
-      name: 'Dynamic Function Constructor',
-      category: 'code-injection',
+      id: 'NEUROLINT-IOC-016',
+      name: 'Rogue use server with Dangerous Import',
+      category: 'rsc-specific',
       severity: 'high',
-      ast: {
-        type: 'NewExpression',
-        callee: { name: 'Function' }
-      },
-      type: 'ast',
-      description: 'Detects dynamic function creation which can execute arbitrary code',
-      remediation: 'Replace with static function definitions'
+      pattern: /['"]use server['"]\s*;?\s*(?:import|require)\s*\(\s*['"](?:child_process|fs|net|http)/gi,
+      type: 'regex',
+      description: 'Server action importing dangerous modules immediately after directive',
+      references: ['CVE-2025-55182'],
+      remediation: 'Verify this server action is legitimate and necessary',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
     },
-    // ... more signatures
+    // ... 68 more signatures
   ]
 };
 ```

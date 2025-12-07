@@ -1,8 +1,8 @@
 /**
  * Layer 8: Security Forensics - CLI Reporter
  * 
- * Comprehensive terminal output for security scan results.
- * Provides detailed, actionable information with proper formatting.
+ * Terminal output for security scan results following NeuroLint layer styling.
+ * Uses [INFO], [SUCCESS], [WARNING], [ERROR] prefixes consistent with other layers.
  */
 
 'use strict';
@@ -70,51 +70,42 @@ class CLIReporter {
   }
   
   generateHeader() {
-    const header = `
-${this.c('cyan', '╔══════════════════════════════════════════════════════════════════╗')}
-${this.c('cyan', '║')}  ${this.c('bright', 'NeuroLint Security Forensics')} - Layer 8                          ${this.c('cyan', '║')}
-${this.c('cyan', '║')}  ${this.c('dim', 'Post-Exploitation Detection & Incident Response')}                 ${this.c('cyan', '║')}
-${this.c('cyan', '╚══════════════════════════════════════════════════════════════════╝')}`;
-    
-    return header;
+    return `[INFO] NeuroLint Security Forensics - Layer 8
+[INFO] Post-Exploitation Detection & Incident Response`;
   }
   
   generateSummary(scanResult) {
     const severity = SeverityCalculator.calculateOverallSeverity(scanResult.findings || []);
     const stats = scanResult.stats || {};
     
-    const statusBadge = this.getStatusBadge(severity.level);
+    const statusText = this.getStatusText(severity.level);
     const executionTime = stats.totalExecutionTime 
       ? `${(stats.totalExecutionTime / 1000).toFixed(2)}s`
       : 'N/A';
     
-    const summary = `
-${this.c('bright', '┌─ SCAN SUMMARY ─────────────────────────────────────────────────┐')}
-│                                                                  │
-│  ${this.c('bright', 'Status:')}     ${statusBadge}                                          
-│  ${this.c('bright', 'Files:')}      ${stats.filesScanned || 0} scanned, ${stats.filesSkipped || 0} skipped
-│  ${this.c('bright', 'Duration:')}   ${executionTime}
-│  ${this.c('bright', 'Findings:')}   ${scanResult.findings?.length || 0} total
-│                                                                  │
-│  ${this.c('red', '● Critical:')} ${severity.breakdown.critical.toString().padStart(3)}    ${this.c('yellow', '● High:')} ${severity.breakdown.high.toString().padStart(3)}
-│  ${this.c('blue', '● Medium:')}   ${severity.breakdown.medium.toString().padStart(3)}    ${this.c('cyan', '● Low:')}  ${severity.breakdown.low.toString().padStart(3)}
-│                                                                  │
-${this.c('bright', '└──────────────────────────────────────────────────────────────────┘')}`;
+    const lines = [
+      '[INFO] SCAN SUMMARY',
+      `[INFO] Status: ${statusText}`,
+      `[INFO] Files: ${stats.filesScanned || 0} scanned, ${stats.filesSkipped || 0} skipped`,
+      `[INFO] Duration: ${executionTime}`,
+      `[INFO] Findings: ${scanResult.findings?.length || 0} total`,
+      `[INFO] Breakdown: Critical=${severity.breakdown.critical}, High=${severity.breakdown.high}, Medium=${severity.breakdown.medium}, Low=${severity.breakdown.low}`
+    ];
     
-    return summary;
+    return lines.join('\n');
   }
   
-  getStatusBadge(level) {
-    const badges = {
-      critical: this.c('bgRed', ' CRITICAL '),
-      high: this.c('bgYellow', ' COMPROMISED '),
-      medium: this.c('bgBlue', ' WARNINGS '),
-      low: this.c('bgCyan', ' MINOR ISSUES '),
-      info: this.c('dim', ' INFO '),
-      clean: this.c('bgGreen', ' CLEAN ')
+  getStatusText(level) {
+    const statusMap = {
+      critical: this.c('red', 'CRITICAL'),
+      high: this.c('yellow', 'COMPROMISED'),
+      medium: this.c('blue', 'WARNINGS'),
+      low: this.c('cyan', 'MINOR ISSUES'),
+      info: this.c('dim', 'INFO'),
+      clean: this.c('green', 'CLEAN')
     };
     
-    return badges[level] || badges.clean;
+    return statusMap[level] || statusMap.clean;
   }
   
   generateFindingsByFile(findings) {
@@ -129,7 +120,7 @@ ${this.c('bright', '└───────────────────
     }
     
     const lines = [];
-    lines.push(this.c('bright', '┌─ FINDINGS BY FILE ────────────────────────────────────────────┐'));
+    lines.push('[INFO] FINDINGS BY FILE');
     lines.push('');
     
     for (const [file, fileFindings] of Object.entries(fileGroups)) {
@@ -138,19 +129,14 @@ ${this.c('bright', '└───────────────────
       });
       
       const relativePath = file.length > 60 ? '...' + file.slice(-57) : file;
-      lines.push(`  ${this.c('cyan', '📄')} ${this.c('bright', relativePath)}`);
-      lines.push('');
+      lines.push(`[INFO] File: ${relativePath}`);
       
       for (const finding of sortedFindings) {
         lines.push(this.formatFinding(finding));
-        lines.push('');
       }
       
-      lines.push(this.c('dim', '  ─────────────────────────────────────────────────────────────'));
       lines.push('');
     }
-    
-    lines.push(this.c('bright', '└──────────────────────────────────────────────────────────────────┘'));
     
     return lines.join('\n');
   }
@@ -164,7 +150,7 @@ ${this.c('bright', '└───────────────────
     }
     
     const lines = [];
-    lines.push(this.c('bright', '┌─ FINDINGS BY SEVERITY ─────────────────────────────────────────┐'));
+    lines.push('[INFO] FINDINGS BY SEVERITY');
     lines.push('');
     
     for (const severity of severityOrder) {
@@ -172,27 +158,25 @@ ${this.c('bright', '└───────────────────
       if (group.length === 0) continue;
       
       const severityLabel = this.getSeverityLabel(severity);
-      lines.push(`  ${severityLabel} (${group.length})`);
-      lines.push('');
+      lines.push(`${severityLabel} (${group.length})`);
       
       for (const finding of group) {
         lines.push(this.formatFinding(finding));
-        lines.push('');
       }
+      
+      lines.push('');
     }
-    
-    lines.push(this.c('bright', '└──────────────────────────────────────────────────────────────────┘'));
     
     return lines.join('\n');
   }
   
   getSeverityLabel(severity) {
     const labels = {
-      critical: this.c('red', '🔴 CRITICAL'),
-      high: this.c('yellow', '🟠 HIGH'),
-      medium: this.c('blue', '🟡 MEDIUM'),
-      low: this.c('cyan', '🟢 LOW'),
-      info: this.c('dim', 'ℹ️  INFO')
+      critical: '[ERROR] CRITICAL',
+      high: '[WARNING] HIGH',
+      medium: '[INFO] MEDIUM',
+      low: '[INFO] LOW',
+      info: '[INFO] INFO'
     };
     
     return labels[severity] || labels.info;
@@ -200,48 +184,49 @@ ${this.c('bright', '└───────────────────
   
   formatFinding(finding) {
     const lines = [];
-    const indent = '    ';
+    const indent = '  ';
     
-    const severityIcon = {
-      critical: '🚨',
-      high: '⚠️ ',
-      medium: '📋',
-      low: '📝',
-      info: 'ℹ️ '
+    const severityPrefix = {
+      critical: '[ERROR]',
+      high: '[WARNING]',
+      medium: '[INFO]',
+      low: '[INFO]',
+      info: '[INFO]'
     };
     
-    lines.push(`${indent}${severityIcon[finding.severity] || '•'} ${this.c('bright', finding.signatureName || finding.signatureId)}`);
-    lines.push(`${indent}   ${this.c('dim', 'ID:')} ${finding.signatureId}`);
-    lines.push(`${indent}   ${this.c('dim', 'Location:')} Line ${finding.line}, Col ${finding.column}`);
+    const prefix = severityPrefix[finding.severity] || '[INFO]';
+    
+    lines.push(`${indent}${prefix} ${finding.signatureName || finding.signatureId}`);
+    lines.push(`${indent}  ID: ${finding.signatureId}`);
+    lines.push(`${indent}  Location: Line ${finding.line}, Col ${finding.column}`);
     
     if (finding.matchedText && finding.matchedText !== '[Behavioral Pattern]') {
       const truncated = finding.matchedText.length > 80 
         ? finding.matchedText.substring(0, 77) + '...'
         : finding.matchedText;
-      lines.push(`${indent}   ${this.c('dim', 'Match:')} ${this.c('yellow', truncated)}`);
+      lines.push(`${indent}  Match: ${truncated}`);
     }
     
     if (finding.description) {
-      lines.push(`${indent}   ${this.c('dim', 'Desc:')} ${finding.description}`);
+      lines.push(`${indent}  Desc: ${finding.description}`);
     }
     
     if (finding.remediation) {
-      lines.push(`${indent}   ${this.c('green', '→ Fix:')} ${finding.remediation}`);
+      lines.push(`${indent}  Fix: ${finding.remediation}`);
     }
     
     if (finding.confidence) {
       const confidence = Math.round(finding.confidence * 100);
-      const confColor = confidence >= 80 ? 'green' : confidence >= 50 ? 'yellow' : 'red';
-      lines.push(`${indent}   ${this.c('dim', 'Confidence:')} ${this.c(confColor, confidence + '%')}`);
+      lines.push(`${indent}  Confidence: ${confidence}%`);
     }
     
     if (this.showContext && finding.context && finding.context.length > 0) {
-      lines.push(`${indent}   ${this.c('dim', 'Context:')}`);
+      lines.push(`${indent}  Context:`);
       for (const ctx of finding.context.slice(0, this.maxContextLines)) {
         const lineNum = ctx.lineNumber.toString().padStart(4);
-        const prefix = ctx.isMatch ? this.c('red', '→') : ' ';
+        const prefix = ctx.isMatch ? '>' : ' ';
         const content = ctx.content.substring(0, 70);
-        lines.push(`${indent}     ${prefix} ${this.c('dim', lineNum + ' |')} ${content}`);
+        lines.push(`${indent}    ${prefix} ${lineNum} | ${content}`);
       }
     }
     
@@ -249,13 +234,9 @@ ${this.c('bright', '└───────────────────
   }
   
   generateCleanReport() {
-    return `
-  ${this.c('green', '✓')} ${this.c('bright', 'No indicators of compromise detected!')}
-  
-  ${this.c('dim', 'Your codebase appears clean based on the current scan.')}
-  ${this.c('dim', 'For deeper analysis, try:')}
-  ${this.c('dim', '  neurolint security:scan-compromise . --mode deep')}
-`;
+    return `[SUCCESS] No indicators of compromise detected!
+[INFO] Your codebase appears clean based on the current scan.
+[INFO] For deeper analysis, try: neurolint security:scan-compromise . --mode deep`;
   }
   
   generateFooter(scanResult) {
@@ -265,23 +246,19 @@ ${this.c('bright', '└───────────────────
     let actionMessage = '';
     
     if (findings.some(f => f.severity === 'critical')) {
-      actionMessage = this.c('red', '⚠️  IMMEDIATE ACTION REQUIRED: Critical security issues detected!');
+      actionMessage = '[ERROR] IMMEDIATE ACTION REQUIRED: Critical security issues detected!';
     } else if (findings.some(f => f.severity === 'high')) {
-      actionMessage = this.c('yellow', '⚡ Review high-severity findings and remediate promptly.');
+      actionMessage = '[WARNING] Review high-severity findings and remediate promptly.';
     } else if (findings.length > 0) {
-      actionMessage = this.c('blue', '📋 Review findings and address as appropriate.');
+      actionMessage = '[INFO] Review findings and address as appropriate.';
     } else {
-      actionMessage = this.c('green', '✓ Scan completed successfully.');
+      actionMessage = '[SUCCESS] Scan completed successfully.';
     }
     
-    return `
-${this.c('dim', '─────────────────────────────────────────────────────────────────')}
-${actionMessage}
-
-${this.c('dim', 'Scan completed at:')} ${timestamp}
-${this.c('dim', 'For JSON output:')} neurolint security:scan-compromise . --json
-${this.c('dim', 'For full report:')} neurolint security:incident-response . --output ./report
-${this.c('dim', '─────────────────────────────────────────────────────────────────')}`;
+    return `${actionMessage}
+[INFO] Scan completed at: ${timestamp}
+[INFO] For JSON output: neurolint security:scan-compromise . --json
+[INFO] For full report: neurolint security:incident-response . --output ./report`;
   }
   
   printReport(scanResult, options = {}) {
