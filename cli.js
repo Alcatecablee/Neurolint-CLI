@@ -2710,6 +2710,7 @@ Security Commands:
   security:scan-compromise [path] Scan for indicators of compromise (Layer 8)
   security:create-baseline [path] Create integrity baseline for future comparison
   security:compare-baseline [path] Compare current state against baseline
+  security:incident-response [path] Full forensic analysis for incident response
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -2881,6 +2882,10 @@ Examples:
       case 'security:compare-baseline':
         // Handle Layer 8 Security Forensics - Compare Baseline
         await handleSecurityCompareBaseline(targetPath, options, spinner, args);
+        break;
+      case 'security:incident-response':
+        // Handle Layer 8 Security Forensics - Incident Response
+        await handleSecurityIncidentResponse(targetPath, options, spinner, args);
         break;
       case 'check-turbopack':
         // Handle Turbopack migration check command
@@ -3101,6 +3106,7 @@ Security Commands:
   security:scan-compromise [path] Scan for indicators of compromise (Layer 8)
   security:create-baseline [path] Create integrity baseline for future comparison
   security:compare-baseline [path] Compare current state against baseline
+  security:incident-response [path] Full forensic analysis for incident response
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -5157,6 +5163,99 @@ async function handleSecurityCompareBaseline(targetPath, options, spinner, args)
     
   } catch (error) {
     spinner.fail('Baseline comparison failed');
+    console.error('\nError:', error.message);
+    if (isVerbose) {
+      console.error(error.stack);
+    }
+    process.exit(1);
+  }
+}
+
+/**
+ * Handle Layer 8 Security Forensics - Incident Response
+ * Comprehensive forensic analysis for security incident response
+ */
+async function handleSecurityIncidentResponse(targetPath, options, spinner, args) {
+  const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
+  const isVerbose = args.includes('--verbose') || args.includes('-v');
+  const isJsonOutput = args.includes('--json');
+  const isQuick = args.includes('--quick');
+  const isFull = args.includes('--full');
+  
+  const lookbackArg = args.find(a => a.startsWith('--lookback='));
+  const lookbackDays = lookbackArg ? parseInt(lookbackArg.split('=')[1], 10) : 30;
+  
+  const outputArg = args.find(a => a.startsWith('--output=') || a.startsWith('-o='));
+  const outputPath = outputArg ? outputArg.split('=')[1] : null;
+  
+  spinner.text = 'Initializing incident response analysis...';
+  
+  try {
+    const Layer8 = getLayer8();
+    const layer8 = new Layer8({
+      mode: isQuick ? 'quick' : (isFull ? 'paranoid' : 'standard'),
+      verbose: isVerbose
+    });
+    
+    const incidentOptions = {
+      verbose: isVerbose,
+      lookbackDays,
+      includeTimeline: !isQuick,
+      includeDependencies: true,
+      includeBehavioral: !isQuick,
+      includeAllCommits: isFull,
+      onProgress: (progress) => {
+        if (!isJsonOutput) {
+          const phase = progress.phase || 'analysis';
+          const status = progress.status || 'running';
+          const message = progress.message || `Processing ${phase}...`;
+          
+          if (status === 'starting') {
+            spinner.text = message;
+          } else if (status === 'complete') {
+            spinner.text = `${phase}: ${progress.findings || 0} findings`;
+          }
+        }
+      }
+    };
+    
+    spinner.text = 'Running forensic analysis...';
+    
+    const results = await layer8.incidentResponse(resolvedPath, incidentOptions);
+    
+    spinner.stop();
+    
+    if (isJsonOutput) {
+      const jsonReport = layer8.generateIncidentJSONReport(results, { prettyPrint: true });
+      
+      if (outputPath) {
+        const fsSync = require('fs');
+        fsSync.writeFileSync(outputPath, jsonReport, 'utf8');
+        console.log(`Incident report saved to: ${outputPath}`);
+      } else {
+        console.log(jsonReport);
+      }
+    } else {
+      layer8.printIncidentReport(results, { verbose: isVerbose });
+      
+      if (outputPath) {
+        const fsSync = require('fs');
+        const jsonReport = layer8.generateIncidentJSONReport(results, { prettyPrint: true });
+        fsSync.writeFileSync(outputPath, jsonReport, 'utf8');
+        console.log(`\n  Report also saved to: ${outputPath}\n`);
+      }
+    }
+    
+    if (results.summary.riskLevel === 'critical') {
+      console.log('\x1b[31m\x1b[1mCRITICAL: Immediate action required!\x1b[0m\n');
+      process.exit(2);
+    } else if (results.summary.riskLevel === 'high') {
+      console.log('\x1b[33m\x1b[1mHIGH RISK: Urgent investigation recommended.\x1b[0m\n');
+      process.exit(1);
+    }
+    
+  } catch (error) {
+    spinner.fail('Incident response analysis failed');
     console.error('\nError:', error.message);
     if (isVerbose) {
       console.error(error.stack);

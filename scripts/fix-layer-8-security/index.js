@@ -374,6 +374,372 @@ class Layer8SecurityForensics {
     return files;
   }
   
+  async incidentResponse(targetPath, options = {}) {
+    const startTime = Date.now();
+    const results = {
+      timestamp: new Date().toISOString(),
+      targetPath: path.resolve(targetPath),
+      mode: options.mode || 'full',
+      phases: {},
+      summary: {},
+      recommendations: []
+    };
+    
+    const onProgress = options.onProgress || (() => {});
+    
+    try {
+      onProgress({ phase: 'code-scan', status: 'starting', message: 'Scanning for indicators of compromise...' });
+      const scanResult = await this.scanCompromise(targetPath, {
+        verbose: options.verbose,
+        onProgress: (p) => onProgress({ phase: 'code-scan', ...p })
+      });
+      results.phases.codeScan = {
+        success: true,
+        findings: scanResult.findings || [],
+        stats: scanResult.stats
+      };
+      onProgress({ phase: 'code-scan', status: 'complete', findings: scanResult.findings?.length || 0 });
+      
+      if (options.includeTimeline !== false) {
+        onProgress({ phase: 'timeline', status: 'starting', message: 'Reconstructing git timeline...' });
+        try {
+          const { TimelineReconstructor } = require('./forensics');
+          const timelineReconstructor = new TimelineReconstructor({
+            verbose: options.verbose,
+            lookbackDays: options.lookbackDays || 30,
+            maxCommits: options.maxCommits || 100
+          });
+          
+          const timelineResult = timelineReconstructor.reconstructTimeline(targetPath, {
+            includeAll: options.includeAllCommits,
+            detectForcesPush: true
+          });
+          
+          results.phases.timeline = {
+            success: timelineResult.success,
+            timeline: timelineResult.timeline || [],
+            findings: timelineResult.findings || [],
+            stats: timelineResult.stats
+          };
+          onProgress({ phase: 'timeline', status: 'complete', findings: timelineResult.findings?.length || 0 });
+        } catch (error) {
+          results.phases.timeline = {
+            success: false,
+            error: error.message,
+            findings: []
+          };
+          onProgress({ phase: 'timeline', status: 'error', error: error.message });
+        }
+      }
+      
+      if (options.includeDependencies !== false) {
+        onProgress({ phase: 'dependencies', status: 'starting', message: 'Analyzing dependencies...' });
+        try {
+          const DependencyDiffer = require('./detectors/dependency-differ');
+          const dependencyDiffer = new DependencyDiffer({
+            verbose: options.verbose,
+            checkTyposquatting: true,
+            checkIntegrity: true
+          });
+          
+          const depFindings = dependencyDiffer.analyze(targetPath, {
+            baseline: options.dependencyBaseline
+          });
+          
+          results.phases.dependencies = {
+            success: true,
+            findings: depFindings || []
+          };
+          onProgress({ phase: 'dependencies', status: 'complete', findings: depFindings?.length || 0 });
+        } catch (error) {
+          results.phases.dependencies = {
+            success: false,
+            error: error.message,
+            findings: []
+          };
+          onProgress({ phase: 'dependencies', status: 'error', error: error.message });
+        }
+      }
+      
+      if (options.includeBehavioral !== false) {
+        onProgress({ phase: 'behavioral', status: 'starting', message: 'Running behavioral analysis...' });
+        try {
+          const BehavioralAnalyzer = require('./detectors/behavioral-analyzer');
+          const behavioralAnalyzer = new BehavioralAnalyzer({
+            verbose: options.verbose,
+            includeContext: true
+          });
+          
+          const files = await this.getFiles(targetPath, options);
+          const behavioralFindings = [];
+          
+          for (const filePath of files) {
+            try {
+              const fsSync = require('fs');
+              const code = fsSync.readFileSync(filePath, 'utf8');
+              const fileFindings = behavioralAnalyzer.analyze(code, filePath, options);
+              behavioralFindings.push(...fileFindings);
+            } catch (e) {
+            }
+          }
+          
+          results.phases.behavioral = {
+            success: true,
+            findings: behavioralFindings
+          };
+          onProgress({ phase: 'behavioral', status: 'complete', findings: behavioralFindings.length });
+        } catch (error) {
+          results.phases.behavioral = {
+            success: false,
+            error: error.message,
+            findings: []
+          };
+          onProgress({ phase: 'behavioral', status: 'error', error: error.message });
+        }
+      }
+      
+      const allFindings = [
+        ...(results.phases.codeScan?.findings || []),
+        ...(results.phases.timeline?.findings || []),
+        ...(results.phases.dependencies?.findings || []),
+        ...(results.phases.behavioral?.findings || [])
+      ];
+      
+      const severityCounts = { critical: 0, high: 0, medium: 0, low: 0, info: 0 };
+      for (const finding of allFindings) {
+        const sev = finding.severity?.toLowerCase() || 'info';
+        if (severityCounts.hasOwnProperty(sev)) {
+          severityCounts[sev]++;
+        }
+      }
+      
+      let riskLevel = 'clean';
+      if (severityCounts.critical > 0) riskLevel = 'critical';
+      else if (severityCounts.high > 0) riskLevel = 'high';
+      else if (severityCounts.medium > 0) riskLevel = 'medium';
+      else if (severityCounts.low > 0) riskLevel = 'low';
+      
+      const phasesCompleted = Object.keys(results.phases).filter(p => results.phases[p].success).length;
+      const phasesTotal = Object.keys(results.phases).length;
+      const phasesFailed = phasesTotal - phasesCompleted;
+      
+      const codeScanFailed = results.phases.codeScan && !results.phases.codeScan.success;
+      const criticalPhaseFailed = codeScanFailed;
+      
+      let overallSuccess = true;
+      let incompleteReason = null;
+      
+      if (criticalPhaseFailed) {
+        overallSuccess = false;
+        incompleteReason = 'Critical phase (code scan) failed';
+      } else if (phasesFailed > 0 && phasesCompleted === 0) {
+        overallSuccess = false;
+        incompleteReason = 'All phases failed';
+      }
+      
+      if (phasesFailed > 0 && riskLevel === 'clean') {
+        riskLevel = 'incomplete';
+      }
+      
+      results.success = overallSuccess;
+      results.summary = {
+        totalFindings: allFindings.length,
+        severityCounts,
+        riskLevel,
+        executionTimeMs: Date.now() - startTime,
+        phasesCompleted,
+        phasesTotal,
+        phasesFailed,
+        incompleteReason
+      };
+      
+      results.recommendations = this.generateIncidentRecommendations(results);
+      results.allFindings = allFindings;
+      
+      return results;
+      
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+        timestamp: results.timestamp,
+        targetPath: results.targetPath,
+        phases: results.phases,
+        summary: {
+          totalFindings: 0,
+          riskLevel: 'unknown',
+          executionTimeMs: Date.now() - startTime
+        },
+        recommendations: []
+      };
+    }
+  }
+  
+  generateIncidentRecommendations(results) {
+    const recommendations = [];
+    const phases = results.phases;
+    
+    if (phases.codeScan?.findings?.length > 0) {
+      const criticalCount = phases.codeScan.findings.filter(f => f.severity === 'critical').length;
+      if (criticalCount > 0) {
+        recommendations.push({
+          priority: 'immediate',
+          action: 'Isolate and investigate critical findings',
+          details: `${criticalCount} critical security issues detected in code. Immediate investigation required.`,
+          phase: 'code-scan'
+        });
+      }
+    }
+    
+    if (phases.timeline?.findings?.length > 0) {
+      recommendations.push({
+        priority: 'high',
+        action: 'Review suspicious commits',
+        details: `${phases.timeline.findings.length} suspicious changes detected in git history. Verify all commits are legitimate.`,
+        phase: 'timeline'
+      });
+    }
+    
+    if (phases.dependencies?.findings?.length > 0) {
+      const malicious = phases.dependencies.findings.filter(f => 
+        f.signatureName?.includes('Malicious') || f.signatureName?.includes('Typosquatting')
+      ).length;
+      if (malicious > 0) {
+        recommendations.push({
+          priority: 'immediate',
+          action: 'Remove malicious or suspicious dependencies',
+          details: `${malicious} potentially malicious packages detected. Remove immediately and audit usage.`,
+          phase: 'dependencies'
+        });
+      }
+    }
+    
+    if (phases.behavioral?.findings?.length > 0) {
+      const dangerousPatterns = phases.behavioral.findings.filter(f => 
+        f.severity === 'critical' || f.severity === 'high'
+      ).length;
+      if (dangerousPatterns > 0) {
+        recommendations.push({
+          priority: 'high',
+          action: 'Review dangerous code patterns',
+          details: `${dangerousPatterns} dangerous behavioral patterns detected. Review for potential backdoors.`,
+          phase: 'behavioral'
+        });
+      }
+    }
+    
+    for (const [phaseName, phaseData] of Object.entries(phases)) {
+      if (!phaseData.success && phaseData.error) {
+        recommendations.push({
+          priority: 'medium',
+          action: `Address ${phaseName} phase failure`,
+          details: `The ${phaseName} phase failed: ${phaseData.error}. Results may be incomplete.`,
+          phase: phaseName
+        });
+      }
+    }
+    
+    if (recommendations.length === 0) {
+      recommendations.push({
+        priority: 'info',
+        action: 'Continue monitoring',
+        details: 'No immediate threats detected. Continue regular security monitoring.',
+        phase: 'general'
+      });
+    }
+    
+    return recommendations.sort((a, b) => {
+      const priorityOrder = { immediate: 0, high: 1, medium: 2, low: 3, info: 4 };
+      return (priorityOrder[a.priority] || 5) - (priorityOrder[b.priority] || 5);
+    });
+  }
+  
+  printIncidentReport(results, options = {}) {
+    const colors = {
+      reset: '\x1b[0m',
+      bold: '\x1b[1m',
+      dim: '\x1b[2m',
+      red: '\x1b[31m',
+      green: '\x1b[32m',
+      yellow: '\x1b[33m',
+      blue: '\x1b[34m',
+      magenta: '\x1b[35m',
+      cyan: '\x1b[36m'
+    };
+    
+    const riskColors = {
+      critical: colors.red,
+      high: colors.red,
+      medium: colors.yellow,
+      low: colors.blue,
+      clean: colors.green,
+      unknown: colors.dim
+    };
+    
+    console.log(`\n${colors.bold}${colors.cyan}=== INCIDENT RESPONSE REPORT ===${colors.reset}\n`);
+    console.log(`${colors.dim}Target: ${results.targetPath}${colors.reset}`);
+    console.log(`${colors.dim}Timestamp: ${results.timestamp}${colors.reset}`);
+    console.log(`${colors.dim}Execution time: ${results.summary.executionTimeMs}ms${colors.reset}\n`);
+    
+    const riskColor = riskColors[results.summary.riskLevel] || colors.dim;
+    console.log(`${colors.bold}Risk Level: ${riskColor}${results.summary.riskLevel.toUpperCase()}${colors.reset}\n`);
+    
+    console.log(`${colors.bold}Findings Summary:${colors.reset}`);
+    console.log(`  Critical: ${colors.red}${results.summary.severityCounts.critical}${colors.reset}`);
+    console.log(`  High: ${colors.red}${results.summary.severityCounts.high}${colors.reset}`);
+    console.log(`  Medium: ${colors.yellow}${results.summary.severityCounts.medium}${colors.reset}`);
+    console.log(`  Low: ${colors.blue}${results.summary.severityCounts.low}${colors.reset}`);
+    console.log(`  Total: ${colors.bold}${results.summary.totalFindings}${colors.reset}\n`);
+    
+    console.log(`${colors.bold}Phases Completed:${colors.reset} ${results.summary.phasesCompleted}/${results.summary.phasesTotal}\n`);
+    
+    for (const [phaseName, phaseData] of Object.entries(results.phases)) {
+      const status = phaseData.success ? `${colors.green}[COMPLETE]${colors.reset}` : `${colors.red}[FAILED]${colors.reset}`;
+      const findingsCount = phaseData.findings?.length || 0;
+      console.log(`  ${status} ${phaseName}: ${findingsCount} findings`);
+      if (phaseData.error) {
+        console.log(`    ${colors.dim}Error: ${phaseData.error}${colors.reset}`);
+      }
+    }
+    
+    if (results.recommendations.length > 0) {
+      console.log(`\n${colors.bold}${colors.yellow}Recommendations:${colors.reset}\n`);
+      for (const rec of results.recommendations) {
+        const priorityColor = rec.priority === 'immediate' ? colors.red :
+                             rec.priority === 'high' ? colors.yellow :
+                             colors.dim;
+        console.log(`  ${priorityColor}[${rec.priority.toUpperCase()}]${colors.reset} ${rec.action}`);
+        console.log(`    ${colors.dim}${rec.details}${colors.reset}\n`);
+      }
+    }
+    
+    if (options.verbose && results.allFindings?.length > 0) {
+      console.log(`\n${colors.bold}Detailed Findings:${colors.reset}\n`);
+      for (const finding of results.allFindings.slice(0, 20)) {
+        const sevColor = finding.severity === 'critical' || finding.severity === 'high' ? colors.red :
+                        finding.severity === 'medium' ? colors.yellow : colors.dim;
+        console.log(`  ${sevColor}[${finding.severity?.toUpperCase() || 'INFO'}]${colors.reset} ${finding.signatureName || finding.signatureId}`);
+        if (finding.file) {
+          console.log(`    ${colors.dim}File: ${finding.file}:${finding.line || 1}${colors.reset}`);
+        }
+        if (finding.description) {
+          console.log(`    ${finding.description}`);
+        }
+        console.log('');
+      }
+      
+      if (results.allFindings.length > 20) {
+        console.log(`  ${colors.dim}... and ${results.allFindings.length - 20} more findings${colors.reset}\n`);
+      }
+    }
+    
+    console.log(`${colors.dim}─${'─'.repeat(59)}${colors.reset}\n`);
+  }
+  
+  generateIncidentJSONReport(results, options = {}) {
+    return JSON.stringify(results, null, options.prettyPrint !== false ? 2 : 0);
+  }
+  
   generateCLIReport(scanResult, options = {}) {
     return this.cliReporter.generateReport(scanResult, options);
   }
