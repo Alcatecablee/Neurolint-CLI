@@ -472,6 +472,8 @@ class Layer8SecurityForensics {
           
           const files = await this.getFiles(targetPath, options);
           const behavioralFindings = [];
+          const skippedFiles = [];
+          let analyzedCount = 0;
           
           for (const filePath of files) {
             try {
@@ -479,15 +481,31 @@ class Layer8SecurityForensics {
               const code = fsSync.readFileSync(filePath, 'utf8');
               const fileFindings = behavioralAnalyzer.analyze(code, filePath, options);
               behavioralFindings.push(...fileFindings);
+              analyzedCount++;
             } catch (e) {
+              skippedFiles.push({ file: filePath, error: e.message });
             }
           }
           
+          const hasPartialCoverage = skippedFiles.length > 0 && files.length > 0;
+          const coveragePercent = files.length > 0 ? Math.round((analyzedCount / files.length) * 100) : 100;
+          
+          const minCoverageThreshold = 50;
+          const phaseSucceeded = coveragePercent >= minCoverageThreshold || files.length === 0;
+          
           results.phases.behavioral = {
-            success: true,
-            findings: behavioralFindings
+            success: phaseSucceeded,
+            error: !phaseSucceeded ? `Insufficient coverage: only ${coveragePercent}% of files could be analyzed` : undefined,
+            findings: behavioralFindings,
+            stats: {
+              filesAnalyzed: analyzedCount,
+              filesSkipped: skippedFiles.length,
+              coveragePercent
+            },
+            partialCoverage: hasPartialCoverage,
+            skippedFiles: skippedFiles.length > 0 ? skippedFiles.slice(0, 10) : undefined
           };
-          onProgress({ phase: 'behavioral', status: 'complete', findings: behavioralFindings.length });
+          onProgress({ phase: 'behavioral', status: phaseSucceeded ? 'complete' : 'partial', findings: behavioralFindings.length });
         } catch (error) {
           results.phases.behavioral = {
             success: false,
@@ -523,18 +541,16 @@ class Layer8SecurityForensics {
       const phasesTotal = Object.keys(results.phases).length;
       const phasesFailed = phasesTotal - phasesCompleted;
       
-      const codeScanFailed = results.phases.codeScan && !results.phases.codeScan.success;
-      const criticalPhaseFailed = codeScanFailed;
+      const failedPhaseNames = Object.keys(results.phases)
+        .filter(p => !results.phases[p].success)
+        .map(p => p);
       
       let overallSuccess = true;
       let incompleteReason = null;
       
-      if (criticalPhaseFailed) {
+      if (phasesFailed > 0) {
         overallSuccess = false;
-        incompleteReason = 'Critical phase (code scan) failed';
-      } else if (phasesFailed > 0 && phasesCompleted === 0) {
-        overallSuccess = false;
-        incompleteReason = 'All phases failed';
+        incompleteReason = `Phase(s) failed: ${failedPhaseNames.join(', ')}`;
       }
       
       if (phasesFailed > 0 && riskLevel === 'clean') {
@@ -634,6 +650,13 @@ class Layer8SecurityForensics {
           priority: 'medium',
           action: `Address ${phaseName} phase failure`,
           details: `The ${phaseName} phase failed: ${phaseData.error}. Results may be incomplete.`,
+          phase: phaseName
+        });
+      } else if (phaseData.partialCoverage && phaseData.stats) {
+        recommendations.push({
+          priority: 'low',
+          action: `Review ${phaseName} partial coverage`,
+          details: `The ${phaseName} phase analyzed ${phaseData.stats.coveragePercent}% of files (${phaseData.stats.filesSkipped} skipped). Some files could not be analyzed.`,
           phase: phaseName
         });
       }
