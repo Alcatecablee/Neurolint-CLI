@@ -7,6 +7,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2025-12-07
+
+### Added
+
+#### Layer 8: Security Forensics (Major Feature)
+
+The most significant addition to NeuroLint - a complete post-exploitation detection and incident response layer. While patches fix vulnerabilities, Layer 8 answers: "Am I already compromised?"
+
+**Core Detection Engine:**
+- 70 IoC (Indicator of Compromise) signatures across 11 detection categories
+- Signature-based detection with regex and AST pattern matching
+- Behavioral analysis for suspicious code execution patterns
+- Dependency integrity verification with typosquatting detection
+
+**Detection Categories:**
+| Category | Signatures | Coverage |
+|----------|------------|----------|
+| Code Injection | 10 | eval/atob, Buffer.from, Function constructor, setTimeout with string |
+| Obfuscation | 5 | Base64 strings, hex/unicode escapes, JSFuck patterns |
+| RSC-Specific | 15 | Server action abuse, credential harvesting, rogue 'use server' |
+| Next.js-Specific | 15 | Middleware hijacking, route handler abuse, config injection |
+| Backdoor | 7 | Reverse shells, hidden endpoints, SSH keys, webshells |
+| Data Exfiltration | 6 | Network beacons, env var theft, AWS credential exfiltration |
+| Supply Chain | 5 | Postinstall hooks, git hook tampering, typosquatting |
+| Persistence | 4 | System path writes, systemd service, profile modification |
+| Crypto Mining | 3 | Mining libraries, worker patterns, stratum protocol |
+
+**New CLI Commands:**
+- `security:scan-compromise` - Fast IoC scan with configurable modes (quick/standard/deep/paranoid)
+- `security:create-baseline` - Create integrity baseline with SHA-256 hashing
+- `security:compare-baseline` - Detect drift from known-good state
+- `security:incident-response` - Comprehensive forensic analysis for incident response
+
+**Reporting Formats:**
+- **SARIF Reporter** - GitHub Security tab integration (SARIF 2.1.0 compliant)
+- **JSON Reporter** - Machine-readable output for CI/CD pipelines
+- **HTML Reporter** - Standalone visual reports with full styling
+- **CLI Reporter** - Human-readable console output with severity breakdown
+
+**Forensics Capabilities:**
+- Timeline reconstruction via git history analysis
+- File integrity verification with baseline comparison
+- Dependency differ for package integrity
+- Behavioral analyzer with AST-based detection
+- Evidence collection for SOC teams
+
+**Architecture:**
+- Layer 8 follows the "never break code" principle - READ-ONLY by default
+- Integrates with Layer 7 (Adaptive) via `securityFindings[]` event
+- Scan modes: quick (critical only), standard, deep, paranoid (all patterns)
+- Exit codes with `--fail-on` for CI/CD gating
+
+**Documentation:**
+- Complete specification document: `docs/LAYER-8-SECURITY-FORENSICS.md`
+- 70 IoC signatures documented with MITRE ATT&CK references
+- Implementation roadmap and testing strategy
+
+### Changed
+- NeuroLint now has **8-layer progressive architecture** (previously 7 layers)
+- Updated all documentation to reflect 8-layer architecture
+- Version bumped to 1.5.0
+
+### Tests
+- 114+ comprehensive tests in `__tests__/layer-8-security.test.js`
+- Test fixtures in `__tests__/fixtures/layer-8/` covering all IoC categories
+- Full coverage for all detection patterns, reporters, and forensic modules
+
+### Security
+- First security scanner built specifically for Next.js + RSC post-exploitation
+- Addresses the gap between patching CVE-2025-55182 and detecting if compromise already occurred
+- Enables continuous security monitoring via baseline comparison
+
 ## [1.4.5] - 2025-12-06
 
 ### Fixed

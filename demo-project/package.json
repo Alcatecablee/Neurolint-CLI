@@ -1,7 +1,7 @@
 {
   "name": "neurolint-demo-showcase",
   "version": "1.0.0",
-  "description": "Demo project showcasing NeuroLint's 7-layer code fixing capabilities and CVE-2025-55182 security patch",
+  "description": "Demo project showcasing NeuroLint's 8-layer code fixing capabilities and CVE-2025-55182 security patch",
   "private": true,
   "scripts": {
     "dev": "next dev",

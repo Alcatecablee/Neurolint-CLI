@@ -1,7 +1,7 @@
 {
   "name": "@neurolint/cli",
-  "version": "1.4.5",
-  "description": "NeuroLint CLI - Deterministic code fixing for TypeScript, JavaScript, React, and Next.js with Next.js 16, React Compiler, and Turbopack support",
+  "version": "1.5.0",
+  "description": "NeuroLint CLI - Deterministic code fixing for TypeScript, JavaScript, React, and Next.js with 8-layer architecture including Security Forensics, Next.js 16, React Compiler, and Turbopack support",
   "main": "cli.js",
   "bin": {
     "neurolint": "cli.js"
@@ -126,7 +126,14 @@
     "react-compiler",
     "turbopack",
     "dependency-checker",
-    "migration-tools"
+    "migration-tools",
+    "security-forensics",
+    "ioc-detection",
+    "compromise-detection",
+    "incident-response",
+    "sarif",
+    "baseline-integrity",
+    "cve-2025-55182"
   ],
   "repository": {
     "type": "git",

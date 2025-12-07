@@ -479,7 +479,7 @@ const SevenLayerPost: React.FC = () => {
         </h2>
 
         <p className="text-xl text-gray-300 leading-relaxed">
-          Unlike AI-based code fixers that can hallucinate or produce unpredictable results, <a href="https://www.neurolint.dev">NeuroLint</a> uses a deterministic, 7-layer pipeline to systematically analyze and transform your React and Next.js code. Each layer builds on the previous, ensuring comprehensive and safe fixes.
+          Unlike AI-based code fixers that can hallucinate or produce unpredictable results, <a href="https://www.neurolint.dev">NeuroLint</a> uses a deterministic, 8-layer pipeline to systematically analyze and transform your React and Next.js code. Each layer builds on the previous, ensuring comprehensive and safe fixes.
         </p>
 
         <p>
@@ -760,7 +760,7 @@ const SevenLayerPost: React.FC = () => {
             <code className="text-gray-300">{`# Install globally
 npm install -g @neurolint/cli
 
-# Run all 7 layers
+# Run all 8 layers
 neurolint fix --all-layers ./src
 
 # Run specific layers
@@ -1122,9 +1122,9 @@ const blogPostsData: Record<string, {
     tags: ["React", "Next.js", "Hydration", "SSR", "Debugging"],
     Component: HydrationErrorsPost,
   },
-  "7-layer-code-fixing-pipeline-explained": {
-    title: "The 7-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
-    description: "A deep dive into how NeuroLint's 7-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to adaptive pattern learning.",
+  "8-layer-code-fixing-pipeline-explained": {
+    title: "The 8-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
+    description: "A deep dive into how NeuroLint's 8-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to security forensics.",
     date: "2025-01-10",
     readTime: "15 min read",
     author: "NeuroLint Team",

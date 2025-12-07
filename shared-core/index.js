@@ -429,7 +429,7 @@ class NeuroLintCore {
   }
 
   /**
-   * Apply fixes to code using the 7-layer transformation system
+   * Apply fixes to code using the 8-layer transformation system
    * Delegates to fix-master.js executeLayers for proper orchestration with:
    * - Layer dependency ordering
    * - Rollback capabilities (for CLI platform)
@@ -448,7 +448,7 @@ class NeuroLintCore {
     
     try {
       const {
-        layers = [1, 2, 3, 4, 5, 6, 7],
+        layers = [1, 2, 3, 4, 5, 6, 7, 8],
         filename = 'unknown',
         verbose = false,
         platform = 'cli',

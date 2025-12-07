@@ -2,11 +2,12 @@
 
 ## Overview
 
-This is the NeuroLint CLI project - a deterministic code transformation tool for React, Next.js, and TypeScript projects. The project includes:
+This is the NeuroLint CLI project - a deterministic code transformation tool for React, Next.js, and TypeScript projects with an **8-layer progressive architecture** including Security Forensics. The project includes:
 
-- **CLI Tool**: Command-line interface for code analysis and transformation
+- **CLI Tool**: Command-line interface for code analysis, transformation, and security forensics
 - **Landing Page**: React/Vite frontend showcasing the tool's features
 - **Core Engine**: AST-based transformation utilities
+- **Layer 8 Security Forensics**: Post-exploitation detection and incident response capabilities
 
 ## Project Architecture
 
@@ -23,30 +24,33 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
-**December 7, 2025** - Layer 8 Security Forensics - Full Incident Response
-- Added `security:incident-response` command for comprehensive security analysis
-- New modules: SARIF Reporter (GitHub Security tab), HTML Reporter (visual reports)
-- New analyzers: Behavioral Analyzer (AST-based detection), Dependency Differ (package integrity)
-- Timeline Reconstructor for git history forensics and suspicious commit detection
-- Incident response phases: code-scan, timeline, dependencies, behavioral
-- Risk assessment with severity counts and actionable recommendations
-- 114 comprehensive tests in `__tests__/layer-8-security.test.js`
-- All tests passing
+**December 7, 2025** - Version 1.5.0 - Layer 8 Security Forensics (Major Release)
 
-**December 7, 2025** - Layer 8 Security Forensics Implementation Complete
-- Implemented complete Layer 8: Security Forensics with 25 IoC signature detectors
-- New commands: `security:scan-compromise`, `security:create-baseline`, `security:compare-baseline`
-- Detection categories: code-injection, backdoor, data-exfiltration, crypto-mining, obfuscation, supply-chain, rsc-specific
-- Scan modes: quick, standard, deep, paranoid
-- Baseline system for integrity monitoring with SHA256 hashing
-- CLI and JSON reporters with severity breakdowns and remediation guidance
-- Architecture follows "never break code" principle - Layer 8 is READ-ONLY by default
+NeuroLint now has an **8-layer progressive architecture**. Layer 8 adds comprehensive post-exploitation detection and incident response capabilities.
 
-**December 7, 2025** - Layer 8 Security Forensics Specification
-- Created comprehensive design document for Layer 8: Security Forensics (`docs/LAYER-8-SECURITY-FORENSICS.md`)
-- Layer 8 adds post-exploitation detection, compromise scanning, and incident response capabilities
-- Extends existing security patching (CVE-2025-55182) with forensic analysis
-- Architecture designed to integrate with Layer 7 (Adaptive) for security pattern learning
+**Key Features:**
+- 70 IoC (Indicator of Compromise) signatures across 11 detection categories
+- RSC-specific and Next.js-specific attack detection (30 tailored signatures)
+- Baseline integrity verification with SHA-256 hashing
+- Timeline reconstruction via git history analysis
+- 4 reporting formats: SARIF (GitHub Security), JSON, HTML, CLI
+
+**New Commands:**
+- `security:scan-compromise` - Fast IoC scan with modes: quick/standard/deep/paranoid
+- `security:create-baseline` - Create integrity baseline for drift detection
+- `security:compare-baseline` - Compare current state against baseline
+- `security:incident-response` - Full forensic analysis for SOC teams
+
+**Architecture:**
+- Layer 8 follows "never break code" principle - READ-ONLY by default
+- Integrates with Layer 7 (Adaptive) via `securityFindings[]` event
+- SARIF 2.1.0 compliant for GitHub Security tab integration
+- Exit codes with `--fail-on` for CI/CD gating
+
+**Documentation:**
+- Complete specification: `docs/LAYER-8-SECURITY-FORENSICS.md`
+- 114+ comprehensive tests in `__tests__/layer-8-security.test.js`
+- Test fixtures covering all IoC categories
 
 **December 6, 2025** - Version 1.4.5 - Bug Fix
 - Fixed `security:cve-2025-55182` backup creation bug where array was passed instead of string path

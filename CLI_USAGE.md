@@ -1,6 +1,6 @@
 # NeuroLint CLI - Complete Usage Guide
 
-> **Version 1.4.5** | Last Updated: December 6, 2025
+> **Version 1.5.0** | Last Updated: December 7, 2025
 
 Comprehensive guide for using NeuroLint CLI to automatically fix React, Next.js, and TypeScript code issues using deterministic AST transformations.
 
@@ -85,6 +85,7 @@ neurolint check-deps . --fix
 | **5: Next.js** | 'use client', Server Components, imports | App Router optimization | Missing directives, wrong imports |
 | **6: Testing** | Error boundaries, test generation | Missing tests, error handling | Components without error boundaries |
 | **7: Adaptive** | Custom patterns, learned rules | Project-specific conventions | Team-specific patterns |
+| **8: Security Forensics** | Compromise detection, IoC scanning, baselines | Post-exploitation, incident response | Backdoors, webshells, crypto miners |
 
 ### Feature Comparison
 
@@ -185,6 +186,7 @@ neurolint analyze src/ --format=json --output=analysis.json
 - Next.js optimization opportunities (Layer 5)
 - Missing tests (Layer 6)
 - Custom patterns (Layer 7)
+- Security threats and IoCs (Layer 8)
 
 ---
 
@@ -193,7 +195,7 @@ neurolint analyze src/ --format=json --output=analysis.json
 Applies automatic fixes to your codebase.
 
 ```bash
-# Fix all issues (all 7 layers)
+# Fix all issues (all 8 layers)
 neurolint fix src/ --all-layers --verbose
 
 # Fix specific layers
@@ -355,7 +357,108 @@ neurolint fix-deprecations . --verbose
 
 ---
 
-### Security Commands (NEW in v1.4.1!)
+### Security Commands
+
+#### Layer 8: Security Forensics (NEW in v1.5.0)
+
+Layer 8 extends NeuroLint beyond code quality into **post-exploitation detection and incident response**. While patches fix vulnerabilities, Layer 8 answers: "Am I already compromised?"
+
+**Key Capabilities:**
+- 70 IoC signatures across 11 detection categories
+- RSC-specific and Next.js-specific attack detection
+- Baseline integrity verification
+- Timeline reconstruction via git history
+- SARIF, JSON, HTML, and CLI reporting
+
+#### `neurolint security:scan-compromise [path]`
+
+Fast scan for indicators of compromise (IoCs).
+
+```bash
+# Quick compromise scan
+neurolint security:scan-compromise .
+
+# Verbose output with details
+neurolint security:scan-compromise . --verbose
+
+# JSON output for CI/CD
+neurolint security:scan-compromise . --format=json
+
+# Set scan depth (quick, standard, deep, paranoid)
+neurolint security:scan-compromise . --mode=deep
+
+# Fail on specific severity threshold
+neurolint security:scan-compromise . --fail-on=high
+```
+
+**What it detects:**
+- Code injection patterns (eval/atob, dynamic Function)
+- Obfuscated payloads (Base64, hex encoding)
+- RSC-specific attacks (rogue server actions, credential harvesting)
+- Next.js attacks (middleware hijacking, config injection)
+- Backdoors (reverse shells, webshells, hidden endpoints)
+- Data exfiltration (network beacons, env var theft)
+- Crypto miners (mining libraries, stratum protocol)
+- Supply chain tampering (postinstall hooks, typosquatting)
+
+---
+
+#### `neurolint security:create-baseline [path]`
+
+Create integrity baseline for future comparison.
+
+```bash
+# Create baseline
+neurolint security:create-baseline .
+
+# Specify output path
+neurolint security:create-baseline . --output=./security-baseline.json
+
+# Include dependency hashes
+neurolint security:create-baseline . --include-deps
+```
+
+---
+
+#### `neurolint security:compare-baseline [path]`
+
+Compare current state against a known-good baseline.
+
+```bash
+# Compare against baseline
+neurolint security:compare-baseline . --baseline=./security-baseline.json
+
+# Verbose diff output
+neurolint security:compare-baseline . --baseline=./baseline.json --verbose
+```
+
+---
+
+#### `neurolint security:incident-response [path]`
+
+Comprehensive forensic analysis for incident response teams.
+
+```bash
+# Full incident response scan
+neurolint security:incident-response .
+
+# With all phases (code-scan, timeline, dependencies, behavioral)
+neurolint security:incident-response . --phases=all
+
+# Generate reports in all formats
+neurolint security:incident-response . --format=all
+
+# Output to specific directory
+neurolint security:incident-response . --output=./incident-report/
+```
+
+**Generates:**
+- SARIF report (GitHub Security tab integration)
+- JSON report (machine-readable)
+- HTML report (visual standalone report)
+- CLI summary with risk assessment
+
+---
 
 #### `neurolint security:cve-2025-55182 [path]`
 
@@ -700,6 +803,12 @@ neurolint testing fix
 # Layer 7: Adaptive pattern learning
 neurolint adaptive scan
 neurolint adaptive fix
+
+# Layer 8: Security forensics
+neurolint security:scan-compromise .
+neurolint security:create-baseline .
+neurolint security:compare-baseline . --baseline=./baseline.json
+neurolint security:incident-response .
 ```
 
 ---
@@ -708,7 +817,7 @@ neurolint adaptive fix
 
 | Flag | Description | Example |
 |------|-------------|---------|
-| `--all-layers` | Apply all 7 layers | `neurolint fix src/ --all-layers` |
+| `--all-layers` | Apply all 8 layers | `neurolint fix src/ --all-layers` |
 | `--layers=<list>` | Specify which layers to apply | `--layers=1,2,3` |
 | `--dry-run` | Preview changes without applying | `neurolint fix src/ --dry-run` |
 | `--verbose` | Show detailed output | `--verbose` |
@@ -1524,15 +1633,19 @@ For complete version history and detailed release notes, see [CHANGELOG.md](./CH
 
 ### Latest Release
 
-**Version 1.4.0** - Marketplace release with VS Code extension icon fix and synchronized versions.
+**Version 1.5.0** - Layer 8 Security Forensics (December 7, 2025)
 
 Key features:
-- 7-layer progressive architecture
+- **8-layer progressive architecture** (NEW Layer 8: Security Forensics)
+- 70 IoC signatures for post-exploitation detection
+- RSC-specific and Next.js-specific attack detection
+- Baseline integrity verification and timeline reconstruction
+- SARIF, JSON, HTML, and CLI security reports
 - React 19 migration support
 - Next.js 16 migration tools
 - Hydration error detection and fixes
 - Accessibility compliance (WCAG 2.1 AA)
-- 297 passing tests
+- 457+ passing tests
 - Deterministic AST transformations
 - VS Code extension with marketplace icon
 
@@ -1694,10 +1807,11 @@ NeuroLint's orchestration pattern would **reject this transformation** because v
 
 ### Implementation in NeuroLint
 
-All 7 layers use this orchestration pattern:
+All 8 layers use this orchestration pattern:
 - **Layers 1-2:** Regex transformations (config files, simple patterns)
 - **Layers 3-5:** AST-first with regex fallback (React components, SSR guards, Next.js optimizations)
 - **Layers 6-7:** Hybrid approach (error boundaries, adaptive learning)
+- **Layer 8:** Read-only forensic scanning (security detection, no code modification by default)
 
 Every layer validates transformations before acceptance, ensuring your codebase remains stable.
 
@@ -1731,4 +1845,4 @@ New to NeuroLint? Follow this checklist:
 
 **Built for developers who want deterministic, rule-based code quality - not AI-driven unpredictability.**
 
-**Version 1.4.0** | Apache License 2.0 | Built for the React and Next.js community
+**Version 1.5.0** | Apache License 2.0 | Built for the React and Next.js community

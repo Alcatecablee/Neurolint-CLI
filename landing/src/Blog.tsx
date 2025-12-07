@@ -39,9 +39,9 @@ const blogPosts: BlogPost[] = [
     featured: false,
   },
   {
-    slug: "7-layer-code-fixing-pipeline-explained",
-    title: "The 7-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
-    description: "A deep dive into how NeuroLint's 7-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to adaptive pattern learning.",
+    slug: "8-layer-code-fixing-pipeline-explained",
+    title: "The 8-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
+    description: "A deep dive into how NeuroLint's 8-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to security forensics.",
     date: "2025-01-10",
     readTime: "15 min read",
     author: "NeuroLint Team",

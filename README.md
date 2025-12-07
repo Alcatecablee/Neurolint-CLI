@@ -7,7 +7,7 @@
 [![Tests](https://img.shields.io/badge/tests-457%20passing-brightgreen.svg)](./__tests__)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)]()
 
-**The only tool that actually FIXES your code** — deterministic, rule-based transformations (NOT AI) that automatically resolve 50+ code issues across 7 progressive layers.
+**The only tool that actually FIXES your code** — deterministic, rule-based transformations (NOT AI) that automatically resolve 50+ code issues across 8 progressive layers.
 
 ---
 
@@ -168,7 +168,7 @@ export default Button;
 
 ## What NeuroLint Fixes
 
-### 7-Layer Progressive Architecture
+### 8-Layer Progressive Architecture
 
 Each layer builds on the previous, ensuring safe and comprehensive transformations:
 
@@ -179,6 +179,7 @@ Each layer builds on the previous, ensuring safe and comprehensive transformatio
 5. **Next.js App Router** — Optimizes 'use client', Server Components, import structure
 6. **Testing & Error Handling** — Generates error boundaries, scaffolds test files
 7. **Adaptive Learning** — Learns project patterns and enforces custom conventions
+8. **Security Forensics** — Post-exploitation detection, compromise scanning, incident response
 
 [See detailed layer documentation in CLI_USAGE.md](./CLI_USAGE.md#layer-overview-table)
 
@@ -282,7 +283,7 @@ neurolint restore                # Restore from backup
 - `--dry-run` — Preview changes without applying
 - `--backup` — Create backup before modifications
 - `--layers=1,2,3` — Apply specific layers
-- `--all-layers` — Apply all 7 layers
+- `--all-layers` — Apply all 8 layers
 - `--fix` — Auto-fix issues (for check commands)
 
 [See complete command reference in CLI_USAGE.md](./CLI_USAGE.md#command-atlas)
@@ -346,6 +347,7 @@ neurolint rules --import=team-rules.json
 ## Documentation
 
 - **[Complete Usage Guide](./CLI_USAGE.md)** — Comprehensive command reference and workflows
+- **[Layer 8 Security Forensics](./docs/LAYER-8-SECURITY-FORENSICS.md)** — Security forensics specification and IoC detection
 - **[Changelog](./CHANGELOG.md)** — Version history and release notes
 - **[Contributing](./CONTRIBUTING.md)** — Contribution guidelines
 - **[Code of Conduct](./CODE_OF_CONDUCT.md)** — Community standards

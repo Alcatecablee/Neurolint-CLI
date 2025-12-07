@@ -1,6 +1,6 @@
 # NeuroLint Demo Showcase
 
-This demo project intentionally contains code issues across all 7 layers that NeuroLint can automatically fix, plus the CVE-2025-55182 security vulnerability.
+This demo project intentionally contains code issues across all 8 layers that NeuroLint can automatically fix, plus the CVE-2025-55182 security vulnerability.
 
 ## Issues Present
 

