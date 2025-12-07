@@ -23,6 +23,16 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 7, 2025** - Layer 8 Security Forensics - Full Incident Response
+- Added `security:incident-response` command for comprehensive security analysis
+- New modules: SARIF Reporter (GitHub Security tab), HTML Reporter (visual reports)
+- New analyzers: Behavioral Analyzer (AST-based detection), Dependency Differ (package integrity)
+- Timeline Reconstructor for git history forensics and suspicious commit detection
+- Incident response phases: code-scan, timeline, dependencies, behavioral
+- Risk assessment with severity counts and actionable recommendations
+- 114 comprehensive tests in `__tests__/layer-8-security.test.js`
+- All tests passing
+
 **December 7, 2025** - Layer 8 Security Forensics Implementation Complete
 - Implemented complete Layer 8: Security Forensics with 25 IoC signature detectors
 - New commands: `security:scan-compromise`, `security:create-baseline`, `security:compare-baseline`
@@ -30,8 +40,6 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 - Scan modes: quick, standard, deep, paranoid
 - Baseline system for integrity monitoring with SHA256 hashing
 - CLI and JSON reporters with severity breakdowns and remediation guidance
-- Added 54 comprehensive tests in `__tests__/layer-8-security.test.js`
-- Total project tests: 511 passing (up from 457)
 - Architecture follows "never break code" principle - Layer 8 is READ-ONLY by default
 
 **December 7, 2025** - Layer 8 Security Forensics Specification
