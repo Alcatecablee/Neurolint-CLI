@@ -73,8 +73,18 @@ const LAYER_NAMES = {
   4: 'hydration',
   5: 'nextjs',
   6: 'testing',
-  7: 'adaptive'
+  7: 'adaptive',
+  8: 'security-forensics'
 };
+
+// Layer 8: Security Forensics (lazy loaded)
+let Layer8SecurityForensics = null;
+function getLayer8() {
+  if (!Layer8SecurityForensics) {
+    Layer8SecurityForensics = require('./scripts/fix-layer-8-security');
+  }
+  return Layer8SecurityForensics;
+}
 
 // Smart Layer Selector for analyzing and recommending layers
 class SmartLayerSelector {
@@ -2697,6 +2707,9 @@ Analysis Commands:
 
 Security Commands:
   security:cve-2025-55182 [path]  Patch CVE-2025-55182 React Server Components RCE (--fix to apply)
+  security:scan-compromise [path] Scan for indicators of compromise (Layer 8)
+  security:create-baseline [path] Create integrity baseline for future comparison
+  security:compare-baseline [path] Compare current state against baseline
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -2856,6 +2869,18 @@ Examples:
       case 'security:cve-2025-55182':
         // Handle CVE-2025-55182 security fix command
         await handleCVE202555182(targetPath, options, spinner, args);
+        break;
+      case 'security:scan-compromise':
+        // Handle Layer 8 Security Forensics - Compromise Scan
+        await handleSecurityScanCompromise(targetPath, options, spinner, args);
+        break;
+      case 'security:create-baseline':
+        // Handle Layer 8 Security Forensics - Create Baseline
+        await handleSecurityCreateBaseline(targetPath, options, spinner, args);
+        break;
+      case 'security:compare-baseline':
+        // Handle Layer 8 Security Forensics - Compare Baseline
+        await handleSecurityCompareBaseline(targetPath, options, spinner, args);
         break;
       case 'check-turbopack':
         // Handle Turbopack migration check command
@@ -3073,6 +3098,9 @@ Analysis Commands:
 
 Security Commands:
   security:cve-2025-55182 [path]  Patch CVE-2025-55182 React Server Components RCE (--fix to apply)
+  security:scan-compromise [path] Scan for indicators of compromise (Layer 8)
+  security:create-baseline [path] Create integrity baseline for future comparison
+  security:compare-baseline [path] Compare current state against baseline
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -4924,5 +4952,216 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
     console.log('\n\x1b[33mWarning: Backup could not be created: ' + backupResult.error + '\x1b[0m');
   }
   console.log('\x1b[2mUse "neurolint restore" to revert if needed.\x1b[0m\n');
+}
+
+/**
+ * Handle Layer 8 Security Forensics - Compromise Scan
+ * Scans for indicators of compromise (IoCs) in the codebase
+ */
+async function handleSecurityScanCompromise(targetPath, options, spinner, args) {
+  const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
+  const isVerbose = args.includes('--verbose') || args.includes('-v');
+  const isJsonOutput = args.includes('--json');
+  const mode = args.includes('--deep') ? 'deep' : 
+               args.includes('--quick') ? 'quick' : 
+               args.includes('--paranoid') ? 'paranoid' : 'standard';
+  
+  const failOnArg = args.find(a => a.startsWith('--fail-on='));
+  const failOn = failOnArg ? failOnArg.split('=')[1] : 'critical';
+  
+  spinner.text = 'Initializing Layer 8 Security Forensics...';
+  
+  try {
+    const Layer8 = getLayer8();
+    const layer8 = new Layer8({
+      mode,
+      verbose: isVerbose,
+      failOn
+    });
+    
+    spinner.text = `Scanning for indicators of compromise (${mode} mode)...`;
+    
+    const scanResult = await layer8.scanCompromise(resolvedPath, {
+      verbose: isVerbose,
+      onProgress: (progress) => {
+        if (!isJsonOutput) {
+          spinner.text = `Scanning files... ${progress.processed}/${progress.total} (${progress.currentFindings} findings)`;
+        }
+      }
+    });
+    
+    spinner.stop();
+    
+    if (isJsonOutput) {
+      console.log(layer8.generateJSONReport(scanResult, { targetPath: resolvedPath, mode }));
+    } else {
+      layer8.printReport(scanResult, { targetPath: resolvedPath });
+    }
+    
+    const severity = scanResult.findings?.length > 0 
+      ? scanResult.findings.some(f => f.severity === 'critical') ? 'critical'
+        : scanResult.findings.some(f => f.severity === 'high') ? 'high'
+        : scanResult.findings.some(f => f.severity === 'medium') ? 'medium'
+        : 'low'
+      : 'clean';
+    
+    const failLevels = ['critical', 'high', 'medium', 'low'];
+    const shouldFail = failLevels.indexOf(severity) >= 0 && 
+                       failLevels.indexOf(severity) <= failLevels.indexOf(failOn);
+    
+    if (shouldFail && scanResult.findings?.length > 0) {
+      process.exit(1);
+    }
+    
+  } catch (error) {
+    spinner.fail('Security scan failed');
+    console.error('\nError:', error.message);
+    if (isVerbose) {
+      console.error(error.stack);
+    }
+    process.exit(1);
+  }
+}
+
+/**
+ * Handle Layer 8 Security Forensics - Create Baseline
+ * Creates an integrity baseline for future comparison
+ */
+async function handleSecurityCreateBaseline(targetPath, options, spinner, args) {
+  const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
+  const isVerbose = args.includes('--verbose') || args.includes('-v');
+  
+  const outputArg = args.find(a => a.startsWith('--output=') || a.startsWith('-o='));
+  const outputPath = outputArg ? outputArg.split('=')[1] : null;
+  
+  spinner.text = 'Creating security baseline...';
+  
+  try {
+    const Layer8 = getLayer8();
+    const layer8 = new Layer8({
+      verbose: isVerbose
+    });
+    
+    const result = await layer8.createBaseline(resolvedPath, {
+      output: outputPath
+    });
+    
+    if (result.success) {
+      spinner.succeed('Security baseline created!');
+      console.log(`\n  Baseline saved to: ${result.baselinePath}`);
+      console.log(`  Files indexed: ${result.fileCount}`);
+      console.log(`  Created at: ${result.created}`);
+      console.log('\n  Use "neurolint security:compare-baseline" to detect drift.\n');
+    } else {
+      spinner.fail('Failed to create baseline');
+      console.error('\nError:', result.error);
+    }
+    
+  } catch (error) {
+    spinner.fail('Baseline creation failed');
+    console.error('\nError:', error.message);
+    if (isVerbose) {
+      console.error(error.stack);
+    }
+    process.exit(1);
+  }
+}
+
+/**
+ * Handle Layer 8 Security Forensics - Compare Baseline
+ * Compares current state against a previously created baseline
+ */
+async function handleSecurityCompareBaseline(targetPath, options, spinner, args) {
+  const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
+  const isVerbose = args.includes('--verbose') || args.includes('-v');
+  const isJsonOutput = args.includes('--json');
+  
+  const baselineArg = args.find(a => a.startsWith('--baseline='));
+  const baselinePath = baselineArg 
+    ? baselineArg.split('=')[1] 
+    : path.join(resolvedPath, '.neurolint', 'security-baseline.json');
+  
+  spinner.text = 'Comparing against baseline...';
+  
+  try {
+    await fs.access(baselinePath);
+  } catch (error) {
+    spinner.fail('Baseline not found');
+    console.error(`\nBaseline file not found: ${baselinePath}`);
+    console.log('\nCreate a baseline first with:');
+    console.log('  neurolint security:create-baseline .\n');
+    process.exit(1);
+  }
+  
+  try {
+    const Layer8 = getLayer8();
+    const layer8 = new Layer8({
+      verbose: isVerbose
+    });
+    
+    const result = await layer8.compareBaseline(resolvedPath, baselinePath);
+    
+    spinner.stop();
+    
+    if (isJsonOutput) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      console.log('\n' + '='.repeat(60));
+      console.log('  BASELINE COMPARISON RESULTS');
+      console.log('='.repeat(60) + '\n');
+      
+      console.log(`  Baseline created: ${result.baselineDate}`);
+      console.log(`  Comparison time:  ${new Date().toISOString()}\n`);
+      
+      if (result.comparison.hasChanges) {
+        console.log('  \x1b[33m⚠ Changes detected since baseline:\x1b[0m\n');
+        
+        if (result.summary.added > 0) {
+          console.log(`    \x1b[32m+ ${result.summary.added} files added\x1b[0m`);
+          if (isVerbose) {
+            result.comparison.added.slice(0, 10).forEach(f => console.log(`      ${f}`));
+            if (result.comparison.added.length > 10) {
+              console.log(`      ... and ${result.comparison.added.length - 10} more`);
+            }
+          }
+        }
+        
+        if (result.summary.removed > 0) {
+          console.log(`    \x1b[31m- ${result.summary.removed} files removed\x1b[0m`);
+          if (isVerbose) {
+            result.comparison.removed.slice(0, 10).forEach(f => console.log(`      ${f}`));
+            if (result.comparison.removed.length > 10) {
+              console.log(`      ... and ${result.comparison.removed.length - 10} more`);
+            }
+          }
+        }
+        
+        if (result.summary.modified > 0) {
+          console.log(`    \x1b[33m~ ${result.summary.modified} files modified\x1b[0m`);
+          if (isVerbose) {
+            result.comparison.modified.slice(0, 10).forEach(f => console.log(`      ${f}`));
+            if (result.comparison.modified.length > 10) {
+              console.log(`      ... and ${result.comparison.modified.length - 10} more`);
+            }
+          }
+        }
+        
+        console.log(`\n    ${result.summary.unchanged} files unchanged`);
+        console.log('\n  Run with --verbose to see affected files.');
+        console.log('  Run security:scan-compromise to check for threats.\n');
+      } else {
+        console.log('  \x1b[32m✓ No changes detected since baseline.\x1b[0m');
+        console.log('  Your codebase integrity is intact.\n');
+      }
+    }
+    
+  } catch (error) {
+    spinner.fail('Baseline comparison failed');
+    console.error('\nError:', error.message);
+    if (isVerbose) {
+      console.error(error.stack);
+    }
+    process.exit(1);
+  }
 }
 
