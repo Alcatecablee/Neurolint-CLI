@@ -23,11 +23,21 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 7, 2025** - Layer 8 Security Forensics Implementation Complete
+- Implemented complete Layer 8: Security Forensics with 25 IoC signature detectors
+- New commands: `security:scan-compromise`, `security:create-baseline`, `security:compare-baseline`
+- Detection categories: code-injection, backdoor, data-exfiltration, crypto-mining, obfuscation, supply-chain, rsc-specific
+- Scan modes: quick, standard, deep, paranoid
+- Baseline system for integrity monitoring with SHA256 hashing
+- CLI and JSON reporters with severity breakdowns and remediation guidance
+- Added 54 comprehensive tests in `__tests__/layer-8-security.test.js`
+- Total project tests: 511 passing (up from 457)
+- Architecture follows "never break code" principle - Layer 8 is READ-ONLY by default
+
 **December 7, 2025** - Layer 8 Security Forensics Specification
 - Created comprehensive design document for Layer 8: Security Forensics (`docs/LAYER-8-SECURITY-FORENSICS.md`)
 - Layer 8 adds post-exploitation detection, compromise scanning, and incident response capabilities
 - Extends existing security patching (CVE-2025-55182) with forensic analysis
-- New planned commands: `security:scan-compromise`, `security:incident-response`, `security:create-baseline`
 - Architecture designed to integrate with Layer 7 (Adaptive) for security pattern learning
 
 **December 6, 2025** - Version 1.4.5 - Bug Fix
