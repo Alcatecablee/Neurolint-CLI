@@ -5350,9 +5350,14 @@ async function handleSecurityHardenActions(targetPath, options, spinner, args) {
         const code = await fsp.readFile(filePath, 'utf8');
         if (code.includes("'use server'") || code.includes('"use server"')) {
           const result = await hardener.analyze(code, filePath);
-          if (result.hasServerActions && result.issues.length > 0) {
+          const issueCount = (result.dangerousCalls?.length || 0) + 
+                            (result.envExposures?.length || 0) + 
+                            (result.unsafePatterns?.length || 0);
+          if (result.isServerAction && issueCount > 0) {
+            result.filePath = filePath;
+            result.issues = [...(result.dangerousCalls || []), ...(result.envExposures || []), ...(result.unsafePatterns || [])];
             analysisResults.push(result);
-            vulnerableCount += result.issues.length;
+            vulnerableCount += issueCount;
           }
         }
       } catch (e) {

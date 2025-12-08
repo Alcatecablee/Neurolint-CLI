@@ -96,13 +96,23 @@ class ServerActionHardening {
   }
 
   detectServerActionDirective(ast) {
+    // Check program directives (where Babel stores 'use server' when at top of file)
+    if (ast.program.directives) {
+      for (const directive of ast.program.directives) {
+        if (directive.value && directive.value.value === 'use server') {
+          return true;
+        }
+      }
+    }
+    
+    // Also check body for fallback (some parsers put it here)
     for (const node of ast.program.body) {
       if (node.type === 'ExpressionStatement' && node.directive === 'use server') {
         return true;
       }
       if (
         node.type === 'ExpressionStatement' &&
-        node.expression.type === 'StringLiteral' &&
+        node.expression?.type === 'StringLiteral' &&
         node.expression.value === 'use server'
       ) {
         return true;
