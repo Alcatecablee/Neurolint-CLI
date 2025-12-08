@@ -24,7 +24,7 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
-**December 8, 2025** - Version 2.2.0 - React 19 Security Patterns
+**December 8, 2025** - Version 1.4.9 - React 19 Security Patterns
 
 Added React 19-specific behavioral analysis patterns (BEHAV-023 to BEHAV-027):
 - BEHAV-023: React 19 use() with User Input detection

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.2.0] - 2025-12-08
+## [1.4.9] - 2025-12-08
 
 ### Added
 
@@ -35,7 +35,7 @@ Added 5 new behavioral analysis patterns specifically targeting React 19 securit
 - Test suite expanded to 132 tests (all passing)
 
 ### Changed
-- Version bumped to 2.2.0
+- Version bumped to 1.4.9
 
 ## [2.1.0] - 2025-12-08
 

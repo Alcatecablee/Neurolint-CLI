@@ -1,6 +1,6 @@
 # NeuroLint CLI - Complete Usage Guide
 
-> **Version 2.2.0** | Last Updated: December 8, 2025
+> **Version 1.4.9** | Last Updated: December 8, 2025
 
 Comprehensive guide for using NeuroLint CLI to automatically fix React, Next.js, and TypeScript code issues using deterministic AST transformations.
 
@@ -359,7 +359,7 @@ neurolint fix-deprecations . --verbose
 
 ### Security Commands
 
-#### Layer 8: Security Forensics (v2.2.0)
+#### Layer 8: Security Forensics (v1.4.9)
 
 Layer 8 extends NeuroLint beyond code quality into **post-exploitation detection and incident response**. While patches fix vulnerabilities, Layer 8 answers: "Am I already compromised?"
 
