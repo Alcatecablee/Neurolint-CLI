@@ -173,6 +173,12 @@ The core engine processes code through progressive layers, each handling specifi
 - **Verified**: All CLI commands working (--version, --help, analyze, fix, layers)
 - **npm pack verified**: Package includes all required files without frontend bloat
 
+### Version 1.4.10 - Windows Compatibility Fix (December 8, 2025)
+- **Critical bug fix**: Fixed path separator issue causing `node_modules` to be scanned on Windows
+- Windows uses `\` but exclusion patterns use `/`, causing 6,645 files to be scanned instead of ~12
+- Added `.replace(/\\/g, '/')` to normalize paths in `scripts/fix-layer-8-security/index.js`
+- Added `.neurolint/**` and `.neurolint-backups/**` to default exclusions
+
 ### Pre-Publishing Security Audit Fixes
 - **CLI handleLayers command**: Added Layer 8 (Security Forensics) to the layers listing - previously only showed 7 layers
 - **LandingFeatures.tsx**: Updated from 6 to 8 layers with correct descriptions for AdaptiveLearn and SecurityForensics

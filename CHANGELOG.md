@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.10] - 2025-12-08
+
+### Fixed
+
+#### Windows Compatibility Bug
+- **Critical**: Fixed path separator issue causing `node_modules` to be scanned on Windows
+- Windows uses `\` but exclusion patterns use `/`, causing 6,645 files to be scanned instead of ~12
+- Added `.replace(/\\/g, '/')` to normalize paths before exclusion matching
+
+#### Additional Exclusions
+- Added `.neurolint/**` to default exclusions (internal state files)
+- Added `.neurolint-backups/**` to default exclusions (backup files)
+
 ## [1.4.9] - 2025-12-08
 
 ### Added
