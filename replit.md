@@ -173,6 +173,12 @@ The core engine processes code through progressive layers, each handling specifi
 - **Verified**: All CLI commands working (--version, --help, analyze, fix, layers)
 - **npm pack verified**: Package includes all required files without frontend bloat
 
+### Version 1.4.11 - Pattern Matching Fix (December 8, 2025)
+- **Critical bug fix**: Fixed glob pattern matching for `.neurolint/` exclusions on Windows
+- Dots in patterns like `.neurolint` were not escaped (matched any character in regex)
+- Root-level paths weren't matched by `**/.neurolint/**` pattern
+- Added proper regex escaping and root-level pattern fallback
+
 ### Version 1.4.10 - Windows Compatibility Fix (December 8, 2025)
 - **Critical bug fix**: Fixed path separator issue causing `node_modules` to be scanned on Windows
 - Windows uses `\` but exclusion patterns use `/`, causing 6,645 files to be scanned instead of ~12

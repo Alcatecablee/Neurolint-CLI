@@ -349,12 +349,19 @@ class Layer8SecurityForensics {
           
           const shouldExclude = exclude.some(pattern => {
             if (pattern.includes('**')) {
+              // Escape special regex chars (especially . for .neurolint)
+              // Then convert glob patterns to regex
               const simplePattern = pattern
+                .replace(/\./g, '\\.')  // Escape dots first
                 .replace(/\*\*/g, '.*')
                 .replace(/\*/g, '[^/]*');
-              return new RegExp(simplePattern).test(relativePath);
+              // Also test without leading **/ to match root-level paths
+              const rootPattern = simplePattern.replace(/^\.\*\//, '');
+              return new RegExp(simplePattern).test(relativePath) || 
+                     new RegExp('^' + rootPattern).test(relativePath);
             }
-            return relativePath.includes(pattern.replace(/\*\*/g, '').replace(/\*/g, ''));
+            const cleanPattern = pattern.replace(/\*\*/g, '').replace(/\*/g, '');
+            return relativePath.includes(cleanPattern);
           });
           
           if (shouldExclude) continue;

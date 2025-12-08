@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.11] - 2025-12-08
+
+### Fixed
+
+#### Pattern Matching Bug (Windows + Root-Level Paths)
+- **Critical**: Fixed glob pattern matching for `.neurolint/` and `.neurolint-backups/` exclusions
+- Dots in patterns like `.neurolint` were not escaped, causing regex to match any character
+- Root-level paths (e.g., `.neurolint/states.json`) weren't matched by `**/.neurolint/**` pattern
+- Added proper regex escaping and root-level pattern fallback
+
 ## [1.4.10] - 2025-12-08
 
 ### Fixed
