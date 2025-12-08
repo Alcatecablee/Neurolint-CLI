@@ -62,7 +62,7 @@ Security improvements to Layer 8 Security Forensics:
 NeuroLint now has an **8-layer progressive architecture**. Layer 8 adds comprehensive post-exploitation detection and incident response capabilities.
 
 **Key Features:**
-- 70 IoC (Indicator of Compromise) signatures across 11 detection categories
+- 80 IoC (Indicator of Compromise) signatures across 11 detection categories
 - RSC-specific and Next.js-specific attack detection (30 tailored signatures)
 - Baseline integrity verification with SHA-256 hashing
 - Timeline reconstruction via git history analysis

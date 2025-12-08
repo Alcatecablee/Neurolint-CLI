@@ -26,8 +26,8 @@ describe('Layer 8 Security Forensics', () => {
   });
 
   describe('IoC Signature Constants', () => {
-    test('should have 70 IoC signatures defined', () => {
-      expect(constants.IOC_SIGNATURES.signatures.length).toBe(70);
+    test('should have 80 IoC signatures defined', () => {
+      expect(constants.IOC_SIGNATURES.signatures.length).toBe(80);
     });
 
     test('should have required fields for each signature', () => {
@@ -1002,7 +1002,7 @@ line4`;
     test('should detect base64 encoded malicious payloads', () => {
       const analyzer = new BehavioralAnalyzer();
       const maliciousBase64 = Buffer.from('eval(code)').toString('base64');
-      const longBase64 = maliciousBase64.padEnd(101, 'A');
+      const longBase64 = maliciousBase64.padEnd(510, 'A');
       const code = `const payload = "${longBase64}";`;
       
       const findings = analyzer.analyze(code, 'test.js');
