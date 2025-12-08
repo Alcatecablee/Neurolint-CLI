@@ -158,6 +158,7 @@ class BehavioralAnalyzer {
         self.checkNetworkRequests(nodePath);
         self.checkChildProcess(nodePath);
         self.checkCryptoMining(nodePath);
+        self.checkReact19Patterns(nodePath);
       },
       
       NewExpression(nodePath) {
@@ -740,6 +741,198 @@ class BehavioralAnalyzer {
           matchedText: name,
           remediation: 'Deobfuscate code for security review'
         });
+      }
+    }
+  }
+  
+  checkReact19Patterns(nodePath) {
+    const { node } = nodePath;
+    const callee = node.callee;
+    
+    if (t.isIdentifier(callee)) {
+      if (callee.name === 'use') {
+        const arg = node.arguments[0];
+        if (arg && t.isCallExpression(arg)) {
+          const innerCallee = arg.callee;
+          
+          if (t.isIdentifier(innerCallee) && innerCallee.name === 'fetch') {
+            const fetchArgs = arg.arguments;
+            if (fetchArgs.length > 0) {
+              const urlArg = fetchArgs[0];
+              
+              if (t.isTemplateLiteral(urlArg) && urlArg.expressions.length > 0) {
+                const hasTaintedExpr = urlArg.expressions.some(expr => {
+                  const isTaintedSource = (node) => {
+                    if (t.isCallExpression(node)) {
+                      const nodeCallee = node.callee;
+                      if (t.isMemberExpression(nodeCallee)) {
+                        const obj = nodeCallee.object;
+                        const prop = nodeCallee.property;
+                        if (t.isIdentifier(obj) && t.isIdentifier(prop)) {
+                          const objName = obj.name;
+                          const propName = prop.name;
+                          if ((objName === 'searchParams' || objName === 'formData') && propName === 'get') {
+                            return true;
+                          }
+                        }
+                      }
+                      if (t.isIdentifier(nodeCallee) && nodeCallee.name === 'cookies') {
+                        return true;
+                      }
+                    }
+                    return false;
+                  };
+                  
+                  const getRootObject = (memberExpr) => {
+                    let current = memberExpr;
+                    while (t.isMemberExpression(current.object)) {
+                      current = current.object;
+                    }
+                    return current.object;
+                  };
+                  
+                  const hasUserInputProperty = (memberExpr) => {
+                    const props = [];
+                    let current = memberExpr;
+                    while (t.isMemberExpression(current)) {
+                      if (t.isIdentifier(current.property)) {
+                        props.push(current.property.name);
+                      }
+                      current = current.object;
+                    }
+                    return props.some(p => p === 'query' || p === 'body' || p === 'params');
+                  };
+                  
+                  if (isTaintedSource(expr)) {
+                    return true;
+                  }
+                  
+                  if (t.isMemberExpression(expr)) {
+                    const root = getRootObject(expr);
+                    if (t.isIdentifier(root)) {
+                      const rootName = root.name;
+                      if ((rootName === 'req' || rootName === 'request' || rootName === 'context') && 
+                          hasUserInputProperty(expr)) {
+                        return true;
+                      }
+                    }
+                  }
+                  
+                  return false;
+                });
+                
+                if (hasTaintedExpr) {
+                  this.addFinding({
+                    signatureId: 'NEUROLINT-BEHAV-023',
+                    signatureName: 'React 19 use() with User Input',
+                    severity: SEVERITY_LEVELS.HIGH,
+                    category: IOC_CATEGORIES.RSC_SPECIFIC,
+                    description: 'React 19 use() hook with user-controlled URL in fetch',
+                    line: node.loc?.start.line,
+                    column: node.loc?.start.column,
+                    remediation: 'Validate and sanitize inputs before constructing fetch URLs',
+                    references: ['React 19 Security', 'CVE-2025-55182']
+                  });
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      if (callee.name === 'useActionState') {
+        const actionArg = node.arguments[0];
+        if (actionArg) {
+          const actionCode = this.getNodeCode(actionArg);
+          
+          if (actionCode.includes('eval') || 
+              actionCode.includes('exec') ||
+              actionCode.includes('spawn') ||
+              actionCode.includes('Function(')) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-024',
+              signatureName: 'React 19 useActionState with Code Execution',
+              severity: SEVERITY_LEVELS.CRITICAL,
+              category: IOC_CATEGORIES.RSC_SPECIFIC,
+              description: 'useActionState action contains code execution patterns',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Remove code execution from action handlers',
+              references: ['React 19 Security', 'CVE-2025-55182']
+            });
+          }
+        }
+      }
+      
+      if (callee.name === 'useOptimistic') {
+        const updateFnArg = node.arguments[1];
+        if (updateFnArg) {
+          const updateCode = this.getNodeCode(updateFnArg);
+          
+          if (updateCode.includes('dangerouslySetInnerHTML') ||
+              updateCode.includes('innerHTML') ||
+              updateCode.includes('eval')) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-025',
+              signatureName: 'React 19 useOptimistic XSS Risk',
+              severity: SEVERITY_LEVELS.HIGH,
+              category: IOC_CATEGORIES.CODE_INJECTION,
+              description: 'useOptimistic update function contains XSS-prone patterns',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Sanitize data in optimistic updates',
+              references: ['React 19 Security', 'OWASP XSS']
+            });
+          }
+        }
+      }
+      
+      if (callee.name === 'startTransition') {
+        const transitionArg = node.arguments[0];
+        if (transitionArg) {
+          const transitionCode = this.getNodeCode(transitionArg);
+          
+          if (transitionCode.includes('fetch') && 
+              (transitionCode.includes('process.env') || 
+               transitionCode.includes('cookies') ||
+               transitionCode.includes('headers'))) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-026',
+              signatureName: 'React 19 Transition Data Leak',
+              severity: SEVERITY_LEVELS.HIGH,
+              category: IOC_CATEGORIES.DATA_EXFILTRATION,
+              description: 'startTransition contains potential data exfiltration pattern',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Audit data handling in transitions',
+              references: ['React 19 Security']
+            });
+          }
+        }
+      }
+      
+      if (callee.name === 'cache') {
+        const cacheArg = node.arguments[0];
+        if (cacheArg) {
+          const cacheCode = this.getNodeCode(cacheArg);
+          
+          if (cacheCode.includes('cookies') || 
+              cacheCode.includes('headers') ||
+              cacheCode.includes('session') ||
+              cacheCode.includes('auth')) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-027',
+              signatureName: 'React 19 Server Cache Poisoning Risk',
+              severity: SEVERITY_LEVELS.HIGH,
+              category: IOC_CATEGORIES.RSC_SPECIFIC,
+              description: 'Server-side cache may store user-specific sensitive data',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Never cache user-specific or sensitive data',
+              references: ['React 19 Security', 'OWASP Cache Poisoning']
+            });
+          }
+        }
       }
     }
   }

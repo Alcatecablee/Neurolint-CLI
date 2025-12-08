@@ -1,20 +1,22 @@
 # Layer 8: Security Forensics
 
-## Specification Document v2.0
+## Specification Document v2.2
 
 **Status**: Implemented  
 **Author**: NeuroLint Team  
 **Created**: December 2025  
-**Updated**: December 2025 (v2.0 - Expanded IoC Coverage)  
+**Updated**: December 8, 2025 (v2.2 - React 19 Security Patterns)  
 **Related CVE**: CVE-2025-55182 (CVSS 10.0)
 
-### Version 2.0 Highlights
+### Version 2.2 Highlights
 
-- **70 IoC Signatures** (expanded from 25) covering 11 categories
+- **80 IoC Signatures** covering 11 detection categories
+- **5 React 19 Behavioral Patterns** (BEHAV-023 to BEHAV-027) for use(), useActionState, useOptimistic
 - **15 RSC-Specific Signatures** for React Server Components attack detection
 - **15 Next.js-Specific Signatures** for middleware, route handlers, and config injection
-- **62 Comprehensive Tests** with full coverage for all detection patterns
-- **CLI Reporter** updated to match NeuroLint layer styling conventions
+- **132 Comprehensive Tests** with full coverage for all detection patterns
+- **AST-Based Detection** with nested property traversal for "never break code" principle
+- **ReDoS Protection** with SafeRegex utility and input chunking
 
 ---
 
@@ -334,9 +336,9 @@ module.exports = {
 | **SSH key injection** | New authorized_keys entries | Critical | System scan |
 | **Environment tampering** | Modified .env files | High | Baseline compare |
 
-### Signature Database Schema (v2.0)
+### Signature Database Schema (v2.2)
 
-**70 IoC Signatures across 11 Categories:**
+**80 IoC Signatures across 11 Categories:**
 
 | Category | Signatures | Examples |
 |----------|------------|----------|
@@ -349,6 +351,31 @@ module.exports = {
 | Supply Chain | 5 | IOC-059 to IOC-063: Postinstall hooks, git hook tampering, typosquatting, malicious plugins |
 | Persistence | 4 | IOC-064 to IOC-067: System path writes, systemd service, registry persistence, profile modification |
 | Crypto Mining | 3 | IOC-068 to IOC-070: Mining libraries, worker patterns, stratum protocol |
+| Advanced RSC | 10 | IOC-071 to IOC-080: WebSocket attacks, Service Worker exploitation, PWA injection, FormData attacks |
+
+### React 19 Behavioral Patterns (v2.2)
+
+**5 Behavioral Signatures for React 19 API Security:**
+
+| Signature | Name | Severity | Detection |
+|-----------|------|----------|-----------|
+| BEHAV-023 | React 19 use() with User Input | High | Detects user-controlled URLs in `use(fetch())` calls using AST traversal |
+| BEHAV-024 | useActionState with Code Execution | Critical | Detects `eval()`, `exec()`, `spawn()` in action handlers |
+| BEHAV-025 | useOptimistic XSS Risk | High | Detects `innerHTML`/`dangerouslySetInnerHTML` in optimistic updates |
+| BEHAV-026 | startTransition Data Leak | High | Detects potential data exfiltration in transition callbacks |
+| BEHAV-027 | Server Cache Poisoning Risk | High | Detects caching of user-specific data (cookies, session, auth) |
+
+**Technical Implementation:**
+
+```javascript
+// BEHAV-023: AST-based detection with nested property traversal
+checkReact19Patterns(nodePath) {
+  // getRootObject() - walks MemberExpression chain to find root identifier
+  // hasUserInputProperty() - collects property names, checks for query/body/params
+  // Only flags: req/request/context with tainted property access
+  // Safe patterns: static URLs, URL objects, database queries
+}
+```
 
 ```javascript
 // constants.js (v2.0.0)

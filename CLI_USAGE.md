@@ -1,6 +1,6 @@
 # NeuroLint CLI - Complete Usage Guide
 
-> **Version 1.5.0** | Last Updated: December 7, 2025
+> **Version 2.2.0** | Last Updated: December 8, 2025
 
 Comprehensive guide for using NeuroLint CLI to automatically fix React, Next.js, and TypeScript code issues using deterministic AST transformations.
 
@@ -359,13 +359,15 @@ neurolint fix-deprecations . --verbose
 
 ### Security Commands
 
-#### Layer 8: Security Forensics (NEW in v1.5.0)
+#### Layer 8: Security Forensics (v2.2.0)
 
 Layer 8 extends NeuroLint beyond code quality into **post-exploitation detection and incident response**. While patches fix vulnerabilities, Layer 8 answers: "Am I already compromised?"
 
 **Key Capabilities:**
-- 70 IoC signatures across 11 detection categories
+- 80 IoC signatures across 11 detection categories
+- 5 React 19 behavioral patterns (use(), useActionState, useOptimistic)
 - RSC-specific and Next.js-specific attack detection
+- AST-based detection with nested property traversal
 - Baseline integrity verification
 - Timeline reconstruction via git history
 - SARIF, JSON, HTML, and CLI reporting

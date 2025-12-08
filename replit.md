@@ -24,6 +24,17 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 8, 2025** - Version 2.2.0 - React 19 Security Patterns
+
+Added React 19-specific behavioral analysis patterns (BEHAV-023 to BEHAV-027):
+- BEHAV-023: React 19 use() with User Input detection
+- BEHAV-024: useActionState with Code Execution patterns  
+- BEHAV-025: useOptimistic XSS Risk detection
+- BEHAV-026: startTransition Data Leak patterns
+- BEHAV-027: Server Cache Poisoning Risk detection
+
+Test suite expanded to 132 tests (all passing), including AST-based detection with nested property traversal and 4 negative regression tests for benign patterns (static URLs, URL objects, database queries) to prevent false positives per "never break code" principle.
+
 **December 8, 2025** - Version 2.1.0 - Layer 8 Security Hardening
 
 Security improvements to Layer 8 Security Forensics:

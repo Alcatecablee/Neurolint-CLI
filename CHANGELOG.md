@@ -7,6 +7,80 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2025-12-08
+
+### Added
+
+#### React 19 Security Patterns (BEHAV-023 to BEHAV-027)
+
+Added 5 new behavioral analysis patterns specifically targeting React 19 security vulnerabilities:
+
+| Signature | Name | Severity | Detection |
+|-----------|------|----------|-----------|
+| BEHAV-023 | React 19 use() with User Input | High | Detects user-controlled URLs in use(fetch()) calls |
+| BEHAV-024 | useActionState with Code Execution | Critical | Detects eval/exec/spawn in action handlers |
+| BEHAV-025 | useOptimistic XSS Risk | High | Detects innerHTML/dangerouslySetInnerHTML in optimistic updates |
+| BEHAV-026 | startTransition Data Leak | High | Detects potential data exfiltration in transitions |
+| BEHAV-027 | Server Cache Poisoning Risk | High | Detects caching of user-specific sensitive data |
+
+**Technical Implementation:**
+- AST-based detection with nested property traversal (not string matching)
+- `getRootObject()` walks MemberExpression chains to find root identifiers
+- `hasUserInputProperty()` collects property names and checks for tainted sources
+- Only flags known user-controlled sources: req/request/context with query/body/params
+
+**Test Coverage:**
+- 5 comprehensive tests for BEHAV-023 (2 positive, 3 negative)
+- Negative tests ensure "never break code" principle: static URLs, URL objects, database queries
+- Test suite expanded to 132 tests (all passing)
+
+### Changed
+- Version bumped to 2.2.0
+
+## [2.1.0] - 2025-12-08
+
+### Added
+
+#### Layer 8 Security Hardening
+
+**ReDoS Protection:**
+- Added SafeRegex utility with pattern pre-validation to prevent catastrophic backtracking
+- Patterns automatically simplified to safer alternatives when dangerous structures detected
+- Input chunking for large files to prevent memory exhaustion
+
+**Error Handling:**
+- Replaced silent error suppression with ErrorAggregator for proper error tracking
+- Per-file error tracking with phase and context information
+- Errors cleared between scans for accurate per-file diagnostics
+
+**Memory Management:**
+- BehavioralAnalyzer.cleanup() clears currentCode after analysis
+- resetForNewScan() methods on all analyzers for proper state cleanup
+- Memory monitoring with automatic backpressure during large scans
+
+**New CVE-2025-55182 Signatures (IOC-071 to IOC-080):**
+- IOC-071: Server action WebSocket exfiltration
+- IOC-072: Server action WebSocket C2 channel
+- IOC-073: Malicious service worker registration
+- IOC-074: Service worker fetch interception to IP
+- IOC-075: PWA manifest tampering with IP
+- IOC-076: PWA manifest malicious scope
+- IOC-077: Server action response caching attack
+- IOC-078: Server action streaming attack
+- IOC-079: Server action FormData injection
+- IOC-080: Server action bind exploitation
+
+**Other Improvements:**
+- Windows path compatibility with normalizePath()
+- PathPattern checking for IOC-024
+- Rate limiting for large scans
+- Base64 threshold increased to 500+ chars to reduce false positives
+
+### Changed
+- IoC signature count expanded from 70 to 80
+- Test suite expanded from 114 to 127 tests
+- Version bumped to 2.1.0
+
 ## [1.5.0] - 2025-12-07
 
 ### Added

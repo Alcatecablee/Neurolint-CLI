@@ -4,7 +4,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@neurolint/cli.svg)](https://www.npmjs.com/package/@neurolint/cli)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
-[![Tests](https://img.shields.io/badge/tests-457%20passing-brightgreen.svg)](./__tests__)
+[![Tests](https://img.shields.io/badge/tests-132%20passing-brightgreen.svg)](./__tests__)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)]()
 
 **The only tool that actually FIXES your code** — deterministic, rule-based transformations (NOT AI) that automatically resolve 50+ code issues across 8 progressive layers.
