@@ -1,7 +1,6 @@
 import React from "react";
 import { DocsLayout, CommandBlock, CodeBlock, Callout, BeforeAfter } from "../components";
 import { Link } from "react-router-dom";
-import { Shield, AlertTriangle, Search, FileText, Clock } from "lucide-react";
 
 export function DocsLayerSecurity() {
   return (
@@ -29,31 +28,27 @@ export function DocsLayerSecurity() {
         </p>
 
         <div className="grid sm:grid-cols-2 gap-4 my-8">
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <Shield className="w-5 h-5 text-red-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">80+ IoC Signatures</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">80+ IoC Signatures</h3>
             <p className="text-sm text-gray-400">
               Detect obfuscated eval, credential leaks, exfiltration patterns, and 
               post-exploitation behavior.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <Search className="w-5 h-5 text-blue-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">AST-Based Detection</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">AST-Based Detection</h3>
             <p className="text-sm text-gray-400">
               Deep analysis using Abstract Syntax Tree parsing, not just pattern matching.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <FileText className="w-5 h-5 text-green-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">Baseline Verification</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">Baseline Verification</h3>
             <p className="text-sm text-gray-400">
               Create integrity baselines and detect unauthorized changes.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <Clock className="w-5 h-5 text-purple-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">Timeline Reconstruction</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">Timeline Reconstruction</h3>
             <p className="text-sm text-gray-400">
               Trace compromise timeline through git history analysis.
             </p>
