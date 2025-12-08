@@ -972,22 +972,14 @@ export default function Index() {
       )}
 
       {/* Security Demo Carousel Section */}
-      <section className="py-16 md:py-24 px-4 relative border-t border-zinc-800/50">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-r from-red-500/5 via-orange-500/5 to-yellow-500/5 rounded-full blur-3xl" />
-        </div>
-        
-        <div className="max-w-6xl mx-auto relative">
+      <section className="py-16 md:py-24 px-4 relative">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 md:mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-full mb-6">
-              <div className="w-2 h-2 bg-red-400 rounded-full animate-pulse" />
-              <span className="text-red-400 text-sm font-medium">Security Demo</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 tracking-tight text-white">
               CVE-2025-55182 Complete Fix
             </h2>
             <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto">
-              Watch the complete security workflow: <span className="text-white">patch</span>, <span className="text-white">scan</span>, and <span className="text-white">protect</span>
+              Watch the complete security workflow: patch, scan, and protect
             </p>
           </div>
           

@@ -62,17 +62,15 @@ export function DemoCarousel() {
 
       const style = document.createElement('style');
       style.textContent = `
-        .demo-carousel-player .ap-wrapper {
+        .demo-player .ap-wrapper,
+        .demo-player .ap-terminal,
+        .demo-player .ap-player {
           background: #0d1117 !important;
         }
-        .demo-carousel-player .ap-terminal {
-          background: #0d1117 !important;
+        .demo-player .ap-terminal {
           padding: 16px !important;
         }
-        .demo-carousel-player .ap-player {
-          background: #0d1117 !important;
-        }
-        .demo-carousel-player .ap-control-bar {
+        .demo-player .ap-control-bar {
           display: none !important;
         }
       `;
@@ -112,9 +110,7 @@ export function DemoCarousel() {
         rows: 20,
         cols: 80,
         controls: false,
-        pauseOnLostFocus: false,
-        terminalFontFamily: "'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace",
-        terminalFontSize: '14px'
+        pauseOnLostFocus: false
       }
     );
 
@@ -156,16 +152,16 @@ export function DemoCarousel() {
   const currentDemo = demos[currentIndex];
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <div className="mb-6 flex items-center justify-center gap-3">
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="mb-6 flex items-center justify-center gap-2">
         {demos.map((demo, index) => (
           <button
             key={demo.id}
             onClick={() => setCurrentIndex(index)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
               index === currentIndex
-                ? 'bg-white text-black'
-                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white'
+                ? 'bg-white text-black border-black'
+                : 'bg-zinc-900 text-zinc-400 border-black hover:bg-zinc-800 hover:text-white'
             }`}
           >
             Step {index + 1}
@@ -173,42 +169,45 @@ export function DemoCarousel() {
         ))}
       </div>
 
-      <div className="relative rounded-xl overflow-hidden bg-[#0d1117] border border-zinc-800 shadow-2xl">
-        <div className="bg-[#161b22] px-4 py-3 flex items-center justify-between border-b border-zinc-800">
-          <div className="flex items-center gap-3">
-            <div className="flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
-              <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
-              <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
+      <div className="relative rounded-2xl overflow-hidden bg-[#0d1117] border border-black shadow-2xl">
+        <div className="bg-[#161b22] border-b border-black px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f57]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#febc2e]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#28c840]"></div>
+              </div>
+              <div className="hidden sm:flex items-center gap-2 ml-4 px-3 py-1.5 bg-[#0d1117] rounded-lg border border-black">
+                <span className="text-sm text-zinc-400 font-mono">neurolint-security</span>
+              </div>
             </div>
-            <div className="hidden sm:block h-4 w-px bg-zinc-700"></div>
-            <span className="hidden sm:block text-xs text-zinc-500 font-mono">zsh</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={restart}
-              className="p-2 rounded-lg hover:bg-zinc-800 transition-colors"
-              aria-label="Restart"
-            >
-              <RotateCcw className="w-4 h-4 text-zinc-500 hover:text-zinc-300" />
-            </button>
-            <button
-              onClick={togglePlay}
-              className="p-2 rounded-lg hover:bg-zinc-800 transition-colors"
-              aria-label={isPlaying ? 'Pause' : 'Play'}
-            >
-              {isPlaying ? (
-                <Pause className="w-4 h-4 text-zinc-500 hover:text-zinc-300" />
-              ) : (
-                <Play className="w-4 h-4 text-zinc-500 hover:text-zinc-300" />
-              )}
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={restart}
+                className="p-2 rounded-lg hover:bg-zinc-800 transition-colors border border-black"
+                aria-label="Restart"
+              >
+                <RotateCcw className="w-4 h-4 text-zinc-400" />
+              </button>
+              <button
+                onClick={togglePlay}
+                className="p-2 rounded-lg hover:bg-zinc-800 transition-colors border border-black"
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              >
+                {isPlaying ? (
+                  <Pause className="w-4 h-4 text-zinc-400" />
+                ) : (
+                  <Play className="w-4 h-4 text-zinc-400" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
         <div 
           ref={containerRef} 
-          className="demo-carousel-player w-full"
+          className="demo-player w-full"
           style={{ 
             background: '#0d1117',
             minHeight: '380px',
@@ -218,39 +217,39 @@ export function DemoCarousel() {
         >
           {!playerLoaded && (
             <div className="flex items-center justify-center h-[380px]">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-zinc-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-              </div>
+              <span className="text-zinc-500 text-sm">Loading...</span>
             </div>
           )}
         </div>
 
         <button
           onClick={goToPrevious}
-          className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-sm transition-all"
+          className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-zinc-900/90 border border-black hover:bg-zinc-800 transition-all"
           aria-label="Previous demo"
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </button>
         <button
           onClick={goToNext}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-sm transition-all"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-zinc-900/90 border border-black hover:bg-zinc-800 transition-all"
           aria-label="Next demo"
         >
           <ChevronRight className="w-5 h-5 text-white" />
         </button>
+
+        <div className="bg-[#161b22] border-t border-black px-4 py-3 flex items-center justify-between">
+          <div className="text-sm text-zinc-500 font-mono">
+            {currentDemo?.title}
+          </div>
+          <div className="text-xs text-zinc-600">
+            {currentIndex + 1} / {demos.length}
+          </div>
+        </div>
       </div>
 
-      <div className="mt-5 text-center">
-        <h3 className="text-lg font-semibold text-white mb-1">
-          {currentDemo?.title}
-        </h3>
-        <p className="text-zinc-500 text-sm">
-          {currentDemo?.description}
-        </p>
-      </div>
+      <p className="mt-4 text-center text-zinc-500 text-sm">
+        {currentDemo?.description}
+      </p>
     </div>
   );
 }
