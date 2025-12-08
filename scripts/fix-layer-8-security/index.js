@@ -348,19 +348,34 @@ class Layer8SecurityForensics {
           const relativePath = path.relative(targetPath, fullPath).replace(/\\/g, '/');
           
           const shouldExclude = exclude.some(pattern => {
-            if (pattern.includes('**')) {
-              // Escape special regex chars (especially . for .neurolint)
-              // Then convert glob patterns to regex
-              const simplePattern = pattern
-                .replace(/\./g, '\\.')  // Escape dots first
+            // Normalize pattern for cross-platform compatibility
+            const normalizedPattern = pattern.replace(/\\/g, '/');
+            
+            if (normalizedPattern.includes('**')) {
+              // Extract the core directory/file name from patterns like **/.neurolint/**
+              // This handles patterns like **/.neurolint/**, **/node_modules/**, etc.
+              const coreMatch = normalizedPattern.match(/\*\*\/([^/*]+)/);
+              if (coreMatch) {
+                const coreName = coreMatch[1];
+                // Check if the path contains this directory/file name as a path segment
+                // This works for both root-level and nested paths on all platforms
+                const pathParts = relativePath.split('/');
+                if (pathParts.some(part => part === coreName)) {
+                  return true;
+                }
+              }
+              
+              // Fallback: convert glob to regex for complex patterns
+              const simplePattern = normalizedPattern
+                .replace(/\./g, '\\.')  // Escape dots
                 .replace(/\*\*/g, '.*')
                 .replace(/\*/g, '[^/]*');
-              // Also test without leading **/ to match root-level paths
-              const rootPattern = simplePattern.replace(/^\.\*\//, '');
+              // Test with optional leading content for root-level matches
               return new RegExp(simplePattern).test(relativePath) || 
-                     new RegExp('^' + rootPattern).test(relativePath);
+                     new RegExp('^' + simplePattern.replace(/^\.\*\//, '')).test(relativePath);
             }
-            const cleanPattern = pattern.replace(/\*\*/g, '').replace(/\*/g, '');
+            // Simple pattern: just check if path includes the pattern
+            const cleanPattern = normalizedPattern.replace(/\*\*/g, '').replace(/\*/g, '').replace(/\//g, '');
             return relativePath.includes(cleanPattern);
           });
           

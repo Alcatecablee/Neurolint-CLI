@@ -96,6 +96,13 @@ class BehavioralAnalyzer {
   
   parseCode(code, filePath) {
     const ext = path.extname(filePath).toLowerCase();
+    
+    // Skip JSON files - they can't be parsed with Babel's JavaScript parser
+    // JSON files are handled separately by the signature analyzer for regex patterns
+    if (ext === '.json') {
+      return null;
+    }
+    
     const isTypeScript = ['.ts', '.tsx'].includes(ext);
     const isJSX = ['.jsx', '.tsx'].includes(ext);
     
