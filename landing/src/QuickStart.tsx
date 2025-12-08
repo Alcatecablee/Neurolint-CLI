@@ -164,9 +164,7 @@ export function QuickStart() {
                 FAQ
               </a>
               <a 
-                href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/docs"
                 className="px-4 py-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 Docs
@@ -236,9 +234,7 @@ export function QuickStart() {
                   FAQ
                 </a>
                 <a 
-                  href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/docs"
                   className="text-gray-300 hover:text-white transition-all duration-200 text-base font-medium py-3 px-4 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/50"
                   role="menuitem"
                 >

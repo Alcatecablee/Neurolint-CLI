@@ -331,9 +331,7 @@ export default function Index() {
                 Blog
               </a>
               <a 
-                href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/docs"
                 className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 Docs
@@ -398,9 +396,7 @@ export default function Index() {
               Blog
             </a>
             <a 
-              href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/docs"
               className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
             >
               Docs
