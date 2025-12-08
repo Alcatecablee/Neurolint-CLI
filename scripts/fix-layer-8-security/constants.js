@@ -16,7 +16,7 @@
 
 'use strict';
 
-const LAYER_8_VERSION = '2.1.0';
+const LAYER_8_VERSION = '2.2.0';
 
 const SEVERITY_LEVELS = {
   CRITICAL: 'critical',

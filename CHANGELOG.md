@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2025-12-08
+
+### Fixed
+
+#### Layer 8 Performance & Windows Compatibility (Critical)
+- **Fixed**: Commands `security:scan-compromise` and `security:incident-response` hanging/timing out
+- **Root Cause**: Behavioral analyzer was attempting to parse JSON files with Babel's JavaScript parser
+- **Solution**: Added JSON file detection to skip AST parsing (JSON is still scanned via regex signatures)
+
+#### Cross-Platform Path Exclusion
+- **Fixed**: Exclusion patterns like `**/.neurolint/**` not working on Windows or for root-level directories
+- **Improved**: Pattern matching now extracts core directory names and checks path segments directly
+- **Added**: Path normalization for Windows backslash compatibility
+
+### Changed
+- Bumped version to 1.5.0
+
 ## [1.4.11] - 2025-12-08
 
 ### Fixed
