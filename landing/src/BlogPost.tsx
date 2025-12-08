@@ -2067,6 +2067,26 @@ const blogPostsData: Record<string, {
     tags: ["Security", "CVE", "React 19", "Next.js", "RCE", "Threat Intelligence"],
     Component: CVE202555182Post,
   },
+  "react2shell-cve-2025-55182-exploit-explained": {
+    title: "React2Shell Explained: How CVE-2025-55182 Enables Remote Code Execution in React Apps",
+    description: "Deep dive into React2Shell (CVE-2025-55182) - the critical unauthenticated RCE vulnerability in React Server Components Flight protocol. Understand the attack vector, proof of concept, and how to protect your applications.",
+    date: "2025-12-08",
+    readTime: "14 min read",
+    author: "NeuroLint Team",
+    category: "Security",
+    tags: ["React2Shell", "CVE-2025-55182", "RCE", "React 19", "Flight Protocol", "Security"],
+    Component: CVE202555182Post,
+  },
+  "cve-2025-66478-nextjs-rce-vulnerability": {
+    title: "CVE-2025-66478: Next.js Server Actions RCE - What You Need to Know",
+    description: "CVE-2025-66478 is the Next.js variant of the React2Shell vulnerability. Learn how this critical RCE affects Next.js 14 and 15 applications using Server Actions, and how to patch immediately with NeuroLint.",
+    date: "2025-12-07",
+    readTime: "11 min read",
+    author: "NeuroLint Team",
+    category: "Security",
+    tags: ["CVE-2025-66478", "Next.js", "Server Actions", "RCE", "React2Shell", "Security"],
+    Component: CVE202555182Post,
+  },
   "detecting-post-exploitation-cve-2025-55182": {
     title: "Detecting Post-Exploitation: How to Know If CVE-2025-55182 Was Used Against You",
     description: "Patching isn't enough. Learn how to detect if your React/Next.js application was already compromised by CVE-2025-55182 using NeuroLint's Layer 8 Security Forensics.",
@@ -2121,8 +2141,48 @@ export const BlogPost: React.FC = () => {
       if (metaDesc) {
         metaDesc.setAttribute('content', post.description);
       }
+      
+      // Add article:published_time meta tag
+      let articleTime = document.querySelector('meta[property="article:published_time"]');
+      if (!articleTime) {
+        articleTime = document.createElement('meta');
+        articleTime.setAttribute('property', 'article:published_time');
+        document.head.appendChild(articleTime);
+      }
+      articleTime.setAttribute('content', post.date);
+      
+      // Add article:author meta tag
+      let articleAuthor = document.querySelector('meta[property="article:author"]');
+      if (!articleAuthor) {
+        articleAuthor = document.createElement('meta');
+        articleAuthor.setAttribute('property', 'article:author');
+        document.head.appendChild(articleAuthor);
+      }
+      articleAuthor.setAttribute('content', post.author);
+      
+      // Add article:section meta tag
+      let articleSection = document.querySelector('meta[property="article:section"]');
+      if (!articleSection) {
+        articleSection = document.createElement('meta');
+        articleSection.setAttribute('property', 'article:section');
+        document.head.appendChild(articleSection);
+      }
+      articleSection.setAttribute('content', post.category);
+      
+      // Update OG meta tags
+      let ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', post.title);
+      
+      let ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', post.description);
+      
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', `https://www.neurolint.dev/blog/${slug}`);
+      
+      let ogType = document.querySelector('meta[property="og:type"]');
+      if (ogType) ogType.setAttribute('content', 'article');
     }
-  }, [post]);
+  }, [post, slug]);
 
   if (!post) {
     return <Navigate to="/blog" replace />;
@@ -2157,6 +2217,31 @@ export const BlogPost: React.FC = () => {
     "keywords": tags.join(", ")
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.neurolint.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://www.neurolint.dev/blog"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": title,
+        "item": `https://www.neurolint.dev/blog/${slug}`
+      }
+    ]
+  };
+
   const copyLink = () => {
     navigator.clipboard.writeText(`https://www.neurolint.dev/blog/${slug}`);
   };
@@ -2166,6 +2251,10 @@ export const BlogPost: React.FC = () => {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       
       <div className="min-h-screen bg-black text-white">

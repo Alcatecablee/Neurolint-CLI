@@ -7,13 +7,9 @@ Allow: /
 # Sitemap
 Sitemap: https://www.neurolint.dev/sitemap.xml
 
-# Crawl-delay (optional, be polite to crawlers)
-Crawl-delay: 1
-
-# Block common non-essential paths
+# Block API and build artifacts
 Disallow: /api/
-Disallow: /_next/
-Disallow: /static/chunks/
+Disallow: /assets/
 
 # Allow important resources
 Allow: /favicon.png
