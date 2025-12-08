@@ -1,4 +1,4 @@
-# NeuroLint CLI - Replit Project
+# NeuroLint CLI 
 
 ## Overview
 
