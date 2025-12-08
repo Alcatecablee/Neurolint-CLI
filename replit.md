@@ -1,0 +1,147 @@
+# NeuroLint CLI
+
+## Overview
+
+NeuroLint is a deterministic, rule-based code transformation tool for React, Next.js, and TypeScript projects. Unlike AI-powered tools, it uses Abstract Syntax Tree (AST) parsing and predefined transformation rules to automatically fix code issues with 100% reliability. The project features an 8-layer progressive architecture that handles everything from configuration fixes to security forensics.
+
+**Core Purpose:** Automatically resolve common React/Next.js development issues including hydration errors, missing accessibility attributes, framework migration breaking changes, and critical security vulnerabilities.
+
+**Key Technologies:**
+- **AST Engine:** Babel parser, traverse, and generator for code transformation
+- **Frontend:** React 19.2 with Vite 4.5 for landing page
+- **CLI Framework:** Node.js with custom spinner and backup systems
+- **Testing:** Jest with 132 passing tests
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### 8-Layer Transformation Architecture
+
+The core engine processes code through progressive layers, each handling specific categories of issues:
+
+**Layer 1 - Configuration:** Fixes `tsconfig.json`, `package.json`, and `next.config.js` settings. Detects Next.js version and applies appropriate compiler options (ES2022 target, ESNext modules).
+
+**Layer 2 - Pattern Fixes:** Removes console statements, fixes HTML entities, replaces `var` with `const/let`, and cleans unused imports. Uses AST-based detection with regex fallbacks.
+
+**Layer 3 - Component Fixes:** Adds missing React `key` props in map iterations, `alt` attributes on images, and ARIA labels for accessibility.
+
+**Layer 4 - Hydration Guards:** Wraps browser API calls (`window`, `document`, `localStorage`, `navigator`) with SSR-safe checks using `typeof window !== 'undefined'`.
+
+**Layer 5 - Next.js Optimization:** Adds `'use client'` directives, migrates deprecated imports (`next/router` → `next/navigation`), and handles React 19 breaking changes (ReactDOM.render → createRoot).
+
+**Layer 6 - Testing Infrastructure:** Adds error boundaries, suggests test scaffolding, and provides MSW/RSC testing guidance.
+
+**Layer 7 - Adaptive Learning:** Learns project-specific patterns from previous transformations and stores custom rules in `.neurolint/learned-rules.json`.
+
+**Layer 8 - Security Forensics:** Detects 80+ Indicators of Compromise (IoC) including obfuscated eval, credential leaks, and post-exploitation patterns. Includes CVE-2025-55182 (React Server Components RCE) detection and patching.
+
+### AST Transformation Engine
+
+**Core Components:**
+- `ast-transformer.js`: Babel-based parser and code generator with TypeScript/JSX support
+- `validator.js`: Syntax validation and transformation safety checks
+- `backup-manager.js`: Automatic backup creation with SHA-256 checksums and retention limits
+
+**Design Pattern:** Parse → Transform → Validate → Backup → Apply. All transformations are validated before writing to disk. If validation fails, the system falls back to regex-based transformations or reverts changes.
+
+**Error Handling:** Production-grade error aggregator tracks errors per-file with phase/context information. Circuit breaker pattern prevents cascading failures. ReDoS protection via SafeRegex utility with pattern pre-validation.
+
+### Framework Migration Systems
+
+**Next.js 16 Migrator:** (`scripts/migrate-nextjs-16.js`)
+- Renames `middleware.ts` → `proxy.ts` with function export updates
+- Migrates `experimental.ppr` → Cache Components pattern
+- Adds async handling for params/searchParams
+- Implements new caching APIs (updateTag, refresh, cacheLife)
+
+**React 19 Compatibility:** (`scripts/enhanced-react19-dom.js`)
+- Converts `ReactDOM.render` → `createRoot().render`
+- Migrates `react-dom/test-utils` → `react` (act function)
+- Removes deprecated `ReactDOM.hydrate`, `findDOMNode`, `unmountComponentAtNode`
+
+**React Compiler Detector:** (`scripts/react-compiler-detector.js`)
+- Identifies manual memoization patterns (useMemo, useCallback, React.memo)
+- Calculates potential bundle size savings from compiler adoption
+- Suggests automatic optimization opportunities
+
+### Security Architecture
+
+**CVE-2025-55182 Handler:** Critical Remote Code Execution vulnerability in React Server Components (CVSS 10.0)
+- Detects vulnerable React 19.0.0-19.2.0 and Next.js 15.x-16.x versions
+- Updates `package.json` to patched versions (React 19.0.1+, Next.js 16.0.7+)
+- Validates `react-server-dom-*` package versions
+- Provides dry-run preview before applying patches
+
+**Layer 8 IoC Detection:** 80 behavioral signatures across categories:
+- Code execution patterns (eval, Function constructor, child_process.exec)
+- Obfuscation detection (hex encoding, base64, string concatenation)
+- Data exfiltration (fetch to suspicious domains, credential patterns)
+- Persistence mechanisms (cron jobs, service installations)
+
+**Signature Analyzer:** AST-based pattern matching with severity scoring (critical/high/medium/low). Includes 5 React 19-specific patterns:
+- BEHAV-023: User input in `use(fetch())` calls
+- BEHAV-024: Code execution in `useActionState` handlers
+- BEHAV-025: XSS risks in `useOptimistic` with dangerouslySetInnerHTML
+- BEHAV-026: Data leaks in `startTransition`
+- BEHAV-027: Cache poisoning with user-specific data
+
+### CLI Command System
+
+**Primary Commands:**
+- `analyze <path>`: Scan for issues without modification
+- `fix <path> --layer <1-8>`: Apply specific layer transformations
+- `fix-all <path>`: Run all 8 layers sequentially
+- `security:cve-2025-55182 <path>`: Patch critical React vulnerability
+- `migrate-react19 <path>`: Apply React 19 breaking change fixes
+- `migrate-nextjs-16 <path>`: Migrate to Next.js 16 patterns
+
+**Global Flags:**
+- `--dry-run`: Preview changes without writing files
+- `--verbose`: Detailed operation logging
+- `--fix`: Apply transformations (required for modification)
+
+**Backup System:** All transformations create timestamped backups in `.neurolint-backups/` with metadata (SHA-256 hash, timestamp, original path). Automatic retention management keeps last 10-50 backups.
+
+## External Dependencies
+
+### Code Transformation Stack
+- **@babel/parser** - JavaScript/TypeScript/JSX parsing
+- **@babel/traverse** - AST node traversal and manipulation
+- **@babel/generator** - Code generation from modified AST
+- **@babel/types** - AST node type definitions and utilities
+
+### CLI & File System
+- **glob** - Pattern-based file discovery
+- **cli-cursor** - Terminal cursor control
+- **restore-cursor** - Cursor state restoration
+- **log-symbols** - Cross-platform terminal symbols
+- **strip-ansi** - ANSI code removal for output parsing
+- **wcwidth** - Character width calculation
+
+### Frontend (Landing Page)
+- **React 19.2 + React DOM** - UI framework
+- **Vite 4.5** - Build tool and dev server
+- **TailwindCSS 3.4** - Utility-first CSS framework
+- **Lucide React** - Icon library
+- **react-syntax-highlighter** - Code snippet display
+- **next-themes** - Dark mode support
+- **react-router-dom 7.9** - Client-side routing
+
+### Analytics & Monitoring
+- **@vercel/analytics** - Usage analytics
+- **@vercel/speed-insights** - Performance monitoring
+
+### Testing Infrastructure
+- **Jest 30.2** - Test runner with 132 tests
+- **@types/jest** - TypeScript definitions for testing
+
+### Build & Development
+- **@vitejs/plugin-react** - Vite React plugin
+- **autoprefixer** - CSS vendor prefixing
+- **postcss** - CSS transformation pipeline
+- **TypeScript 5.3** - Type checking (noEmit mode only)
+
+**Note:** No database dependencies. All state is file-based (JSON) stored in `.neurolint/` directory.
