@@ -148,12 +148,18 @@ The core engine processes code through progressive layers, each handling specifi
 
 ## Recent Changes (December 2025)
 
+### Documentation Accuracy Audit (December 8, 2025)
+- **Fixed fake layer names**: Replaced ConfigMaster, PatternCleanse, ReactRepair, HydraFix, NextGuard, TestReady, AdaptiveLearn with real CLI names (Configuration, Patterns, Components, Hydration, Next.js, Testing, Adaptive, Security Forensics)
+- **Verified CLI reference**: DocsCliReference.tsx layers output now matches actual `neurolint layers` command
+- **Fixed scroll-to-top navigation**: Added useEffect in DocsLayout.tsx to scroll to top on page changes
+- **Updated 6 docs files**: DocsArchitecture.tsx, DocsQuickstart.tsx, DocsCommandFix.tsx, DocsCliReference.tsx, plus layer pages
+
 ### Documentation Expansion (December 8, 2025)
 - **20+ new documentation pages**: Created comprehensive docs matching Supabase/Vercel enterprise quality
 - **Dark minimalist theme**: Pure black (#000000) backgrounds, zinc-900/zinc-800 surfaces, white text, zinc-800 borders only
 - **NO colorful icons**: Removed all emoji-style icons per user preference
 - **Command pages**: analyze, fix, migrate-react19, migrate-nextjs-16 with full flag documentation
-- **Layer pages**: All 8 layers (ConfigMaster through SecurityForensics) with detailed behaviors
+- **Layer pages**: All 8 layers with real CLI names (Configuration, Patterns, Components, Hydration, Next.js, Testing, Adaptive, Security Forensics)
 - **Security pages**: CVE-2025-55182, IoC Detection, Incident Response workflows
 - **Guide pages**: CI/CD Integration, Backup & Restore, Troubleshooting
 - **Technical pages**: How It Works, AST Transformations with architecture details
