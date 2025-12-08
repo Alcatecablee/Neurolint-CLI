@@ -145,3 +145,17 @@ The core engine processes code through progressive layers, each handling specifi
 - **TypeScript 5.3** - Type checking (noEmit mode only)
 
 **Note:** No database dependencies. All state is file-based (JSON) stored in `.neurolint/` directory.
+
+## Recent Changes (December 2025)
+
+### Pre-Publishing Security Audit Fixes
+- **CLI handleLayers command**: Added Layer 8 (Security Forensics) to the layers listing - previously only showed 7 layers
+- **LandingFeatures.tsx**: Updated from 6 to 8 layers with correct descriptions for AdaptiveLearn and SecurityForensics
+- **UI Components**: Created missing components (badge.tsx, button.tsx, glowing-border.tsx) in landing/src/components/ui/
+- **Marketing copy**: Updated "All 6 code-fixing layers" to "All 8 code-fixing layers"
+
+### Verified Components
+- All 132 tests passing including 60+ Layer 8 security forensics tests
+- Layer 8 CLI commands fully functional (scan-compromise, create-baseline, compare-baseline, incident-response)
+- 80 IoC signatures with behavioral and signature analyzers
+- CVE-2025-55182 detection and patching operational
