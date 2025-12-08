@@ -1,7 +1,7 @@
 import React from "react";
 import { DocsLayout, CodeBlock, CommandBlock, Callout, BeforeAfter } from "../components";
 import { Link } from "react-router-dom";
-import { ArrowRight, Zap, Shield, Layers, GitBranch } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export function DocsIntro() {
   return (
@@ -18,30 +18,26 @@ export function DocsIntro() {
         </p>
 
         <div className="grid sm:grid-cols-2 gap-4 my-8">
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <Zap className="w-5 h-5 text-blue-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">Deterministic Fixes</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">Deterministic Fixes</h3>
             <p className="text-sm text-gray-400">
               Same input always produces the same output. No randomness, no surprises.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <Layers className="w-5 h-5 text-green-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">8-Layer Architecture</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">8-Layer Architecture</h3>
             <p className="text-sm text-gray-400">
               Progressive layers from config fixes to security forensics.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <GitBranch className="w-5 h-5 text-purple-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">Automatic Backups</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">Automatic Backups</h3>
             <p className="text-sm text-gray-400">
               Every transformation creates a backup. Restore anytime with one command.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900 border border-zinc-800 rounded-lg">
-            <Shield className="w-5 h-5 text-red-400 mb-3" />
-            <h3 className="font-semibold text-white mb-2">Security Forensics</h3>
+          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-2">Security Forensics</h3>
             <p className="text-sm text-gray-400">
               Layer 8 detects 80+ indicators of compromise and CVE vulnerabilities.
             </p>
