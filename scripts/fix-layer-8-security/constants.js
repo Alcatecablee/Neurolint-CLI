@@ -16,7 +16,7 @@
 
 'use strict';
 
-const LAYER_8_VERSION = '2.0.0';
+const LAYER_8_VERSION = '2.1.0';
 
 const SEVERITY_LEVELS = {
   CRITICAL: 'critical',
@@ -50,7 +50,7 @@ const IOC_CATEGORIES = {
 
 const IOC_SIGNATURES = {
   version: LAYER_8_VERSION,
-  lastUpdated: '2025-12-07',
+  lastUpdated: '2025-12-08',
   
   signatures: [
     // ============================================================
@@ -173,11 +173,12 @@ const IOC_SIGNATURES = {
       name: 'Base64 Encoded Long String',
       category: IOC_CATEGORIES.OBFUSCATION,
       severity: SEVERITY_LEVELS.MEDIUM,
-      pattern: /['"`][A-Za-z0-9+/=]{100,}['"`]/g,
+      pattern: /['"`][A-Za-z0-9+/=]{500,}['"`]/g,
       type: 'regex',
-      description: 'Long Base64-like string that may contain encoded payload',
+      description: 'Very long Base64-like string that may contain encoded payload',
       remediation: 'Decode and inspect the string contents',
-      contextRequired: true
+      contextRequired: true,
+      falsePositiveHints: ['JWT tokens', 'data URIs', 'source maps', 'legitimate encoded assets']
     },
     {
       id: 'NEUROLINT-IOC-012',
@@ -253,7 +254,7 @@ const IOC_SIGNATURES = {
       name: 'Server Action Database Injection Pattern',
       category: IOC_CATEGORIES.RSC_SPECIFIC,
       severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /['"]use server['"][\s\S]{0,1000}(?:query|execute|raw)\s*\(\s*`[^`]*\$\{/gi,
+      pattern: /['"]use server['"][\s\S]{0,200}(?:query|execute|raw)\s*\(\s*`[^`]*\$\{/gi,
       type: 'regex',
       description: 'Server action with raw SQL template injection vulnerability',
       references: ['CVE-2025-55182', 'OWASP SQL Injection'],
@@ -277,7 +278,7 @@ const IOC_SIGNATURES = {
       name: 'Server Action Process Spawn',
       category: IOC_CATEGORIES.RSC_SPECIFIC,
       severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /['"]use server['"][\s\S]{0,1000}(?:spawn|exec|execSync|spawnSync)\s*\(/gi,
+      pattern: /['"]use server['"][\s\S]{0,200}(?:spawn|exec|execSync|spawnSync)\s*\(/gi,
       type: 'regex',
       description: 'Server action spawning child processes - potential RCE',
       references: ['CVE-2025-55182', 'MITRE T1059'],
@@ -338,7 +339,7 @@ const IOC_SIGNATURES = {
       name: 'Server Component Exfiltration Pattern',
       category: IOC_CATEGORIES.RSC_SPECIFIC,
       severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /['"]use server['"][\s\S]{0,1000}fetch\s*\([^)]*JSON\.stringify\s*\([^)]*(?:cookies|headers|session)/gi,
+      pattern: /['"]use server['"][\s\S]{0,200}fetch\s*\([^)]*JSON\.stringify\s*\([^)]*(?:cookies|headers|session)/gi,
       type: 'regex',
       description: 'Server action sending cookies/headers/session to external endpoint',
       references: ['CVE-2025-55182', 'MITRE T1041'],
@@ -398,7 +399,7 @@ const IOC_SIGNATURES = {
       name: 'Server Action Credential Harvesting',
       category: IOC_CATEGORIES.RSC_SPECIFIC,
       severity: SEVERITY_LEVELS.CRITICAL,
-      pattern: /['"]use server['"][\s\S]{0,1000}(?:password|secret|apiKey|api_key|token)[\s\S]{0,200}fetch\s*\(/gi,
+      pattern: /['"]use server['"][\s\S]{0,200}(?:password|secret|apiKey|api_key|token)[\s\S]{0,100}fetch\s*\(/gi,
       type: 'regex',
       description: 'Server action extracting and transmitting credentials',
       references: ['CVE-2025-55182', 'MITRE T1552'],
@@ -881,6 +882,131 @@ const IOC_SIGNATURES = {
       description: 'Mining pool connection URL detected',
       references: ['MITRE T1496'],
       remediation: 'Remove mining pool connections'
+    },
+
+    // ============================================================
+    // CVE-2025-55182 EXTENDED SIGNATURES (IOC-071 to IOC-080)
+    // WebSocket, Service Worker, PWA, and Response Caching attacks
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-071',
+      name: 'Server Action WebSocket Exfiltration',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,200}new\s+WebSocket\s*\(\s*['"`]wss?:\/\/\d/gi,
+      type: 'regex',
+      description: 'Server action opening WebSocket to IP address - real-time data exfiltration',
+      references: ['CVE-2025-55182', 'MITRE T1041'],
+      remediation: 'Remove WebSocket connections from server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-072',
+      name: 'Server Action WebSocket C2 Channel',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,200}(?:ws|socket)\.(?:on|addEventListener)\s*\(\s*['"]message/gi,
+      type: 'regex',
+      description: 'Server action with WebSocket message listener - potential C2 channel',
+      references: ['CVE-2025-55182', 'MITRE T1571'],
+      remediation: 'Audit WebSocket usage in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-073',
+      name: 'Malicious Service Worker Registration',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /navigator\.serviceWorker\.register\s*\(\s*['"`](?:https?:\/\/\d|[^'"]*\$\{)/gi,
+      type: 'regex',
+      description: 'Service Worker registration with dynamic or IP-based URL',
+      references: ['CVE-2025-55182', 'MITRE T1189'],
+      remediation: 'Verify Service Worker source is legitimate',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-074',
+      name: 'Service Worker Fetch Interception',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /self\.addEventListener\s*\(\s*['"]fetch['"][\s\S]{0,200}respondWith[\s\S]{0,100}fetch\s*\(\s*['"`]https?:\/\/\d/gi,
+      type: 'regex',
+      description: 'Service Worker intercepting requests and forwarding to IP address',
+      references: ['CVE-2025-55182', 'MITRE T1557'],
+      remediation: 'Audit Service Worker fetch handlers',
+      fileTypes: ['.js', '.ts']
+    },
+    {
+      id: 'NEUROLINT-IOC-075',
+      name: 'PWA Manifest Tampering',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /"start_url"\s*:\s*"https?:\/\/\d{1,3}\.\d{1,3}/gi,
+      type: 'regex',
+      description: 'PWA manifest with start_url pointing to IP address',
+      references: ['CVE-2025-55182'],
+      remediation: 'Verify PWA manifest URLs are legitimate',
+      fileTypes: ['.json', '.webmanifest']
+    },
+    {
+      id: 'NEUROLINT-IOC-076',
+      name: 'PWA Manifest Malicious Scope',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /"scope"\s*:\s*"https?:\/\/(?!\w+\.(?:vercel|netlify|github|localhost))/gi,
+      type: 'regex',
+      description: 'PWA manifest with suspicious external scope',
+      references: ['CVE-2025-55182'],
+      remediation: 'Verify PWA scope is correct',
+      fileTypes: ['.json', '.webmanifest']
+    },
+    {
+      id: 'NEUROLINT-IOC-077',
+      name: 'Server Action Response Caching Attack',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,150}(?:cache|revalidate)[\s\S]{0,50}(?:cookies|headers|session)/gi,
+      type: 'regex',
+      description: 'Server action caching sensitive data - cache poisoning risk',
+      references: ['CVE-2025-55182', 'OWASP Cache Poisoning'],
+      remediation: 'Never cache sensitive data in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-078',
+      name: 'Server Action Streaming Attack',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,150}(?:ReadableStream|TransformStream)[\s\S]{0,100}(?:process\.env|credentials)/gi,
+      type: 'regex',
+      description: 'Server action streaming sensitive data',
+      references: ['CVE-2025-55182'],
+      remediation: 'Audit streaming data in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-079',
+      name: 'Server Action FormData Injection',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,150}formData\.get\s*\([^)]+\)[\s\S]{0,50}(?:eval|exec|spawn|import\s*\()/gi,
+      type: 'regex',
+      description: 'Server action using form data in code execution',
+      references: ['CVE-2025-55182', 'OWASP Injection'],
+      remediation: 'Sanitize all form data inputs in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-080',
+      name: 'Server Action Bind Exploitation',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /\.bind\s*\(\s*null[\s\S]{0,50}['"]use server['"]/gi,
+      type: 'regex',
+      description: 'Server action using bind() which can bypass security checks',
+      references: ['CVE-2025-55182'],
+      remediation: 'Avoid using bind() with server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
     }
   ]
 };

@@ -17,6 +17,8 @@ const t = require('@babel/types');
 const path = require('path');
 const { SEVERITY_LEVELS, IOC_CATEGORIES } = require('../constants');
 
+const ErrorAggregator = require('../utils/error-aggregator');
+
 class BehavioralAnalyzer {
   constructor(options = {}) {
     this.verbose = options.verbose || false;
@@ -25,28 +27,71 @@ class BehavioralAnalyzer {
     this.findings = [];
     this.currentFile = null;
     this.currentCode = null;
+    this.errorAggregator = new ErrorAggregator({ verbose: this.verbose });
   }
   
   analyze(code, filePath, options = {}) {
     this.findings = [];
     this.currentFile = filePath;
     this.currentCode = code;
+    this.lastFileErrors = [];
     
     let ast;
     try {
       ast = this.parseCode(code, filePath);
     } catch (error) {
+      const errorEntry = { 
+        phase: 'parse', 
+        file: filePath,
+        message: error.message
+      };
+      this.lastFileErrors.push(errorEntry);
+      this.errorAggregator.addError(error, errorEntry);
       if (this.verbose) {
         console.error(`[Layer 8] Parse error in ${filePath}: ${error.message}`);
       }
+      const result = [...this.findings];
+      this.cleanup();
+      return result;
+    }
+    
+    if (!ast) {
+      this.cleanup();
       return this.findings;
     }
     
-    if (!ast) return this.findings;
+    try {
+      this.analyzeAST(ast, options);
+    } catch (error) {
+      const errorEntry = { 
+        phase: 'ast-analysis', 
+        file: filePath,
+        message: error.message
+      };
+      this.lastFileErrors.push(errorEntry);
+      this.errorAggregator.addError(error, errorEntry);
+    }
     
-    this.analyzeAST(ast, options);
-    
-    return this.findings;
+    const result = [...this.findings];
+    this.cleanup();
+    return result;
+  }
+  
+  cleanup() {
+    this.currentCode = null;
+    this.currentFile = null;
+  }
+  
+  getLastFileErrors() {
+    return this.lastFileErrors || [];
+  }
+  
+  resetForNewScan() {
+    this.findings = [];
+    this.currentCode = null;
+    this.currentFile = null;
+    this.lastFileErrors = [];
+    this.errorAggregator.clear();
   }
   
   parseCode(code, filePath) {
@@ -556,7 +601,7 @@ class BehavioralAnalyzer {
     const { node } = nodePath;
     const value = node.value;
     
-    if (value.length > 100 && /^[A-Za-z0-9+/=]+$/.test(value)) {
+    if (value.length > 500 && /^[A-Za-z0-9+/=]+$/.test(value)) {
       try {
         const decoded = Buffer.from(value, 'base64').toString();
         
@@ -773,6 +818,14 @@ class BehavioralAnalyzer {
     }
     
     return stats;
+  }
+  
+  getErrors() {
+    return this.errorAggregator.toJSON();
+  }
+  
+  clearErrors() {
+    this.errorAggregator.clear();
   }
 }
 

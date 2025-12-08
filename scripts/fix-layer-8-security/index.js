@@ -28,6 +28,7 @@ const DetectorOrchestrator = require('./detectors');
 const { CLIReporter, JSONReporter } = require('./reporters');
 const SeverityCalculator = require('./utils/severity-calculator');
 const HashUtils = require('./utils/hash-utils');
+const ErrorAggregator = require('./utils/error-aggregator');
 const { 
   LAYER_8_VERSION, 
   DETECTION_MODES, 
@@ -57,6 +58,8 @@ class Layer8SecurityForensics {
       include: options.include || ['**/*.{js,jsx,ts,tsx,json,mjs,cjs}'],
       ...options
     };
+    
+    this.errorAggregator = new ErrorAggregator({ verbose: this.options.verbose });
     
     this.detector = new DetectorOrchestrator({
       mode: this.options.mode,
@@ -334,6 +337,7 @@ class Layer8SecurityForensics {
     const files = [];
     const include = options.include || this.options.include;
     const exclude = options.exclude || this.options.exclude;
+    const self = this;
     
     async function walkDir(dir) {
       try {
@@ -367,6 +371,12 @@ class Layer8SecurityForensics {
           }
         }
       } catch (error) {
+        if (self.errorAggregator) {
+          self.errorAggregator.addError(error, { 
+            phase: 'file-discovery', 
+            directory: dir 
+          });
+        }
       }
     }
     
