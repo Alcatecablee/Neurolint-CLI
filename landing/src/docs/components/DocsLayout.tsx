@@ -29,7 +29,8 @@ export function DocsLayout({ children, title, description }: DocsLayoutProps) {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <nav className="fixed top-0 w-full z-50 bg-zinc-900/95 backdrop-blur-md border-b border-zinc-800">
+      <div className="fixed inset-0 bg-gradient-to-br from-zinc-900/20 via-black to-zinc-900/10 pointer-events-none" />
+      <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14">
             <div className="flex items-center gap-4">
@@ -77,11 +78,12 @@ export function DocsLayout({ children, title, description }: DocsLayoutProps) {
         </div>
       </nav>
 
-      <div className="flex pt-14">
+      <div className="flex pt-14 relative">
         <DocsSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <main className="flex-1 lg:pl-64 min-h-screen">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <main className="flex-1 lg:pl-64 min-h-screen relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-zinc-900/5 to-zinc-900/10 pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 relative z-10">
             <nav className="flex items-center gap-1.5 text-sm mb-6">
               {getBreadcrumbs().map((crumb, idx) => (
                 <React.Fragment key={crumb.path}>

@@ -148,6 +148,18 @@ The core engine processes code through progressive layers, each handling specifi
 
 ## Recent Changes (December 2025)
 
+### Documentation Expansion (December 8, 2025)
+- **20+ new documentation pages**: Created comprehensive docs matching Supabase/Vercel enterprise quality
+- **Dark minimalist theme**: Pure black (#000000) backgrounds, zinc-900/zinc-800 surfaces, white text, zinc-800 borders only
+- **NO colorful icons**: Removed all emoji-style icons per user preference
+- **Command pages**: analyze, fix, migrate-react19, migrate-nextjs-16 with full flag documentation
+- **Layer pages**: All 8 layers (ConfigMaster through SecurityForensics) with detailed behaviors
+- **Security pages**: CVE-2025-55182, IoC Detection, Incident Response workflows
+- **Guide pages**: CI/CD Integration, Backup & Restore, Troubleshooting
+- **Technical pages**: How It Works, AST Transformations with architecture details
+- **Sidebar navigation**: All pages accessible via collapsible sidebar sections
+- **Verified working**: All routes configured in main.jsx, screenshots confirmed styling
+
 ### npm Publishing Preparation (December 8, 2025)
 - **package.json cleanup**: Moved frontend-only dependencies (react, react-dom, lucide-react, @vercel/analytics, @vercel/speed-insights, asciinema-player, next-themes, react-router-dom, react-syntax-highlighter, ora, cli-cursor, log-symbols, restore-cursor, strip-ansi, wcwidth) from dependencies to devDependencies
 - **engines field**: Updated minimum Node.js version from >=16.0.0 to >=18.0.0 for glob@12 compatibility
