@@ -2711,6 +2711,8 @@ Security Commands:
   security:create-baseline [path] Create integrity baseline for future comparison
   security:compare-baseline [path] Compare current state against baseline
   security:incident-response [path] Full forensic analysis for incident response
+  security:harden-actions [path]  Analyze/harden server actions (--quarantine to fix)
+  security:mitigation-playbook    Generate compensating controls when patching blocked
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -2886,6 +2888,14 @@ Examples:
       case 'security:incident-response':
         // Handle Layer 8 Security Forensics - Incident Response
         await handleSecurityIncidentResponse(targetPath, options, spinner, args);
+        break;
+      case 'security:harden-actions':
+        // Handle Server Action Hardening
+        await handleSecurityHardenActions(targetPath, options, spinner, args);
+        break;
+      case 'security:mitigation-playbook':
+        // Generate mitigation playbook
+        await handleSecurityMitigationPlaybook(targetPath, options, spinner, args);
         break;
       case 'check-turbopack':
         // Handle Turbopack migration check command
@@ -3107,6 +3117,8 @@ Security Commands:
   security:create-baseline [path] Create integrity baseline for future comparison
   security:compare-baseline [path] Compare current state against baseline
   security:incident-response [path] Full forensic analysis for incident response
+  security:harden-actions [path]  Analyze/harden server actions (--quarantine to fix)
+  security:mitigation-playbook    Generate compensating controls when patching blocked
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -4947,10 +4959,39 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
     console.log(`  \x1b[32m[PATCHED]\x1b[0m ${fix.package} -> ${fix.version}`);
   }
   
+  spinner.text = 'Verifying lock file integrity...';
+  
+  try {
+    const { DependencyAssuranceModule } = require('./scripts/fix-layer-8-security/dependency-assurance');
+    const depAssurance = new DependencyAssuranceModule({ verbose: options.verbose, projectPath: resolvedPath });
+    const auditResult = await depAssurance.audit(resolvedPath);
+    
+    if (auditResult.lockFileExists) {
+      if (auditResult.vulnerabilities.length > 0 || auditResult.transitiveIssues.length > 0) {
+        spinner.warn('Lock file still contains vulnerable versions!');
+        console.log(depAssurance.formatReport(auditResult));
+        console.log('\n\x1b[33mIMPORTANT:\x1b[0m Your lock file has not been updated.');
+        console.log('Run the following commands to complete the patch:\n');
+        console.log('  \x1b[1mrm -rf node_modules package-lock.json\x1b[0m');
+        console.log('  \x1b[1mnpm install\x1b[0m');
+        console.log('  \x1b[1mnpx @neurolint/cli security:cve-2025-55182 . --dry-run\x1b[0m  (verify fix)\n');
+      } else {
+        spinner.succeed('Lock file verified - no vulnerable versions detected');
+      }
+    } else {
+      spinner.info('No lock file found. Run npm install to generate one.');
+    }
+  } catch (e) {
+    if (options.verbose) {
+      console.log('\x1b[2mDependency assurance check skipped: ' + e.message + '\x1b[0m');
+    }
+  }
+  
   console.log('\n\x1b[1mNext Steps:\x1b[0m');
   console.log('\n  1. Run \x1b[1mnpm install\x1b[0m to install patched versions');
-  console.log('  2. Test your application');
-  console.log('  3. Deploy the security update');
+  console.log('  2. Run \x1b[1mnpx @neurolint/cli security:cve-2025-55182 . --dry-run\x1b[0m to verify');
+  console.log('  3. Test your application');
+  console.log('  4. Deploy the security update');
   
   if (backupResult.success) {
     console.log('\n\x1b[2mBackup created at: ' + backupResult.backupPath + '\x1b[0m');
@@ -5256,6 +5297,212 @@ async function handleSecurityIncidentResponse(targetPath, options, spinner, args
     
   } catch (error) {
     spinner.fail('Incident response analysis failed');
+    console.error('\nError:', error.message);
+    if (isVerbose) {
+      console.error(error.stack);
+    }
+    process.exit(1);
+  }
+}
+
+/**
+ * Handle Server Action Hardening
+ * Analyzes and optionally hardens server actions against exploitation
+ */
+async function handleSecurityHardenActions(targetPath, options, spinner, args) {
+  const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
+  const isVerbose = args.includes('--verbose') || args.includes('-v');
+  const isJsonOutput = args.includes('--json');
+  const isQuarantine = args.includes('--quarantine');
+  const isDryRun = args.includes('--dry-run');
+  
+  spinner.text = 'Initializing Server Action Hardening module...';
+  
+  try {
+    const { ServerActionHardening } = require('./scripts/fix-layer-8-security/server-action-hardening');
+    const hardener = new ServerActionHardening({
+      verbose: isVerbose,
+      projectPath: resolvedPath
+    });
+    
+    spinner.text = 'Scanning for server action files...';
+    
+    const glob = require('glob');
+    const fsp = require('fs').promises;
+    
+    const serverActionFiles = glob.sync('**/*.{js,jsx,ts,tsx}', {
+      cwd: resolvedPath,
+      ignore: ['**/node_modules/**', '**/.next/**', '**/dist/**', '**/build/**']
+    });
+    
+    const analysisResults = [];
+    let vulnerableCount = 0;
+    
+    for (let i = 0; i < serverActionFiles.length; i++) {
+      const file = serverActionFiles[i];
+      const filePath = path.join(resolvedPath, file);
+      
+      if (!isJsonOutput) {
+        spinner.text = `Analyzing server actions... ${i + 1}/${serverActionFiles.length} files`;
+      }
+      
+      try {
+        const code = await fsp.readFile(filePath, 'utf8');
+        if (code.includes("'use server'") || code.includes('"use server"')) {
+          const result = await hardener.analyze(code, filePath);
+          if (result.hasServerActions && result.issues.length > 0) {
+            analysisResults.push(result);
+            vulnerableCount += result.issues.length;
+          }
+        }
+      } catch (e) {
+        if (isVerbose) {
+          console.log(`\x1b[2mSkipped ${file}: ${e.message}\x1b[0m`);
+        }
+      }
+    }
+    
+    spinner.stop();
+    
+    if (analysisResults.length === 0) {
+      console.log('\n\x1b[32m[SECURE]\x1b[0m No vulnerable server actions detected.\n');
+      return;
+    }
+    
+    console.log(`\n\x1b[33m[WARNING]\x1b[0m Found ${vulnerableCount} issues in ${analysisResults.length} server action files:\n`);
+    
+    for (const result of analysisResults) {
+      console.log(hardener.formatReport(result));
+    }
+    
+    if (isQuarantine && !isDryRun) {
+      spinner.start();
+      spinner.text = 'Applying hardening transformations in quarantine mode...';
+      
+      let hardenedCount = 0;
+      for (const result of analysisResults) {
+        try {
+          const code = await fsp.readFile(result.filePath, 'utf8');
+          const hardenResult = await hardener.harden(code, result.filePath);
+          
+          if (hardenResult.success && hardenResult.transformedCode !== code) {
+            await fsp.writeFile(result.filePath, hardenResult.transformedCode, 'utf8');
+            hardenedCount++;
+          }
+        } catch (e) {
+          if (isVerbose) {
+            console.log(`\x1b[31mFailed to harden ${result.filePath}: ${e.message}\x1b[0m`);
+          }
+        }
+      }
+      
+      spinner.succeed(`Server action hardening complete - ${hardenedCount} files modified`);
+    } else if (isQuarantine && isDryRun) {
+      spinner.start();
+      spinner.text = 'Generating hardening preview (dry-run)...';
+      
+      for (const result of analysisResults) {
+        try {
+          const code = await fsp.readFile(result.filePath, 'utf8');
+          const hardenResult = await hardener.harden(code, result.filePath);
+          
+          if (hardenResult.success && hardenResult.transformations.length > 0) {
+            console.log(`\n\x1b[1m${result.filePath}\x1b[0m`);
+            console.log('  Proposed transformations:');
+            for (const t of hardenResult.transformations) {
+              console.log(`    - ${t.type}: ${t.description}`);
+            }
+          }
+        } catch (e) {
+          if (isVerbose) {
+            console.log(`\x1b[2mSkipped preview for ${result.filePath}: ${e.message}\x1b[0m`);
+          }
+        }
+      }
+      
+      spinner.succeed('Dry-run complete');
+      console.log('\n\x1b[2mRun with --quarantine (without --dry-run) to apply changes.\x1b[0m\n');
+    } else {
+      console.log('\n\x1b[33mNote:\x1b[0m Run with --quarantine to apply hardening transformations.');
+      console.log('\x1b[2mUse --quarantine --dry-run to preview changes first.\x1b[0m\n');
+    }
+    
+    if (isJsonOutput) {
+      console.log(JSON.stringify(analysisResults, null, 2));
+    }
+    
+  } catch (error) {
+    spinner.fail('Server action hardening failed');
+    console.error('\nError:', error.message);
+    if (isVerbose) {
+      console.error(error.stack);
+    }
+    process.exit(1);
+  }
+}
+
+/**
+ * Handle Mitigation Playbook Generation
+ * Generates compensating controls when patching is blocked
+ */
+async function handleSecurityMitigationPlaybook(targetPath, options, spinner, args) {
+  const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
+  const isVerbose = args.includes('--verbose') || args.includes('-v');
+  const isJsonOutput = args.includes('--json');
+  
+  const outputArg = args.find(a => a.startsWith('--output=') || a.startsWith('-o='));
+  const outputPath = outputArg ? outputArg.split('=')[1] : null;
+  
+  const cveArg = args.find(a => a.startsWith('--cve='));
+  const cveId = cveArg ? cveArg.split('=')[1] : 'CVE-2025-55182';
+  
+  const reasonArg = args.find(a => a.startsWith('--reason='));
+  const blockReason = reasonArg ? reasonArg.split('=')[1] : 'unknown';
+  
+  spinner.text = 'Generating mitigation playbook...';
+  
+  try {
+    const { MitigationPlaybookGenerator } = require('./scripts/fix-layer-8-security/mitigation-playbook');
+    const playbook = new MitigationPlaybookGenerator({
+      verbose: isVerbose,
+      projectPath: resolvedPath
+    });
+    
+    spinner.text = 'Generating compensating controls...';
+    
+    const mitigationResult = await playbook.generate({
+      cveId,
+      blockReason,
+      projectPath: resolvedPath,
+      verbose: isVerbose
+    });
+    
+    spinner.stop();
+    
+    if (isJsonOutput) {
+      const jsonOutput = JSON.stringify(mitigationResult, null, 2);
+      if (outputPath) {
+        const fsSync = require('fs');
+        fsSync.writeFileSync(outputPath, jsonOutput, 'utf8');
+        console.log(`Mitigation playbook saved to: ${outputPath}`);
+      } else {
+        console.log(jsonOutput);
+      }
+    } else {
+      console.log(playbook.formatPlaybook(mitigationResult));
+      
+      if (outputPath) {
+        const fsSync = require('fs');
+        fsSync.writeFileSync(outputPath, JSON.stringify(mitigationResult, null, 2), 'utf8');
+        console.log(`\n  Playbook also saved to: ${outputPath}\n`);
+      }
+    }
+    
+    console.log('\n\x1b[33mIMPORTANT:\x1b[0m These are compensating controls, NOT a complete fix.');
+    console.log('Patching should remain the priority when dependencies allow.\n');
+    
+  } catch (error) {
+    spinner.fail('Mitigation playbook generation failed');
     console.error('\nError:', error.message);
     if (isVerbose) {
       console.error(error.stack);
