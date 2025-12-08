@@ -109,14 +109,14 @@ Options:
         <CommandBlock 
           command="neurolint layers" 
           output={`Available Layers:
-1. ConfigMaster - Modernizes TypeScript, Next.js, and package.json configs
-2. PatternCleanse - Cleans code patterns (console removal, var to const)
-3. ReactRepair - Adds missing keys, alt attributes, ARIA labels
-4. HydraFix - Wraps browser APIs with SSR-safe checks
-5. NextGuard - Adds 'use client', migrates router imports
-6. TestReady - Adds error boundaries, test scaffolding
-7. AdaptiveLearn - Learns and applies project-specific patterns
-8. SecurityForensics - Detects IoCs and CVE vulnerabilities`}
+1. Configuration - Updates tsconfig.json, next.config.js, package.json
+2. Patterns - Standardizes variables, removes console statements
+3. Components - Adds keys, accessibility attributes, prop types
+4. Hydration - Guards client-side APIs for SSR
+5. Next.js - Optimizes App Router with directives
+6. Testing - Adds error boundaries, prop types, loading states
+7. Adaptive Pattern Learning - Learns and applies patterns from prior fixes
+8. Security Forensics - Detects IoCs, supply chain attacks, and CVE-2025-55182 vulnerabilities`}
         />
       </section>
 

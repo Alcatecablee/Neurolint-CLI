@@ -4,7 +4,7 @@ import { DocsLayout, CommandBlock, CodeBlock, Callout, BeforeAfter } from "../co
 export function DocsLayerConfig() {
   return (
     <DocsLayout
-      title="Layer 1: ConfigMaster"
+      title="Layer 1: Configuration"
       description="Modernizes project configuration files to align with Next.js 15.5+ and React 19 best practices. Enforces TypeScript strict mode and updates build tools."
     >
       <section className="mb-12">

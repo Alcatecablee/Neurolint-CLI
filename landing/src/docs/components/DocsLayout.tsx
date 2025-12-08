@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Menu, X, Search, ExternalLink } from "lucide-react";
 import { DocsSidebar } from "./DocsSidebar";
@@ -12,6 +12,10 @@ interface DocsLayoutProps {
 export function DocsLayout({ children, title, description }: DocsLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const getBreadcrumbs = () => {
     const parts = location.pathname.split("/").filter(Boolean);

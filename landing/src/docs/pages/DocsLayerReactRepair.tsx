@@ -4,7 +4,7 @@ import { DocsLayout, CommandBlock, Callout, BeforeAfter } from "../components";
 export function DocsLayerReactRepair() {
   return (
     <DocsLayout
-      title="Layer 3: ReactRepair"
+      title="Layer 3: Components"
       description="Enhances React component quality with accessibility improvements, missing key props, and React 19 ref modernization."
     >
       <section className="mb-12">

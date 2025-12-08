@@ -43,14 +43,14 @@ const navigation: NavSection[] = [
   {
     title: "Layers",
     items: [
-      { title: "Layer 1: ConfigMaster", href: "/docs/layers/config" },
-      { title: "Layer 2: PatternCleanse", href: "/docs/layers/patterns" },
-      { title: "Layer 3: ReactRepair", href: "/docs/layers/react-repair" },
-      { title: "Layer 4: HydraFix", href: "/docs/layers/hydration" },
-      { title: "Layer 5: NextGuard", href: "/docs/layers/nextjs" },
-      { title: "Layer 6: TestReady", href: "/docs/layers/testing" },
-      { title: "Layer 7: AdaptiveLearn", href: "/docs/layers/adaptive" },
-      { title: "Layer 8: SecurityForensics", href: "/docs/layers/security" },
+      { title: "Layer 1: Configuration", href: "/docs/layers/config" },
+      { title: "Layer 2: Patterns", href: "/docs/layers/patterns" },
+      { title: "Layer 3: Components", href: "/docs/layers/react-repair" },
+      { title: "Layer 4: Hydration", href: "/docs/layers/hydration" },
+      { title: "Layer 5: Next.js", href: "/docs/layers/nextjs" },
+      { title: "Layer 6: Testing", href: "/docs/layers/testing" },
+      { title: "Layer 7: Adaptive", href: "/docs/layers/adaptive" },
+      { title: "Layer 8: Security Forensics", href: "/docs/layers/security" },
     ],
   },
   {

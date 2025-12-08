@@ -6,8 +6,8 @@ export function DocsArchitecture() {
   const layers = [
     {
       num: 1,
-      name: "ConfigMaster",
-      description: "Modernizes TypeScript, Next.js, and package.json configurations",
+      name: "Configuration",
+      description: "Updates tsconfig.json, next.config.js, package.json",
       fixes: [
         "Updates tsconfig.json to ES2022 target and ESNext modules",
         "Detects Next.js version and applies appropriate compiler options",
@@ -18,8 +18,8 @@ export function DocsArchitecture() {
     },
     {
       num: 2,
-      name: "PatternCleanse",
-      description: "Cleans and restructures code for maintainability",
+      name: "Patterns",
+      description: "Standardizes variables, removes console statements",
       fixes: [
         "Removes console.log and debug statements",
         "Fixes HTML entities in JSX (& to &amp;)",
@@ -30,8 +30,8 @@ export function DocsArchitecture() {
     },
     {
       num: 3,
-      name: "ReactRepair",
-      description: "Improves React components with smart rewrites",
+      name: "Components",
+      description: "Adds keys, accessibility attributes, prop types",
       fixes: [
         "Adds missing key props in map() iterations",
         "Adds alt attributes to <img> elements",
@@ -42,8 +42,8 @@ export function DocsArchitecture() {
     },
     {
       num: 4,
-      name: "HydraFix",
-      description: "Detects and fixes hydration and SSR issues",
+      name: "Hydration",
+      description: "Guards client-side APIs for SSR",
       fixes: [
         "Wraps window access with typeof window !== 'undefined'",
         "Guards document usage for SSR safety",
@@ -54,8 +54,8 @@ export function DocsArchitecture() {
     },
     {
       num: 5,
-      name: "NextGuard",
-      description: "Enforces Next.js conventions and migrations",
+      name: "Next.js",
+      description: "Optimizes App Router with directives",
       fixes: [
         "Adds 'use client' directives where needed",
         "Migrates next/router to next/navigation",
@@ -66,8 +66,8 @@ export function DocsArchitecture() {
     },
     {
       num: 6,
-      name: "TestReady",
-      description: "Ensures components are test-ready",
+      name: "Testing",
+      description: "Adds error boundaries, prop types, loading states",
       fixes: [
         "Adds error boundaries where missing",
         "Suggests test scaffolding patterns",
@@ -78,8 +78,8 @@ export function DocsArchitecture() {
     },
     {
       num: 7,
-      name: "AdaptiveLearn",
-      description: "Learns patterns from your codebase",
+      name: "Adaptive",
+      description: "Learns and applies patterns from prior fixes",
       fixes: [
         "Stores learned rules in .neurolint/learned-rules.json",
         "Applies project-specific patterns from previous runs",
@@ -90,8 +90,8 @@ export function DocsArchitecture() {
     },
     {
       num: 8,
-      name: "SecurityForensics",
-      description: "Detects indicators of compromise and vulnerabilities",
+      name: "Security Forensics",
+      description: "Detects IoCs, supply chain attacks, and CVE-2025-55182",
       fixes: [
         "80+ IoC signatures for post-exploitation detection",
         "CVE-2025-55182 React Server Components RCE detection",

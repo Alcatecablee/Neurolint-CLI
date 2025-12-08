@@ -4,7 +4,7 @@ import { DocsLayout, CommandBlock, CodeBlock, Callout, BeforeAfter } from "../co
 export function DocsLayerPatterns() {
   return (
     <DocsLayout
-      title="Layer 2: PatternCleanse"
+      title="Layer 2: Patterns"
       description="Fixes common code patterns and anti-patterns. Handles React 19 breaking changes like Legacy Context and createFactory removal."
     >
       <section className="mb-12">

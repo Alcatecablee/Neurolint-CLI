@@ -4,7 +4,7 @@ import { DocsLayout, CommandBlock, Callout, BeforeAfter } from "../components";
 export function DocsLayerNextjs() {
   return (
     <DocsLayout
-      title="Layer 5: NextGuard"
+      title="Layer 5: Next.js"
       description="Optimizes Next.js 15.5 App Router usage with proper directives, React 19 DOM API migrations, and type-safe routing."
     >
       <section className="mb-12">

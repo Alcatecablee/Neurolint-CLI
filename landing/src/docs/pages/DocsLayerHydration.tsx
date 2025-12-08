@@ -4,7 +4,7 @@ import { DocsLayout, CommandBlock, Callout, BeforeAfter } from "../components";
 export function DocsLayerHydration() {
   return (
     <DocsLayout
-      title="Layer 4: HydraFix"
+      title="Layer 4: Hydration"
       description="Prevents hydration mismatches in Next.js SSR by guarding browser APIs and implementing event listener cleanup."
     >
       <section className="mb-12">

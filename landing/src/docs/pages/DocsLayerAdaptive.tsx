@@ -4,7 +4,7 @@ import { DocsLayout, CommandBlock, CodeBlock, Callout } from "../components";
 export function DocsLayerAdaptive() {
   return (
     <DocsLayout
-      title="Layer 7: AdaptiveLearn"
+      title="Layer 7: Adaptive"
       description="Learns project-specific patterns from previous layers and applies custom rules automatically. Adapts to your codebase style."
     >
       <section className="mb-12">

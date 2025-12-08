@@ -4,7 +4,7 @@ import { DocsLayout, CommandBlock, Callout, BeforeAfter } from "../components";
 export function DocsLayerTesting() {
   return (
     <DocsLayout
-      title="Layer 6: TestReady"
+      title="Layer 6: Testing"
       description="Enhances testing infrastructure with proper imports, improved descriptions, and guidance for React Server Components."
     >
       <section className="mb-12">
