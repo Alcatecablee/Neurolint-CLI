@@ -24,6 +24,39 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 8, 2025** - Version 2.1.0 - Layer 8 Security Hardening
+
+Security improvements to Layer 8 Security Forensics:
+
+**ReDoS Protection:**
+- Added SafeRegex utility with pattern pre-validation to prevent catastrophic backtracking
+- Patterns automatically simplified to safer alternatives when dangerous structures detected
+- Input chunking for large files to prevent memory exhaustion
+
+**Error Handling:**
+- Replaced silent error suppression with ErrorAggregator for proper error tracking
+- Per-file error tracking with phase and context information
+- Errors cleared between scans for accurate per-file diagnostics
+
+**Memory Management:**
+- BehavioralAnalyzer.cleanup() clears currentCode after analysis
+- resetForNewScan() methods on all analyzers for proper state cleanup
+- Memory monitoring with automatic backpressure during large scans
+
+**New CVE-2025-55182 Signatures (IOC-071 to IOC-080):**
+- WebSocket attacks in RSC actions
+- Service Worker registration exploitation
+- PWA manifest injection
+- Response caching manipulation
+- Streaming response exploitation
+- FormData injection attacks
+
+**Other Improvements:**
+- Windows path compatibility with normalizePath()
+- PathPattern checking for IOC-024
+- Rate limiting for large scans
+- Base64 threshold increased to 500+ chars to reduce false positives
+
 **December 7, 2025** - Version 1.5.0 - Layer 8 Security Forensics (Major Release)
 
 NeuroLint now has an **8-layer progressive architecture**. Layer 8 adds comprehensive post-exploitation detection and incident response capabilities.
