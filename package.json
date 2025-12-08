@@ -3,6 +3,21 @@
   "version": "1.5.0",
   "description": "NeuroLint CLI - Deterministic code fixing for TypeScript, JavaScript, React, and Next.js with 8-layer architecture including Security Forensics, Next.js 16, React Compiler, and Turbopack support",
   "main": "cli.js",
+  "type": "commonjs",
+  "exports": {
+    ".": {
+      "require": "./cli.js",
+      "default": "./cli.js"
+    },
+    "./fix-master": {
+      "require": "./fix-master.js",
+      "default": "./fix-master.js"
+    },
+    "./ast-transformer": {
+      "require": "./ast-transformer.js",
+      "default": "./ast-transformer.js"
+    }
+  },
   "bin": {
     "neurolint": "cli.js"
   },

@@ -1,38 +1,69 @@
-# Development files
+# Development and test files
 __tests__/
+demo-project/
 landing/
 docs/
-.cache/
-.local/
+
+# Build artifacts
+node_modules/
+dist/
+build/
+coverage/
+*.log
+*.tmp
+npm-debug.log*
+
+# Editor and IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
 .git/
+.gitignore
 .github/
 
-# Config files
+# Replit
 .replit
-.gitignore
-.neurolintrc
+replit.nix
+replit.md
+.local/
+.config/
+.cache/
+.upm/
+
+# Development config
+vite.config.js
 vite.config.mjs
 tailwind.config.js
 postcss.config.js
-jest.config.cjs
 tsconfig.json
+jest.config.js
+jest.config.cjs
+.eslintrc*
+.prettierrc*
+.neurolintrc
 
-# Documentation that's not needed in the package
+# Documentation not needed in package
 NPM_PUBLISH_GUIDE.md
 CODE_OF_CONDUCT.md
 CONTRIBUTING.md
-replit.md
 
-# Temporary files
-*.log
-*.tmp
-.DS_Store
-node_modules/
+# NeuroLint working files
 .neurolint/
 .neurolint-backups/
 *.backup-*
 
-# Build artifacts
-dist/
-build/
-coverage/
+# CI/CD
+.gitlab-ci.yml
+.travis.yml
+
+# Misc
+*.tgz
+.nyc_output/
