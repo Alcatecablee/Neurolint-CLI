@@ -1057,6 +1057,8 @@ const FILE_TYPE_ASSOCIATIONS = {
 
 const EXCLUDED_PATHS_DEFAULT = [
   '**/node_modules/**',
+  '**/.neurolint/**',
+  '**/.neurolint-backups/**',
   '**/dist/**',
   '**/build/**',
   '**/.next/**',

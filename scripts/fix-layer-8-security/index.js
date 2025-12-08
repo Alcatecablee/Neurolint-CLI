@@ -345,7 +345,7 @@ class Layer8SecurityForensics {
         
         for (const entry of entries) {
           const fullPath = path.join(dir, entry.name);
-          const relativePath = path.relative(targetPath, fullPath);
+          const relativePath = path.relative(targetPath, fullPath).replace(/\\/g, '/');
           
           const shouldExclude = exclude.some(pattern => {
             if (pattern.includes('**')) {
