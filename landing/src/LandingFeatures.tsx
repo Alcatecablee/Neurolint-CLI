@@ -19,36 +19,50 @@ const LAYERS = [
     name: "PatternCleanse",
     description:
       "Cleans and restructures code entities for maintainability and clarity.",
-    status: "soon",
-    experimental: true,
+    status: "live",
+    experimental: false,
   },
   {
     name: "ReactRepair",
     description:
       "Improves React components with smart rewrites, import fixing, and missing key detection.",
-    status: "soon",
-    experimental: true,
+    status: "live",
+    experimental: false,
   },
   {
     name: "HydraFix",
     description:
       "Detects and fixes hydration and SSR bugs for flawless React/Next.js deployments.",
-    status: "soon",
-    experimental: true,
+    status: "live",
+    experimental: false,
   },
   {
     name: "NextGuard",
     description:
       "Enforces Next.js conventions and integrates optimization strategies automatically.",
-    status: "soon",
-    experimental: true,
+    status: "live",
+    experimental: false,
   },
   {
     name: "TestReady",
     description:
       "Ensures components and configs are test-ready with basic static analysis.",
-    status: "soon",
-    experimental: true,
+    status: "live",
+    experimental: false,
+  },
+  {
+    name: "AdaptiveLearn",
+    description:
+      "Learns and applies patterns from prior fixes for intelligent code adaptation.",
+    status: "live",
+    experimental: false,
+  },
+  {
+    name: "SecurityForensics",
+    description:
+      "Detects IoCs, supply chain attacks, and CVE-2025-55182 vulnerabilities with 80+ signatures.",
+    status: "live",
+    experimental: false,
   },
 ];
 
@@ -198,10 +212,10 @@ export function LandingFeatures() {
         <ul className="ml-5 list-disc space-y-1 text-sm text-zinc-100">
           <li>
             <b>
-              All 6 code-fixing layers are production-ready and powerful
+              All 8 code-fixing layers are production-ready and powerful
               individually
             </b>
-            : config, patterns, smart component repair, hydration/SSR, and more.
+            : config, patterns, component repair, hydration/SSR, Next.js, testing, adaptive learning, and security forensics.
           </li>
           <li>
             Robust dry run, backup, safety, transparency, and per-layer

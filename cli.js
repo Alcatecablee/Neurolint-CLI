@@ -1009,7 +1009,8 @@ async function handleLayers(options, spinner) {
     { id: 4, name: 'Hydration', description: 'Guards client-side APIs for SSR' },
     { id: 5, name: 'Next.js', description: 'Optimizes App Router with directives' },
     { id: 6, name: 'Testing', description: 'Adds error boundaries, prop types, loading states' },
-    { id: 7, name: 'Adaptive Pattern Learning', description: 'Learns and applies patterns from prior fixes' }
+    { id: 7, name: 'Adaptive Pattern Learning', description: 'Learns and applies patterns from prior fixes' },
+    { id: 8, name: 'Security Forensics', description: 'Detects IoCs, supply chain attacks, and CVE-2025-55182 vulnerabilities' }
   ];
 
   if (options.verbose) {
