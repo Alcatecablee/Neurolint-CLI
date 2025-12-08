@@ -148,6 +148,13 @@ The core engine processes code through progressive layers, each handling specifi
 
 ## Recent Changes (December 2025)
 
+### npm Publishing Preparation (December 8, 2025)
+- **package.json cleanup**: Moved frontend-only dependencies (react, react-dom, lucide-react, @vercel/analytics, @vercel/speed-insights, asciinema-player, next-themes, react-router-dom, react-syntax-highlighter, ora, cli-cursor, log-symbols, restore-cursor, strip-ansi, wcwidth) from dependencies to devDependencies
+- **engines field**: Updated minimum Node.js version from >=16.0.0 to >=18.0.0 for glob@12 compatibility
+- **Lean production dependencies**: CLI now only requires @babel/generator, @babel/parser, @babel/traverse, @babel/types, and glob for runtime
+- **Verified**: All CLI commands working (--version, --help, analyze, fix, layers)
+- **npm pack verified**: Package includes all required files without frontend bloat
+
 ### Pre-Publishing Security Audit Fixes
 - **CLI handleLayers command**: Added Layer 8 (Security Forensics) to the layers listing - previously only showed 7 layers
 - **LandingFeatures.tsx**: Updated from 6 to 8 layers with correct descriptions for AdaptiveLearn and SecurityForensics
