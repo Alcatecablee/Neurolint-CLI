@@ -1,0 +1,70 @@
+Patching CVE-2025-55182 removes the vulnerability. It doesn't remove infections from December 3-7.
+
+This is the complete fix: patch React2Shell AND scan for post-breach compromise.
+
+🔧 NEUROLINT CLI (Free & Open Source):
+• GitHub: https://github.com/Alcatecablee/Neurolint-CLI
+• NPM: https://www.npmjs.com/package/@neurolint/cli
+• Docs: https://neurolint.dev
+
+⚡ QUICK FIX:
+# Step 1: Patch the vulnerability
+npx @neurolint/cli security:cve-2025-55182 . --fix
+npm install
+
+# Step 2: Scan for existing infections
+npx @neurolint/cli security:scan-compromise . --mode=deep
+
+📊 WHAT NEUROLINT SCANS:
+• 70 Indicator of Compromise (IoC) signatures
+• 11 threat categories
+• Code injection, obfuscation, backdoors
+• RSC & Next.js-specific attacks
+• Crypto miners, data exfiltration
+• Supply chain compromises
+
+📚 RESOURCES:
+• CVE-2025-55182: https://react.dev/blog/2025/12/03/react-server-components-rce
+• Layer 8 Security Forensics: https://github.com/Alcatecablee/Neurolint-CLI/blob/main/docs/LAYER-8-SECURITY-FORENSICS.md
+• NeuroLint Documentation: https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md
+
+⏱️ TIMESTAMPS:
+0:00 - The Problem Nobody's Talking About
+0:50 - Real Breach Case Study (Eduardo Borges)
+2:15 - Why Patching Isn't Enough
+3:30 - Live Demo: Patch the Vulnerability
+4:30 - Live Demo: Scan for Compromise
+6:00 - Your Complete Action Plan
+7:00 - Closing & Next Steps
+
+🚨 IMPORTANT:
+If you were running React 19 or Next.js 15-16 between December 3-7, 2025, you MUST do both steps:
+1. Patch the vulnerability (removes the door)
+2. Scan for infections (removes the intruder)
+
+Patching locks the door. Scanning removes the intruder who's already inside.
+
+💡 WHY THIS MATTERS:
+AWS reported active exploitation within hours of disclosure. Attackers installed:
+• Crypto miners (XMRig variants)
+• Backdoor endpoints in routes
+• Credential harvesters in server actions
+• Persistence mechanisms (cron jobs, fake services)
+• Data exfiltration code
+
+These survive patching. NeuroLint's Layer 8 Security Forensics detects and reports them.
+
+🛡️ SECURITY FEATURES:
+• 70 IoC signatures (continuously updated)
+• SARIF output for CI/CD integration
+• Security baseline creation
+• Drift detection
+• Zero false positives (rule-based, not AI)
+
+🔗 CONNECT:
+• Star the repo: https://github.com/Alcatecablee/Neurolint-CLI
+• Report issues: https://github.com/Alcatecablee/Neurolint-CLI/issues
+• Discussions: https://github.com/Alcatecablee/Neurolint-CLI/discussions
+• Email: clivemakazhu@gmail.com
+
+#React #NextJS #CyberSecurity #CVE202555182 #React2Shell #SecurityTools #OpenSource #InfoSec #WebSecurity #ReactServerComponents #IncidentResponse #ThreatDetection #Vulnerability #Patching #SecurityScanning
