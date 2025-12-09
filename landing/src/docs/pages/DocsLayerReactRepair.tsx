@@ -41,6 +41,11 @@ export function DocsLayerReactRepair() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">Usage</h2>
         
+        <p className="text-gray-400 text-sm mb-3">Using layer-specific command:</p>
+        <CommandBlock command="neurolint components scan ./src" />
+        <CommandBlock command="neurolint components fix ./src --verbose" />
+        
+        <p className="text-gray-400 text-sm mb-3 mt-4">Or using the fix command with layer flag:</p>
         <CommandBlock command="neurolint fix ./src --layers=3 --verbose" />
         <CommandBlock command="neurolint fix ./src --layers=3 --dry-run" />
       </section>
