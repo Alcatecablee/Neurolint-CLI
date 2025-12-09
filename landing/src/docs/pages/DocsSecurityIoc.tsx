@@ -23,37 +23,37 @@ export function DocsSecurityIoc() {
         <div className="space-y-4">
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-medium text-white">Standard Scan (Default)</h3>
+              <h3 className="font-medium text-white">Quick Scan</h3>
               <span className="text-xs text-gray-500">~30 seconds</span>
             </div>
-            <p className="text-gray-400 text-sm mb-2">Full IoC signature matching</p>
-            <CommandBlock command="neurolint security:scan-compromise ./src" />
-          </div>
-
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="font-medium text-white">Quick Scan</h3>
-              <span className="text-xs text-gray-500">~5 seconds</span>
-            </div>
-            <p className="text-gray-400 text-sm mb-2">Essential checks only - great for pre-commit hooks</p>
+            <p className="text-gray-400 text-sm mb-2">Common IoC patterns only - great for pre-commit hooks</p>
             <CommandBlock command="neurolint security:scan-compromise ./src --quick" />
           </div>
 
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="font-medium text-white">Deep Scan</h3>
+              <h3 className="font-medium text-white">Standard Scan (Default)</h3>
               <span className="text-xs text-gray-500">~2 minutes</span>
             </div>
-            <p className="text-gray-400 text-sm mb-2">AST analysis + behavioral patterns + obfuscation detection</p>
+            <p className="text-gray-400 text-sm mb-2">Full IoC signature matching - balanced analysis</p>
+            <CommandBlock command="neurolint security:scan-compromise ./src" />
+          </div>
+
+          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="font-medium text-white">Deep Scan</h3>
+              <span className="text-xs text-gray-500">~3 minutes</span>
+            </div>
+            <p className="text-gray-400 text-sm mb-2">Extended pattern matching + AST analysis</p>
             <CommandBlock command="neurolint security:scan-compromise ./src --deep" />
           </div>
 
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Paranoid Scan</h3>
-              <span className="text-xs text-gray-500">~5 minutes</span>
+              <span className="text-xs text-gray-500">~5-10 minutes</span>
             </div>
-            <p className="text-gray-400 text-sm mb-2">Everything + heuristic analysis (may have false positives)</p>
+            <p className="text-gray-400 text-sm mb-2">Heuristic + behavioral analysis (may have false positives)</p>
             <CommandBlock command="neurolint security:scan-compromise ./src --paranoid" />
           </div>
         </div>
