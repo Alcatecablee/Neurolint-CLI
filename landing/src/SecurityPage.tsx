@@ -20,18 +20,56 @@ import {
   Network,
   Eye,
   Clock,
-  ArrowRight
+  ArrowRight,
+  CheckCircle,
+  ChevronRight
 } from "lucide-react";
 
 const SecurityPage = () => {
   const [copied, setCopied] = React.useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const [activeWorkflowStep, setActiveWorkflowStep] = React.useState(0);
 
   const copyCommand = (command: string, id: string) => {
     navigator.clipboard.writeText(command);
     setCopied(id);
     setTimeout(() => setCopied(null), 2000);
   };
+
+  const workflowSteps = [
+    { 
+      step: 1, 
+      title: 'Patch the CVE', 
+      cmd: 'neurolint security:cve-2025-55182 . --fix', 
+      desc: 'Apply security patches to vulnerable Server Components',
+      screenshot: '/security-patched.png',
+      screenshotAlt: 'CVE patch applied successfully'
+    },
+    { 
+      step: 2, 
+      title: 'Scan for Compromise', 
+      cmd: 'neurolint security:scan-compromise ./src --mode=deep', 
+      desc: 'Detect if exploitation occurred before you patched',
+      screenshot: '/security-dry-run.png',
+      screenshotAlt: 'Deep scan showing vulnerability detection'
+    },
+    { 
+      step: 3, 
+      title: 'Generate Incident Report', 
+      cmd: 'neurolint security:incident-response ./src --format=sarif', 
+      desc: 'Create exportable report for your security team',
+      screenshot: '/security-incident-report.png',
+      screenshotAlt: 'Incident response report output'
+    },
+    { 
+      step: 4, 
+      title: 'Verify Clean State', 
+      cmd: 'neurolint security:compare-baseline ./src', 
+      desc: 'Confirm no unauthorized changes remain',
+      screenshot: '/security-safe.png',
+      screenshotAlt: 'Verification scan showing no vulnerabilities'
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -112,62 +150,143 @@ const SecurityPage = () => {
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 animate-fade-in-blur">
-            Security Forensics for<br />React & Next.js
+            You Patched the CVE.<br />
+            <span className="text-red-400">Were You Already Compromised?</span>
           </h1>
 
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-            While others patch vulnerabilities, we answer the question that keeps security teams up at night: 
-            <span className="text-white font-semibold"> Am I already compromised?</span>
+            Patching closes the door. But the intruder may already be inside. NeuroLint provides 
+            <span className="text-white font-semibold"> forensic-grade incident response</span> to answer the question that keeps security teams up at night.
           </p>
 
           <p className="text-base text-gray-400 mb-10 max-w-2xl mx-auto">
-            80+ IoC signatures. React 19 behavioral analysis. Forensic-grade incident response.
+            80+ IoC signatures. React 19 behavioral analysis. Full incident response workflow.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button 
-              onClick={() => copyCommand('npx @neurolint/cli security:cve-2025-55182 . --fix', 'hero-cve')}
-              className="group px-6 py-4 bg-zinc-900 border border-black text-white rounded-xl hover:bg-zinc-800 transition-all duration-200 flex items-center justify-center gap-3"
-            >
-              <Shield className="w-5 h-5 text-white" />
-              <span className="font-mono text-sm">Patch CVE-2025-55182</span>
-              {copied === 'hero-cve' ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}
-            </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <button 
               onClick={() => copyCommand('npx @neurolint/cli security:scan-compromise ./src --mode=deep', 'hero-scan')}
               className="group px-6 py-4 bg-white text-black rounded-xl hover:bg-gray-100 transition-all duration-200 flex items-center justify-center gap-3 font-semibold"
             >
               <Search className="w-5 h-5" />
-              Scan for Compromise
+              Am I Compromised?
               {copied === 'hero-scan' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
+            </button>
+            <button 
+              onClick={() => copyCommand('npx @neurolint/cli security:incident-response ./src --format=sarif', 'hero-ir')}
+              className="group px-6 py-4 bg-zinc-900 border border-black text-white rounded-xl hover:bg-zinc-800 transition-all duration-200 flex items-center justify-center gap-3"
+            >
+              <FileCheck className="w-5 h-5 text-white" />
+              <span className="font-mono text-sm">Generate Incident Report</span>
+              {copied === 'hero-ir' ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}
             </button>
           </div>
 
-          <div className="bg-zinc-900/80 border border-black rounded-xl p-6 max-w-2xl mx-auto">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
-                <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
-                <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
-              </div>
-              <span className="text-xs text-gray-500 font-mono ml-2">terminal</span>
+          <a href="#workflow" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
+            See the full incident response workflow
+            <ChevronRight className="w-4 h-4" />
+          </a>
+        </div>
+      </section>
+
+      <section id="workflow" className="py-16 md:py-24 px-4 relative bg-zinc-900/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 border border-black text-red-400 rounded-full text-sm font-medium mb-6">
+              <AlertTriangle className="w-4 h-4" />
+              CVE-2025-55182 Incident Response
             </div>
-            <pre className="text-left font-mono text-sm text-gray-300 overflow-x-auto">
-              <code>{`$ `}<span className="text-blue-400">neurolint</span>{` security:scan-compromise ./src --mode=deep
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Complete Incident Response Workflow
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Don't just patch—investigate. Follow this 4-step workflow to determine if your application was exploited before you patched.
+            </p>
+          </div>
 
-Scanning 247 files for indicators of compromise...
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="lg:w-1/3 space-y-3">
+              {workflowSteps.map((item, idx) => (
+                <button
+                  key={item.step}
+                  onClick={() => setActiveWorkflowStep(idx)}
+                  className={`w-full text-left p-4 rounded-xl border transition-all duration-200 ${
+                    activeWorkflowStep === idx 
+                      ? 'bg-zinc-800 border-zinc-600' 
+                      : 'bg-zinc-900 border-black hover:bg-zinc-800/50'
+                  }`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      activeWorkflowStep === idx ? 'bg-white text-black' : 'bg-zinc-700 text-white'
+                    }`}>
+                      <span className="text-sm font-bold">{item.step}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className={`font-semibold mb-1 ${activeWorkflowStep === idx ? 'text-white' : 'text-gray-300'}`}>
+                        {item.title}
+                      </h3>
+                      <p className="text-sm text-gray-500 line-clamp-2">{item.desc}</p>
+                    </div>
+                    {activeWorkflowStep === idx && (
+                      <ChevronRight className="w-5 h-5 text-white flex-shrink-0" />
+                    )}
+                  </div>
+                </button>
+              ))}
 
-`}<span className="text-red-400">CRITICAL</span>{`  IOC-003  Obfuscated eval pattern
-          src/utils/loader.js:45
-          Risk: Remote code execution
+              <div className="mt-4 p-4 bg-zinc-900 border border-black rounded-xl">
+                <div className="flex items-center gap-2 text-green-400 mb-2">
+                  <CheckCircle className="w-5 h-5" />
+                  <span className="font-semibold">Result</span>
+                </div>
+                <p className="text-sm text-gray-400">
+                  Know definitively whether you were compromised or clean.
+                </p>
+              </div>
+            </div>
 
-`}<span className="text-orange-400">HIGH</span>{`      IOC-024  Credential exposure  
-          src/lib/auth.ts:112
-          Risk: Information disclosure
-
-Summary: 2 IoCs detected (`}<span className="text-red-400">1 critical</span>{`, `}<span className="text-orange-400">1 high</span>{`)
-Action: Review flagged files immediately`}</code>
-            </pre>
+            <div className="lg:w-2/3">
+              <div className="bg-zinc-900 border border-black rounded-2xl overflow-hidden">
+                <div className="p-6 border-b border-black">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold">{workflowSteps[activeWorkflowStep].step}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-white">{workflowSteps[activeWorkflowStep].title}</h3>
+                        <p className="text-sm text-gray-400">{workflowSteps[activeWorkflowStep].desc}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 bg-zinc-800 border border-black rounded-lg p-3">
+                    <Terminal className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                    <code className="text-sm font-mono text-blue-400 flex-1 overflow-x-auto">
+                      {workflowSteps[activeWorkflowStep].cmd}
+                    </code>
+                    <button
+                      onClick={() => copyCommand(workflowSteps[activeWorkflowStep].cmd, `workflow-${activeWorkflowStep}`)}
+                      className="p-1.5 hover:bg-zinc-700 rounded transition-colors flex-shrink-0"
+                      aria-label="Copy command"
+                    >
+                      {copied === `workflow-${activeWorkflowStep}` ? (
+                        <Check className="w-4 h-4 text-green-400" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-gray-400" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                <div className="relative">
+                  <img 
+                    src={workflowSteps[activeWorkflowStep].screenshot}
+                    alt={workflowSteps[activeWorkflowStep].screenshotAlt}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -181,7 +300,7 @@ Action: Review flagged files immediately`}</code>
               </div>
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  You Patched CVE-2025-55182. But Were You Exploited First?
+                  Why Patching Isn't Enough
                 </h2>
                 <p className="text-gray-400">
                   CVSS 10.0 — Critical Remote Code Execution in React 19 Server Components
@@ -231,12 +350,12 @@ Action: Review flagged files immediately`}</code>
         </div>
       </section>
 
-      <section className="py-16 md:py-24 px-4 relative">
+      <section className="py-16 md:py-24 px-4 relative bg-zinc-900/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Detection Capabilities</h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Layer 8 provides comprehensive security analysis purpose-built for React and Next.js applications.
+              Comprehensive security analysis purpose-built for React and Next.js applications.
             </p>
           </div>
 
@@ -284,7 +403,7 @@ Action: Review flagged files immediately`}</code>
         </div>
       </section>
 
-      <section className="py-16 md:py-24 px-4 relative bg-zinc-900/30">
+      <section className="py-16 md:py-24 px-4 relative">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Scan Modes</h2>
@@ -325,7 +444,7 @@ Action: Review flagged files immediately`}</code>
         </div>
       </section>
 
-      <section className="py-16 md:py-24 px-4 relative">
+      <section className="py-16 md:py-24 px-4 relative bg-zinc-900/30">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">React 19 Behavioral Patterns</h2>
@@ -366,7 +485,7 @@ Action: Review flagged files immediately`}</code>
         </div>
       </section>
 
-      <section className="py-16 md:py-24 px-4 relative bg-zinc-900/30">
+      <section className="py-16 md:py-24 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">IoC Categories</h2>
@@ -404,86 +523,12 @@ Action: Review flagged files immediately`}</code>
         </div>
       </section>
 
-      <section className="py-16 md:py-24 px-4 relative">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Incident Response Workflow</h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Complete security workflow from patch to verification.
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            {[
-              { step: 1, title: 'Patch Vulnerability', cmd: 'neurolint security:cve-2025-55182 . --fix', desc: 'Apply security patches to vulnerable Server Components' },
-              { step: 2, title: 'Scan for Compromise', cmd: 'neurolint security:scan-compromise ./src --mode=deep', desc: 'Detect if exploitation occurred before patching' },
-              { step: 3, title: 'Generate Report', cmd: 'neurolint security:incident-response ./src --format=sarif', desc: 'Create exportable incident report for your security team' },
-              { step: 4, title: 'Compare Baseline', cmd: 'neurolint security:compare-baseline ./src', desc: 'Verify file integrity against known-good baseline' },
-            ].map((item) => (
-              <div key={item.step} className="flex gap-4 items-start">
-                <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-bold">{item.step}</span>
-                </div>
-                <div className="flex-1 bg-zinc-900 border border-black rounded-xl p-5">
-                  <h3 className="text-lg font-semibold text-white mb-1">{item.title}</h3>
-                  <p className="text-sm text-gray-400 mb-3">{item.desc}</p>
-                  <div className="flex items-center gap-2">
-                    <code className="text-sm font-mono text-blue-400 bg-zinc-800 px-3 py-2 rounded-lg flex-1 overflow-x-auto border border-black">
-                      {item.cmd}
-                    </code>
-                    <button
-                      onClick={() => copyCommand(item.cmd, `step-${item.step}`)}
-                      className="p-2 bg-zinc-800 hover:bg-zinc-700 border border-black rounded-lg transition-colors flex-shrink-0"
-                      aria-label="Copy command"
-                    >
-                      {copied === `step-${item.step}` ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 bg-zinc-900 border border-black rounded-xl p-6 text-center">
-            <p className="text-green-400 font-medium">
-              Result: Know definitively whether you were compromised or clean.
-            </p>
-          </div>
-
-          <div className="mt-12">
-            <h3 className="text-xl font-semibold text-white mb-4 text-center">See It In Action</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <p className="text-gray-400 text-sm mb-3">Incident Response Report:</p>
-                <div className="rounded-lg overflow-hidden border border-black">
-                  <img 
-                    src="/attached_assets/Screenshot_2025-12-09_034612_1765291802532.png" 
-                    alt="Incident Response Report showing HIGH RISK findings"
-                    className="w-full"
-                  />
-                </div>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm mb-3">CVE Vulnerability Patching:</p>
-                <div className="rounded-lg overflow-hidden border border-black">
-                  <img 
-                    src="/attached_assets/Screenshot_2025-12-09_033620_1765291802534.png" 
-                    alt="CVE-2025-55182 fix showing patched packages"
-                    className="w-full"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="py-16 md:py-24 px-4 relative bg-zinc-900/30">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Real-World Scenario</h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Timeline of how Layer 8 reveals post-exploitation compromise.
+              Timeline of how NeuroLint reveals post-exploitation compromise.
             </p>
           </div>
 
@@ -496,7 +541,7 @@ Action: Review flagged files immediately`}</code>
                 { date: 'Dec 3', event: 'Active Exploitation Begins', desc: 'State-nexus threat actors begin automated scanning and exploitation within hours.', type: 'danger' },
                 { date: 'Dec 4-7', event: 'Attacks Continue', desc: 'Your application is vulnerable. Attackers may plant backdoors, steal credentials.', type: 'danger' },
                 { date: 'Dec 8', event: 'You Patch with NeuroLint', desc: 'Run security:cve-2025-55182 command. Vulnerability is now closed.', type: 'success' },
-                { date: 'Dec 9', event: 'Layer 8 Reveals Compromise', desc: 'Deep scan detects backdoor planted on Dec 5. Security team investigates.', type: 'warning' },
+                { date: 'Dec 9', event: 'NeuroLint Reveals Compromise', desc: 'Deep scan detects backdoor planted on Dec 5. Security team investigates.', type: 'warning' },
               ].map((item, idx) => (
                 <div key={idx} className={`flex gap-4 md:gap-8 ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                   <div className={`flex-1 ${idx % 2 === 0 ? 'md:text-right' : ''}`}>
