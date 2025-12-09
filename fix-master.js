@@ -528,6 +528,9 @@ async function executeLayers(code, layers, options = {}) {
         }
       }
 
+      // Capture code before transformation for Layer 7 learning
+      const previousCode = finalCode;
+
       // Execute layer transformation with retry logic
       let attempts = 0;
       const maxRetries = 3;
@@ -590,10 +593,15 @@ async function executeLayers(code, layers, options = {}) {
       if (result) {
         results.push({
           layer: layerNum,
+          layerId: layerNum,
           success: result.success,
           changes: result.changes?.length || 0,
+          changeCount: result.changeCount || result.changes?.length || 0,
           warnings: result.warnings || [],
-          error: result.error
+          error: result.error,
+          originalCode: previousCode,
+          code: result.code,
+          securityFindings: result.securityFindings || []
         });
       }
 

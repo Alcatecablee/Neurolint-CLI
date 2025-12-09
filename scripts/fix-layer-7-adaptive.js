@@ -219,6 +219,21 @@ async function transform(code, options = {}) {
           changes.push({ type: 'learn', description: pattern.description, location: null });
         }
       }
+
+      // Learn from Layer 8 security findings (Layer 8 → Layer 7 integration)
+      for (const result of previousResults.filter(r => r && Array.isArray(r.securityFindings) && r.securityFindings.length > 0)) {
+        const securityPatterns = extractSecurityPatterns(result.securityFindings);
+        for (const pattern of securityPatterns) {
+          await ruleStore.addRule(pattern);
+          results.push({
+            type: 'learn-security',
+            file: filePath,
+            success: true,
+            details: `Learned security pattern: ${pattern.description} from Layer 8`
+          });
+          changes.push({ type: 'learn-security', description: pattern.description, location: null });
+        }
+      }
     }
 
     // Apply learned rules
@@ -388,4 +403,105 @@ function extractPatterns(before, after, layerId) {
   return patterns;
 }
 
-module.exports = { transform, RuleStore };
+/**
+ * Extract security patterns from Layer 8 security findings
+ * This enables Layer 7 to learn from Layer 8's security analysis
+ * @param {Array} securityFindings - Array of security findings from Layer 8
+ * @returns {Array} - Array of learnable patterns
+ */
+function extractSecurityPatterns(securityFindings) {
+  const patterns = [];
+  
+  if (!Array.isArray(securityFindings) || securityFindings.length === 0) {
+    return patterns;
+  }
+  
+  try {
+    for (const finding of securityFindings) {
+      // Only learn from high-severity findings to avoid noise
+      const severity = (finding.severity || '').toLowerCase();
+      if (severity !== 'critical' && severity !== 'high') {
+        continue;
+      }
+      
+      // Create pattern based on finding type
+      const signatureId = finding.signatureId || finding.type || 'unknown';
+      const description = finding.description || finding.message || signatureId;
+      
+      // Generate regex pattern from the finding context if available
+      let patternRegex = null;
+      let replacement = null;
+      
+      // Handle common security patterns
+      if (signatureId.includes('eval') || description.toLowerCase().includes('eval')) {
+        patternRegex = /\beval\s*\([^)]+\)/g;
+        replacement = '/* SECURITY: eval() removed by NeuroLint */';
+      } else if (signatureId.includes('innerHTML') || description.toLowerCase().includes('innerhtml')) {
+        patternRegex = /\.innerHTML\s*=\s*[^;]+/g;
+        replacement = '.textContent = /* SECURITY: innerHTML replaced */';
+      } else if (signatureId.includes('dangerouslySetInnerHTML') || description.toLowerCase().includes('dangerouslysetinnerhtml')) {
+        patternRegex = /dangerouslySetInnerHTML\s*=\s*\{\s*\{[^}]+\}\s*\}/g;
+        replacement = '/* SECURITY: dangerouslySetInnerHTML removed */';
+      } else if (signatureId.includes('hardcoded') || description.toLowerCase().includes('hardcoded')) {
+        // Detect hardcoded secrets/credentials
+        patternRegex = /(password|secret|key|token|apikey|api_key)\s*[:=]\s*['"][^'"]+['"]/gi;
+        replacement = '$1: process.env.$1 /* SECURITY: moved to env var */';
+      } else if (signatureId.includes('exec') || description.toLowerCase().includes('command injection')) {
+        patternRegex = /child_process\.(exec|execSync)\s*\([^)]+\)/g;
+        replacement = '/* SECURITY: exec removed - use spawn with validated input */';
+      } else if (signatureId.includes('sql') || description.toLowerCase().includes('sql injection')) {
+        // SQL injection prevention hint
+        patternRegex = /`[^`]*\$\{[^}]+\}[^`]*`/g;
+        replacement = '/* SECURITY: Use parameterized queries instead of template literals */';
+      }
+      
+      // Only add if we have a valid pattern
+      if (patternRegex) {
+        patterns.push({
+          description: `Security: ${description}`,
+          pattern: patternRegex,
+          replacement: replacement,
+          confidence: 0.95,
+          frequency: 1,
+          layer: 8,
+          securityRelated: true,
+          severity: severity,
+          signatureId: signatureId
+        });
+      }
+      
+      // Also create a more generic pattern using the finding's context if available
+      if (finding.context || finding.match) {
+        const contextPattern = escapeRegex(finding.match || finding.context);
+        if (contextPattern && contextPattern.length > 5 && contextPattern.length < 200) {
+          patterns.push({
+            description: `Security context: ${description}`,
+            pattern: new RegExp(contextPattern, 'g'),
+            replacement: `/* SECURITY FLAGGED: ${signatureId} */`,
+            confidence: 0.85,
+            frequency: 1,
+            layer: 8,
+            securityRelated: true,
+            severity: severity
+          });
+        }
+      }
+    }
+  } catch (error) {
+    // Silently handle extraction errors
+  }
+  
+  return patterns;
+}
+
+/**
+ * Escape special regex characters in a string
+ * @param {string} str - String to escape
+ * @returns {string} - Escaped string safe for use in RegExp
+ */
+function escapeRegex(str) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+module.exports = { transform, RuleStore, extractPatterns, extractSecurityPatterns };

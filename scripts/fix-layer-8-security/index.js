@@ -123,11 +123,14 @@ class Layer8SecurityForensics {
   
   async transform(code, options = {}) {
     if (!this.options.quarantine) {
+      // Even in read-only mode, perform analysis to emit securityFindings for Layer 7
+      const analysis = await this.analyze(code, options);
       return {
         success: true,
         code: code,
         originalCode: code,
         changeCount: 0,
+        securityFindings: analysis.securityFindings || [],
         message: 'Layer 8 is read-only. Enable quarantine mode for code modification.',
         executionTime: 0
       };
@@ -145,6 +148,7 @@ class Layer8SecurityForensics {
           code: originalCode,
           originalCode,
           changeCount: 0,
+          securityFindings: [],
           message: 'No security issues to quarantine',
           executionTime: Date.now() - startTime
         };
@@ -171,6 +175,7 @@ class Layer8SecurityForensics {
           code: originalCode,
           originalCode,
           changeCount: 0,
+          securityFindings: analysis.securityFindings || [],
           revertReason: validation.reason,
           message: 'Transformation reverted to preserve code integrity',
           executionTime: Date.now() - startTime
@@ -182,7 +187,7 @@ class Layer8SecurityForensics {
         code: modifiedCode,
         originalCode,
         changeCount,
-        findings: analysis.securityFindings,
+        securityFindings: analysis.securityFindings || [],
         message: `Neutralized ${changeCount} critical threats`,
         executionTime: Date.now() - startTime
       };
@@ -193,6 +198,7 @@ class Layer8SecurityForensics {
         code: originalCode,
         originalCode,
         changeCount: 0,
+        securityFindings: [],
         error: error.message,
         message: 'Transformation failed, original code preserved',
         executionTime: Date.now() - startTime
