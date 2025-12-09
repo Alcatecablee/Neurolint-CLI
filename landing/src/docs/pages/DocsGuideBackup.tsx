@@ -113,14 +113,34 @@ export function DocsGuideBackup() {
         <h2 className="text-2xl font-bold text-white mb-4">Production Backups</h2>
         
         <p className="text-gray-300 mb-4">
-          For production environments, use encrypted backups:
+          For production environments, use enhanced backup settings:
         </p>
 
         <CommandBlock command="neurolint fix ./src --all-layers --production" />
 
         <p className="text-gray-400 text-sm mt-4">
-          The --production flag creates backups with encryption for sensitive codebases.
+          The --production flag enables production-grade backup management with:
         </p>
+        
+        <ul className="space-y-2 text-gray-400 text-sm mt-3">
+          <li className="flex items-start gap-2">
+            <span className="text-gray-600 mt-1">-</span>
+            <span>Increased backup retention (50 backups vs 10 in development)</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-gray-600 mt-1">-</span>
+            <span>Enhanced logging with file-based audit trails</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-gray-600 mt-1">-</span>
+            <span>Environment-aware configuration for CI/CD pipelines</span>
+          </li>
+        </ul>
+
+        <Callout type="info" title="Note on encryption">
+          Encryption features are available through the enterprise encryption management commands. 
+          Use <code className="text-gray-300 bg-zinc-800 px-1 rounded">neurolint encryption status</code> to check encryption status.
+        </Callout>
       </section>
 
       <section>

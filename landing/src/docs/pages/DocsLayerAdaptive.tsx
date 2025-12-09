@@ -57,35 +57,42 @@ export function DocsLayerAdaptive() {
         <h2 className="text-2xl font-bold text-white mb-4">How It Learns</h2>
         
         <p className="text-gray-300 mb-4">
-          Layer 7 observes the transformations applied by previous layers and extracts 
-          patterns that can be reused:
+          Layer 7 receives transformation results from previous layers when run together 
+          via the <code className="text-gray-300 bg-zinc-800 px-1 rounded">--all-layers</code> flag 
+          or when Layer 7 is included in a multi-layer run:
         </p>
 
-        <div className="space-y-4">
+        <Callout type="warning" title="Important">
+          Learning only occurs when Layer 7 runs in the same execution as other layers. 
+          Running <code className="text-gray-300 bg-zinc-800 px-1 rounded">neurolint fix . --layers=7</code> alone 
+          will only apply existing rules, not learn new patterns.
+        </Callout>
+
+        <div className="space-y-4 mt-6">
           <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">1</div>
             <div>
-              <h3 className="font-medium text-white">Observe</h3>
+              <h3 className="font-medium text-white">Receive Results</h3>
               <p className="text-sm text-gray-400">
-                Watches transformations from Layers 1-6 and records before/after states
+                Gets <code className="text-gray-300 bg-zinc-800 px-1 rounded">previousResults</code> array from fix-master.js containing layer outcomes
               </p>
             </div>
           </div>
           <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">2</div>
             <div>
-              <h3 className="font-medium text-white">Extract</h3>
+              <h3 className="font-medium text-white">Extract Patterns</h3>
               <p className="text-sm text-gray-400">
-                Identifies common patterns across multiple files
+                Compares before/after code from successful transformations (e.g., Layer 5 adding 'use client')
               </p>
             </div>
           </div>
           <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">3</div>
             <div>
-              <h3 className="font-medium text-white">Score</h3>
+              <h3 className="font-medium text-white">Score & Store</h3>
               <p className="text-sm text-gray-400">
-                Assigns confidence scores based on frequency and consistency
+                Assigns confidence scores (starting at 0.9) and saves to .neurolint/learned-rules.json
               </p>
             </div>
           </div>
@@ -94,7 +101,7 @@ export function DocsLayerAdaptive() {
             <div>
               <h3 className="font-medium text-white">Apply</h3>
               <p className="text-sm text-gray-400">
-                Applies rules with 70%+ confidence to new files
+                Applies rules with 70%+ confidence to current and future files
               </p>
             </div>
           </div>

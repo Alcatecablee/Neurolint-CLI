@@ -169,7 +169,7 @@ Layer 3 (Components) → Improves React components
 Layer 4 (Hydration)  → Adds SSR guards
 Layer 5 (Next.js)    → App Router optimizations
 Layer 6 (Testing)    → Test infrastructure
-Layer 7 (Adaptive)   → Learns patterns from above
+Layer 7 (Adaptive)   → Applies & learns rules (when run with other layers)
 Layer 8 (Security)   → Scans for threats`}
         />
 

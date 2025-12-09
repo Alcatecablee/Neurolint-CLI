@@ -61,7 +61,7 @@ export function DocsCommandFix() {
               </tr>
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--production</td>
-                <td className="py-3 px-4 text-gray-400">Use production-grade backups with encryption</td>
+                <td className="py-3 px-4 text-gray-400">Use production-grade backups with enhanced logging and retention</td>
               </tr>
             </tbody>
           </table>

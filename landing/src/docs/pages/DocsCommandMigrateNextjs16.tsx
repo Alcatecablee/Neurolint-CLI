@@ -35,7 +35,7 @@ export function DocsCommandMigrateNextjs16() {
           </div>
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <h3 className="font-medium text-white mb-2">Async params</h3>
-            <p className="text-gray-400">Converts sync params to async: ({ params }) to async (props) with await.</p>
+            <p className="text-gray-400">Converts sync params to async: {"({ params })"} to async (props) with await.</p>
           </div>
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <h3 className="font-medium text-white mb-2">cookies() and headers()</h3>
