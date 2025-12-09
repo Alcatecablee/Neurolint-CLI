@@ -96,8 +96,11 @@ class RuleStore {
             appliedRules.push(rule.description);
           }
         }
-      } catch {
-        // Silently skip failed rules
+      } catch (error) {
+        // Log rule application errors in verbose/debug mode
+        if (process.env.NEUROLINT_DEBUG === 'true') {
+          process.stderr.write(`[DEBUG] Rule application failed for "${rule.description}": ${error.message}\n`);
+        }
       }
     }
 
@@ -252,23 +255,28 @@ async function transform(code, options = {}) {
     });
 
     // Add general adaptive suggestions for any file
+    // NOTE: Suggestions are tracked separately and do NOT increment changeCount
+    // to avoid inflating metrics with non-transformative suggestions
+    const suggestions = [];
+    
     if (updatedCode.includes('console.') && !updatedCode.includes('// [NeuroLint]')) {
-      changes.push({ 
+      suggestions.push({ 
         type: 'AdaptiveSuggestion', 
         description: 'Console statements detected - consider removing for production', 
         location: null 
       });
-      changeCount++;
     }
 
     if (updatedCode.includes('style={{') && updatedCode.includes('}}')) {
-      changes.push({ 
+      suggestions.push({ 
         type: 'AdaptiveSuggestion', 
         description: 'Inline styles detected - consider using CSS classes for better performance', 
         location: null 
       });
-      changeCount++;
     }
+    
+    // Add suggestions to changes array but don't count them as actual changes
+    changes.push(...suggestions);
 
     updatedCode = updatedCode.trim().replace(/\r\n/g, '\n');
 
@@ -329,34 +337,37 @@ function extractPatterns(before, after, layerId) {
     if (beforeSnip !== afterSnip) {
       // Learn Layer 5 pattern: adding 'use client' directive
       if (layerId === 5 && afterSnip.includes("'use client'") && !beforeSnip.includes("'use client'")) {
-        patterns.push({
-          description: 'Add use client directive for React components',
-          pattern: /^(import\s+.*?from\s+['"]react['"];?\s*\n)/m,
-          replacement: "'use client';\n$1",
-          confidence: 0.9,
-          frequency: 1,
-          layer: layerId
-        });
+        // Only add pattern for files with React hooks (useState, useEffect, etc.)
+        // This ensures we only apply 'use client' to files that actually need it
+        const hasReactHooks = /use(State|Effect|Context|Reducer|Callback|Memo|Ref|LayoutEffect|ImperativeHandle|DebugValue)\s*\(/.test(afterSnip);
         
-        // Add a simpler pattern that just looks for React imports
-        patterns.push({
-          description: 'Add use client directive for any React import',
-          pattern: /^(import\s+.*?from\s+['"]react['"];?\s*\n)/m,
-          replacement: "'use client';\n$1",
-          confidence: 0.8,
-          frequency: 1,
-          layer: layerId
-        });
+        if (hasReactHooks) {
+          patterns.push({
+            description: 'Add use client directive for React components with hooks',
+            pattern: /^(import\s+.*?from\s+['"]react['"];?\s*\n)/m,
+            replacement: "'use client';\n$1",
+            confidence: 0.9,
+            frequency: 1,
+            layer: layerId
+          });
+        }
         
-        // Add a very simple pattern that just adds 'use client' at the start
-        patterns.push({
-          description: 'Add use client directive at file start',
-          pattern: /^/,
-          replacement: "'use client';\n",
-          confidence: 0.7,
-          frequency: 1,
-          layer: layerId
-        });
+        // Pattern for files importing client-side hooks from react
+        const hasClientImports = /import\s*\{[^}]*(useState|useEffect|useContext|useReducer)[^}]*\}\s*from\s+['"]react['"]/.test(afterSnip);
+        if (hasClientImports) {
+          patterns.push({
+            description: 'Add use client directive for files importing React hooks',
+            pattern: /^(import\s*\{[^}]*(useState|useEffect|useContext|useReducer)[^}]*\}\s*from\s+['"]react['"];?\s*\n)/m,
+            replacement: "'use client';\n$1",
+            confidence: 0.85,
+            frequency: 1,
+            layer: layerId
+          });
+        }
+        
+        // NOTE: Removed the overly broad /^/ pattern that would match ANY file
+        // and add 'use client' indiscriminately. This was a bug that could corrupt
+        // server components and non-React files.
       }
       
       // Learn Layer 6 pattern: adding error boundaries or memoization
@@ -397,7 +408,10 @@ function extractPatterns(before, after, layerId) {
       }
     }
   } catch (error) {
-    // Silently handle extraction errors
+    // Log extraction errors in debug mode for troubleshooting
+    if (process.env.NEUROLINT_DEBUG === 'true') {
+      process.stderr.write(`[DEBUG] extractPatterns error: ${error.message}\n`);
+    }
   }
   
   return patterns;
@@ -488,7 +502,10 @@ function extractSecurityPatterns(securityFindings) {
       }
     }
   } catch (error) {
-    // Silently handle extraction errors
+    // Log security pattern extraction errors in debug mode
+    if (process.env.NEUROLINT_DEBUG === 'true') {
+      process.stderr.write(`[DEBUG] extractSecurityPatterns error: ${error.message}\n`);
+    }
   }
   
   return patterns;

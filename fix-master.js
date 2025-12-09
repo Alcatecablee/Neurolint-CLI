@@ -501,16 +501,13 @@ async function executeLayers(code, layers, options = {}) {
       // Create centralized backup before layer execution
       if (!dryRun) {
         try {
-          // Initialize backup manager if not already done
-          if (!this.backupManager) {
-            this.backupManager = new BackupManager({
-              backupDir: '.neurolint-backups',
-              maxBackups: 10
-            });
-          }
+          // Create backup using backup manager (local instance for standalone function)
+          const backupManager = new BackupManager({
+            backupDir: '.neurolint-backups',
+            maxBackups: 10
+          });
           
-          // Create backup using centralized manager
-          const backupResult = await this.backupManager.createBackup(filePath, `layer-${layerNum}`);
+          const backupResult = await backupManager.createBackup(filePath, `layer-${layerNum}`);
           
           if (backupResult.success) {
             state.backups.push(backupResult.backupPath);
@@ -627,7 +624,11 @@ async function executeLayers(code, layers, options = {}) {
       if (!dryRun && state.backups.length > 0) {
         try {
           const lastBackup = state.backups[state.backups.length - 1];
-          const restoreResult = await this.backupManager.restoreFromBackup(lastBackup, filePath);
+          const restoreBackupManager = new BackupManager({
+            backupDir: '.neurolint-backups',
+            maxBackups: 10
+          });
+          const restoreResult = await restoreBackupManager.restoreFromBackup(lastBackup, filePath);
           
           if (restoreResult.success) {
             finalCode = restoreResult.backupInfo.content;
