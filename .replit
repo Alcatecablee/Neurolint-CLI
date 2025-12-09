@@ -21,21 +21,17 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "webview"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm run dev"
 waitForPort = 5000
 
-[workflows.workflow.metadata]
-outputType = "webview"
-
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 33389
-externalPort = 5000
 
 [[ports]]
 localPort = 35247
@@ -92,6 +88,10 @@ externalPort = 3002
 [[ports]]
 localPort = 46715
 externalPort = 8000
+
+[[ports]]
+localPort = 46803
+externalPort = 5000
 
 [deployment]
 deploymentTarget = "static"

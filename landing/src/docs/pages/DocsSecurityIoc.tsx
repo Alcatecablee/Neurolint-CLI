@@ -1,5 +1,5 @@
 import React from "react";
-import { DocsLayout, CommandBlock, CodeBlock, Callout } from "../components";
+import { DocsLayout, CommandBlock, Callout } from "../components";
 
 export function DocsSecurityIoc() {
   return (
@@ -93,25 +93,17 @@ export function DocsSecurityIoc() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">Example Output</h2>
         
-        <CodeBlock
-          language="text"
-          code={`Scanning for indicators of compromise...
+        <p className="text-gray-300 mb-4">
+          Here's an example of a complete incident response scan:
+        </p>
 
-CRITICAL: IOC-003 found in src/utils/analytics.js:45
-  Pattern: Obfuscated eval with string concatenation
-  Risk: Remote code execution
-
-HIGH: IOC-024 found in src/lib/auth.ts:112
-  Pattern: Credential exposure in error message
-  Risk: Information disclosure
-
-MEDIUM: IOC-041 found in src/hooks/useData.ts:23
-  Pattern: Fetch to IP address instead of domain
-  Risk: Potential data exfiltration
-
-Summary: 3 IoCs detected (1 critical, 1 high, 1 medium)
-Recommendation: Review flagged files immediately`}
-        />
+        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+          <img 
+            src="/attached_assets/Screenshot_2025-12-09_033436_1765291802535.png" 
+            alt="Security scan showing vulnerable packages detected"
+            className="w-full"
+          />
+        </div>
       </section>
 
       <section className="mb-12">

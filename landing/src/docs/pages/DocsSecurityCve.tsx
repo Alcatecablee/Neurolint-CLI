@@ -106,33 +106,41 @@ export function DocsSecurityCve() {
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">Example Output</h2>
         
-        <CodeBlock
-          language="text"
-          code={`======================================================================
-   CRITICAL SECURITY VULNERABILITY: CVE-2025-55182
-   React Server Components Remote Code Execution (CVSS 10.0)
-======================================================================
+        <p className="text-gray-400 text-sm mb-4">Scanning for vulnerable packages:</p>
+        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+          <img 
+            src="/attached_assets/Screenshot_2025-12-09_033436_1765291802535.png" 
+            alt="CVE-2025-55182 scan showing vulnerable packages detected"
+            className="w-full"
+          />
+        </div>
 
-[!] Found 2 vulnerable package(s)!
+        <p className="text-gray-400 text-sm mb-4">Preview changes with --dry-run:</p>
+        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+          <img 
+            src="/attached_assets/Screenshot_2025-12-09_034116_1765291802533.png" 
+            alt="CVE-2025-55182 dry-run showing proposed changes"
+            className="w-full"
+          />
+        </div>
 
-Vulnerable Packages:
+        <p className="text-gray-400 text-sm mb-4">After applying the fix:</p>
+        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+          <img 
+            src="/attached_assets/Screenshot_2025-12-09_033620_1765291802534.png" 
+            alt="CVE-2025-55182 fix applied showing patched packages"
+            className="w-full"
+          />
+        </div>
 
-  [VULNERABLE] react
-              Current: ^19.2.0
-              Patched: 19.2.1
-
-  [VULNERABLE] next
-              Current: ^16.0.0
-              Patched: 16.0.7
-
-[DRY RUN] Changes that would be made:
-
-  - Update react to 19.2.1
-  - Update react-dom to 19.2.1
-  - Update next to 16.0.7
-
-Run with --fix to apply these changes.`}
-        />
+        <p className="text-gray-400 text-sm mb-4">Verification scan showing project is safe:</p>
+        <div className="rounded-lg overflow-hidden border border-zinc-800">
+          <img 
+            src="/attached_assets/Screenshot_2025-12-09_034957_1765291802531.png" 
+            alt="CVE-2025-55182 verification showing no vulnerable packages"
+            className="w-full"
+          />
+        </div>
       </section>
 
       <section className="mb-12">

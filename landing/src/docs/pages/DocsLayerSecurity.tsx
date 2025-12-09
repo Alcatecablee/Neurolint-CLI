@@ -1,5 +1,5 @@
 import React from "react";
-import { DocsLayout, CommandBlock, CodeBlock, Callout, BeforeAfter } from "../components";
+import { DocsLayout, CommandBlock, Callout } from "../components";
 import { Link } from "react-router-dom";
 
 export function DocsLayerSecurity() {
@@ -66,28 +66,16 @@ export function DocsLayerSecurity() {
         <CommandBlock command="neurolint security:scan-compromise ./src --verbose" />
 
         <p className="text-gray-400 text-sm mt-4 mb-4">
-          Example output when issues are found:
+          Example incident response output:
         </p>
 
-        <CodeBlock
-          language="text"
-          code={`Scanning for indicators of compromise...
-
-CRITICAL: IOC-003 found in src/utils/analytics.js:45
-  Pattern: Obfuscated eval with string concatenation
-  Risk: Remote code execution
-
-HIGH: IOC-024 found in src/lib/auth.ts:112
-  Pattern: Credential exposure in error message
-  Risk: Information disclosure
-
-MEDIUM: IOC-041 found in src/hooks/useData.ts:23
-  Pattern: Fetch to IP address instead of domain
-  Risk: Potential data exfiltration
-
-Summary: 3 IoCs detected (1 critical, 1 high, 1 medium)
-Recommendation: Review flagged files immediately`}
-        />
+        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+          <img 
+            src="/attached_assets/Screenshot_2025-12-09_034612_1765291802532.png" 
+            alt="Incident Response Report showing findings summary"
+            className="w-full"
+          />
+        </div>
       </section>
 
       <section className="mb-12">

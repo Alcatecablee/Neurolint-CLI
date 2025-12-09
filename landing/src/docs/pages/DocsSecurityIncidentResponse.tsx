@@ -99,6 +99,22 @@ export function DocsSecurityIncidentResponse() {
       </section>
 
       <section className="mb-12">
+        <h2 className="text-2xl font-bold text-white mb-4">Example Report</h2>
+        
+        <p className="text-gray-300 mb-4">
+          Here's an example of a complete incident response report output:
+        </p>
+
+        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+          <img 
+            src="/attached_assets/Screenshot_2025-12-09_034612_1765291802532.png" 
+            alt="Incident Response Report showing findings summary and risk level"
+            className="w-full"
+          />
+        </div>
+      </section>
+
+      <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">Report Contents</h2>
         
         <p className="text-gray-300 mb-4">

@@ -449,6 +449,32 @@ Action: Review flagged files immediately`}</code>
               Result: Know definitively whether you were compromised or clean.
             </p>
           </div>
+
+          <div className="mt-12">
+            <h3 className="text-xl font-semibold text-white mb-4 text-center">See It In Action</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <p className="text-gray-400 text-sm mb-3">Incident Response Report:</p>
+                <div className="rounded-lg overflow-hidden border border-black">
+                  <img 
+                    src="/attached_assets/Screenshot_2025-12-09_034612_1765291802532.png" 
+                    alt="Incident Response Report showing HIGH RISK findings"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-3">CVE Vulnerability Patching:</p>
+                <div className="rounded-lg overflow-hidden border border-black">
+                  <img 
+                    src="/attached_assets/Screenshot_2025-12-09_033620_1765291802534.png" 
+                    alt="CVE-2025-55182 fix showing patched packages"
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
