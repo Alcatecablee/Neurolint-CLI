@@ -79,12 +79,13 @@ export function DocsArchitecture() {
     {
       num: 7,
       name: "Adaptive",
-      description: "Learns and applies patterns from prior fixes",
+      description: "Learns and applies patterns from prior fixes with production-grade reliability",
       fixes: [
         "Stores learned rules in .neurolint/learned-rules.json",
-        "Applies project-specific patterns from previous runs",
-        "Adapts to your team's coding conventions",
-        "Remembers custom transformation preferences",
+        "Applies project-specific patterns with 70%+ confidence scoring",
+        "Smart pattern extraction - only learns from files with actual React hooks",
+        "Separates suggestions from actual changes for accurate metrics",
+        "Debug logging via NEUROLINT_DEBUG environment variable",
       ],
       link: "/docs/layers/adaptive",
     },

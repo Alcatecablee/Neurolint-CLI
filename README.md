@@ -178,7 +178,7 @@ Each layer builds on the previous, ensuring safe and comprehensive transformatio
 4. **SSR/Hydration Safety** — Protects against hydration errors with client-side API guards
 5. **Next.js App Router** — Optimizes 'use client', Server Components, import structure
 6. **Testing & Error Handling** — Generates error boundaries, scaffolds test files
-7. **Adaptive Learning** — Learns project patterns and enforces custom conventions
+7. **Adaptive Learning** — Production-grade pattern learning with 70%+ confidence scoring and 41 unit tests
 8. **Security Forensics** — Post-exploitation detection, compromise scanning, incident response
 
 [See detailed layer documentation in CLI_USAGE.md](./CLI_USAGE.md#layer-overview-table)

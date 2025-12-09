@@ -34,7 +34,7 @@ The core engine processes code through progressive layers, each handling specifi
 
 **Layer 6 - Testing Infrastructure:** Adds error boundaries, suggests test scaffolding, and provides MSW/RSC testing guidance.
 
-**Layer 7 - Adaptive Learning:** Learns project-specific patterns from previous transformations and stores custom rules in `.neurolint/learned-rules.json`.
+**Layer 7 - Adaptive Learning:** Production-grade pattern learning with smart extraction (only learns from files with actual React hooks), confidence scoring (70%+ threshold), suggestion/change separation, and verbose debug logging. Stores custom rules in `.neurolint/learned-rules.json`. Backed by 41 comprehensive unit tests.
 
 **Layer 8 - Security Forensics:** Detects 80+ Indicators of Compromise (IoC) including obfuscated eval, credential leaks, and post-exploitation patterns. Includes CVE-2025-55182 (React Server Components RCE) detection and patching.
 

@@ -51,9 +51,9 @@ const LAYERS = [
     experimental: false,
   },
   {
-    name: "AdaptiveLearn",
+    name: "Adaptive",
     description:
-      "Learns and applies patterns from prior fixes for intelligent code adaptation.",
+      "Production-grade pattern learning with confidence scoring, smart extraction, and 41 unit tests.",
     status: "live",
     experimental: false,
   },

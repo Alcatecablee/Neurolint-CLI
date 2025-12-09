@@ -17,11 +17,11 @@ export function DocsLayerAdaptive() {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
-            <span>Extracts common patterns and creates rules</span>
+            <span>Smart pattern extraction - only learns from files with actual React hooks</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
-            <span>Applies learned rules with confidence scoring</span>
+            <span>Applies learned rules with 70%+ confidence scoring</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
@@ -29,11 +29,15 @@ export function DocsLayerAdaptive() {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
-            <span>Provides adaptive suggestions for inline styles</span>
+            <span>Separates suggestions from actual changes (accurate metrics)</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
-            <span>Adapts to project-specific conventions</span>
+            <span>Debug logging via NEUROLINT_DEBUG environment variable</span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-gray-500 mt-1">-</span>
+            <span>Dry-run mode returns transformed code for preview</span>
           </li>
         </ul>
       </section>
@@ -140,20 +144,24 @@ export function DocsLayerAdaptive() {
         
         <div className="space-y-3">
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <h3 className="font-medium text-white mb-1">Pattern extraction</h3>
-            <p className="text-sm text-gray-400">Machine learning-like pattern extraction from transformations</p>
+            <h3 className="font-medium text-white mb-1">Smart pattern extraction</h3>
+            <p className="text-sm text-gray-400">Only learns from files with actual React hooks - no overly broad patterns</p>
           </div>
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
             <h3 className="font-medium text-white mb-1">Confidence scoring</h3>
-            <p className="text-sm text-gray-400">Only applies rules with minimum 70% confidence</p>
+            <p className="text-sm text-gray-400">Only applies rules with minimum 70% confidence threshold</p>
           </div>
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <h3 className="font-medium text-white mb-1">Rule persistence</h3>
-            <p className="text-sm text-gray-400">Rules persist across runs and can be shared</p>
+            <h3 className="font-medium text-white mb-1">Accurate metrics</h3>
+            <p className="text-sm text-gray-400">Suggestions tracked separately from actual changes - no inflated counts</p>
           </div>
           <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <h3 className="font-medium text-white mb-1">Style adaptation</h3>
-            <p className="text-sm text-gray-400">Learns project-specific code style preferences</p>
+            <h3 className="font-medium text-white mb-1">Debug logging</h3>
+            <p className="text-sm text-gray-400">Verbose error logging via NEUROLINT_DEBUG environment variable</p>
+          </div>
+          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <h3 className="font-medium text-white mb-1">Production-grade reliability</h3>
+            <p className="text-sm text-gray-400">Backed by 41 comprehensive unit tests covering all functionality</p>
           </div>
         </div>
       </section>
@@ -182,8 +190,9 @@ export function DocsLayerAdaptive() {
 
         <Callout type="info" title="Technical details">
           Implements RuleStore class for pattern persistence. Uses confidence scoring 
-          (0-1.0) and frequency tracking. Extracts patterns by comparing before/after 
-          code from previous layers.
+          (0-1.0) and frequency tracking. Smart pattern extraction only creates rules 
+          for files with actual React hooks (hasReactHooks, hasClientImports checks). 
+          Dry-run mode returns transformed code. Backed by 41 unit tests.
         </Callout>
       </section>
     </DocsLayout>

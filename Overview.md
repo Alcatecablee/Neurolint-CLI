@@ -24,6 +24,17 @@ This is the NeuroLint CLI project - a deterministic code transformation tool for
 
 ## Recent Changes
 
+**December 9, 2025** - Version 1.5.1 - Layer 7 Production-Grade Fixes
+
+Layer 7 (Adaptive Pattern Learning) received comprehensive production-grade fixes:
+
+- **Fixed overly broad pattern**: The `/^/` pattern that matched everything is now replaced with proper React hook detection
+- **Fixed context issue**: `this.backupManager` undefined error resolved by using local instances
+- **Fixed dry-run mode**: Now returns transformed code instead of original code
+- **Fixed suggestion counting**: Suggestions no longer inflate the `changeCount` metric
+- **Added verbose logging**: Debug output via `NEUROLINT_DEBUG='true'` environment variable
+- **Added 41 unit tests**: Comprehensive coverage for RuleStore, transforms, and pattern extraction
+
 **December 8, 2025** - Version 1.4.9 - React 19 Security Patterns
 
 Added React 19-specific behavioral analysis patterns (BEHAV-023 to BEHAV-027):

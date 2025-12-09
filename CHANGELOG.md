@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2025-12-09
+
+### Fixed
+
+#### Layer 7 Production-Grade Fixes
+- **Fixed**: Overly broad `/^/` pattern in `extractPatterns()` that matched everything
+  - Now only creates 'use client' patterns for files with actual React hooks (`hasReactHooks`, `hasClientImports` checks)
+- **Fixed**: `this` context issue in `executeLayers()` causing `this.backupManager` to be undefined
+  - Changed from `this.backupManager` to local `backupManager` instance variables
+- **Fixed**: Dry-run mode returning original code instead of transformed code
+  - Now returns `updatedCode` so callers can inspect simulated mutations
+- **Fixed**: Suggestions inflating `changeCount` metric
+  - Suggestions now tracked separately and don't increment transformation counts
+
+### Added
+- Verbose error logging in Layer 7 catch blocks (enabled via `NEUROLINT_DEBUG='true'`)
+- 41 comprehensive unit tests for Layer 7 in `__tests__/fix-layer-7-adaptive.test.js`
+  - RuleStore persistence tests
+  - Transform flow tests (including dry-run, suggestions, normalization)
+  - Pattern extraction tests with overly broad pattern validation
+  - Security pattern extraction tests
+
+### Changed
+- Version bumped to 1.5.1
+
 ## [1.5.0] - 2025-12-08
 
 ### Fixed

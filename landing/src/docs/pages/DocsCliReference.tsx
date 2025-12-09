@@ -115,7 +115,7 @@ Options:
 4. Hydration - Guards client-side APIs for SSR
 5. Next.js - Optimizes App Router with directives
 6. Testing - Adds error boundaries, prop types, loading states
-7. Adaptive Pattern Learning - Learns and applies patterns from prior fixes
+7. Adaptive - Learns patterns with confidence scoring (production-grade)
 8. Security Forensics - Detects IoCs, supply chain attacks, and CVE-2025-55182 vulnerabilities`}
         />
       </section>

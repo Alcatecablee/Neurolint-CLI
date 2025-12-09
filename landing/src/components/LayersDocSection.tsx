@@ -442,21 +442,22 @@ test('test should work correctly', () => {
     name: "Layer 7: Adaptive Learning",
     shortName: "L7 Adaptive",
     icon: <Brain className="w-6 h-6" />,
-    description: "Learns project-specific patterns from previous layers and applies custom rules automatically. Adapts to your codebase style.",
+    description: "Production-grade pattern learning with smart extraction, confidence scoring, and comprehensive test coverage.",
     whatItDoes: [
       "Analyzes transformations from Layers 1-6",
-      "Extracts common patterns and creates rules",
-      "Applies learned rules with confidence scoring",
+      "Smart pattern extraction - only learns from files with actual React hooks",
+      "Applies learned rules with 70%+ confidence scoring",
       "Stores rules in .neurolint/learned-rules.json",
-      "Provides adaptive suggestions for inline styles",
-      "Learns console removal patterns",
+      "Separates suggestions from actual changes (accurate metrics)",
+      "Debug logging via NEUROLINT_DEBUG environment variable",
       "Adapts to project-specific conventions"
     ],
     keyFeatures: [
-      "Machine learning-like pattern extraction",
+      "Production-grade pattern extraction (no overly broad patterns)",
       "Confidence-based rule application (minimum 70%)",
-      "Rule persistence and sharing across runs",
-      "Project-specific code style learning"
+      "Dry-run mode returns transformed code for preview",
+      "41 comprehensive unit tests for reliability",
+      "Verbose error logging for debugging"
     ],
     examples: [
       {
@@ -494,7 +495,7 @@ const Button = () => (
       }
     ],
     whenToUse: "Run last after all other layers. Most effective after running multiple fixes to learn project-specific patterns.",
-    technicalDetails: "Implements RuleStore class for pattern persistence. Uses confidence scoring (0-1.0) and frequency tracking. Extracts patterns by comparing before/after code from previous layers. Applies rules with minimum 0.7 confidence threshold."
+    technicalDetails: "Production-grade implementation with RuleStore class for pattern persistence. Smart pattern extraction only creates rules for files with actual React hooks (hasReactHooks, hasClientImports checks). Separates suggestions from changes for accurate metrics. Verbose error logging via NEUROLINT_DEBUG. Dry-run mode returns transformed code. Backed by 41 comprehensive unit tests."
   },
   {
     id: 8,
