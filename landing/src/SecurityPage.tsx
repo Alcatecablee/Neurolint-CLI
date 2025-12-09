@@ -90,12 +90,12 @@ const SecurityPage = () => {
         </div>
         
         <div className={`md:hidden transition-all duration-300 ease-out overflow-hidden ${mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="px-4 py-4 space-y-2 bg-zinc-900/95 backdrop-blur-xl border-t border-zinc-800">
+          <div className="px-4 py-4 space-y-2 bg-zinc-900/95 backdrop-blur-xl border-t border-black">
             <Link to="/" className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium">Home</Link>
             <Link to="/docs" className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium">Docs</Link>
             <Link to="/blog" className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium">Blog</Link>
             <Link to="/security" className="block px-4 py-3 min-h-[48px] text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium">Security</Link>
-            <div className="border-t border-zinc-800 my-3"></div>
+            <div className="border-t border-black my-3"></div>
             <a 
               href="https://www.npmjs.com/package/@neurolint/cli"
               target="_blank"
@@ -196,19 +196,19 @@ Action: Review flagged files immediately`}</code>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-black/30 border border-zinc-800 rounded-lg p-4">
+              <div className="bg-black/30 border border-black rounded-lg p-4">
                 <p className="text-2xl font-bold text-white mb-1">Dec 3</p>
                 <p className="text-sm text-gray-400">CVE Disclosed</p>
               </div>
-              <div className="bg-black/30 border border-zinc-800 rounded-lg p-4">
+              <div className="bg-black/30 border border-black rounded-lg p-4">
                 <p className="text-2xl font-bold text-red-400 mb-1">Hours</p>
                 <p className="text-sm text-gray-400">Until Active Exploitation</p>
               </div>
-              <div className="bg-black/30 border border-zinc-800 rounded-lg p-4">
+              <div className="bg-black/30 border border-black rounded-lg p-4">
                 <p className="text-2xl font-bold text-white mb-1">40%</p>
                 <p className="text-sm text-gray-400">Cloud Environments Vulnerable</p>
               </div>
-              <div className="bg-black/30 border border-zinc-800 rounded-lg p-4">
+              <div className="bg-black/30 border border-black rounded-lg p-4">
                 <p className="text-2xl font-bold text-orange-400 mb-1">State-Nexus</p>
                 <p className="text-sm text-gray-400">Threat Actors Attacking</p>
               </div>
@@ -222,7 +222,7 @@ Action: Review flagged files immediately`}</code>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link 
                 to="/blog/cve-2025-55182-react-server-components-rce"
-                className="px-5 py-3 bg-zinc-800 border border-zinc-700 text-white rounded-lg hover:bg-zinc-700 transition-colors text-center text-sm font-medium"
+                className="px-5 py-3 bg-zinc-800 border border-black text-white rounded-lg hover:bg-zinc-700 transition-colors text-center text-sm font-medium"
               >
                 Read Full Advisory
               </Link>
@@ -247,7 +247,7 @@ Action: Review flagged files immediately`}</code>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-colors">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
                 <Search className="w-6 h-6 text-white" />
               </div>
@@ -257,7 +257,7 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-colors">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
                 <Activity className="w-6 h-6 text-white" />
               </div>
@@ -267,7 +267,7 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-colors">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
                 <FileCheck className="w-6 h-6 text-white" />
               </div>
@@ -277,7 +277,7 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-colors">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
                 <Database className="w-6 h-6 text-white" />
               </div>
@@ -306,7 +306,7 @@ Action: Review flagged files immediately`}</code>
               { mode: 'deep', name: 'Deep Scan', desc: 'AST analysis + behavioral patterns + obfuscation detection.', cmd: 'neurolint security:scan-compromise ./src --mode=deep' },
               { mode: 'paranoid', name: 'Paranoid Scan', desc: 'Everything + heuristic analysis. More false positives, maximum coverage.', cmd: 'neurolint security:scan-compromise ./src --mode=paranoid' },
             ].map((scan) => (
-              <div key={scan.mode} className="bg-zinc-900/80 border border-zinc-800 rounded-xl p-5 hover:border-zinc-700 transition-colors">
+              <div key={scan.mode} className="bg-zinc-900/80 border border-black rounded-xl p-5 hover:border-black transition-colors">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-white mb-1">{scan.name}</h3>
@@ -349,7 +349,7 @@ Action: Review flagged files immediately`}</code>
               { id: 'BEHAV-026', name: 'startTransition Data Leak', severity: 'high', desc: 'Detects potential data exfiltration in transition callbacks' },
               { id: 'BEHAV-027', name: 'Server Cache Poisoning Risk', severity: 'high', desc: 'Detects caching of user-specific data (cookies, session, auth)' },
             ].map((pattern) => (
-              <div key={pattern.id} className="bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div key={pattern.id} className="bg-zinc-900/50 border border-black rounded-lg p-4 flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-center gap-3 flex-1">
                   <span className={`text-xs font-mono px-2 py-1 rounded ${
                     pattern.severity === 'critical' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : 'bg-orange-500/10 text-orange-400 border border-orange-500/30'
@@ -400,7 +400,7 @@ Action: Review flagged files immediately`}</code>
                 blue: 'text-blue-400',
               };
               return (
-                <div key={cat.range} className="bg-zinc-900/80 border border-zinc-800 rounded-lg p-4 hover:border-zinc-700 transition-colors">
+                <div key={cat.range} className="bg-zinc-900/80 border border-black rounded-lg p-4 hover:border-black transition-colors">
                   <div className="flex items-start gap-3">
                     <IconComponent className={`w-5 h-5 ${colorMap[cat.color]} flex-shrink-0 mt-0.5`} />
                     <div>
@@ -433,10 +433,10 @@ Action: Review flagged files immediately`}</code>
               { step: 4, title: 'Compare Baseline', cmd: 'neurolint security:compare-baseline ./src', desc: 'Verify file integrity against known-good baseline' },
             ].map((item) => (
               <div key={item.step} className="flex gap-4 items-start">
-                <div className="w-10 h-10 bg-zinc-800 border border-zinc-700 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-white font-bold">{item.step}</span>
                 </div>
-                <div className="flex-1 bg-zinc-900/50 border border-zinc-800 rounded-xl p-5">
+                <div className="flex-1 bg-zinc-900/50 border border-black rounded-xl p-5">
                   <h3 className="text-lg font-semibold text-white mb-1">{item.title}</h3>
                   <p className="text-sm text-gray-400 mb-3">{item.desc}</p>
                   <div className="flex items-center gap-2">
@@ -490,7 +490,7 @@ Action: Review flagged files immediately`}</code>
                       item.type === 'danger' ? 'border-red-500/30' : 
                       item.type === 'success' ? 'border-green-500/30' : 
                       item.type === 'warning' ? 'border-orange-500/30' : 
-                      'border-zinc-700'
+                      'border-black'
                     }`}>
                       <span className={`text-xs font-mono ${
                         item.type === 'danger' ? 'text-red-400' : 
@@ -528,28 +528,28 @@ Action: Review flagged files immediately`}</code>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <GitBranch className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">GitHub Security</h3>
               <p className="text-sm text-gray-400">Direct integration with GitHub Security tab via SARIF format</p>
             </div>
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <FileWarning className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">SARIF Standard</h3>
               <p className="text-sm text-gray-400">Static Analysis Results Interchange Format for tool interoperability</p>
             </div>
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Terminal className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">CI/CD Pipelines</h3>
               <p className="text-sm text-gray-400">Exit codes and machine-readable JSON for automated security gates</p>
             </div>
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 text-center">
+            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
               <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <FileCheck className="w-6 h-6 text-white" />
               </div>
@@ -592,7 +592,7 @@ Action: Review flagged files immediately`}</code>
             </Link>
             <a 
               href="mailto:clivemakazhu@gmail.com?subject=NeuroLint Security Demo Request"
-              className="px-8 py-4 bg-zinc-800 border border-zinc-700 text-white rounded-xl hover:bg-zinc-700 transition-all duration-200 font-medium"
+              className="px-8 py-4 bg-zinc-800 border border-black text-white rounded-xl hover:bg-zinc-700 transition-all duration-200 font-medium"
             >
               Book Security Demo
             </a>
