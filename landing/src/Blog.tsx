@@ -247,6 +247,12 @@ export const Blog: React.FC = () => {
                 >
                   Docs
                 </a>
+                <Link 
+                  to="/security"
+                  className="px-4 py-2 min-h-[44px] flex items-center text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                >
+                  Security
+                </Link>
                 <div className="w-px h-6 bg-white/10 mx-2"></div>
                 <a 
                   href="https://github.com/Alcatecablee/Neurolint-CLI"
@@ -297,6 +303,13 @@ export const Blog: React.FC = () => {
               >
                 Docs
               </a>
+              <Link 
+                to="/security"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 min-h-[48px] text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              >
+                Security
+              </Link>
               <div className="border-t border-black my-3"></div>
               <div className="flex items-center gap-3 px-4">
                 <a 
