@@ -338,7 +338,7 @@ export default function Index() {
               </a>
               <a 
                 href="/security"
-                className="px-4 py-2 min-h-[44px] flex items-center text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-sm font-medium"
+                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 Security
               </a>
@@ -409,7 +409,7 @@ export default function Index() {
             </a>
             <a 
               href="/security"
-              className="block px-4 py-3 min-h-[48px] text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
             >
               Security
             </a>
