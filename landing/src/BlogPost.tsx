@@ -419,7 +419,7 @@ neurolint fix --layers 4,5 --dry-run ./src`}</code>
   );
 };
 
-const SevenLayerPost: React.FC = () => {
+const EightLayerPost: React.FC = () => {
   const toc: TableOfContentsItem[] = [
     { id: "introduction", title: "Introduction", level: 1 },
     { id: "why-layers", title: "Why a Layered Approach?", level: 1 },
@@ -430,6 +430,7 @@ const SevenLayerPost: React.FC = () => {
     { id: "layer-5", title: "Layer 5: Next.js Optimization", level: 1 },
     { id: "layer-6", title: "Layer 6: Testing & Accessibility", level: 1 },
     { id: "layer-7", title: "Layer 7: Adaptive Learning", level: 1 },
+    { id: "layer-8", title: "Layer 8: Security Forensics", level: 1 },
     { id: "how-it-works", title: "How It Works Under the Hood", level: 1 },
     { id: "getting-started", title: "Getting Started", level: 1 },
   ];
@@ -446,7 +447,7 @@ const SevenLayerPost: React.FC = () => {
           <div>
             <h4 className="text-white font-semibold mb-2">Quick Overview</h4>
             <p className="text-gray-300 text-base">
-              NeuroLint uses 7 progressive layers to systematically fix React/Next.js code: Configuration → Patterns → Components → Hydration → Next.js → Testing → Adaptive Learning.
+              NeuroLint uses 8 progressive layers to systematically fix React/Next.js code: Configuration → Patterns → Components → Hydration → Next.js → Testing → Adaptive Learning → Security Forensics.
             </p>
           </div>
         </div>
@@ -693,7 +694,7 @@ const SevenLayerPost: React.FC = () => {
         </h2>
 
         <p>
-          The most advanced layer - it learns from transformations applied in previous layers and applies those patterns across your codebase.
+          This layer learns from transformations applied in previous layers and applies those patterns across your codebase.
         </p>
 
         <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-black rounded-xl p-6 my-6 not-prose">
@@ -721,6 +722,45 @@ const SevenLayerPost: React.FC = () => {
             </li>
           </ul>
         </div>
+
+        <h2 id="layer-8" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Layer 8: Security Forensics
+        </h2>
+
+        <p>
+          The security layer that provides comprehensive security analysis and compromise detection for React and Next.js applications.
+        </p>
+
+        <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-black rounded-xl p-6 my-6 not-prose">
+          <h4 className="text-red-400 font-semibold mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            Security Detection Capabilities
+          </h4>
+          <ul className="space-y-2 text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-red-500/20 rounded flex items-center justify-center text-red-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">80+ IoC Signatures:</strong> Detects obfuscated eval, credential leaks, exfiltration patterns, and persistence mechanisms</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-red-500/20 rounded flex items-center justify-center text-red-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">React 19 Behavioral Analysis:</strong> 5 framework-specific patterns for <code className="text-blue-400 bg-zinc-800 px-1 rounded">use()</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">useActionState</code>, <code className="text-blue-400 bg-zinc-800 px-1 rounded">useOptimistic</code></span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-red-500/20 rounded flex items-center justify-center text-red-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">CVE Detection:</strong> Scans for CVE-2025-55182 and CVE-2025-66478 exploitation patterns</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="w-5 h-5 bg-red-500/20 rounded flex items-center justify-center text-red-400 text-xs flex-shrink-0 mt-0.5">✓</span>
+              <span><strong className="text-white">Baseline Verification:</strong> Cryptographic integrity checks and Git timeline reconstruction</span>
+            </li>
+          </ul>
+        </div>
+
+        <p>
+          Layer 8 is essential for post-incident analysis and can detect if your codebase was compromised before you patched a vulnerability. For a deep dive, see our guide: <Link to="/blog/layer-8-security-forensics-deep-dive" className="text-blue-400 hover:text-blue-300">Layer 8 Security Forensics Deep Dive</Link>.
+        </p>
 
         <h2 id="how-it-works" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
           How It Works Under the Hood
@@ -2110,7 +2150,7 @@ const blogPostsData: Record<string, {
   "fix-react-nextjs-hydration-errors-complete-guide": {
     title: "How to Fix React & Next.js Hydration Errors: The Complete 2025 Guide",
     description: "Learn why hydration mismatches happen, how to identify them, and the proven strategies to fix 'window is not defined', 'document is not defined', and other SSR errors automatically.",
-    date: "2025-01-15",
+    date: "2025-12-05",
     readTime: "12 min read",
     author: "NeuroLint Team",
     category: "Tutorials",
@@ -2120,12 +2160,12 @@ const blogPostsData: Record<string, {
   "8-layer-code-fixing-pipeline-explained": {
     title: "The 8-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
     description: "A deep dive into how NeuroLint's 8-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to security forensics.",
-    date: "2025-01-10",
+    date: "2025-12-04",
     readTime: "15 min read",
     author: "NeuroLint Team",
     category: "Deep Dives",
     tags: ["AST", "Code Transformation", "Architecture", "React", "Next.js"],
-    Component: SevenLayerPost,
+    Component: EightLayerPost,
   },
 };
 
@@ -2304,14 +2344,12 @@ export const BlogPost: React.FC = () => {
                 >
                   Blog
                 </Link>
-                <a 
-                  href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link 
+                  to="/docs"
                   className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
                 >
                   Docs
-                </a>
+                </Link>
                 <Link 
                   to="/security"
                   className="px-4 py-2 min-h-[44px] flex items-center text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-sm font-medium"
@@ -2362,14 +2400,13 @@ export const BlogPost: React.FC = () => {
               >
                 Blog
               </Link>
-              <a 
-                href="https://github.com/Alcatecablee/Neurolint-CLI/blob/main/CLI_USAGE.md"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link 
+                to="/docs"
+                onClick={() => setMobileMenuOpen(false)}
                 className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
               >
                 Docs
-              </a>
+              </Link>
               <Link 
                 to="/security"
                 onClick={() => setMobileMenuOpen(false)}
