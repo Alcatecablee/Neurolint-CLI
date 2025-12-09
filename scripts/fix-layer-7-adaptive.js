@@ -278,7 +278,7 @@ async function transform(code, options = {}) {
     // Add suggestions to changes array but don't count them as actual changes
     changes.push(...suggestions);
 
-    updatedCode = updatedCode.trim().replace(/\r\n/g, '\n');
+    updatedCode = updatedCode.replace(/\r\n/g, '\n');
 
     if (dryRun) {
       if (verbose && changeCount > 0) {
@@ -286,7 +286,7 @@ async function transform(code, options = {}) {
       }
       return {
         success: true,
-        code,
+        code: updatedCode,
         originalCode: code,
         changeCount,
         results,
