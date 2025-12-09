@@ -308,7 +308,8 @@ class LayerOrchestrator {
             changes: transformResult.changeCount,
             originalCode: transformResult.originalCode,
             code: transformResult.code,
-            results: transformResult.results
+            results: transformResult.results,
+            securityFindings: transformResult.securityFindings || []
           });
           break;
         } catch (error) {
