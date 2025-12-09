@@ -2708,12 +2708,26 @@ Analysis Commands:
 
 Security Commands:
   security:cve-2025-55182 [path]  Patch CVE-2025-55182 React Server Components RCE (--fix to apply)
-  security:scan-compromise [path] Scan for indicators of compromise (Layer 8)
-  security:create-baseline [path] Create integrity baseline for future comparison
-  security:compare-baseline [path] Compare current state against baseline
-  security:incident-response [path] Full forensic analysis for incident response
+  security:scan-compromise [path] Detect malware, backdoors, and IOCs in codebase (~30s-5min)
+  security:create-baseline [path] Create file hash baseline for drift detection (~10s)
+  security:compare-baseline [path] Detect unauthorized changes since baseline (~15s)
+  security:incident-response [path] Full forensic scan with timeline analysis (~2-10min)
   security:harden-actions [path]  Analyze/harden server actions (--quarantine to fix)
   security:mitigation-playbook    Generate compensating controls when patching blocked
+
+Security Options:
+  --quick                 Fast scan: common IOC patterns only (~30s)
+  (default)               Standard mode: balanced analysis (~2min, no flag needed)
+  --deep                  Deep scan: extended pattern matching (~3min)
+  --paranoid              Maximum depth: heuristic + behavioral analysis (~5-10min)
+  --full                  Full forensic mode for incident-response (all commits)
+  --fail-on=<level>       Exit non-zero if severity >= level (low|medium|high|critical)
+  --json                  Output results as JSON for CI/CD pipelines
+  --baseline=<file>       Use custom baseline file path (for compare-baseline)
+
+Exit Codes (security commands):
+  0 = No findings (or below --fail-on threshold)
+  1 = Findings detected at or above --fail-on threshold
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -2755,6 +2769,10 @@ Examples:
   neurolint analyze src/ --verbose
   neurolint fix . --layers=1,2,7 --dry-run
   neurolint components fix src/ --verbose
+  neurolint security:scan-compromise . --quick
+  neurolint security:scan-compromise . --paranoid --fail-on=critical
+  neurolint security:create-baseline .
+  neurolint security:incident-response . --json
 `);
         process.exit(0);
       case 'version':
@@ -3114,12 +3132,26 @@ Analysis Commands:
 
 Security Commands:
   security:cve-2025-55182 [path]  Patch CVE-2025-55182 React Server Components RCE (--fix to apply)
-  security:scan-compromise [path] Scan for indicators of compromise (Layer 8)
-  security:create-baseline [path] Create integrity baseline for future comparison
-  security:compare-baseline [path] Compare current state against baseline
-  security:incident-response [path] Full forensic analysis for incident response
+  security:scan-compromise [path] Detect malware, backdoors, and IOCs in codebase (~30s-5min)
+  security:create-baseline [path] Create file hash baseline for drift detection (~10s)
+  security:compare-baseline [path] Detect unauthorized changes since baseline (~15s)
+  security:incident-response [path] Full forensic scan with timeline analysis (~2-10min)
   security:harden-actions [path]  Analyze/harden server actions (--quarantine to fix)
   security:mitigation-playbook    Generate compensating controls when patching blocked
+
+Security Options:
+  --quick                 Fast scan: common IOC patterns only (~30s)
+  (default)               Standard mode: balanced analysis (~2min, no flag needed)
+  --deep                  Deep scan: extended pattern matching (~3min)
+  --paranoid              Maximum depth: heuristic + behavioral analysis (~5-10min)
+  --full                  Full forensic mode for incident-response (all commits)
+  --fail-on=<level>       Exit non-zero if severity >= level (low|medium|high|critical)
+  --json                  Output results as JSON for CI/CD pipelines
+  --baseline=<file>       Use custom baseline file path (for compare-baseline)
+
+Exit Codes (security commands):
+  0 = No findings (or below --fail-on threshold)
+  1 = Findings detected at or above --fail-on threshold
 
 Configuration Commands:
   init-config             Generate or display configuration
@@ -3208,6 +3240,11 @@ Examples:
   neurolint rules --delete=0
   neurolint rules --reset
   neurolint health
+  neurolint security:scan-compromise . --quick
+  neurolint security:scan-compromise . --paranoid --fail-on=critical
+  neurolint security:create-baseline .
+  neurolint security:compare-baseline .
+  neurolint security:incident-response . --json
 `);
   printCommunityCTA('help');
   process.exit(0);
