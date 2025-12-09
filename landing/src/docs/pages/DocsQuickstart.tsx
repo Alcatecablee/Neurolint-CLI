@@ -59,9 +59,9 @@ Processing: src/pages/dashboard.tsx
 
 Analysis Complete
 -----------------
-Layer 1 (Config): 2 issues
+Layer 1 (Configuration): 2 issues
 Layer 2 (Patterns): 5 issues  
-Layer 3 (React): 8 issues
+Layer 3 (Components): 8 issues
 Layer 4 (Hydration): 3 issues
 Layer 5 (Next.js): 5 issues
 
@@ -167,31 +167,32 @@ Backup available: neurolint restore --interactive`}
         
         <p className="text-gray-300 mb-4">
           For more control, apply one layer at a time. This is recommended for 
-          large codebases or when you want to review each type of change:
+          large codebases or when you want to review each type of change. You can use either 
+          layer-specific commands or the generic <code className="text-blue-400 bg-zinc-800 px-1.5 py-0.5 rounded text-sm">--layers=N</code> flag:
         </p>
 
         <div className="space-y-2">
-          <CommandBlock command="neurolint fix ./your-project --layers=1 --verbose" />
-          <p className="text-gray-500 text-sm">Config fixes (tsconfig, next.config, package.json)</p>
+          <CommandBlock command="neurolint config fix ./your-project" />
+          <p className="text-gray-500 text-sm">Or: <code className="text-gray-400">neurolint fix ./your-project --layers=1</code> - Configuration fixes (tsconfig, next.config, package.json)</p>
         </div>
 
         <div className="space-y-2 mt-4">
-          <CommandBlock command="neurolint fix ./your-project --layers=2 --verbose" />
-          <p className="text-gray-500 text-sm">Pattern fixes (console removal, var to const)</p>
+          <CommandBlock command="neurolint patterns fix ./your-project" />
+          <p className="text-gray-500 text-sm">Or: <code className="text-gray-400">neurolint fix ./your-project --layers=2</code> - Pattern fixes (console removal, var to const)</p>
         </div>
 
         <div className="space-y-2 mt-4">
-          <CommandBlock command="neurolint fix ./your-project --layers=3 --verbose" />
-          <p className="text-gray-500 text-sm">React fixes (keys, alt attributes, ARIA labels)</p>
+          <CommandBlock command="neurolint components fix ./your-project" />
+          <p className="text-gray-500 text-sm">Or: <code className="text-gray-400">neurolint fix ./your-project --layers=3</code> - Component fixes (keys, alt attributes, ARIA labels)</p>
         </div>
 
         <div className="space-y-2 mt-4">
-          <CommandBlock command="neurolint fix ./your-project --layers=4 --verbose" />
-          <p className="text-gray-500 text-sm">Hydration fixes (SSR-safe browser API access)</p>
+          <CommandBlock command="neurolint hydration fix ./your-project" />
+          <p className="text-gray-500 text-sm">Or: <code className="text-gray-400">neurolint fix ./your-project --layers=4</code> - Hydration fixes (SSR-safe browser API access)</p>
         </div>
 
         <Callout type="info" title="Multiple layers">
-          You can apply multiple layers at once: 
+          You can apply multiple layers at once with the generic format: 
           <code className="text-blue-400 ml-1">--layers=1,2,3</code>
         </Callout>
       </section>
