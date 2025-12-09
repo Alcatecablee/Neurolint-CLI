@@ -106,7 +106,7 @@ const SecurityPage = () => {
         <div className="max-w-5xl mx-auto z-10">
           <div className="mb-6 animate-slide-in-down">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-black text-gray-300 rounded-full text-sm font-medium">
-              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
               Active Threat — CVE-2025-55182
             </span>
           </div>
@@ -131,7 +131,7 @@ const SecurityPage = () => {
             >
               <Shield className="w-5 h-5 text-white" />
               <span className="font-mono text-sm">Patch CVE-2025-55182</span>
-              {copied === 'hero-cve' ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}
+              {copied === 'hero-cve' ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}
             </button>
             <button 
               onClick={() => copyCommand('npx @neurolint/cli security:scan-compromise ./src --mode=deep', 'hero-scan')}
@@ -139,7 +139,7 @@ const SecurityPage = () => {
             >
               <Search className="w-5 h-5" />
               Scan for Compromise
-              {copied === 'hero-scan' ? <Check className="w-4 h-4 text-gray-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
+              {copied === 'hero-scan' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
             </button>
           </div>
 
@@ -153,19 +153,19 @@ const SecurityPage = () => {
               <span className="text-xs text-gray-500 font-mono ml-2">terminal</span>
             </div>
             <pre className="text-left font-mono text-sm text-gray-300 overflow-x-auto">
-              <code>{`$ neurolint security:scan-compromise ./src --mode=deep
+              <code>{`$ `}<span className="text-blue-400">neurolint</span>{` security:scan-compromise ./src --mode=deep
 
 Scanning 247 files for indicators of compromise...
 
-CRITICAL  IOC-003  Obfuscated eval pattern
+`}<span className="text-red-400">CRITICAL</span>{`  IOC-003  Obfuscated eval pattern
           src/utils/loader.js:45
           Risk: Remote code execution
 
-HIGH      IOC-024  Credential exposure  
+`}<span className="text-orange-400">HIGH</span>{`      IOC-024  Credential exposure  
           src/lib/auth.ts:112
           Risk: Information disclosure
 
-Summary: 2 IoCs detected (1 critical, 1 high)
+Summary: 2 IoCs detected (`}<span className="text-red-400">1 critical</span>{`, `}<span className="text-orange-400">1 high</span>{`)
 Action: Review flagged files immediately`}</code>
             </pre>
           </div>
@@ -177,7 +177,7 @@ Action: Review flagged files immediately`}</code>
           <div className="bg-zinc-900 border border-black rounded-2xl p-8 md:p-12">
             <div className="flex items-start gap-4 mb-8">
               <div className="p-3 bg-zinc-800 border border-black rounded-xl">
-                <AlertTriangle className="w-8 h-8 text-white" />
+                <AlertTriangle className="w-8 h-8 text-amber-500" />
               </div>
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
@@ -195,7 +195,7 @@ Action: Review flagged files immediately`}</code>
                 <p className="text-sm text-gray-400">CVE Disclosed</p>
               </div>
               <div className="bg-zinc-800 border border-black rounded-lg p-4">
-                <p className="text-2xl font-bold text-white mb-1">Hours</p>
+                <p className="text-2xl font-bold text-red-400 mb-1">Hours</p>
                 <p className="text-sm text-gray-400">Until Active Exploitation</p>
               </div>
               <div className="bg-zinc-800 border border-black rounded-lg p-4">
@@ -203,7 +203,7 @@ Action: Review flagged files immediately`}</code>
                 <p className="text-sm text-gray-400">Cloud Environments Vulnerable</p>
               </div>
               <div className="bg-zinc-800 border border-black rounded-lg p-4">
-                <p className="text-2xl font-bold text-white mb-1">State-Nexus</p>
+                <p className="text-2xl font-bold text-amber-500 mb-1">State-Nexus</p>
                 <p className="text-sm text-gray-400">Threat Actors Attacking</p>
               </div>
             </div>
@@ -241,8 +241,8 @@ Action: Review flagged files immediately`}</code>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
                 <Search className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">80+ IoC Signatures</h3>
@@ -251,8 +251,8 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
                 <Activity className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">React 19 Behavioral Analysis</h3>
@@ -261,8 +261,8 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
                 <FileCheck className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Incident Response</h3>
@@ -271,8 +271,8 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
                 <Database className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Baseline Verification</h3>
@@ -307,7 +307,7 @@ Action: Review flagged files immediately`}</code>
                     <p className="text-sm text-gray-400">{scan.desc}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <code className="text-sm font-mono text-gray-300 bg-zinc-800 px-3 py-2 rounded-lg truncate max-w-xs border border-black">
+                    <code className="text-sm font-mono text-blue-400 bg-zinc-800 px-3 py-2 rounded-lg truncate max-w-xs border border-black">
                       {scan.cmd}
                     </code>
                     <button
@@ -315,7 +315,7 @@ Action: Review flagged files immediately`}</code>
                       className="p-2 bg-zinc-800 hover:bg-zinc-700 border border-black rounded-lg transition-colors"
                       aria-label="Copy command"
                     >
-                      {copied === scan.mode ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                      {copied === scan.mode ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
                     </button>
                   </div>
                 </div>
@@ -345,7 +345,9 @@ Action: Review flagged files immediately`}</code>
             ].map((pattern) => (
               <div key={pattern.id} className="bg-zinc-900 border border-black rounded-lg p-4 flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-center gap-3 flex-1">
-                  <span className="text-xs font-mono px-2 py-1 rounded bg-zinc-800 text-gray-300 border border-black">
+                  <span className={`text-xs font-mono px-2 py-1 rounded border border-black ${
+                    pattern.severity === 'critical' ? 'bg-zinc-800 text-red-400' : 'bg-zinc-800 text-orange-400'
+                  }`}>
                     {pattern.id}
                   </span>
                   <div>
@@ -354,7 +356,7 @@ Action: Review flagged files immediately`}</code>
                   </div>
                 </div>
                 <span className={`text-xs font-medium px-2 py-1 rounded border border-black ${
-                  pattern.severity === 'critical' ? 'bg-zinc-800 text-white' : 'bg-zinc-800 text-gray-300'
+                  pattern.severity === 'critical' ? 'bg-zinc-800 text-red-400' : 'bg-zinc-800 text-orange-400'
                 }`}>
                   {pattern.severity.toUpperCase()}
                 </span>
@@ -375,22 +377,22 @@ Action: Review flagged files immediately`}</code>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { range: 'IOC-001+', name: 'Code Execution', desc: 'eval, Function constructor, child_process', icon: Terminal },
-              { range: 'IOC-011+', name: 'Obfuscation', desc: 'Base64, hex encoding, string concatenation', icon: Eye },
-              { range: 'IOC-021+', name: 'Credential Exposure', desc: 'API keys, tokens, secrets in code', icon: Lock },
-              { range: 'IOC-031+', name: 'Data Exfiltration', desc: 'Suspicious network calls, DNS exfil', icon: Network },
-              { range: 'IOC-041+', name: 'Persistence', desc: 'Cron jobs, service installations', icon: Clock },
-              { range: 'IOC-051+', name: 'Supply Chain', desc: 'npm postinstall, suspicious deps', icon: Bug },
-              { range: 'IOC-061+', name: 'React 19 Specific', desc: 'Server Components, Actions abuse', icon: Cpu },
-              { range: 'IOC-071+', name: 'CVE-2025-55182', desc: 'RCE exploitation patterns', icon: AlertTriangle },
+              { range: 'IOC-001+', name: 'Code Execution', desc: 'eval, Function constructor, child_process', icon: Terminal, color: 'text-red-400' },
+              { range: 'IOC-011+', name: 'Obfuscation', desc: 'Base64, hex encoding, string concatenation', icon: Eye, color: 'text-red-400' },
+              { range: 'IOC-021+', name: 'Credential Exposure', desc: 'API keys, tokens, secrets in code', icon: Lock, color: 'text-orange-400' },
+              { range: 'IOC-031+', name: 'Data Exfiltration', desc: 'Suspicious network calls, DNS exfil', icon: Network, color: 'text-orange-400' },
+              { range: 'IOC-041+', name: 'Persistence', desc: 'Cron jobs, service installations', icon: Clock, color: 'text-amber-400' },
+              { range: 'IOC-051+', name: 'Supply Chain', desc: 'npm postinstall, suspicious deps', icon: Bug, color: 'text-amber-400' },
+              { range: 'IOC-061+', name: 'React 19 Specific', desc: 'Server Components, Actions abuse', icon: Cpu, color: 'text-blue-400' },
+              { range: 'IOC-071+', name: 'CVE-2025-55182', desc: 'RCE exploitation patterns', icon: AlertTriangle, color: 'text-blue-400' },
             ].map((cat) => {
               const IconComponent = cat.icon;
               return (
                 <div key={cat.range} className="bg-zinc-900 border border-black rounded-lg p-4 hover:bg-zinc-800/50 transition-colors">
                   <div className="flex items-start gap-3">
-                    <IconComponent className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
+                    <IconComponent className={`w-5 h-5 ${cat.color} flex-shrink-0 mt-0.5`} />
                     <div>
-                      <span className="text-xs font-mono text-gray-400 block mb-1">{cat.range}</span>
+                      <span className={`text-xs font-mono ${cat.color} block mb-1`}>{cat.range}</span>
                       <p className="text-white font-medium text-sm">{cat.name}</p>
                       <p className="text-xs text-gray-500 mt-1">{cat.desc}</p>
                     </div>
@@ -426,7 +428,7 @@ Action: Review flagged files immediately`}</code>
                   <h3 className="text-lg font-semibold text-white mb-1">{item.title}</h3>
                   <p className="text-sm text-gray-400 mb-3">{item.desc}</p>
                   <div className="flex items-center gap-2">
-                    <code className="text-sm font-mono text-gray-300 bg-zinc-800 px-3 py-2 rounded-lg flex-1 overflow-x-auto border border-black">
+                    <code className="text-sm font-mono text-blue-400 bg-zinc-800 px-3 py-2 rounded-lg flex-1 overflow-x-auto border border-black">
                       {item.cmd}
                     </code>
                     <button
@@ -434,7 +436,7 @@ Action: Review flagged files immediately`}</code>
                       className="p-2 bg-zinc-800 hover:bg-zinc-700 border border-black rounded-lg transition-colors flex-shrink-0"
                       aria-label="Copy command"
                     >
-                      {copied === `step-${item.step}` ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                      {copied === `step-${item.step}` ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
                     </button>
                   </div>
                 </div>
@@ -443,7 +445,7 @@ Action: Review flagged files immediately`}</code>
           </div>
 
           <div className="mt-8 bg-zinc-900 border border-black rounded-xl p-6 text-center">
-            <p className="text-white font-medium">
+            <p className="text-green-400 font-medium">
               Result: Know definitively whether you were compromised or clean.
             </p>
           </div>
@@ -473,13 +475,23 @@ Action: Review flagged files immediately`}</code>
                 <div key={idx} className={`flex gap-4 md:gap-8 ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                   <div className={`flex-1 ${idx % 2 === 0 ? 'md:text-right' : ''}`}>
                     <div className="inline-block bg-zinc-900 border border-black rounded-xl p-4">
-                      <span className="text-xs font-mono text-gray-400">{item.date}</span>
+                      <span className={`text-xs font-mono ${
+                        item.type === 'danger' ? 'text-red-400' : 
+                        item.type === 'success' ? 'text-green-400' : 
+                        item.type === 'warning' ? 'text-orange-400' : 
+                        'text-gray-400'
+                      }`}>{item.date}</span>
                       <h3 className="text-white font-semibold mt-1">{item.event}</h3>
                       <p className="text-sm text-gray-400 mt-1">{item.desc}</p>
                     </div>
                   </div>
                   <div className="relative flex-shrink-0 w-8 flex justify-center">
-                    <div className="w-3 h-3 rounded-full mt-2 bg-white"></div>
+                    <div className={`w-3 h-3 rounded-full mt-2 ${
+                      item.type === 'danger' ? 'bg-red-500' : 
+                      item.type === 'success' ? 'bg-green-500' : 
+                      item.type === 'warning' ? 'bg-orange-500' : 
+                      'bg-zinc-500'
+                    }`}></div>
                   </div>
                   <div className="flex-1 hidden md:block"></div>
                 </div>
@@ -499,28 +511,28 @@ Action: Review flagged files immediately`}</code>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center hover:bg-zinc-800/50 transition-colors">
               <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <GitBranch className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">GitHub Security</h3>
               <p className="text-sm text-gray-400">Direct integration with GitHub Security tab via SARIF format</p>
             </div>
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center hover:bg-zinc-800/50 transition-colors">
               <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <FileWarning className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">SARIF Standard</h3>
               <p className="text-sm text-gray-400">Static Analysis Results Interchange Format for tool interoperability</p>
             </div>
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center hover:bg-zinc-800/50 transition-colors">
               <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Terminal className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">CI/CD Pipelines</h3>
               <p className="text-sm text-gray-400">Exit codes and machine-readable JSON for automated security gates</p>
             </div>
-            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center hover:bg-zinc-800/50 transition-colors">
               <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <FileCheck className="w-6 h-6 text-white" />
               </div>
@@ -540,7 +552,7 @@ Action: Review flagged files immediately`}</code>
 
           <div className="bg-zinc-900 border border-black rounded-xl p-6 max-w-xl mx-auto mb-8">
             <div className="flex items-center justify-between gap-4">
-              <code className="text-gray-300 font-mono text-sm md:text-base">
+              <code className="text-blue-400 font-mono text-sm md:text-base">
                 npm install -g @neurolint/cli
               </code>
               <button
@@ -548,7 +560,7 @@ Action: Review flagged files immediately`}</code>
                 className="p-2 bg-zinc-800 hover:bg-zinc-700 border border-black rounded-lg transition-colors flex-shrink-0"
                 aria-label="Copy install command"
               >
-                {copied === 'install' ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                {copied === 'install' ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
               </button>
             </div>
           </div>
