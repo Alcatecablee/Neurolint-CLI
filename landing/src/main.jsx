@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import Index from './Index.tsx'
+import SecurityPage from './SecurityPage.tsx'
 import { QuickStart } from './QuickStart.tsx'
 import { Blog } from './Blog.tsx'
 import { BlogPost } from './BlogPost.tsx'
@@ -41,6 +42,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/security" element={<SecurityPage />} />
         <Route path="/quick-start" element={<QuickStart />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />

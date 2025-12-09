@@ -336,6 +336,12 @@ export default function Index() {
               >
                 Docs
               </a>
+              <a 
+                href="/security"
+                className="px-4 py-2 min-h-[44px] flex items-center text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-sm font-medium"
+              >
+                Security
+              </a>
               <div className="w-px h-6 bg-white/10 mx-2"></div>
               <a 
                 href="https://github.com/Alcatecablee/Neurolint-CLI"
@@ -400,6 +406,12 @@ export default function Index() {
               className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
             >
               Docs
+            </a>
+            <a 
+              href="/security"
+              className="block px-4 py-3 min-h-[48px] text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+            >
+              Security
             </a>
             <div className="border-t border-zinc-800 my-3"></div>
             <div className="flex items-center gap-3 px-4">
