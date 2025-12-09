@@ -51,41 +51,49 @@ export function DocsSecurityIoc() {
         <h2 className="text-2xl font-bold text-white mb-4">IoC Categories</h2>
         
         <p className="text-gray-300 mb-4">
-          Layer 8 detects 11 categories of indicators of compromise:
+          Layer 8 detects 80+ indicators of compromise across 11 categories:
         </p>
 
         <div className="space-y-2 text-sm">
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-001+</span>
-            <span className="text-gray-300">Code execution (eval, Function constructor, child_process)</span>
+            <span className="font-mono w-24 text-red-400">IOC-001-010</span>
+            <span className="text-gray-300">Code Injection (eval, Function constructor, child_process, setTimeout strings)</span>
           </div>
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-011+</span>
-            <span className="text-gray-300">Obfuscation (hex encoding, base64, string concatenation)</span>
+            <span className="font-mono w-24 text-orange-400">IOC-011-015</span>
+            <span className="text-gray-300">Obfuscation (base64, hex encoding, unicode escapes, JSFuck)</span>
           </div>
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-021+</span>
-            <span className="text-gray-300">Credential exposure (API keys, tokens in code)</span>
+            <span className="font-mono w-24 text-red-400">IOC-016-030</span>
+            <span className="text-gray-300">RSC-Specific CVE-2025-55182 (rogue server actions, credential harvesting)</span>
           </div>
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-031+</span>
-            <span className="text-gray-300">Data exfiltration (fetch to suspicious domains)</span>
+            <span className="font-mono w-24 text-orange-400">IOC-031-045</span>
+            <span className="text-gray-300">Next.js Specific (malicious rewrites, middleware hijacking, edge runtime abuse)</span>
           </div>
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-041+</span>
-            <span className="text-gray-300">Persistence (cron jobs, service installations)</span>
+            <span className="font-mono w-24 text-red-400">IOC-046-052</span>
+            <span className="text-gray-300">Backdoors (reverse shells, webshells, hidden endpoints, SSH keys)</span>
           </div>
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-051+</span>
-            <span className="text-gray-300">Supply chain (npm postinstall scripts, suspicious deps)</span>
+            <span className="font-mono w-24 text-red-400">IOC-053-058</span>
+            <span className="text-gray-300">Data Exfiltration (network to IPs, env var theft, DNS exfil, beacons)</span>
           </div>
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-061+</span>
-            <span className="text-gray-300">React 19 specific (Server Components, Actions)</span>
+            <span className="font-mono w-24 text-orange-400">IOC-059-063</span>
+            <span className="text-gray-300">Supply Chain (postinstall hooks, git hook tampering, typosquatting)</span>
           </div>
           <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
-            <span className="font-mono w-20 text-gray-400">IOC-071+</span>
-            <span className="text-gray-300">CVE-2025-55182 related patterns</span>
+            <span className="font-mono w-24 text-red-400">IOC-064-067</span>
+            <span className="text-gray-300">Persistence (system path writes, systemd services, registry, profile files)</span>
+          </div>
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <span className="font-mono w-24 text-red-400">IOC-068-070</span>
+            <span className="text-gray-300">Crypto Mining (mining libraries, worker miners, stratum protocol)</span>
+          </div>
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+            <span className="font-mono w-24 text-red-400">IOC-071-080</span>
+            <span className="text-gray-300">RSC Extended (WebSocket C2, service worker attacks, PWA tampering, cache poisoning)</span>
           </div>
         </div>
       </section>

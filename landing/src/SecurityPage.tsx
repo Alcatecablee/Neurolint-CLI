@@ -247,6 +247,7 @@ const SecurityPage = () => {
             </div>
 
             <div className="lg:w-2/3">
+              {workflowSteps[activeWorkflowStep] && (
               <div className="bg-zinc-900 border border-black rounded-2xl overflow-hidden">
                 <div className="p-6 border-b border-black">
                   <div className="flex items-center justify-between mb-4">
@@ -266,7 +267,10 @@ const SecurityPage = () => {
                       {workflowSteps[activeWorkflowStep].cmd}
                     </code>
                     <button
-                      onClick={() => copyCommand(workflowSteps[activeWorkflowStep].cmd, `workflow-${activeWorkflowStep}`)}
+                      onClick={() => {
+                        const step = workflowSteps[activeWorkflowStep];
+                        if (step) copyCommand(step.cmd, `workflow-${activeWorkflowStep}`);
+                      }}
                       className="p-1.5 hover:bg-zinc-700 rounded transition-colors flex-shrink-0"
                       aria-label="Copy command"
                     >
@@ -286,6 +290,7 @@ const SecurityPage = () => {
                   />
                 </div>
               </div>
+              )}
             </div>
           </div>
         </div>
