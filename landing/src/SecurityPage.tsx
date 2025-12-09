@@ -48,15 +48,15 @@ const SecurityPage = () => {
     { 
       step: 2, 
       title: 'Scan for Compromise', 
-      cmd: 'neurolint security:scan-compromise ./src --mode=deep', 
+      cmd: 'neurolint security:scan-compromise ./ --mode=deep', 
       desc: 'Detect if exploitation occurred before you patched',
-      screenshot: '/security-dry-run.png',
+      screenshot: '/security-scan-compromise.png',
       screenshotAlt: 'Deep scan showing vulnerability detection'
     },
     { 
       step: 3, 
       title: 'Generate Incident Report', 
-      cmd: 'neurolint security:incident-response ./src --format=sarif', 
+      cmd: 'neurolint security:incident-response ./ --format=sarif', 
       desc: 'Create exportable report for your security team',
       screenshot: '/security-incident-report.png',
       screenshotAlt: 'Incident response report output'
@@ -64,9 +64,9 @@ const SecurityPage = () => {
     { 
       step: 4, 
       title: 'Verify Clean State', 
-      cmd: 'neurolint security:compare-baseline ./src', 
+      cmd: 'neurolint security:compare-baseline ./', 
       desc: 'Confirm no unauthorized changes remain',
-      screenshot: '/security-safe.png',
+      screenshot: '/security-compare-baseline.png',
       screenshotAlt: 'Verification scan showing no vulnerabilities'
     },
   ];
