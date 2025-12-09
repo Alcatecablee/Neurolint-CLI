@@ -11,7 +11,6 @@ import {
   Copy,
   Check,
   X,
-  ChevronRight,
   Lock,
   Activity,
   Database,
@@ -36,11 +35,6 @@ const SecurityPage = () => {
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-red-500/10 to-orange-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-      </div>
-
       <nav className="fixed top-0 w-full z-50 bg-zinc-900/80 backdrop-blur-xl border-b border-black transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14 md:h-16">
@@ -70,7 +64,7 @@ const SecurityPage = () => {
               <Link to="/blog" className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium">
                 Blog
               </Link>
-              <Link to="/security" className="px-4 py-2 min-h-[44px] flex items-center text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-sm font-medium">
+              <Link to="/security" className="px-4 py-2 min-h-[44px] flex items-center text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium">
                 Security
               </Link>
               <div className="w-px h-6 bg-white/10 mx-2"></div>
@@ -94,7 +88,7 @@ const SecurityPage = () => {
             <Link to="/" className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium">Home</Link>
             <Link to="/docs" className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium">Docs</Link>
             <Link to="/blog" className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium">Blog</Link>
-            <Link to="/security" className="block px-4 py-3 min-h-[48px] text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium">Security</Link>
+            <Link to="/security" className="block px-4 py-3 min-h-[48px] text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium">Security</Link>
             <div className="border-t border-black my-3"></div>
             <a 
               href="https://www.npmjs.com/package/@neurolint/cli"
@@ -111,9 +105,9 @@ const SecurityPage = () => {
       <section className="min-h-screen flex items-center justify-center text-center px-4 py-16 pt-24 relative">
         <div className="max-w-5xl mx-auto z-10">
           <div className="mb-6 animate-slide-in-down">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/30 text-red-400 rounded-full text-sm font-medium">
-              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-              Active Threat - CVE-2025-55182
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-black text-gray-300 rounded-full text-sm font-medium">
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+              Active Threat — CVE-2025-55182
             </span>
           </div>
 
@@ -133,11 +127,11 @@ const SecurityPage = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <button 
               onClick={() => copyCommand('npx @neurolint/cli security:cve-2025-55182 . --fix', 'hero-cve')}
-              className="group px-6 py-4 bg-red-500/10 border border-red-500/30 text-white rounded-xl hover:bg-red-500/20 transition-all duration-200 flex items-center justify-center gap-3"
+              className="group px-6 py-4 bg-zinc-900 border border-black text-white rounded-xl hover:bg-zinc-800 transition-all duration-200 flex items-center justify-center gap-3"
             >
-              <Shield className="w-5 h-5 text-red-400" />
+              <Shield className="w-5 h-5 text-white" />
               <span className="font-mono text-sm">Patch CVE-2025-55182</span>
-              {copied === 'hero-cve' ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}
+              {copied === 'hero-cve' ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-500 group-hover:text-white" />}
             </button>
             <button 
               onClick={() => copyCommand('npx @neurolint/cli security:scan-compromise ./src --mode=deep', 'hero-scan')}
@@ -145,16 +139,16 @@ const SecurityPage = () => {
             >
               <Search className="w-5 h-5" />
               Scan for Compromise
-              {copied === 'hero-scan' ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
+              {copied === 'hero-scan' ? <Check className="w-4 h-4 text-gray-600" /> : <Copy className="w-4 h-4 text-gray-400" />}
             </button>
           </div>
 
           <div className="bg-zinc-900/80 border border-black rounded-xl p-6 max-w-2xl mx-auto">
             <div className="flex items-center gap-2 mb-4">
               <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/60"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-500/60"></div>
-                <div className="w-3 h-3 rounded-full bg-green-500/60"></div>
+                <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
+                <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
+                <div className="w-3 h-3 rounded-full bg-zinc-600"></div>
               </div>
               <span className="text-xs text-gray-500 font-mono ml-2">terminal</span>
             </div>
@@ -180,36 +174,36 @@ Action: Review flagged files immediately`}</code>
 
       <section className="py-16 md:py-24 px-4 relative">
         <div className="max-w-5xl mx-auto">
-          <div className="bg-gradient-to-r from-red-500/10 via-orange-500/10 to-red-500/10 border border-red-500/20 rounded-2xl p-8 md:p-12">
+          <div className="bg-zinc-900 border border-black rounded-2xl p-8 md:p-12">
             <div className="flex items-start gap-4 mb-8">
-              <div className="p-3 bg-red-500/10 rounded-xl">
-                <AlertTriangle className="w-8 h-8 text-red-400" />
+              <div className="p-3 bg-zinc-800 border border-black rounded-xl">
+                <AlertTriangle className="w-8 h-8 text-white" />
               </div>
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                   You Patched CVE-2025-55182. But Were You Exploited First?
                 </h2>
                 <p className="text-gray-400">
-                  CVSS 10.0 - Critical Remote Code Execution in React 19 Server Components
+                  CVSS 10.0 — Critical Remote Code Execution in React 19 Server Components
                 </p>
               </div>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <div className="bg-black/30 border border-black rounded-lg p-4">
+              <div className="bg-zinc-800 border border-black rounded-lg p-4">
                 <p className="text-2xl font-bold text-white mb-1">Dec 3</p>
                 <p className="text-sm text-gray-400">CVE Disclosed</p>
               </div>
-              <div className="bg-black/30 border border-black rounded-lg p-4">
-                <p className="text-2xl font-bold text-red-400 mb-1">Hours</p>
+              <div className="bg-zinc-800 border border-black rounded-lg p-4">
+                <p className="text-2xl font-bold text-white mb-1">Hours</p>
                 <p className="text-sm text-gray-400">Until Active Exploitation</p>
               </div>
-              <div className="bg-black/30 border border-black rounded-lg p-4">
+              <div className="bg-zinc-800 border border-black rounded-lg p-4">
                 <p className="text-2xl font-bold text-white mb-1">40%</p>
                 <p className="text-sm text-gray-400">Cloud Environments Vulnerable</p>
               </div>
-              <div className="bg-black/30 border border-black rounded-lg p-4">
-                <p className="text-2xl font-bold text-orange-400 mb-1">State-Nexus</p>
+              <div className="bg-zinc-800 border border-black rounded-lg p-4">
+                <p className="text-2xl font-bold text-white mb-1">State-Nexus</p>
                 <p className="text-sm text-gray-400">Threat Actors Attacking</p>
               </div>
             </div>
@@ -247,8 +241,8 @@ Action: Review flagged files immediately`}</code>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
                 <Search className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">80+ IoC Signatures</h3>
@@ -257,8 +251,8 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
                 <Activity className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">React 19 Behavioral Analysis</h3>
@@ -267,8 +261,8 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
                 <FileCheck className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Incident Response</h3>
@@ -277,8 +271,8 @@ Action: Review flagged files immediately`}</code>
               </p>
             </div>
 
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 hover:border-black transition-colors">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4">
                 <Database className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Baseline Verification</h3>
@@ -306,22 +300,22 @@ Action: Review flagged files immediately`}</code>
               { mode: 'deep', name: 'Deep Scan', desc: 'AST analysis + behavioral patterns + obfuscation detection.', cmd: 'neurolint security:scan-compromise ./src --mode=deep' },
               { mode: 'paranoid', name: 'Paranoid Scan', desc: 'Everything + heuristic analysis. More false positives, maximum coverage.', cmd: 'neurolint security:scan-compromise ./src --mode=paranoid' },
             ].map((scan) => (
-              <div key={scan.mode} className="bg-zinc-900/80 border border-black rounded-xl p-5 hover:border-black transition-colors">
+              <div key={scan.mode} className="bg-zinc-900 border border-black rounded-xl p-5 hover:bg-zinc-800/50 transition-colors">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-white mb-1">{scan.name}</h3>
                     <p className="text-sm text-gray-400">{scan.desc}</p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <code className="text-sm font-mono text-blue-400 bg-black/50 px-3 py-2 rounded-lg truncate max-w-xs">
+                    <code className="text-sm font-mono text-gray-300 bg-zinc-800 px-3 py-2 rounded-lg truncate max-w-xs border border-black">
                       {scan.cmd}
                     </code>
                     <button
                       onClick={() => copyCommand(scan.cmd, scan.mode)}
-                      className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors"
+                      className="p-2 bg-zinc-800 hover:bg-zinc-700 border border-black rounded-lg transition-colors"
                       aria-label="Copy command"
                     >
-                      {copied === scan.mode ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                      {copied === scan.mode ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-400" />}
                     </button>
                   </div>
                 </div>
@@ -349,11 +343,9 @@ Action: Review flagged files immediately`}</code>
               { id: 'BEHAV-026', name: 'startTransition Data Leak', severity: 'high', desc: 'Detects potential data exfiltration in transition callbacks' },
               { id: 'BEHAV-027', name: 'Server Cache Poisoning Risk', severity: 'high', desc: 'Detects caching of user-specific data (cookies, session, auth)' },
             ].map((pattern) => (
-              <div key={pattern.id} className="bg-zinc-900/50 border border-black rounded-lg p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div key={pattern.id} className="bg-zinc-900 border border-black rounded-lg p-4 flex flex-col sm:flex-row sm:items-center gap-4">
                 <div className="flex items-center gap-3 flex-1">
-                  <span className={`text-xs font-mono px-2 py-1 rounded ${
-                    pattern.severity === 'critical' ? 'bg-red-500/10 text-red-400 border border-red-500/30' : 'bg-orange-500/10 text-orange-400 border border-orange-500/30'
-                  }`}>
+                  <span className="text-xs font-mono px-2 py-1 rounded bg-zinc-800 text-gray-300 border border-black">
                     {pattern.id}
                   </span>
                   <div>
@@ -361,8 +353,8 @@ Action: Review flagged files immediately`}</code>
                     <p className="text-sm text-gray-400">{pattern.desc}</p>
                   </div>
                 </div>
-                <span className={`text-xs font-medium px-2 py-1 rounded ${
-                  pattern.severity === 'critical' ? 'bg-red-500/10 text-red-400' : 'bg-orange-500/10 text-orange-400'
+                <span className={`text-xs font-medium px-2 py-1 rounded border border-black ${
+                  pattern.severity === 'critical' ? 'bg-zinc-800 text-white' : 'bg-zinc-800 text-gray-300'
                 }`}>
                   {pattern.severity.toUpperCase()}
                 </span>
@@ -383,28 +375,22 @@ Action: Review flagged files immediately`}</code>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { range: 'IOC-001+', name: 'Code Execution', desc: 'eval, Function constructor, child_process', icon: Terminal, color: 'red' },
-              { range: 'IOC-011+', name: 'Obfuscation', desc: 'Base64, hex encoding, string concatenation', icon: Eye, color: 'red' },
-              { range: 'IOC-021+', name: 'Credential Exposure', desc: 'API keys, tokens, secrets in code', icon: Lock, color: 'orange' },
-              { range: 'IOC-031+', name: 'Data Exfiltration', desc: 'Suspicious network calls, DNS exfil', icon: Network, color: 'orange' },
-              { range: 'IOC-041+', name: 'Persistence', desc: 'Cron jobs, service installations', icon: Clock, color: 'yellow' },
-              { range: 'IOC-051+', name: 'Supply Chain', desc: 'npm postinstall, suspicious deps', icon: Bug, color: 'yellow' },
-              { range: 'IOC-061+', name: 'React 19 Specific', desc: 'Server Components, Actions abuse', icon: Cpu, color: 'blue' },
-              { range: 'IOC-071+', name: 'CVE-2025-55182', desc: 'RCE exploitation patterns', icon: AlertTriangle, color: 'blue' },
+              { range: 'IOC-001+', name: 'Code Execution', desc: 'eval, Function constructor, child_process', icon: Terminal },
+              { range: 'IOC-011+', name: 'Obfuscation', desc: 'Base64, hex encoding, string concatenation', icon: Eye },
+              { range: 'IOC-021+', name: 'Credential Exposure', desc: 'API keys, tokens, secrets in code', icon: Lock },
+              { range: 'IOC-031+', name: 'Data Exfiltration', desc: 'Suspicious network calls, DNS exfil', icon: Network },
+              { range: 'IOC-041+', name: 'Persistence', desc: 'Cron jobs, service installations', icon: Clock },
+              { range: 'IOC-051+', name: 'Supply Chain', desc: 'npm postinstall, suspicious deps', icon: Bug },
+              { range: 'IOC-061+', name: 'React 19 Specific', desc: 'Server Components, Actions abuse', icon: Cpu },
+              { range: 'IOC-071+', name: 'CVE-2025-55182', desc: 'RCE exploitation patterns', icon: AlertTriangle },
             ].map((cat) => {
               const IconComponent = cat.icon;
-              const colorMap: Record<string, string> = {
-                red: 'text-red-400',
-                orange: 'text-orange-400',
-                yellow: 'text-yellow-400',
-                blue: 'text-blue-400',
-              };
               return (
-                <div key={cat.range} className="bg-zinc-900/80 border border-black rounded-lg p-4 hover:border-black transition-colors">
+                <div key={cat.range} className="bg-zinc-900 border border-black rounded-lg p-4 hover:bg-zinc-800/50 transition-colors">
                   <div className="flex items-start gap-3">
-                    <IconComponent className={`w-5 h-5 ${colorMap[cat.color]} flex-shrink-0 mt-0.5`} />
+                    <IconComponent className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className={`text-xs font-mono ${colorMap[cat.color]} block mb-1`}>{cat.range}</span>
+                      <span className="text-xs font-mono text-gray-400 block mb-1">{cat.range}</span>
                       <p className="text-white font-medium text-sm">{cat.name}</p>
                       <p className="text-xs text-gray-500 mt-1">{cat.desc}</p>
                     </div>
@@ -436,19 +422,19 @@ Action: Review flagged files immediately`}</code>
                 <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center flex-shrink-0">
                   <span className="text-white font-bold">{item.step}</span>
                 </div>
-                <div className="flex-1 bg-zinc-900/50 border border-black rounded-xl p-5">
+                <div className="flex-1 bg-zinc-900 border border-black rounded-xl p-5">
                   <h3 className="text-lg font-semibold text-white mb-1">{item.title}</h3>
                   <p className="text-sm text-gray-400 mb-3">{item.desc}</p>
                   <div className="flex items-center gap-2">
-                    <code className="text-sm font-mono text-blue-400 bg-black/50 px-3 py-2 rounded-lg flex-1 overflow-x-auto">
+                    <code className="text-sm font-mono text-gray-300 bg-zinc-800 px-3 py-2 rounded-lg flex-1 overflow-x-auto border border-black">
                       {item.cmd}
                     </code>
                     <button
                       onClick={() => copyCommand(item.cmd, `step-${item.step}`)}
-                      className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors flex-shrink-0"
+                      className="p-2 bg-zinc-800 hover:bg-zinc-700 border border-black rounded-lg transition-colors flex-shrink-0"
                       aria-label="Copy command"
                     >
-                      {copied === `step-${item.step}` ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                      {copied === `step-${item.step}` ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-400" />}
                     </button>
                   </div>
                 </div>
@@ -456,8 +442,8 @@ Action: Review flagged files immediately`}</code>
             ))}
           </div>
 
-          <div className="mt-8 bg-green-500/10 border border-green-500/20 rounded-xl p-6 text-center">
-            <p className="text-green-400 font-medium">
+          <div className="mt-8 bg-zinc-900 border border-black rounded-xl p-6 text-center">
+            <p className="text-white font-medium">
               Result: Know definitively whether you were compromised or clean.
             </p>
           </div>
@@ -486,29 +472,14 @@ Action: Review flagged files immediately`}</code>
               ].map((item, idx) => (
                 <div key={idx} className={`flex gap-4 md:gap-8 ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                   <div className={`flex-1 ${idx % 2 === 0 ? 'md:text-right' : ''}`}>
-                    <div className={`inline-block bg-zinc-900 border rounded-xl p-4 ${
-                      item.type === 'danger' ? 'border-red-500/30' : 
-                      item.type === 'success' ? 'border-green-500/30' : 
-                      item.type === 'warning' ? 'border-orange-500/30' : 
-                      'border-black'
-                    }`}>
-                      <span className={`text-xs font-mono ${
-                        item.type === 'danger' ? 'text-red-400' : 
-                        item.type === 'success' ? 'text-green-400' : 
-                        item.type === 'warning' ? 'text-orange-400' : 
-                        'text-gray-400'
-                      }`}>{item.date}</span>
+                    <div className="inline-block bg-zinc-900 border border-black rounded-xl p-4">
+                      <span className="text-xs font-mono text-gray-400">{item.date}</span>
                       <h3 className="text-white font-semibold mt-1">{item.event}</h3>
                       <p className="text-sm text-gray-400 mt-1">{item.desc}</p>
                     </div>
                   </div>
                   <div className="relative flex-shrink-0 w-8 flex justify-center">
-                    <div className={`w-3 h-3 rounded-full mt-2 ${
-                      item.type === 'danger' ? 'bg-red-500' : 
-                      item.type === 'success' ? 'bg-green-500' : 
-                      item.type === 'warning' ? 'bg-orange-500' : 
-                      'bg-zinc-500'
-                    }`}></div>
+                    <div className="w-3 h-3 rounded-full mt-2 bg-white"></div>
                   </div>
                   <div className="flex-1 hidden md:block"></div>
                 </div>
@@ -528,29 +499,29 @@ Action: Review flagged files immediately`}</code>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <GitBranch className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">GitHub Security</h3>
               <p className="text-sm text-gray-400">Direct integration with GitHub Security tab via SARIF format</p>
             </div>
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <FileWarning className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">SARIF Standard</h3>
               <p className="text-sm text-gray-400">Static Analysis Results Interchange Format for tool interoperability</p>
             </div>
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Terminal className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">CI/CD Pipelines</h3>
               <p className="text-sm text-gray-400">Exit codes and machine-readable JSON for automated security gates</p>
             </div>
-            <div className="bg-zinc-900/50 border border-black rounded-xl p-6 text-center">
-              <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="bg-zinc-900 border border-black rounded-xl p-6 text-center">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <FileCheck className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-white font-semibold mb-2">Azure DevOps</h3>
@@ -567,17 +538,17 @@ Action: Review flagged files immediately`}</code>
             NeuroLint CLI is free and open source (Apache 2.0). Install and scan in seconds.
           </p>
 
-          <div className="bg-zinc-900/80 border border-black rounded-xl p-6 max-w-xl mx-auto mb-8">
+          <div className="bg-zinc-900 border border-black rounded-xl p-6 max-w-xl mx-auto mb-8">
             <div className="flex items-center justify-between gap-4">
-              <code className="text-blue-400 font-mono text-sm md:text-base">
+              <code className="text-gray-300 font-mono text-sm md:text-base">
                 npm install -g @neurolint/cli
               </code>
               <button
                 onClick={() => copyCommand('npm install -g @neurolint/cli', 'install')}
-                className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-lg transition-colors flex-shrink-0"
+                className="p-2 bg-zinc-800 hover:bg-zinc-700 border border-black rounded-lg transition-colors flex-shrink-0"
                 aria-label="Copy install command"
               >
-                {copied === 'install' ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                {copied === 'install' ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4 text-gray-400" />}
               </button>
             </div>
           </div>
