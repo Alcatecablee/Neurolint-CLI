@@ -4,8 +4,8 @@ import { DocsLayout, CommandBlock, Callout, BeforeAfter } from "../components";
 export function DocsLayerHydration() {
   return (
     <DocsLayout
-      title="Layer 4: Hydration"
-      description="Prevents hydration mismatches in Next.js SSR by guarding browser APIs and implementing event listener cleanup."
+      title="Layer 4: Fix React Hydration Errors Automatically"
+      description="Automatically fix 'window is not defined' and hydration mismatch errors in React & Next.js. Adds SSR-safe guards for browser APIs like localStorage, document, and window."
     >
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">What It Does</h2>

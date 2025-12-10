@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 export function DocsCommandMigrateReact19() {
   return (
     <DocsLayout
-      title="migrate-react19"
-      description="Automatically migrate your project to React 19 compatibility. Handles breaking changes, deprecated APIs, and new patterns."
+      title="React 19 Migration Tool: Fix Breaking Changes Automatically"
+      description="Automatically fix React 19 breaking changes. Migrates ReactDOM.render to createRoot, updates act() imports, and handles deprecated APIs. The fastest way to upgrade from React 18 to 19."
     >
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">Usage</h2>

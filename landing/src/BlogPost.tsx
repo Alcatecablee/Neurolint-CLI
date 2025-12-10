@@ -32,7 +32,7 @@ const HydrationErrorsPost: React.FC = () => {
 
   return (
     <article className="max-w-none">
-      <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-black rounded-xl p-6 mb-8">
+      <div className="bg-zinc-900/50 border border-black rounded-xl p-6 mb-8">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
             <span className="text-red-400 text-lg">!</span>
@@ -396,7 +396,7 @@ neurolint fix --layers 4,5 --dry-run ./src`}</code>
           For existing codebases with hydration issues, tools like <a href="https://www.neurolint.dev">NeuroLint</a> can automatically detect and fix these problems, saving hours of manual debugging. Check out our <Link to="/docs/layers/hydration">Hydration layer documentation</Link> and the <Link to="/blog/eight-layer-pipeline-deep-dive">8-Layer Pipeline deep dive</Link> for more information.
         </p>
 
-        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">
           <h4 className="text-white font-semibold mb-4">Ready to fix your hydration errors?</h4>
           <p className="text-gray-300 mb-4">
             Get started with NeuroLint in 30 seconds:
@@ -437,7 +437,7 @@ const EightLayerPost: React.FC = () => {
 
   return (
     <article className="max-w-none">
-      <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 mb-8">
+      <div className="bg-zinc-900/50 border border-black rounded-xl p-6 mb-8">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
             <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -697,7 +697,7 @@ const EightLayerPost: React.FC = () => {
           This layer learns from transformations applied in previous layers and applies those patterns across your codebase.
         </p>
 
-        <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-black rounded-xl p-6 my-6 not-prose">
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-6 not-prose">
           <h4 className="text-purple-400 font-semibold mb-4 flex items-center gap-2">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -731,7 +731,7 @@ const EightLayerPost: React.FC = () => {
           The security layer that provides comprehensive security analysis and compromise detection for React and Next.js applications.
         </p>
 
-        <div className="bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-black rounded-xl p-6 my-6 not-prose">
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-6 not-prose">
           <h4 className="text-red-400 font-semibold mb-4 flex items-center gap-2">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -814,7 +814,7 @@ neurolint fix --all-layers --dry-run ./src`}</code>
           </pre>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">
           <h4 className="text-white font-semibold mb-4">Ready to transform your codebase?</h4>
           <p className="text-gray-300 mb-4">
             Join thousands of developers using NeuroLint to automate code quality.
@@ -1317,7 +1317,7 @@ npm list next
 npx @neurolint/cli security:cve-2025-55182 . --dry-run`}</code>
         </pre>
 
-        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">
           <h4 className="text-white font-semibold mb-4">Need Help?</h4>
           <p className="text-gray-300 mb-4">
             If you encounter issues while patching or suspect your system has been compromised, we're here to help.
@@ -1703,7 +1703,7 @@ npx @neurolint/cli security:compare-baseline .`}</code>
           </pre>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">
           <h4 className="text-white font-semibold mb-4">Related Resources</h4>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -1747,7 +1747,7 @@ const Layer8DeepDive: React.FC = () => {
 
   return (
     <article className="max-w-none">
-      <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 mb-8">
+      <div className="bg-zinc-900/50 border border-black rounded-xl p-6 mb-8">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
             <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1856,39 +1856,39 @@ const Layer8DeepDive: React.FC = () => {
           <h4 className="text-white font-semibold mb-4">IoC Categories</h4>
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-700">
+              <tr className="border-b border-black">
                 <th className="text-left py-2 text-white">Category</th>
                 <th className="text-left py-2 text-white">Signatures</th>
                 <th className="text-left py-2 text-white">Example Pattern</th>
               </tr>
             </thead>
             <tbody className="text-gray-300">
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <td className="py-2">BACKDOOR</td>
                 <td className="py-2">15+</td>
                 <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">exec\(.*user</code></td>
               </tr>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <td className="py-2">CODE_INJECTION</td>
                 <td className="py-2">12+</td>
                 <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">eval\(|new Function</code></td>
               </tr>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <td className="py-2">DATA_EXFILTRATION</td>
                 <td className="py-2">10+</td>
                 <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">process\.env.*fetch</code></td>
               </tr>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <td className="py-2">OBFUSCATION</td>
                 <td className="py-2">8+</td>
                 <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">atob\(|btoa\(</code></td>
               </tr>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <td className="py-2">NETWORK</td>
                 <td className="py-2">10+</td>
                 <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">https?://\d+\.\d+</code></td>
               </tr>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <td className="py-2">CRYPTO_MINING</td>
                 <td className="py-2">5+</td>
                 <td className="py-2"><code className="text-blue-400 bg-zinc-800 px-1 rounded">coinhive|cryptonight</code></td>
@@ -1950,19 +1950,19 @@ const Layer8DeepDive: React.FC = () => {
 
         <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
           <div className="space-y-4">
-            <div className="border-b border-zinc-700 pb-4">
+            <div className="border-b border-black pb-4">
               <h5 className="text-white font-semibold mb-2">1. Dangerous Server Action</h5>
               <p className="text-gray-400 text-sm">Server actions containing exec(), spawn(), or eval()</p>
             </div>
-            <div className="border-b border-zinc-700 pb-4">
+            <div className="border-b border-black pb-4">
               <h5 className="text-white font-semibold mb-2">2. Environment Variable Exposure</h5>
               <p className="text-gray-400 text-sm">Server actions that return or expose process.env</p>
             </div>
-            <div className="border-b border-zinc-700 pb-4">
+            <div className="border-b border-black pb-4">
               <h5 className="text-white font-semibold mb-2">3. SSRF in Server Components</h5>
               <p className="text-gray-400 text-sm">Server-side fetch with user-controlled URLs</p>
             </div>
-            <div className="border-b border-zinc-700 pb-4">
+            <div className="border-b border-black pb-4">
               <h5 className="text-white font-semibold mb-2">4. Dynamic Module Smuggling</h5>
               <p className="text-gray-400 text-sm">Dynamic imports in server actions with variable paths</p>
             </div>
@@ -2057,7 +2057,7 @@ jobs:
           </pre>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">
           <h4 className="text-white font-semibold mb-4">Related Resources</h4>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -2080,6 +2080,599 @@ jobs:
             >
               View on GitHub
             </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+const ESLintComparisonPost: React.FC = () => {
+  const toc = [
+    { id: "introduction", title: "Introduction", level: 1 },
+    { id: "what-is-eslint", title: "What ESLint Does", level: 1 },
+    { id: "eslint-limitations", title: "The Limitations of Linting", level: 1 },
+    { id: "neurolint-approach", title: "The NeuroLint Approach: Fix, Don't Warn", level: 1 },
+    { id: "comparison-table", title: "Feature Comparison", level: 1 },
+    { id: "real-world-example", title: "Real-World Example", level: 1 },
+    { id: "when-to-use-what", title: "When to Use What", level: 1 },
+    { id: "conclusion", title: "Conclusion", level: 1 },
+  ];
+
+  return (
+    <article className="max-w-none">
+      <nav className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-12">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          Table of Contents
+        </h3>
+        <ul className="space-y-2">
+          {toc.map((item) => (
+            <li key={item.id}>
+              <a href={`#${item.id}`} className="text-gray-400 hover:text-blue-400 transition-colors text-sm">
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-blue-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal">
+        
+        <h2 id="introduction" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Introduction: The Problem with Just "Linting"
+        </h2>
+
+        <p className="text-xl text-gray-300 leading-relaxed">
+          If you've ever run <code>npm run lint</code> and stared at 500+ warnings without knowing where to start, you understand the core problem with traditional linting: <strong>it tells you what's wrong but doesn't fix it</strong>.
+        </p>
+
+        <p>
+          ESLint has been the go-to code quality tool for JavaScript and React developers for years. But in 2025, developers are asking: why am I manually fixing the same issues over and over when tools can do this automatically?
+        </p>
+
+        <p>
+          This article compares ESLint (the linter) with NeuroLint (the fixer) to help you understand when each tool makes sense and why many teams are adopting automated fixing over traditional linting.
+        </p>
+
+        <h2 id="what-is-eslint" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          What ESLint Does (And Does Well)
+        </h2>
+
+        <p>
+          <a href="https://eslint.org/" target="_blank" rel="noopener noreferrer">ESLint</a> is a static code analysis tool that identifies problematic patterns in JavaScript code. It's excellent at:
+        </p>
+
+        <div className="space-y-3 my-6 not-prose">
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Pattern Detection</h5>
+            <p className="text-gray-400 text-sm">Finds unused variables, missing semicolons, inconsistent formatting, and potential bugs</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">Customizable Rules</h5>
+            <p className="text-gray-400 text-sm">Hundreds of built-in rules plus community plugins for React, TypeScript, accessibility, and more</p>
+          </div>
+          <div className="bg-zinc-900/50 border border-black rounded-lg p-4">
+            <h5 className="text-white font-semibold mb-2">CI/CD Integration</h5>
+            <p className="text-gray-400 text-sm">Blocks merges when code quality standards aren't met</p>
+          </div>
+        </div>
+
+        <h2 id="eslint-limitations" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          The Limitations of Traditional Linting
+        </h2>
+
+        <p>
+          Here's where linting falls short for modern React development:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-4 my-8 not-prose">
+          <div className="bg-red-500/10 border border-black rounded-xl p-5">
+            <h4 className="text-red-400 font-semibold mb-3">ESLint Limitation #1</h4>
+            <p className="text-gray-300 text-sm"><strong className="text-white">Warnings, not fixes.</strong> You see the problem but still have to manually fix it. With 700+ warnings, this becomes a multi-day task.</p>
+          </div>
+          <div className="bg-red-500/10 border border-black rounded-xl p-5">
+            <h4 className="text-red-400 font-semibold mb-3">ESLint Limitation #2</h4>
+            <p className="text-gray-300 text-sm"><strong className="text-white">Limited auto-fix.</strong> ESLint's <code className="text-blue-400 bg-zinc-800 px-1 rounded">--fix</code> only works for simple issues. It can't fix complex patterns like hydration errors or missing keys.</p>
+          </div>
+          <div className="bg-red-500/10 border border-black rounded-xl p-5">
+            <h4 className="text-red-400 font-semibold mb-3">ESLint Limitation #3</h4>
+            <p className="text-gray-300 text-sm"><strong className="text-white">No context awareness.</strong> ESLint doesn't understand React Server Components, Next.js App Router, or framework-specific patterns.</p>
+          </div>
+          <div className="bg-red-500/10 border border-black rounded-xl p-5">
+            <h4 className="text-red-400 font-semibold mb-3">ESLint Limitation #4</h4>
+            <p className="text-gray-300 text-sm"><strong className="text-white">No security forensics.</strong> ESLint can't detect supply chain attacks, compromised dependencies, or post-exploitation indicators.</p>
+          </div>
+        </div>
+
+        <h2 id="neurolint-approach" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          The NeuroLint Approach: Fix, Don't Warn
+        </h2>
+
+        <p>
+          NeuroLint takes a fundamentally different approach: instead of telling you what's wrong, it <strong>automatically fixes the problem</strong> using AST-based code transformation.
+        </p>
+
+        <div className="bg-blue-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-blue-400 font-semibold mb-4">How NeuroLint Works</h4>
+          <ol className="space-y-3 text-gray-300">
+            <li><strong className="text-white">1. Parse:</strong> Uses Babel AST to understand your code's structure</li>
+            <li><strong className="text-white">2. Analyze:</strong> Identifies issues across 8 specialized layers</li>
+            <li><strong className="text-white">3. Transform:</strong> Applies deterministic fixes using AST manipulation</li>
+            <li><strong className="text-white">4. Validate:</strong> Verifies the transformed code has valid syntax</li>
+            <li><strong className="text-white">5. Backup:</strong> Creates automatic backups before any changes</li>
+          </ol>
+        </div>
+
+        <h2 id="comparison-table" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Feature Comparison: ESLint vs NeuroLint
+        </h2>
+
+        <div className="overflow-x-auto my-8 not-prose">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-black">
+                <th className="text-left py-3 px-4 text-gray-400 font-medium">Feature</th>
+                <th className="text-left py-3 px-4 text-gray-400 font-medium">ESLint</th>
+                <th className="text-left py-3 px-4 text-gray-400 font-medium">NeuroLint</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">Issue Detection</td>
+                <td className="py-3 px-4 text-green-400">Yes</td>
+                <td className="py-3 px-4 text-green-400">Yes</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">Automatic Fixing</td>
+                <td className="py-3 px-4 text-yellow-400">Limited (simple patterns)</td>
+                <td className="py-3 px-4 text-green-400">Full (700+ issue types)</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">React Hydration Fixes</td>
+                <td className="py-3 px-4 text-red-400">No</td>
+                <td className="py-3 px-4 text-green-400">Yes (Layer 4)</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">Next.js App Router Support</td>
+                <td className="py-3 px-4 text-yellow-400">Plugin required</td>
+                <td className="py-3 px-4 text-green-400">Built-in (Layer 5)</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">React 19 Migration</td>
+                <td className="py-3 px-4 text-red-400">No</td>
+                <td className="py-3 px-4 text-green-400">Yes</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">Security Forensics</td>
+                <td className="py-3 px-4 text-red-400">No</td>
+                <td className="py-3 px-4 text-green-400">Yes (Layer 8, 80+ IoCs)</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">Automatic Backups</td>
+                <td className="py-3 px-4 text-red-400">No</td>
+                <td className="py-3 px-4 text-green-400">Yes</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-white">Syntax Validation</td>
+                <td className="py-3 px-4 text-red-400">No (trusts output)</td>
+                <td className="py-3 px-4 text-green-400">Yes (auto-revert on failure)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="real-world-example" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Real-World Example: 500 Warnings to 0
+        </h2>
+
+        <p>
+          Consider a typical Next.js project with 500+ ESLint warnings:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">ESLint Approach (Manual)</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`$ npm run lint
+523 problems (47 errors, 476 warnings)
+  47 errors and 312 warnings potentially fixable with \`--fix\`.
+
+# Run auto-fix (limited)
+$ npm run lint -- --fix
+211 problems (12 errors, 199 warnings)
+
+# Still 199 warnings to fix manually...`}</code>
+          </pre>
+          <p className="text-gray-400 text-sm mt-4">Result: 199 issues still require manual fixing. Time estimate: 4-8 hours.</p>
+        </div>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-green-400 font-semibold mb-4">NeuroLint Approach (Automated)</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`$ npx @neurolint/cli analyze ./src
+Issues Found: 523
+Recommended Layers: 2, 3, 4, 5
+
+$ npx @neurolint/cli fix --layers=2,3,4,5 ./src
+[SUCCESS] 523 issues fixed across 47 files
+[BACKUP] Backup created at .neurolint-backups/2025-12-10_143022/
+
+# Run ESLint to verify
+$ npm run lint
+No problems found.`}</code>
+          </pre>
+          <p className="text-gray-400 text-sm mt-4">Result: All 523 issues fixed automatically. Time: 30 seconds.</p>
+        </div>
+
+        <h2 id="when-to-use-what" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          When to Use What
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-4 my-8 not-prose">
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-3">Use ESLint for:</h4>
+            <ul className="space-y-2 text-gray-300 text-sm">
+              <li>Enforcing code style in CI/CD</li>
+              <li>Catching issues during development (IDE integration)</li>
+              <li>Custom team-specific rules</li>
+              <li>Gradual adoption of new patterns</li>
+            </ul>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-3">Use NeuroLint for:</h4>
+            <ul className="space-y-2 text-gray-300 text-sm">
+              <li>Bulk fixing existing codebase issues</li>
+              <li>React/Next.js hydration errors</li>
+              <li>React 18 to 19 migration</li>
+              <li>Security vulnerability scanning</li>
+              <li>Legacy codebase modernization</li>
+            </ul>
+          </div>
+        </div>
+
+        <p>
+          <strong>Best practice:</strong> Use both tools together. Run NeuroLint first to fix everything automatically, then use ESLint to maintain standards going forward.
+        </p>
+
+        <h2 id="conclusion" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Conclusion
+        </h2>
+
+        <p>
+          ESLint and NeuroLint solve different problems. ESLint is a guard that warns you about issues. NeuroLint is a fixer that resolves them automatically.
+        </p>
+
+        <p>
+          In 2025, with codebases growing larger and development velocity increasing, automated fixing is no longer a nice-to-have - it's essential. Why spend hours manually fixing what a tool can handle in seconds?
+        </p>
+
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Try NeuroLint on Your Codebase</h4>
+          <p className="text-gray-300 mb-4">
+            See how many issues NeuroLint can fix automatically - no configuration required:
+          </p>
+          <div className="bg-zinc-900/80 border border-black rounded-lg p-3 mb-4">
+            <code className="text-green-400 font-mono text-sm">npx @neurolint/cli analyze ./src</code>
+          </div>
+          <a
+            href="https://www.npmjs.com/package/@neurolint/cli"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition-colors"
+          >
+            Install NeuroLint
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+const React19MigrationPost: React.FC = () => {
+  const [copied, setCopied] = React.useState(false);
+
+  const copyCommand = (cmd: string) => {
+    navigator.clipboard.writeText(cmd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const toc = [
+    { id: "introduction", title: "Introduction", level: 1 },
+    { id: "breaking-changes", title: "React 19 Breaking Changes", level: 1 },
+    { id: "reactdom-render", title: "ReactDOM.render to createRoot", level: 2 },
+    { id: "act-import", title: "act() Import Changes", level: 2 },
+    { id: "removed-apis", title: "Removed APIs", level: 2 },
+    { id: "automatic-migration", title: "Automatic Migration with NeuroLint", level: 1 },
+    { id: "nextjs-considerations", title: "Next.js 15/16 Considerations", level: 1 },
+    { id: "verification", title: "Verifying Your Migration", level: 1 },
+  ];
+
+  return (
+    <article className="max-w-none">
+      <div className="bg-zinc-900/50 border border-black rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span className="text-blue-400 text-lg font-bold">19</span>
+          </div>
+          <div>
+            <h4 className="text-white font-semibold mb-2">Quick Migration Command</h4>
+            <p className="text-gray-300 mb-3 text-base">
+              Automatically fix all React 19 breaking changes in your project:
+            </p>
+            <div className="bg-zinc-900/80 border border-black rounded-lg p-3 relative group">
+              <code className="text-green-400 font-mono text-sm">npx @neurolint/cli migrate-react19 ./src --fix</code>
+              <button
+                onClick={() => copyCommand('npx @neurolint/cli migrate-react19 ./src --fix')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 hover:bg-white/10 rounded transition-colors"
+                aria-label="Copy command"
+              >
+                {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <nav className="bg-zinc-900/80 border border-black rounded-xl p-6 mb-12">
+        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          Table of Contents
+        </h3>
+        <ul className="space-y-2">
+          {toc.map((item) => (
+            <li key={item.id} className={`${item.level === 2 ? 'ml-4' : ''}`}>
+              <a href={`#${item.id}`} className="text-gray-400 hover:text-blue-400 transition-colors text-sm">
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <div className="prose prose-invert prose-lg max-w-none prose-headings:font-bold prose-headings:text-white prose-p:text-gray-300 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300 prose-strong:text-white prose-code:text-blue-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-normal">
+        
+        <h2 id="introduction" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Introduction
+        </h2>
+
+        <p className="text-xl text-gray-300 leading-relaxed">
+          React 19 brings powerful new features like the React Compiler, Actions, and improved Server Components. But it also includes <strong>breaking changes</strong> that will cause your existing code to fail if not addressed.
+        </p>
+
+        <p>
+          This guide covers every React 19 breaking change and shows you how to fix them automatically using NeuroLint's migration tool. Whether you're upgrading a small project or a large enterprise codebase, you'll be on React 19 in minutes, not days.
+        </p>
+
+        <h2 id="breaking-changes" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          React 19 Breaking Changes
+        </h2>
+
+        <p>
+          The <a href="https://react.dev/blog/2024/12/05/react-19" target="_blank" rel="noopener noreferrer">official React 19 release notes</a> list several breaking changes. Here are the most impactful:
+        </p>
+
+        <h3 id="reactdom-render" className="text-2xl font-bold text-white mt-10 mb-4 scroll-mt-24">
+          1. ReactDOM.render to createRoot
+        </h3>
+
+        <p>
+          <code>ReactDOM.render()</code> has been removed in React 19. You must use the new <code>createRoot()</code> API introduced in React 18.
+        </p>
+
+        <div className="bg-red-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-red-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-red-500/20 rounded flex items-center justify-center text-xs">X</span>
+            React 18 Code (Breaks in React 19)
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`import ReactDOM from 'react-dom';
+
+ReactDOM.render(<App />, document.getElementById('root'));`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-green-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-xs">Y</span>
+            React 19 Code (Fixed)
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`import { createRoot } from 'react-dom/client';
+
+const root = createRoot(document.getElementById('root'));
+root.render(<App />);`}</code>
+          </pre>
+        </div>
+
+        <h3 id="act-import" className="text-2xl font-bold text-white mt-10 mb-4 scroll-mt-24">
+          2. act() Import Changes
+        </h3>
+
+        <p>
+          The <code>act()</code> function has been moved from <code>react-dom/test-utils</code> to <code>react</code>. This affects all your test files.
+        </p>
+
+        <div className="bg-red-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-red-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-red-500/20 rounded flex items-center justify-center text-xs">X</span>
+            Old Import (Breaks in React 19)
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`import { act } from 'react-dom/test-utils';`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-green-500/10 border border-black rounded-xl p-4 my-6 not-prose">
+          <h5 className="text-green-400 font-semibold mb-2 flex items-center gap-2">
+            <span className="w-5 h-5 bg-green-500/20 rounded flex items-center justify-center text-xs">Y</span>
+            New Import (React 19)
+          </h5>
+          <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`import { act } from 'react';`}</code>
+          </pre>
+        </div>
+
+        <h3 id="removed-apis" className="text-2xl font-bold text-white mt-10 mb-4 scroll-mt-24">
+          3. Removed APIs
+        </h3>
+
+        <p>
+          Several legacy APIs have been completely removed in React 19:
+        </p>
+
+        <div className="overflow-x-auto my-8 not-prose">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-black">
+                <th className="text-left py-3 px-4 text-gray-400 font-medium">Removed API</th>
+                <th className="text-left py-3 px-4 text-gray-400 font-medium">Replacement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-red-400 font-mono">ReactDOM.render()</td>
+                <td className="py-3 px-4 text-green-400 font-mono">createRoot().render()</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-red-400 font-mono">ReactDOM.hydrate()</td>
+                <td className="py-3 px-4 text-green-400 font-mono">hydrateRoot()</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-red-400 font-mono">ReactDOM.unmountComponentAtNode()</td>
+                <td className="py-3 px-4 text-green-400 font-mono">root.unmount()</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-red-400 font-mono">ReactDOM.findDOMNode()</td>
+                <td className="py-3 px-4 text-green-400 font-mono">useRef / forwardRef</td>
+              </tr>
+              <tr className="border-b border-black/50">
+                <td className="py-3 px-4 text-red-400 font-mono">react-dom/test-utils (act)</td>
+                <td className="py-3 px-4 text-green-400 font-mono">react (act)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="automatic-migration" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Automatic Migration with NeuroLint
+        </h2>
+
+        <p>
+          NeuroLint's <code>migrate-react19</code> command automatically handles all these breaking changes using AST-based code transformation.
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Step-by-Step Migration</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm mb-4">
+            <code className="text-gray-300">{`# Step 1: Update React to version 19
+npm install react@19 react-dom@19
+
+# Step 2: Preview breaking changes (dry run)
+npx @neurolint/cli migrate-react19 ./src --dry-run
+
+# Step 3: Apply fixes automatically
+npx @neurolint/cli migrate-react19 ./src --fix
+
+# Step 4: Run tests to verify
+npm test`}</code>
+          </pre>
+        </div>
+
+        <p>
+          NeuroLint creates automatic backups before any changes. If anything goes wrong, restore with:
+        </p>
+
+        <pre className="bg-zinc-900/80 border border-black rounded-lg p-4 overflow-x-auto text-sm not-prose">
+          <code className="text-gray-300">{`npx @neurolint/cli backup restore`}</code>
+        </pre>
+
+        <h2 id="nextjs-considerations" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Next.js 15/16 Considerations
+        </h2>
+
+        <p>
+          If you're using Next.js with React 19, there are additional considerations:
+        </p>
+
+        <div className="space-y-4 my-8 not-prose">
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">App Router: Already React 19 Ready</h4>
+            <p className="text-gray-400 text-sm">
+              If you're using the App Router, most of your code is already compatible. Focus on fixing any legacy patterns in client components.
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">Pages Router: May Need Migration</h4>
+            <p className="text-gray-400 text-sm">
+              Legacy _app.tsx and _document.tsx files may use old ReactDOM patterns that need updating.
+            </p>
+          </div>
+          <div className="bg-zinc-900/80 border border-black rounded-xl p-5">
+            <h4 className="text-white font-semibold mb-2">Next.js 16 Migration</h4>
+            <p className="text-gray-400 text-sm">
+              Use <code className="text-blue-400 bg-zinc-800 px-1 rounded">npx @neurolint/cli migrate-nextjs-16</code> for Next.js 16-specific changes like middleware.ts renaming.
+            </p>
+          </div>
+        </div>
+
+        <h2 id="verification" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
+          Verifying Your Migration
+        </h2>
+
+        <p>
+          After migration, verify everything works:
+        </p>
+
+        <div className="bg-zinc-900/80 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Verification Checklist</h4>
+          <pre className="bg-black/50 border border-black rounded-lg p-4 overflow-x-auto text-sm">
+            <code className="text-gray-300">{`# Check React version
+npm list react
+
+# Run type checking
+npm run type-check
+
+# Run tests
+npm test
+
+# Run linting
+npm run lint
+
+# Start development server
+npm run dev`}</code>
+          </pre>
+        </div>
+
+        <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">
+          <h4 className="text-white font-semibold mb-4">Ready to Migrate?</h4>
+          <p className="text-gray-300 mb-4">
+            Preview all React 19 breaking changes in your codebase without making any modifications:
+          </p>
+          <div className="bg-zinc-900/80 border border-black rounded-lg p-3 mb-4">
+            <code className="text-green-400 font-mono text-sm">npx @neurolint/cli migrate-react19 ./src --dry-run</code>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="https://www.npmjs.com/package/@neurolint/cli"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-semibold rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              Install NeuroLint
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <Link
+              to="/docs/commands/migrate-react19"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 text-white font-semibold rounded-xl hover:bg-zinc-700 transition-colors"
+            >
+              View Documentation
+            </Link>
           </div>
         </div>
       </div>
@@ -2148,24 +2741,44 @@ const blogPostsData: Record<string, {
     Component: Layer8DeepDive,
   },
   "fix-react-nextjs-hydration-errors-complete-guide": {
-    title: "How to Fix React & Next.js Hydration Errors: The Complete 2025 Guide",
-    description: "Learn why hydration mismatches happen, how to identify them, and the proven strategies to fix 'window is not defined', 'document is not defined', and other SSR errors automatically.",
+    title: "How to Fix React Hydration Errors Automatically: Complete 2025 Guide",
+    description: "Fix 'window is not defined', 'document is not defined', and SSR hydration mismatches in React & Next.js. Learn the exact patterns that cause React hydration errors and how to fix them automatically with AST-based code transformation.",
     date: "2025-12-05",
     readTime: "12 min read",
     author: "NeuroLint Team",
     category: "Tutorials",
-    tags: ["React", "Next.js", "Hydration", "SSR", "Debugging"],
+    tags: ["React Hydration Error Fix", "Next.js SSR", "React Debugging", "Code Fixer"],
     Component: HydrationErrorsPost,
   },
   "8-layer-code-fixing-pipeline-explained": {
-    title: "The 8-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
-    description: "A deep dive into how NeuroLint's 8-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to security forensics.",
+    title: "Automated React Code Fixer: How the 8-Layer Pipeline Works (ESLint Alternative)",
+    description: "Discover how AST-based code transformation automatically fixes 700+ React and Next.js issues. Better than ESLint for automated fixes - deterministic results, no AI hallucinations, instant code repair.",
     date: "2025-12-04",
     readTime: "15 min read",
     author: "NeuroLint Team",
     category: "Deep Dives",
-    tags: ["AST", "Code Transformation", "Architecture", "React", "Next.js"],
+    tags: ["React Code Fixer", "ESLint Alternative", "AST Transformation", "Automated Fixes"],
     Component: EightLayerPost,
+  },
+  "eslint-vs-neurolint-why-rule-based-fixing-wins": {
+    title: "ESLint vs NeuroLint: Why Rule-Based Code Fixing Beats Linting in 2025",
+    description: "ESLint finds problems, NeuroLint fixes them. Compare the traditional linting approach vs automated AST-based code transformation. See why developers are switching from ESLint warnings to automatic fixes.",
+    date: "2025-12-10",
+    readTime: "10 min read",
+    author: "NeuroLint Team",
+    category: "Comparisons",
+    tags: ["ESLint Alternative", "React Code Fixer", "Linting", "Automated Fixes"],
+    Component: ESLintComparisonPost,
+  },
+  "react-19-migration-guide-breaking-changes-fixes": {
+    title: "React 19 Migration Guide: Fix Breaking Changes Automatically (2025)",
+    description: "Upgrade from React 18 to React 19 without the headaches. This guide covers all React 19 breaking changes and shows how to automatically fix ReactDOM.render, act() imports, and deprecated APIs.",
+    date: "2025-12-10",
+    readTime: "14 min read",
+    author: "NeuroLint Team",
+    category: "Tutorials",
+    tags: ["React 19 Migration", "Breaking Changes", "Next.js Migration", "Automated Fixes"],
+    Component: React19MigrationPost,
   },
 };
 
@@ -2441,10 +3054,6 @@ export const BlogPost: React.FC = () => {
         </nav>
 
         <main className="relative pt-32 pb-20 px-4">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-green-500/5 to-blue-600/5 rounded-full blur-3xl"></div>
-          </div>
 
           <div className="max-w-3xl mx-auto relative z-10">
             <Link 
@@ -2457,7 +3066,7 @@ export const BlogPost: React.FC = () => {
 
             <header className="mb-12">
               <div className="flex items-center gap-3 mb-4">
-                <span className="px-3 py-1 bg-blue-500/20 text-blue-400 text-sm font-medium rounded-full border border-black">
+                <span className="px-3 py-1 bg-zinc-800 text-gray-300 text-sm font-medium rounded-full border border-black">
                   {category}
                 </span>
               </div>

@@ -73,25 +73,47 @@ const blogPosts: BlogPost[] = [
   },
   {
     slug: "fix-react-nextjs-hydration-errors-complete-guide",
-    title: "How to Fix React & Next.js Hydration Errors: The Complete 2025 Guide",
-    description: "Learn why hydration mismatches happen, how to identify them, and the proven strategies to fix 'window is not defined', 'document is not defined', and other SSR errors automatically.",
+    title: "How to Fix React Hydration Errors Automatically: Complete 2025 Guide",
+    description: "Fix 'window is not defined', 'document is not defined', and SSR hydration mismatches in React & Next.js. Learn the exact patterns that cause React hydration errors and how to fix them automatically with AST-based code transformation.",
     date: "2025-12-05",
     readTime: "12 min read",
     author: "NeuroLint Team",
     category: "Tutorials",
-    tags: ["React", "Next.js", "Hydration", "SSR", "Debugging"],
-    featured: false,
+    tags: ["React Hydration Error Fix", "Next.js SSR", "React Debugging", "Code Fixer"],
+    featured: true,
   },
   {
     slug: "8-layer-code-fixing-pipeline-explained",
-    title: "The 8-Layer Code Fixing Pipeline: How NeuroLint Transforms Your Codebase",
-    description: "A deep dive into how NeuroLint's 8-layer pipeline systematically analyzes and fixes React/Next.js code - from configuration to security forensics.",
+    title: "Automated React Code Fixer: How the 8-Layer Pipeline Works (ESLint Alternative)",
+    description: "Discover how AST-based code transformation automatically fixes 700+ React and Next.js issues. Better than ESLint for automated fixes - deterministic results, no AI hallucinations, instant code repair.",
     date: "2025-12-04",
     readTime: "15 min read",
     author: "NeuroLint Team",
     category: "Deep Dives",
-    tags: ["AST", "Code Transformation", "Architecture", "React", "Next.js"],
-    featured: false,
+    tags: ["React Code Fixer", "ESLint Alternative", "AST Transformation", "Automated Fixes"],
+    featured: true,
+  },
+  {
+    slug: "eslint-vs-neurolint-why-rule-based-fixing-wins",
+    title: "ESLint vs NeuroLint: Why Rule-Based Code Fixing Beats Linting in 2025",
+    description: "ESLint finds problems, NeuroLint fixes them. Compare the traditional linting approach vs automated AST-based code transformation. See why developers are switching from ESLint warnings to automatic fixes.",
+    date: "2025-12-10",
+    readTime: "10 min read",
+    author: "NeuroLint Team",
+    category: "Comparisons",
+    tags: ["ESLint Alternative", "React Code Fixer", "Linting", "Automated Fixes"],
+    featured: true,
+  },
+  {
+    slug: "react-19-migration-guide-breaking-changes-fixes",
+    title: "React 19 Migration Guide: Fix Breaking Changes Automatically (2025)",
+    description: "Upgrade from React 18 to React 19 without the headaches. This guide covers all React 19 breaking changes and shows how to automatically fix ReactDOM.render, act() imports, and deprecated APIs.",
+    date: "2025-12-10",
+    readTime: "14 min read",
+    author: "NeuroLint Team",
+    category: "Tutorials",
+    tags: ["React 19 Migration", "Breaking Changes", "Next.js Migration", "Automated Fixes"],
+    featured: true,
   },
 ];
 
@@ -101,7 +123,7 @@ const BlogCard: React.FC<{ post: BlogPost }> = ({ post }) => {
   return (
     <Link 
       to={`/blog/${post.slug}`}
-      className="group block bg-zinc-900/80 border border-black rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-zinc-700 hover:shadow-blue-500/5"
+      className="group block bg-zinc-900/80 border border-black rounded-xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:border-black/80 hover:shadow-white/5"
     >
       <div className="aspect-video relative overflow-hidden bg-zinc-800/50">
         <div className="absolute inset-0 flex items-center justify-center">
@@ -126,7 +148,7 @@ const BlogCard: React.FC<{ post: BlogPost }> = ({ post }) => {
             {post.readTime}
           </span>
         </div>
-        <h2 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors line-clamp-2">
+        <h2 className="text-xl font-bold text-white mb-3 group-hover:text-gray-300 transition-colors line-clamp-2">
           {post.title}
         </h2>
         <p className="text-gray-400 text-sm mb-4 line-clamp-3">
@@ -153,10 +175,14 @@ export const Blog: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
-    document.title = "Blog | NeuroLint - React & Next.js Code Fixing Guides";
+    document.title = "React Code Fixer Blog | Fix Hydration Errors, ESLint Issues & Security Bugs - NeuroLint";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', 'Expert guides on fixing React & Next.js bugs, understanding hydration errors, and automating code quality improvements with NeuroLint.');
+      metaDesc.setAttribute('content', 'Learn how to fix React hydration errors, Next.js migration issues, and automate ESLint fixes. Expert guides on React debugging, code transformation, and security vulnerability detection for 2025.');
+    }
+    const metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (metaKeywords) {
+      metaKeywords.setAttribute('content', 'React code fixer, fix React hydration errors, ESLint alternative, React debugging guide, Next.js migration tool, CVE-2025-55182, React Server Components security, automated bug fixer, React 19 migration');
     }
   }, []);
 
@@ -337,19 +363,15 @@ export const Blog: React.FC = () => {
         </nav>
 
         <main className="relative pt-32 pb-20 px-4">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-blue-500/10 to-purple-600/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-green-500/5 to-blue-600/5 rounded-full blur-3xl"></div>
-          </div>
 
           <div className="max-w-5xl mx-auto relative z-10">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-black rounded-full mb-6">
-                <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                <span className="text-blue-400 text-sm font-medium">Developer Resources</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 border border-black rounded-full mb-6">
+                <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse" />
+                <span className="text-gray-300 text-sm font-medium">Developer Resources</span>
               </div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-black mb-6 tracking-tight">
-                NeuroLint <span className="text-blue-400">Blog</span>
+                NeuroLint <span className="text-gray-400">Blog</span>
               </h1>
               <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto">
                 Expert guides on fixing React & Next.js bugs, understanding hydration errors, and automating code quality improvements.

@@ -6,8 +6,8 @@ import { ArrowRight, Shield, Layers, Zap, RefreshCw } from "lucide-react";
 export function DocsIntro() {
   return (
     <DocsLayout
-      title="Introduction to NeuroLint v1.5.2"
-      description="NeuroLint is a deterministic, 8-layer code transformation and security forensics tool for React/Next.js projects. No AI, no guesswork - AST-powered reliability with automatic validation."
+      title="NeuroLint: The React Code Fixer & ESLint Alternative for 2025"
+      description="NeuroLint is a deterministic React code fixer that automatically fixes hydration errors, ESLint issues, and security vulnerabilities. AST-powered code transformation for React 19 and Next.js 16 - no AI, just reliable automated fixes."
     >
       <section className="mb-12">
         <div className="p-6 bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-800/50 rounded-lg mb-8">
