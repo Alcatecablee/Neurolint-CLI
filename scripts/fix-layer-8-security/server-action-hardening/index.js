@@ -137,18 +137,34 @@ class ServerActionHardening {
   }
 
   hasUseServerDirective(blockNode) {
-    if (!blockNode || !blockNode.body) return false;
+    if (!blockNode) return false;
     
-    for (const stmt of blockNode.body) {
-      if (stmt.type === 'ExpressionStatement' && stmt.directive === 'use server') {
-        return true;
+    // Check directives array (where Babel stores 'use server' when it's the first statement)
+    if (blockNode.directives && Array.isArray(blockNode.directives)) {
+      for (const directive of blockNode.directives) {
+        if (
+          directive.type === 'Directive' &&
+          directive.value?.type === 'DirectiveLiteral' &&
+          directive.value.value === 'use server'
+        ) {
+          return true;
+        }
       }
-      if (
-        stmt.type === 'ExpressionStatement' &&
-        stmt.expression.type === 'StringLiteral' &&
-        stmt.expression.value === 'use server'
-      ) {
-        return true;
+    }
+    
+    // Also check body for fallback (older parser behavior)
+    if (blockNode.body) {
+      for (const stmt of blockNode.body) {
+        if (stmt.type === 'ExpressionStatement' && stmt.directive === 'use server') {
+          return true;
+        }
+        if (
+          stmt.type === 'ExpressionStatement' &&
+          stmt.expression?.type === 'StringLiteral' &&
+          stmt.expression.value === 'use server'
+        ) {
+          return true;
+        }
       }
     }
     return false;
@@ -190,6 +206,16 @@ class ServerActionHardening {
           line: node.loc?.start?.line,
           severity: 'CRITICAL',
           message: 'Server action returns process.env directly'
+        });
+      }
+      
+      // Detect spread operator: { ...process.env }
+      if (parent && parent.isSpreadElement()) {
+        result.envExposures.push({
+          type: 'SPREAD_ENV',
+          line: node.loc?.start?.line,
+          severity: 'CRITICAL',
+          message: 'process.env is spread into object (leaks all environment variables)'
         });
       }
       

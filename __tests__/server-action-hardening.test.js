@@ -73,7 +73,7 @@ export async function action() {}`;
       expect(result.isServerAction).toBe(true);
     });
 
-    test.skip('should detect inline "use server" directive in function body (TODO: enhance hasUseServerDirective)', async () => {
+    test('should detect inline "use server" directive in function body', async () => {
       const code = `export async function inlineServerAction(formData) {
   'use server';
   const name = formData.get('name');
@@ -84,7 +84,7 @@ export async function action() {}`;
       expect(result.isServerAction).toBe(true);
     });
 
-    test.skip('should detect inline "use server" in arrow function (TODO: enhance hasUseServerDirective)', async () => {
+    test('should detect inline "use server" in arrow function', async () => {
       const code = `export const arrowAction = async (data) => {
   'use server';
   return data.value * 2;
@@ -215,7 +215,7 @@ export async function leakEnv() {
       expect(result.envExposures.length).toBeGreaterThan(0);
     });
 
-    test.skip('should detect process.env in object spread (TODO: enhance env exposure detection)', async () => {
+    test('should detect process.env in object spread', async () => {
       const code = `'use server';
 
 export async function leakEnvSpread() {
