@@ -191,6 +191,14 @@ The core engine processes code through progressive layers, each handling specifi
 - **UI Components**: Created missing components (badge.tsx, button.tsx, glowing-border.tsx) in landing/src/components/ui/
 - **Marketing copy**: Updated "All 6 code-fixing layers" to "All 8 code-fixing layers"
 
+### CLI Output Improvements (December 10, 2025)
+- **Centralized output utility**: Created `shared-core/cli-output.js` with TTY detection, NO_COLOR/CI env support, and consistent severity-to-stream routing
+- **Colorized spinner**: Updated `simple-ora.js` to use colors when TTY detected, text-based symbols ([OK], [ERROR], [WARN], [INFO]) for accessibility
+- **Proper stderr routing**: Errors and warnings now consistently route to stderr across all CLI components
+- **Actionable hints**: Added HINTS map in CLIReporter for severity-specific and category-specific guidance
+- **No emojis**: All output uses text-based symbols per user preference
+- **TTY-aware colors**: Colors automatically disabled in CI environments or when output is piped
+
 ### Verified Components
 - All 132 tests passing including 60+ Layer 8 security forensics tests
 - Layer 8 CLI commands fully functional (scan-compromise, create-baseline, compare-baseline, incident-response)
