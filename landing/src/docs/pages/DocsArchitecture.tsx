@@ -9,35 +9,41 @@ export function DocsArchitecture() {
       name: "Configuration",
       description: "Updates tsconfig.json, next.config.js, package.json",
       fixes: [
-        "Updates tsconfig.json to ES2022 target and ESNext modules",
-        "Detects Next.js version and applies appropriate compiler options",
-        "Fixes package.json type field and engine requirements",
-        "Updates next.config.js for App Router compatibility",
+        "Enforces TypeScript strict mode settings (strict, noImplicitAny, strictNullChecks, etc.)",
+        "Updates target to ES2022 and module to ESNext",
+        "Sets compilerOptions.jsx to react-jsx for React 19 compatibility",
+        "Removes deprecated Next.js experimental flags",
+        "Adds Turbopack configuration suggestions for Next.js 15+",
       ],
+      engine: "JSON parsing + regex for JS configs",
       link: "/docs/layers/config",
     },
     {
       num: 2,
       name: "Patterns",
-      description: "Standardizes variables, removes console statements",
+      description: "Removes debug statements, fixes HTML entities",
       fixes: [
-        "Removes console.log and debug statements",
-        "Fixes HTML entities in JSX (& to &amp;)",
-        "Replaces var with const/let",
-        "Removes unused imports",
+        "Removes console.log, console.warn, console.error statements via AST",
+        "Removes alert, confirm, prompt dialog calls",
+        "Fixes HTML entities in JSX (&quot; to \", &amp; to &, etc.)",
+        "Detects Legacy Context patterns (contextTypes, getChildContext) and warns",
+        "Detects React.createFactory usage and converts to JSX",
       ],
+      engine: "AST-first with regex fallback, syntax validated",
       link: "/docs/layers/patterns",
     },
     {
       num: 3,
       name: "Components",
-      description: "Adds keys, accessibility attributes, prop types",
+      description: "Adds keys, accessibility attributes, ref fixes",
       fixes: [
-        "Adds missing key props in map() iterations",
+        "Adds missing key props in map() iterations using stack-based tokenization",
         "Adds alt attributes to <img> elements",
-        "Adds ARIA labels for accessibility",
-        "Fixes missing React imports",
+        "Adds aria-label to buttons without accessible text",
+        "Converts forwardRef to direct ref prop for React 19 compatibility",
+        "Converts string refs to callback ref pattern",
       ],
+      engine: "AST transformation with regex fallback",
       link: "/docs/layers/react-repair",
     },
     {
@@ -45,11 +51,13 @@ export function DocsArchitecture() {
       name: "Hydration",
       description: "Guards client-side APIs for SSR",
       fixes: [
-        "Wraps window access with typeof window !== 'undefined'",
-        "Guards document usage for SSR safety",
-        "Protects localStorage and sessionStorage calls",
-        "Handles navigator API access",
+        "Wraps localStorage.getItem/setItem/removeItem with typeof window !== 'undefined' guards",
+        "Guards sessionStorage calls for SSR safety",
+        "Protects window.matchMedia, window.location, window.navigator, window.innerWidth access",
+        "Guards document.querySelector, document.getElementById, document.body calls",
+        "Checks if already guarded (isAlreadyGuarded) to avoid double-wrapping",
       ],
+      engine: "AST-first with isAlreadyGuarded() detection",
       link: "/docs/layers/hydration",
     },
     {
@@ -57,11 +65,13 @@ export function DocsArchitecture() {
       name: "Next.js",
       description: "Optimizes App Router with directives",
       fixes: [
-        "Adds 'use client' directives where needed",
-        "Migrates next/router to next/navigation",
-        "Handles React 19 breaking changes",
-        "Updates deprecated Next.js patterns",
+        "Adds 'use client' directives where hooks/browser APIs detected",
+        "Converts ReactDOM.render to createRoot() for React 19",
+        "Converts ReactDOM.hydrate to hydrateRoot() for React 19",
+        "Converts unmountComponentAtNode to root.unmount()",
+        "Migrates next/router to next/navigation patterns",
       ],
+      engine: "Manual parsing for nested parentheses, AST for imports",
       link: "/docs/layers/nextjs",
     },
     {
@@ -74,19 +84,21 @@ export function DocsArchitecture() {
         "Provides MSW integration guidance",
         "RSC testing recommendations",
       ],
+      engine: "AST analysis with suggestions",
       link: "/docs/layers/testing",
     },
     {
       num: 7,
       name: "Adaptive",
-      description: "Learns and applies patterns from prior fixes with production-grade reliability",
+      description: "Learns and applies patterns from prior fixes",
       fixes: [
-        "Stores learned rules in .neurolint/learned-rules.json",
-        "Applies project-specific patterns with 70%+ confidence scoring",
-        "Smart pattern extraction - only learns from files with actual React hooks",
-        "Separates suggestions from actual changes for accurate metrics",
-        "Debug logging via NEUROLINT_DEBUG environment variable",
+        "Stores learned rules in .neurolint/learned-rules.json with confidence scoring",
+        "Applies patterns only when confidence exceeds 70% threshold",
+        "Extracts patterns from files with actual React hooks",
+        "Manages rules via --list, --edit, --delete, --reset commands",
+        "Debug logging available via NEUROLINT_DEBUG environment variable",
       ],
+      engine: "RuleStore with regex patterns and confidence thresholds",
       link: "/docs/layers/adaptive",
     },
     {
@@ -94,11 +106,13 @@ export function DocsArchitecture() {
       name: "Security Forensics",
       description: "Detects IoCs, supply chain attacks, and CVE-2025-55182",
       fixes: [
-        "80+ IoC signatures for post-exploitation detection",
-        "CVE-2025-55182 React Server Components RCE detection",
+        "80+ IoC signatures for post-exploitation detection (beacons, data exfiltration)",
+        "CVE-2025-55182 React Server Components RCE detection (CVSS 10.0)",
         "Supply chain attack pattern recognition",
-        "Baseline integrity verification",
+        "Baseline creation and drift detection via file hashing",
+        "Incident response with git timeline analysis",
       ],
+      engine: "Read-only by default, only modifies code in --quarantine mode",
       link: "/docs/layers/security",
     },
   ];
@@ -106,7 +120,7 @@ export function DocsArchitecture() {
   return (
     <DocsLayout
       title="The 8-Layer Architecture"
-      description="NeuroLint processes code through 8 progressive layers, each handling specific categories of issues from configuration to security."
+      description="NeuroLint processes code through 8 progressive layers, each handling specific categories of issues from configuration to security forensics."
     >
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">Overview</h2>
@@ -122,9 +136,9 @@ export function DocsArchitecture() {
             {layers.map((layer, idx) => (
               <div 
                 key={layer.num}
-                className="flex items-center gap-4 p-3 rounded-lg hover:bg-zinc-800/50 transition-colors"
+                className={`flex items-center gap-4 p-3 rounded-lg hover:bg-zinc-800/50 transition-colors ${layer.num === 8 ? 'border border-red-900/50' : ''}`}
               >
-                <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">
+                <div className={`w-8 h-8 flex items-center justify-center rounded font-mono text-sm ${layer.num === 8 ? 'bg-red-900/50 text-red-400' : 'bg-zinc-800 text-gray-400'}`}>
                   {layer.num}
                 </div>
                 <div className="flex-1">
@@ -138,10 +152,55 @@ export function DocsArchitecture() {
         </div>
 
         <Callout type="info" title="Layer execution order">
-          Layers run in order from 1 to 8. Earlier layers prepare the codebase 
-          for later transformations. For example, Layer 1 fixes configs before 
-          Layer 5 applies Next.js migrations.
+          Layers 1-7 run in order when using --all-layers. Layer 8 (Security Forensics) 
+          is read-only by default and runs separately via security: commands. Earlier layers prepare 
+          the codebase for later transformations.
         </Callout>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-white mb-4">The Transformation Safety Pipeline</h2>
+        
+        <p className="text-gray-300 mb-6">
+          NeuroLint uses a three-step safety process for every transformation to ensure 
+          your code is never left in a broken state:
+        </p>
+
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-6">
+          <ol className="space-y-4 text-gray-400 text-sm">
+            <li className="flex items-start gap-3">
+              <span className="w-8 h-8 flex items-center justify-center bg-blue-900/50 rounded text-blue-400 font-mono text-sm">1</span>
+              <div>
+                <strong className="text-white">AST Transformation</strong>
+                <p className="mt-1">First attempts AST-based transformation using Babel parser for maximum accuracy. Parses with TypeScript and JSX plugins enabled.</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="w-8 h-8 flex items-center justify-center bg-yellow-900/50 rounded text-yellow-400 font-mono text-sm">2</span>
+              <div>
+                <strong className="text-white">Regex Fallback</strong>
+                <p className="mt-1">If AST fails or makes no changes, applies regex-based pattern matching. Uses custom patterns for console removal, SSR guards, and key props.</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="w-8 h-8 flex items-center justify-center bg-green-900/50 rounded text-green-400 font-mono text-sm">3</span>
+              <div>
+                <strong className="text-white">Syntax Validation & Revert</strong>
+                <p className="mt-1">Validates transformed code using Babel parser. If syntax is invalid, automatically reverts to original. You'll see: <code className="text-yellow-400">"[ERROR] Regex fallback produced invalid syntax - REJECTING changes"</code></p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <CodeBlock
+          language="text"
+          code={`[INFO] AST-based pattern transformations: 2 changes (validated)
+[SUCCESS] Layer 2 identified 2 pattern fixes (dry-run)
+[WARNING] AST transformation produced invalid syntax - reverted to original
+[INFO] Attempting regex fallback for pattern transformations
+[INFO] Regex fallback succeeded with 2 changes (validated)
+[ERROR] Regex fallback produced invalid syntax - REJECTING changes`}
+        />
       </section>
 
       <section className="mb-12">
@@ -151,10 +210,10 @@ export function DocsArchitecture() {
           {layers.map((layer) => (
             <div 
               key={layer.num}
-              className="border border-zinc-800 rounded-lg overflow-hidden"
+              className={`border rounded-lg overflow-hidden ${layer.num === 8 ? 'border-red-900/50' : 'border-zinc-800'}`}
             >
-              <div className="flex items-center gap-4 px-5 py-4 bg-zinc-900/50 border-b border-zinc-800">
-                <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-lg font-mono text-lg text-white">
+              <div className={`flex items-center gap-4 px-5 py-4 border-b ${layer.num === 8 ? 'bg-red-900/20 border-red-900/50' : 'bg-zinc-900/50 border-zinc-800'}`}>
+                <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-mono text-lg ${layer.num === 8 ? 'bg-red-900/50 text-red-400' : 'bg-zinc-800 text-white'}`}>
                   {layer.num}
                 </div>
                 <div>
@@ -164,6 +223,11 @@ export function DocsArchitecture() {
               </div>
               
               <div className="p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Engine:</span>
+                  <span className="text-xs text-blue-400 bg-blue-900/20 px-2 py-1 rounded">{layer.engine}</span>
+                </div>
+                
                 <h4 className="text-sm font-medium text-gray-300 uppercase tracking-wide mb-3">
                   What it fixes
                 </h4>
@@ -189,44 +253,36 @@ export function DocsArchitecture() {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold text-white mb-4">How Transformations Work</h2>
+        <h2 className="text-2xl font-bold text-white mb-4">Backup System</h2>
         
-        <p className="text-gray-300 mb-6">
-          Each layer uses AST (Abstract Syntax Tree) parsing to understand your code 
-          structure. This is safer than regex-based find-and-replace because it 
-          understands code semantics.
+        <p className="text-gray-300 mb-4">
+          Every fix operation creates automatic backups before modifying files:
         </p>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-6">
-          <h3 className="font-medium text-white mb-3">The transformation pipeline:</h3>
-          <ol className="space-y-3 text-gray-400 text-sm">
-            <li className="flex items-start gap-3">
-              <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-500 font-mono text-xs">1</span>
-              <span><strong className="text-gray-300">Parse</strong> - Code is parsed into an AST using Babel</span>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-4">
+          <ul className="space-y-2 text-gray-400 text-sm">
+            <li className="flex items-start gap-2">
+              <span className="text-gray-600 mt-0.5">-</span>
+              Backups stored in centralized <code className="text-blue-400">.neurolint-backups/</code> directory
             </li>
-            <li className="flex items-start gap-3">
-              <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-500 font-mono text-xs">2</span>
-              <span><strong className="text-gray-300">Transform</strong> - Layer-specific rules modify the AST</span>
+            <li className="flex items-start gap-2">
+              <span className="text-gray-600 mt-0.5">-</span>
+              SHA-256 checksums for integrity verification
             </li>
-            <li className="flex items-start gap-3">
-              <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-500 font-mono text-xs">3</span>
-              <span><strong className="text-gray-300">Validate</strong> - Changed code is validated for syntax errors</span>
+            <li className="flex items-start gap-2">
+              <span className="text-gray-600 mt-0.5">-</span>
+              Restore with <code className="text-blue-400">neurolint backups restore &lt;n&gt; --yes</code>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-500 font-mono text-xs">4</span>
-              <span><strong className="text-gray-300">Backup</strong> - Original file is backed up with SHA-256 checksum</span>
+            <li className="flex items-start gap-2">
+              <span className="text-gray-600 mt-0.5">-</span>
+              Maximum 10 backups retained by default
             </li>
-            <li className="flex items-start gap-3">
-              <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-500 font-mono text-xs">5</span>
-              <span><strong className="text-gray-300">Apply</strong> - Modified code is written to disk</span>
-            </li>
-          </ol>
+          </ul>
         </div>
 
-        <Callout type="warning" title="Validation failures">
-          If validation fails (the transformed code has syntax errors), NeuroLint 
-          falls back to regex-based transformations or reverts the change entirely. 
-          Your code is never left in a broken state.
+        <Callout type="warning" title="Layer 8 is read-only by default">
+          Layer 8 (Security Forensics) never modifies code unless you explicitly use <code className="text-blue-400">--quarantine</code> mode. 
+          This ensures security scanning never breaks your build.
         </Callout>
       </section>
 
@@ -239,7 +295,7 @@ export function DocsArchitecture() {
 
         <CodeBlock
           language="bash"
-          code={`# Run all layers
+          code={`# Run all layers (1-7, excludes Layer 8)
 neurolint fix ./src --all-layers
 
 # Run specific layers
@@ -248,13 +304,18 @@ neurolint fix ./src --layers=1,3,4
 # Run layers 1 through 5
 neurolint fix ./src --layers=1,2,3,4,5
 
-# Run only security forensics
-neurolint fix ./src --layers=8`}
+# Run layer-specific commands
+neurolint hydration fix ./src --verbose
+neurolint components scan ./src
+
+# Security forensics (Layer 8) runs separately
+neurolint security:scan-compromise ./src --quick`}
         />
 
         <p className="text-gray-400 text-sm mt-4">
-          For large codebases, running layers incrementally (one at a time) is 
-          recommended so you can review each category of changes.
+          For large codebases, running layers incrementally (one at a time) with 
+          <code className="text-blue-400"> --dry-run</code> is recommended so you can review 
+          each category of changes before applying.
         </p>
       </section>
     </DocsLayout>

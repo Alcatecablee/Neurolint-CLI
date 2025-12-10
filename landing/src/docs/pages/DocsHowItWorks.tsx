@@ -108,10 +108,14 @@ export function DocsHowItWorks() {
           </div>
         </div>
 
-        <Callout type="info" title="Fallback mechanism">
-          If AST transformation fails (rare edge cases), NeuroLint falls back to 
-          regex-based transformations or skips the file entirely. Your code is 
-          never left in a broken state.
+        <Callout type="info" title="Three-Step Safety Pattern">
+          <p className="mb-2">Every transformation follows this safety pattern:</p>
+          <ol className="list-decimal list-inside space-y-1 text-sm">
+            <li><strong>AST First</strong> - Attempts Babel-based AST transformation</li>
+            <li><strong>Regex Fallback</strong> - If AST fails or makes no changes, tries regex patterns</li>
+            <li><strong>Validate & Revert</strong> - Validates syntax, reverts if invalid</li>
+          </ol>
+          <p className="mt-2 text-xs">You'll see logs like: <code>"[INFO] AST-based transformations: 2 changes (validated)"</code> or <code>"[ERROR] Regex fallback produced invalid syntax - REJECTING changes"</code></p>
         </Callout>
       </section>
 
@@ -148,9 +152,20 @@ export function DocsHowItWorks() {
         </div>
 
         <p className="text-gray-400 text-sm mt-4">
-          NeuroLint uses regex only for simple pattern matching (like HTML entity fixes) 
-          where AST would be overkill, or as a fallback when AST parsing fails.
+          NeuroLint always attempts AST first for accuracy, then falls back to regex 
+          if AST makes no changes. Both results are syntax-validated before applying.
+          If validation fails, changes are automatically rejected to protect your code.
         </p>
+        
+        <CodeBlock
+          language="text"
+          code={`[INFO] AST-based pattern transformations: 2 changes (validated)
+[SUCCESS] Layer 2 identified 2 pattern fixes (dry-run)
+[WARNING] AST transformation produced invalid syntax - reverted to original
+[INFO] Attempting regex fallback for pattern transformations
+[INFO] Regex fallback succeeded with 2 changes (validated)
+[ERROR] Regex fallback produced invalid syntax - REJECTING changes`}
+        />
       </section>
 
       <section className="mb-12">
@@ -170,7 +185,7 @@ Layer 4 (Hydration)  → Adds SSR guards
 Layer 5 (Next.js)    → App Router optimizations
 Layer 6 (Testing)    → Test infrastructure
 Layer 7 (Adaptive)   → Applies & learns rules (when run with other layers)
-Layer 8 (Security)   → Scans for threats`}
+Layer 8 (Security)   → Scans for threats (read-only by default)`}
         />
 
         <p className="text-gray-400 text-sm mt-4">
