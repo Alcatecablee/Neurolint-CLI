@@ -7,7 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2025-12-10
+
+### Added
+
+#### CLI Output Improvements
+- **Centralized output utility**: Created `shared-core/cli-output.js` with TTY detection, NO_COLOR/CI env support, and consistent severity-to-stream routing
+- **Colorized spinner**: Updated `simple-ora.js` to use colors when TTY detected, text-based symbols ([OK], [ERROR], [WARN], [INFO]) for accessibility
+- **Proper stderr routing**: Errors and warnings now consistently route to stderr across all CLI components
+- **Actionable hints**: Added HINTS map in CLIReporter for severity-specific and category-specific guidance
+- **No emojis**: All output uses text-based symbols per user preference
+- **TTY-aware colors**: Colors automatically disabled in CI environments or when output is piped
+
+### Changed
+- Version bumped to 1.5.2
+
 ## [1.5.1] - 2025-12-09
+
+### Added
+
+#### Documentation Expansion
+- **20+ new documentation pages**: Created comprehensive docs matching Supabase/Vercel enterprise quality
+- **Dark minimalist theme**: Pure black (#000000) backgrounds, zinc-900/zinc-800 surfaces, white text, zinc-800 borders only
+- **NO colorful icons**: Removed all emoji-style icons per user preference
+- **Command pages**: analyze, fix, migrate-react19, migrate-nextjs-16 with full flag documentation
+- **Layer pages**: All 8 layers with real CLI names (Configuration, Patterns, Components, Hydration, Next.js, Testing, Adaptive, Security Forensics)
+- **Security pages**: CVE-2025-55182, IoC Detection, Incident Response workflows
+- **Guide pages**: CI/CD Integration, Backup & Restore, Troubleshooting
+- **Technical pages**: How It Works, AST Transformations with architecture details
+- **Sidebar navigation**: All pages accessible via collapsible sidebar sections
+
+#### npm Publishing Preparation
+- **package.json cleanup**: Moved frontend-only dependencies to devDependencies
+- **engines field**: Updated minimum Node.js version from >=16.0.0 to >=18.0.0 for glob@12 compatibility
+- **Lean production dependencies**: CLI now only requires @babel/generator, @babel/parser, @babel/traverse, @babel/types, and glob for runtime
+
+#### Documentation Accuracy Audit
+- **Fixed fake layer names**: Replaced ConfigMaster, PatternCleanse, ReactRepair, HydraFix, NextGuard, TestReady, AdaptiveLearn with real CLI names
+- **Verified CLI reference**: DocsCliReference.tsx layers output now matches actual `neurolint layers` command
+- **Fixed scroll-to-top navigation**: Added useEffect in DocsLayout.tsx to scroll to top on page changes
+
+#### Pre-Publishing Security Audit Fixes
+- **CLI handleLayers command**: Added Layer 8 (Security Forensics) to the layers listing - previously only showed 7 layers
+- **LandingFeatures.tsx**: Updated from 6 to 8 layers with correct descriptions
+- **UI Components**: Created missing components (badge.tsx, button.tsx, glowing-border.tsx)
+- **Marketing copy**: Updated "All 6 code-fixing layers" to "All 8 code-fixing layers"
 
 ### Fixed
 
