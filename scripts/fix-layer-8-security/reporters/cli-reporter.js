@@ -10,38 +10,34 @@
 const path = require('path');
 const { SEVERITY_LEVELS, SEVERITY_WEIGHTS, IOC_CATEGORIES } = require('../constants');
 const SeverityCalculator = require('../utils/severity-calculator');
+const { COLORS, SYMBOLS, isColorSupported } = require('../../../shared-core/cli-output');
+
+const HINTS = {
+  critical: 'Isolate affected systems immediately and review access logs.',
+  high: 'Prioritize remediation and audit recent code changes.',
+  medium: 'Schedule review in your next security sprint.',
+  low: 'Consider addressing during regular maintenance.',
+  malicious_code: 'Check git history for unauthorized commits.',
+  data_exfiltration: 'Review network logs and API access patterns.',
+  backdoor: 'Rotate all credentials and API keys immediately.',
+  suspicious_dependency: 'Audit package.json and lock files for tampering.'
+};
 
 class CLIReporter {
   constructor(options = {}) {
     this.verbose = options.verbose || false;
-    this.useColors = options.colors !== false;
+    this.useColors = options.colors !== false && isColorSupported();
     this.showContext = options.showContext !== false;
     this.maxContextLines = options.maxContextLines || 3;
     this.groupByFile = options.groupByFile !== false;
+    this.showHints = options.showHints !== false;
   }
-  
-  colors = {
-    reset: '\x1b[0m',
-    bright: '\x1b[1m',
-    dim: '\x1b[2m',
-    red: '\x1b[31m',
-    green: '\x1b[32m',
-    yellow: '\x1b[33m',
-    blue: '\x1b[34m',
-    magenta: '\x1b[35m',
-    cyan: '\x1b[36m',
-    white: '\x1b[37m',
-    bgRed: '\x1b[41m',
-    bgGreen: '\x1b[42m',
-    bgYellow: '\x1b[43m',
-    bgBlue: '\x1b[44m',
-    bgMagenta: '\x1b[45m',
-    bgCyan: '\x1b[46m'
-  };
   
   c(color, text) {
     if (!this.useColors) return text;
-    return `${this.colors[color] || ''}${text}${this.colors.reset}`;
+    const colorCode = COLORS[color];
+    if (!colorCode) return text;
+    return `${colorCode}${text}${COLORS.reset}`;
   }
   
   generateReport(scanResult, options = {}) {
@@ -70,8 +66,8 @@ class CLIReporter {
   }
   
   generateHeader() {
-    return `[INFO] NeuroLint Security Forensics - Layer 8
-[INFO] Post-Exploitation Detection & Incident Response`;
+    return `${SYMBOLS.info} NeuroLint Security Forensics - Layer 8
+${SYMBOLS.info} Post-Exploitation Detection & Incident Response`;
   }
   
   generateSummary(scanResult) {
@@ -84,12 +80,12 @@ class CLIReporter {
       : 'N/A';
     
     const lines = [
-      '[INFO] SCAN SUMMARY',
-      `[INFO] Status: ${statusText}`,
-      `[INFO] Files: ${stats.filesScanned || 0} scanned, ${stats.filesSkipped || 0} skipped`,
-      `[INFO] Duration: ${executionTime}`,
-      `[INFO] Findings: ${scanResult.findings?.length || 0} total`,
-      `[INFO] Breakdown: Critical=${severity.breakdown.critical}, High=${severity.breakdown.high}, Medium=${severity.breakdown.medium}, Low=${severity.breakdown.low}`
+      `${SYMBOLS.info} SCAN SUMMARY`,
+      `${SYMBOLS.info} Status: ${statusText}`,
+      `${SYMBOLS.info} Files: ${stats.filesScanned || 0} scanned, ${stats.filesSkipped || 0} skipped`,
+      `${SYMBOLS.info} Duration: ${executionTime}`,
+      `${SYMBOLS.info} Findings: ${scanResult.findings?.length || 0} total`,
+      `${SYMBOLS.info} Breakdown: Critical=${severity.breakdown.critical}, High=${severity.breakdown.high}, Medium=${severity.breakdown.medium}, Low=${severity.breakdown.low}`
     ];
     
     return lines.join('\n');
@@ -120,7 +116,7 @@ class CLIReporter {
     }
     
     const lines = [];
-    lines.push('[INFO] FINDINGS BY FILE');
+    lines.push(`${SYMBOLS.info} FINDINGS BY FILE`);
     lines.push('');
     
     for (const [file, fileFindings] of Object.entries(fileGroups)) {
@@ -129,7 +125,7 @@ class CLIReporter {
       });
       
       const relativePath = file.length > 60 ? '...' + file.slice(-57) : file;
-      lines.push(`[INFO] File: ${relativePath}`);
+      lines.push(`${SYMBOLS.info} File: ${relativePath}`);
       
       for (const finding of sortedFindings) {
         lines.push(this.formatFinding(finding));
@@ -150,7 +146,7 @@ class CLIReporter {
     }
     
     const lines = [];
-    lines.push('[INFO] FINDINGS BY SEVERITY');
+    lines.push(`${SYMBOLS.info} FINDINGS BY SEVERITY`);
     lines.push('');
     
     for (const severity of severityOrder) {
@@ -172,11 +168,11 @@ class CLIReporter {
   
   getSeverityLabel(severity) {
     const labels = {
-      critical: '[ERROR] CRITICAL',
-      high: '[WARNING] HIGH',
-      medium: '[INFO] MEDIUM',
-      low: '[INFO] LOW',
-      info: '[INFO] INFO'
+      critical: `${SYMBOLS.error} CRITICAL`,
+      high: `${SYMBOLS.warning} HIGH`,
+      medium: `${SYMBOLS.info} MEDIUM`,
+      low: `${SYMBOLS.info} LOW`,
+      info: `${SYMBOLS.info} INFO`
     };
     
     return labels[severity] || labels.info;
@@ -187,14 +183,14 @@ class CLIReporter {
     const indent = '  ';
     
     const severityPrefix = {
-      critical: '[ERROR]',
-      high: '[WARNING]',
-      medium: '[INFO]',
-      low: '[INFO]',
-      info: '[INFO]'
+      critical: SYMBOLS.error,
+      high: SYMBOLS.warning,
+      medium: SYMBOLS.info,
+      low: SYMBOLS.info,
+      info: SYMBOLS.info
     };
     
-    const prefix = severityPrefix[finding.severity] || '[INFO]';
+    const prefix = severityPrefix[finding.severity] || SYMBOLS.info;
     
     lines.push(`${indent}${prefix} ${finding.signatureName || finding.signatureId}`);
     lines.push(`${indent}  ID: ${finding.signatureId}`);
@@ -220,23 +216,37 @@ class CLIReporter {
       lines.push(`${indent}  Confidence: ${confidence}%`);
     }
     
+    if (this.showHints && finding.severity) {
+      const hint = this.getHintForFinding(finding);
+      if (hint) {
+        lines.push(`${indent}  Hint: ${hint}`);
+      }
+    }
+    
     if (this.showContext && finding.context && finding.context.length > 0) {
       lines.push(`${indent}  Context:`);
       for (const ctx of finding.context.slice(0, this.maxContextLines)) {
         const lineNum = ctx.lineNumber.toString().padStart(4);
-        const prefix = ctx.isMatch ? '>' : ' ';
+        const marker = ctx.isMatch ? '>' : ' ';
         const content = ctx.content.substring(0, 70);
-        lines.push(`${indent}    ${prefix} ${lineNum} | ${content}`);
+        lines.push(`${indent}    ${marker} ${lineNum} | ${content}`);
       }
     }
     
     return lines.join('\n');
   }
   
+  getHintForFinding(finding) {
+    if (finding.category && HINTS[finding.category]) {
+      return HINTS[finding.category];
+    }
+    return HINTS[finding.severity] || null;
+  }
+  
   generateCleanReport() {
-    return `[SUCCESS] No indicators of compromise detected!
-[INFO] Your codebase appears clean based on the current scan.
-[INFO] For deeper analysis, try: neurolint security:scan-compromise . --mode deep`;
+    return `${SYMBOLS.success} No indicators of compromise detected!
+${SYMBOLS.info} Your codebase appears clean based on the current scan.
+${SYMBOLS.info} For deeper analysis, try: neurolint security:scan-compromise . --mode deep`;
   }
   
   generateFooter(scanResult) {
@@ -246,24 +256,30 @@ class CLIReporter {
     let actionMessage = '';
     
     if (findings.some(f => f.severity === 'critical')) {
-      actionMessage = '[ERROR] IMMEDIATE ACTION REQUIRED: Critical security issues detected!';
+      actionMessage = `${SYMBOLS.error} IMMEDIATE ACTION REQUIRED: Critical security issues detected!`;
     } else if (findings.some(f => f.severity === 'high')) {
-      actionMessage = '[WARNING] Review high-severity findings and remediate promptly.';
+      actionMessage = `${SYMBOLS.warning} Review high-severity findings and remediate promptly.`;
     } else if (findings.length > 0) {
-      actionMessage = '[INFO] Review findings and address as appropriate.';
+      actionMessage = `${SYMBOLS.info} Review findings and address as appropriate.`;
     } else {
-      actionMessage = '[SUCCESS] Scan completed successfully.';
+      actionMessage = `${SYMBOLS.success} Scan completed successfully.`;
     }
     
     return `${actionMessage}
-[INFO] Scan completed at: ${timestamp}
-[INFO] For JSON output: neurolint security:scan-compromise . --json
-[INFO] For full report: neurolint security:incident-response . --output ./report`;
+${SYMBOLS.info} Scan completed at: ${timestamp}
+${SYMBOLS.info} For JSON output: neurolint security:scan-compromise . --json
+${SYMBOLS.info} For full report: neurolint security:incident-response . --output ./report`;
   }
   
   printReport(scanResult, options = {}) {
     const report = this.generateReport(scanResult, options);
-    console.log(report);
+    const findings = scanResult.findings || [];
+    
+    if (findings.some(f => f.severity === 'critical' || f.severity === 'high')) {
+      process.stderr.write(report + '\n');
+    } else {
+      process.stdout.write(report + '\n');
+    }
     return report;
   }
 }

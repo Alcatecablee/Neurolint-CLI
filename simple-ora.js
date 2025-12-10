@@ -15,21 +15,32 @@
  * limitations under the License.
  */
 
+const { COLORS, SYMBOLS, isColorSupported, isTTY } = require('./shared-core/cli-output');
+
 class SimpleSpinner {
   constructor(text) {
     this.text = text;
     this.isSpinning = false;
   }
 
+  _formatOutput(symbol, color, text) {
+    if (isColorSupported()) {
+      return `${COLORS[color]}${symbol}${COLORS.reset} ${text}\n`;
+    }
+    return `${symbol} ${text}\n`;
+  }
+
   start() {
     this.isSpinning = true;
-    process.stdout.write(`${this.text}...\n`);
+    const output = this._formatOutput(SYMBOLS.spinner, 'cyan', `${this.text}...`);
+    process.stdout.write(output);
     return this;
   }
 
   succeed(text) {
     if (this.isSpinning) {
-      process.stdout.write(`[OK] ${text || this.text}\n`);
+      const output = this._formatOutput(SYMBOLS.success, 'green', text || this.text);
+      process.stdout.write(output);
       this.isSpinning = false;
     }
     return this;
@@ -37,7 +48,8 @@ class SimpleSpinner {
 
   fail(text) {
     if (this.isSpinning) {
-      process.stdout.write(`[ERROR] ${text || this.text}\n`);
+      const output = this._formatOutput(SYMBOLS.error, 'red', text || this.text);
+      process.stderr.write(output);
       this.isSpinning = false;
     }
     return this;
@@ -45,7 +57,8 @@ class SimpleSpinner {
 
   warn(text) {
     if (this.isSpinning) {
-      process.stdout.write(`⚠ ${text || this.text}\n`);
+      const output = this._formatOutput(SYMBOLS.warning, 'yellow', text || this.text);
+      process.stderr.write(output);
       this.isSpinning = false;
     }
     return this;
@@ -53,7 +66,8 @@ class SimpleSpinner {
 
   info(text) {
     if (this.isSpinning) {
-      process.stdout.write(`ℹ ${text || this.text}\n`);
+      const output = this._formatOutput(SYMBOLS.info, 'cyan', text || this.text);
+      process.stdout.write(output);
       this.isSpinning = false;
     }
     return this;

@@ -1,5 +1,7 @@
 'use strict';
 
+const { COLORS, SYMBOLS, isColorSupported } = require('../../../shared-core/cli-output');
+
 class ErrorAggregator {
   constructor(options = {}) {
     this.errors = [];
@@ -8,6 +10,20 @@ class ErrorAggregator {
     this.maxWarnings = options.maxWarnings || 100;
     this.verbose = options.verbose || false;
     this.throwOnCritical = options.throwOnCritical || false;
+    this.useColors = options.colors !== false && isColorSupported();
+  }
+
+  _formatMessage(type, message) {
+    const prefix = type === 'critical' ? SYMBOLS.error : 
+                   type === 'error' ? SYMBOLS.error : 
+                   type === 'warning' ? SYMBOLS.warning : SYMBOLS.info;
+    
+    if (this.useColors) {
+      const color = type === 'critical' || type === 'error' ? COLORS.red :
+                    type === 'warning' ? COLORS.yellow : COLORS.cyan;
+      return `${color}${prefix}${COLORS.reset} [ErrorAggregator] ${message}`;
+    }
+    return `${prefix} [ErrorAggregator] ${message}`;
   }
 
   addError(error, context = {}) {
@@ -26,7 +42,11 @@ class ErrorAggregator {
     this.errors.push(entry);
 
     if (this.verbose) {
-      console.error(`[ErrorAggregator] Error: ${entry.message}`, context);
+      const formatted = this._formatMessage('error', `Error: ${entry.message}`);
+      process.stderr.write(formatted + '\n');
+      if (Object.keys(context).length > 0) {
+        process.stderr.write(`  Context: ${JSON.stringify(context)}\n`);
+      }
     }
   }
 
@@ -45,7 +65,11 @@ class ErrorAggregator {
     this.warnings.push(entry);
 
     if (this.verbose) {
-      console.warn(`[ErrorAggregator] Warning: ${entry.message}`, context);
+      const formatted = this._formatMessage('warning', `Warning: ${entry.message}`);
+      process.stderr.write(formatted + '\n');
+      if (Object.keys(context).length > 0) {
+        process.stderr.write(`  Context: ${JSON.stringify(context)}\n`);
+      }
     }
   }
 
@@ -61,7 +85,11 @@ class ErrorAggregator {
     this.errors.push(entry);
 
     if (this.verbose) {
-      console.error(`[ErrorAggregator] CRITICAL: ${entry.message}`, context);
+      const formatted = this._formatMessage('critical', `CRITICAL: ${entry.message}`);
+      process.stderr.write(formatted + '\n');
+      if (Object.keys(context).length > 0) {
+        process.stderr.write(`  Context: ${JSON.stringify(context)}\n`);
+      }
     }
 
     if (this.throwOnCritical) {
