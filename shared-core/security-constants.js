@@ -15,11 +15,18 @@
 
 
 /**
- * CVE-2025-55182 Security Constants
- * Centralized version mappings for React Server Components RCE vulnerability
+ * RSC Security Constants - Centralized CVE Definitions
  * 
- * These constants should be updated when new patched versions are released.
- * Only changelogs and documentation files should contain static version references.
+ * Contains version mappings for React Server Components vulnerabilities:
+ * - CVE-2025-55182: Remote Code Execution (CRITICAL, CVSS 10.0)
+ * - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)
+ * - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)
+ * 
+ * IMPORTANT: The patches for CVE-2025-55182 (19.0.1, 19.1.2, 19.2.1) are 
+ * STILL VULNERABLE to CVE-2025-55183 and CVE-2025-55184.
+ * Users must upgrade to 19.0.2, 19.1.3, or 19.2.2 to be fully protected.
+ * 
+ * Last updated: December 11, 2025
  */
 
 const CVE_2025_55182 = {
@@ -30,13 +37,13 @@ const CVE_2025_55182 = {
   disclosed: '2025-12-03',
   
   react: {
-    vulnerable: ['19.0.0', '19.1.0', '19.1.1', '19.2.0'],
+    vulnerable: ['19.0.0', '19.0.1', '19.1.0', '19.1.1', '19.1.2', '19.2.0', '19.2.1'],
     patched: {
-      '19.0': '19.0.1',
-      '19.1': '19.1.2',
-      '19.2': '19.2.1'
+      '19.0': '19.0.2',
+      '19.1': '19.1.3',
+      '19.2': '19.2.2'
     },
-    defaultPatched: '19.2.1'
+    defaultPatched: '19.2.2'
   },
   
   nextjs: {
@@ -67,7 +74,87 @@ const CVE_2025_55182 = {
   ]
 };
 
-function isVulnerableReactVersion(version) {
+const CVE_2025_55183 = {
+  id: 'CVE-2025-55183',
+  cvss: 5.3,
+  severity: 'MEDIUM',
+  description: 'React Server Components Source Code Exposure',
+  disclosed: '2025-12-11',
+  
+  react: {
+    vulnerable: ['19.0.0', '19.0.1', '19.1.0', '19.1.1', '19.1.2', '19.2.0', '19.2.1'],
+    patched: {
+      '19.0': '19.0.2',
+      '19.1': '19.1.3',
+      '19.2': '19.2.2'
+    },
+    defaultPatched: '19.2.2'
+  },
+  
+  serverDomPackages: [
+    'react-server-dom-webpack',
+    'react-server-dom-parcel',
+    'react-server-dom-turbopack'
+  ],
+  
+  exploitPattern: 'Malicious HTTP request can leak Server Function source code including hardcoded secrets',
+  
+  affectedPatterns: [
+    'Server Functions that explicitly stringify arguments',
+    'Server Functions that implicitly convert arguments to strings',
+    'Hardcoded secrets in Server Function source code'
+  ]
+};
+
+const CVE_2025_55184 = {
+  id: 'CVE-2025-55184',
+  cvss: 7.5,
+  severity: 'HIGH',
+  description: 'React Server Components Denial of Service',
+  disclosed: '2025-12-11',
+  
+  react: {
+    vulnerable: ['19.0.0', '19.0.1', '19.1.0', '19.1.1', '19.1.2', '19.2.0', '19.2.1'],
+    patched: {
+      '19.0': '19.0.2',
+      '19.1': '19.1.3',
+      '19.2': '19.2.2'
+    },
+    defaultPatched: '19.2.2'
+  },
+  
+  serverDomPackages: [
+    'react-server-dom-webpack',
+    'react-server-dom-parcel',
+    'react-server-dom-turbopack'
+  ],
+  
+  exploitPattern: 'Malicious HTTP request causes infinite loop during deserialization, hanging server process',
+  
+  indicators: [
+    'CPU usage spike on RSC endpoints',
+    'Hanging requests that never complete',
+    'Memory exhaustion from infinite loops'
+  ]
+};
+
+const ALL_RSC_CVES = [CVE_2025_55182, CVE_2025_55183, CVE_2025_55184];
+
+const FULLY_PATCHED_VERSIONS = {
+  react: {
+    '19.0': '19.0.2',
+    '19.1': '19.1.3',
+    '19.2': '19.2.2'
+  },
+  defaultPatched: '19.2.2'
+};
+
+const PARTIALLY_PATCHED_VERSIONS = {
+  react: ['19.0.1', '19.1.2', '19.2.1'],
+  description: 'These versions patched CVE-2025-55182 but are still vulnerable to CVE-2025-55183 and CVE-2025-55184'
+};
+
+function isVulnerableReactVersion(version, cveId = null) {
   if (!version || typeof version !== 'string') return false;
   
   const hasGreaterThan = version.includes('>') && !version.includes('>=');
@@ -87,19 +174,47 @@ function isVulnerableReactVersion(version) {
   if (isNaN(major) || isNaN(minor) || major !== 19) return false;
   
   const majorMinor = `${major}.${minor}`;
-  const patchedVersion = CVE_2025_55182.react.patched[majorMinor];
+  const fullyPatchedVersion = FULLY_PATCHED_VERSIONS.react[majorMinor];
   
-  if (!patchedVersion) return false;
+  if (!fullyPatchedVersion) return false;
   
-  const patchedPatch = parseInt(patchedVersion.split('.')[2]);
+  const fullyPatchedPatch = parseInt(fullyPatchedVersion.split('.')[2]);
   
-  return patch < patchedPatch;
+  return patch < fullyPatchedPatch;
+}
+
+function isPartiallyPatchedVersion(version) {
+  if (!version || typeof version !== 'string') return false;
+  
+  const cleanVersion = version.replace(/[\^~>=<]/g, '');
+  return PARTIALLY_PATCHED_VERSIONS.react.includes(cleanVersion);
+}
+
+function getVulnerabilitiesForVersion(version, includePartialPatch = false) {
+  if (!version || typeof version !== 'string') return [];
+  
+  const cleanVersion = version.replace(/[\^~>=<]/g, '');
+  const vulnerabilities = [];
+  
+  if (PARTIALLY_PATCHED_VERSIONS.react.includes(cleanVersion)) {
+    vulnerabilities.push(CVE_2025_55183);
+    vulnerabilities.push(CVE_2025_55184);
+    if (includePartialPatch) {
+      vulnerabilities.unshift(CVE_2025_55182);
+    }
+  } else if (isVulnerableReactVersion(version)) {
+    vulnerabilities.push(CVE_2025_55182);
+    vulnerabilities.push(CVE_2025_55183);
+    vulnerabilities.push(CVE_2025_55184);
+  }
+  
+  return vulnerabilities;
 }
 
 function getPatchedReactVersion(version) {
   const cleanVersion = version.replace(/[\^~>=<]/g, '');
   const majorMinor = cleanVersion.split('.').slice(0, 2).join('.');
-  return CVE_2025_55182.react.patched[majorMinor] || CVE_2025_55182.react.defaultPatched;
+  return FULLY_PATCHED_VERSIONS.react[majorMinor] || FULLY_PATCHED_VERSIONS.defaultPatched;
 }
 
 function isVulnerableNextVersion(version) {
@@ -123,7 +238,7 @@ function getPatchedNextVersion(version) {
 
 function formatPatchedVersionsList(type) {
   if (type === 'react') {
-    return Object.values(CVE_2025_55182.react.patched).join(', ');
+    return Object.values(FULLY_PATCHED_VERSIONS.react).join(', ');
   }
   if (type === 'nextjs') {
     return Object.entries(CVE_2025_55182.nextjs.patched)
@@ -133,11 +248,28 @@ function formatPatchedVersionsList(type) {
   return '';
 }
 
+function getAllCVEIds() {
+  return ALL_RSC_CVES.map(cve => cve.id);
+}
+
+function getCVEById(id) {
+  return ALL_RSC_CVES.find(cve => cve.id === id) || null;
+}
+
 module.exports = {
   CVE_2025_55182,
+  CVE_2025_55183,
+  CVE_2025_55184,
+  ALL_RSC_CVES,
+  FULLY_PATCHED_VERSIONS,
+  PARTIALLY_PATCHED_VERSIONS,
   isVulnerableReactVersion,
+  isPartiallyPatchedVersion,
+  getVulnerabilitiesForVersion,
   getPatchedReactVersion,
   isVulnerableNextVersion,
   getPatchedNextVersion,
-  formatPatchedVersionsList
+  formatPatchedVersionsList,
+  getAllCVEIds,
+  getCVEById
 };

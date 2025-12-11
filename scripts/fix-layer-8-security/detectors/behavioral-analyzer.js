@@ -182,6 +182,20 @@ class BehavioralAnalyzer {
         self.checkChildProcess(nodePath);
         self.checkCryptoMining(nodePath);
         self.checkReact19Patterns(nodePath);
+        self.checkCVE202555184Patterns(nodePath);
+        self.checkCVE202555183Patterns(nodePath);
+      },
+      
+      WhileStatement(nodePath) {
+        self.checkCVE202555184Patterns(nodePath);
+      },
+      
+      ForStatement(nodePath) {
+        self.checkCVE202555184Patterns(nodePath);
+      },
+      
+      DoWhileStatement(nodePath) {
+        self.checkCVE202555184Patterns(nodePath);
       },
       
       NewExpression(nodePath) {
@@ -953,6 +967,184 @@ class BehavioralAnalyzer {
               column: node.loc?.start.column,
               remediation: 'Never cache user-specific or sensitive data',
               references: ['React 19 Security', 'OWASP Cache Poisoning']
+            });
+          }
+        }
+      }
+    }
+  }
+  
+  checkCVE202555184Patterns(nodePath) {
+    const { node } = nodePath;
+    
+    if (t.isWhileStatement(node) || t.isForStatement(node) || t.isDoWhileStatement(node)) {
+      const test = node.test;
+      
+      const isInfiniteLoop = 
+        (t.isBooleanLiteral(test) && test.value === true) ||
+        (t.isNumericLiteral(test) && test.value !== 0) ||
+        (t.isIdentifier(test) && test.name === 'true') ||
+        (!test);
+      
+      if (isInfiniteLoop) {
+        const hasServerDirective = this.currentCode && 
+          this.currentCode.includes("'use server'") || 
+          this.currentCode.includes('"use server"');
+        
+        if (hasServerDirective) {
+          this.addFinding({
+            signatureId: 'NEUROLINT-BEHAV-028',
+            signatureName: 'CVE-2025-55184 DoS: Infinite Loop in Server Context',
+            severity: SEVERITY_LEVELS.HIGH,
+            category: IOC_CATEGORIES.RSC_SPECIFIC,
+            description: 'Infinite loop detected in server action context - DoS vulnerability',
+            line: node.loc?.start.line,
+            column: node.loc?.start.column,
+            remediation: 'Add proper termination conditions to prevent server hang',
+            references: ['CVE-2025-55184', 'MITRE T1499']
+          });
+        }
+      }
+    }
+    
+    if (t.isCallExpression(node)) {
+      const callee = node.callee;
+      
+      if (t.isIdentifier(callee) && 
+          ['setImmediate', 'queueMicrotask'].includes(callee.name)) {
+        const arg = node.arguments[0];
+        if (arg) {
+          const argCode = this.getNodeCode(arg);
+          if (argCode.includes(callee.name)) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-029',
+              signatureName: 'CVE-2025-55184 DoS: Recursive Async Scheduling',
+              severity: SEVERITY_LEVELS.HIGH,
+              category: IOC_CATEGORIES.RSC_SPECIFIC,
+              description: 'Recursive async scheduling can cause infinite CPU consumption',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Add termination conditions or iteration limits',
+              references: ['CVE-2025-55184']
+            });
+          }
+        }
+      }
+      
+      if (t.isMemberExpression(callee) && 
+          t.isIdentifier(callee.object) && 
+          callee.object.name === 'process' &&
+          t.isIdentifier(callee.property) && 
+          callee.property.name === 'nextTick') {
+        const arg = node.arguments[0];
+        if (arg) {
+          const argCode = this.getNodeCode(arg);
+          if (argCode.includes('nextTick')) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-029',
+              signatureName: 'CVE-2025-55184 DoS: Recursive nextTick',
+              severity: SEVERITY_LEVELS.HIGH,
+              category: IOC_CATEGORIES.RSC_SPECIFIC,
+              description: 'Recursive process.nextTick can starve the event loop',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Add termination conditions',
+              references: ['CVE-2025-55184']
+            });
+          }
+        }
+      }
+    }
+  }
+  
+  checkCVE202555183Patterns(nodePath) {
+    const { node } = nodePath;
+    
+    if (!t.isCallExpression(node)) return;
+    
+    const callee = node.callee;
+    
+    if (t.isMemberExpression(callee) && 
+        t.isIdentifier(callee.property) && 
+        callee.property.name === 'toString') {
+      
+      const hasServerDirective = this.currentCode && 
+        (this.currentCode.includes("'use server'") || 
+         this.currentCode.includes('"use server"'));
+      
+      if (hasServerDirective) {
+        const objectCode = this.getNodeCode(callee.object);
+        
+        if (objectCode.includes('function') || 
+            objectCode.includes('async') ||
+            objectCode.includes('=>')) {
+          this.addFinding({
+            signatureId: 'NEUROLINT-BEHAV-030',
+            signatureName: 'CVE-2025-55183: Server Function Source Exposure',
+            severity: SEVERITY_LEVELS.HIGH,
+            category: IOC_CATEGORIES.RSC_SPECIFIC,
+            description: 'Function.toString() in server context exposes source code',
+            line: node.loc?.start.line,
+            column: node.loc?.start.column,
+            remediation: 'Never expose function source code from server actions',
+            references: ['CVE-2025-55183']
+          });
+        }
+      }
+    }
+    
+    if (t.isIdentifier(callee) && callee.name === 'String') {
+      const arg = node.arguments[0];
+      if (arg) {
+        const argCode = this.getNodeCode(arg);
+        if (argCode.includes('function') || argCode.includes('=>')) {
+          const hasServerDirective = this.currentCode && 
+            (this.currentCode.includes("'use server'") || 
+             this.currentCode.includes('"use server"'));
+          
+          if (hasServerDirective) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-031',
+              signatureName: 'CVE-2025-55183: Function Stringification in Server',
+              severity: SEVERITY_LEVELS.HIGH,
+              category: IOC_CATEGORIES.RSC_SPECIFIC,
+              description: 'String(function) in server context exposes source code',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Avoid converting functions to strings in server actions',
+              references: ['CVE-2025-55183']
+            });
+          }
+        }
+      }
+    }
+    
+    if (t.isMemberExpression(callee) && 
+        t.isIdentifier(callee.property) && 
+        ['json', 'send'].includes(callee.property.name)) {
+      
+      const hasServerDirective = this.currentCode && 
+        (this.currentCode.includes("'use server'") || 
+         this.currentCode.includes('"use server"'));
+      
+      if (hasServerDirective) {
+        const arg = node.arguments[0];
+        if (arg) {
+          const argCode = this.getNodeCode(arg);
+          
+          if (argCode.includes('toString') || 
+              argCode.includes('.stack') ||
+              argCode.includes('Function')) {
+            this.addFinding({
+              signatureId: 'NEUROLINT-BEHAV-032',
+              signatureName: 'CVE-2025-55183: Response May Contain Source Code',
+              severity: SEVERITY_LEVELS.MEDIUM,
+              category: IOC_CATEGORIES.RSC_SPECIFIC,
+              description: 'Server response may contain function source code or stack traces',
+              line: node.loc?.start.line,
+              column: node.loc?.start.column,
+              remediation: 'Sanitize response data to remove source code and stack traces',
+              references: ['CVE-2025-55183']
             });
           }
         }

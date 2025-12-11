@@ -24,15 +24,21 @@
  * unless explicitly requested (quarantine mode). This follows the NeuroLint
  * principle of "never break code".
  * 
- * Signature Coverage:
- * - CVE-2025-55182: React Server Components post-exploitation indicators
+ * Signature Coverage (90 IoC Signatures):
+ * - CVE-2025-55182: React Server Components RCE (CRITICAL, CVSS 10.0)
+ * - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3) - NEW Dec 11, 2025
+ * - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5) - NEW Dec 11, 2025
  * - Next.js 13-16 specific attack patterns
  * - General supply-chain and persistence patterns
+ * 
+ * IMPORTANT: Versions 19.0.1, 19.1.2, 19.2.1 patched CVE-2025-55182 but are
+ * STILL VULNERABLE to CVE-2025-55183 and CVE-2025-55184.
+ * Fully patched versions: 19.0.2, 19.1.3, 19.2.2
  */
 
 'use strict';
 
-const LAYER_8_VERSION = '2.2.0';
+const LAYER_8_VERSION = '2.3.0';
 
 const SEVERITY_LEVELS = {
   CRITICAL: 'critical',
@@ -66,7 +72,7 @@ const IOC_CATEGORIES = {
 
 const IOC_SIGNATURES = {
   version: LAYER_8_VERSION,
-  lastUpdated: '2025-12-08',
+  lastUpdated: '2025-12-11',
   
   signatures: [
     // ============================================================
@@ -1022,6 +1028,139 @@ const IOC_SIGNATURES = {
       description: 'Server action using bind() which can bypass security checks',
       references: ['CVE-2025-55182'],
       remediation: 'Avoid using bind() with server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+
+    // ============================================================
+    // CVE-2025-55184 DENIAL OF SERVICE SIGNATURES (IOC-081 to IOC-085)
+    // Disclosed: December 11, 2025 - CVSS 7.5 (HIGH)
+    // Malicious request causes infinite loop during deserialization
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-081',
+      name: 'Server Action Infinite Loop Pattern',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,300}(?:while\s*\(\s*true\s*\)|for\s*\(\s*;\s*;\s*\)|while\s*\(\s*1\s*\))/gi,
+      type: 'regex',
+      description: 'Server action with potential infinite loop - DoS vulnerability indicator',
+      references: ['CVE-2025-55184', 'MITRE T1499'],
+      remediation: 'Remove infinite loops or add proper termination conditions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-082',
+      name: 'Server Action Recursive Self-Call',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,100}(?:async\s+)?function\s+(\w+)[\s\S]{0,200}\1\s*\(/gi,
+      type: 'regex',
+      description: 'Server action with unbounded recursion - potential DoS',
+      references: ['CVE-2025-55184'],
+      remediation: 'Add recursion depth limits or termination conditions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-083',
+      name: 'Server Action setImmediate/queueMicrotask Loop',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,200}\b(?:setImmediate|queueMicrotask|process\.nextTick)\s*\([^)]*\b(?:setImmediate|queueMicrotask|process\.nextTick)\b/gi,
+      type: 'regex',
+      description: 'Server action with recursive async scheduling - DoS pattern',
+      references: ['CVE-2025-55184', 'MITRE T1499'],
+      remediation: 'Avoid recursive async scheduling in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-084',
+      name: 'RSC Payload Replay Loop',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /(?:JSON\.parse|decodeURIComponent)\s*\([^)]+\)[\s\S]{0,100}(?:while|for)\s*\(/gi,
+      type: 'regex',
+      description: 'Parsed request payload used in loop - potential DoS amplification',
+      references: ['CVE-2025-55184'],
+      remediation: 'Validate and limit iterations when processing request data',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-085',
+      name: 'Flight Protocol Deserialization Attack Pattern',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /createFromReadableStream|decodeReply|decodeAction|decodeFormState/gi,
+      type: 'regex',
+      description: 'Direct RSC Flight protocol deserialization - attack surface for CVE-2025-55184',
+      references: ['CVE-2025-55184', 'CVE-2025-55182'],
+      remediation: 'Ensure RSC packages are updated to patched versions (19.0.2+, 19.1.3+, 19.2.2+)',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js'],
+      contextRequired: true
+    },
+
+    // ============================================================
+    // CVE-2025-55183 SOURCE CODE EXPOSURE SIGNATURES (IOC-086 to IOC-090)
+    // Disclosed: December 11, 2025 - CVSS 5.3 (MEDIUM)
+    // Malicious request can leak Server Function source code
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-086',
+      name: 'Server Function toString Exposure',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,300}\.toString\s*\(\s*\)/gi,
+      type: 'regex',
+      description: 'Server action exposing function source via toString() - source code leak risk',
+      references: ['CVE-2025-55183'],
+      remediation: 'Never expose server function source code',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-087',
+      name: 'Server Action Stringification Pattern',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      pattern: /['"]use server['"][\s\S]{0,200}(?:String\s*\(|`\$\{[^}]*function|JSON\.stringify\s*\([^)]*function)/gi,
+      type: 'regex',
+      description: 'Server action with function stringification - potential source code exposure',
+      references: ['CVE-2025-55183'],
+      remediation: 'Avoid converting functions to strings in server actions',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-088',
+      name: 'Server Action Hardcoded Secrets',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,500}(?:password|secret|api[_-]?key|auth[_-]?token|private[_-]?key)\s*[=:]\s*['"][^'"]{8,}['"]/gi,
+      type: 'regex',
+      description: 'Hardcoded secrets in server action - will be exposed via CVE-2025-55183',
+      references: ['CVE-2025-55183', 'OWASP Sensitive Data Exposure'],
+      remediation: 'Use environment variables instead of hardcoded secrets',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-089',
+      name: 'Server Action Connection String Exposure',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      pattern: /['"]use server['"][\s\S]{0,300}(?:mongodb|postgres|mysql|redis|amqp):\/\/[^'"]+:[^'"]+@/gi,
+      type: 'regex',
+      description: 'Database connection string with credentials in server action - will be exposed',
+      references: ['CVE-2025-55183'],
+      remediation: 'Use environment variables for database credentials',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-090',
+      name: 'Server Action Error Handler Source Leak',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      pattern: /['"]use server['"][\s\S]{0,300}catch\s*\([^)]*\)\s*\{[\s\S]{0,100}(?:console\.(?:log|error)|res\.(?:json|send))\s*\([^)]*(?:err|error|e)\.(?:stack|message)/gi,
+      type: 'regex',
+      description: 'Server action error handler may leak source code in stack traces',
+      references: ['CVE-2025-55183'],
+      remediation: 'Sanitize error messages before sending to client',
       fileTypes: ['.tsx', '.ts', '.jsx', '.js']
     }
   ]

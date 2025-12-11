@@ -17,8 +17,14 @@
 /**
  * Dependency Assurance Module
  * 
- * Lock file verification and transitive dependency auditing for CVE-2025-55182.
- * Ensures that patching package.json actually results in secure installed dependencies.
+ * Lock file verification and transitive dependency auditing for RSC CVEs:
+ * - CVE-2025-55182: Remote Code Execution (CRITICAL, CVSS 10.0)
+ * - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)
+ * - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)
+ * 
+ * IMPORTANT: Versions 19.0.1, 19.1.2, 19.2.1 patched CVE-2025-55182 but are
+ * STILL VULNERABLE to CVE-2025-55183 and CVE-2025-55184.
+ * Fully patched versions: 19.0.2, 19.1.3, 19.2.2
  * 
  * CORE PRINCIPLES:
  * 1. Verify lock files match package.json versions
@@ -31,7 +37,17 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const { CVE_2025_55182, isVulnerableReactVersion, isVulnerableNextVersion } = require('../../../shared-core/security-constants');
+const { 
+  CVE_2025_55182,
+  CVE_2025_55183,
+  CVE_2025_55184,
+  ALL_RSC_CVES,
+  isVulnerableReactVersion, 
+  isPartiallyPatchedVersion,
+  getVulnerabilitiesForVersion,
+  isVulnerableNextVersion,
+  FULLY_PATCHED_VERSIONS
+} = require('../../../shared-core/security-constants');
 
 const LOCK_FILE_TYPES = {
   NPM: 'package-lock.json',
@@ -58,7 +74,8 @@ class DependencyAssuranceModule {
       warnings: [],
       recommendations: [],
       transitiveIssues: [],
-      phantomDependencies: []
+      phantomDependencies: [],
+      partiallyPatchedPackages: []
     };
 
     try {
@@ -80,10 +97,12 @@ class DependencyAssuranceModule {
         result.vulnerabilities = npmAudit.vulnerabilities;
         result.transitiveIssues = npmAudit.transitiveIssues;
         result.phantomDependencies = npmAudit.phantomDependencies;
+        result.partiallyPatchedPackages = npmAudit.partiallyPatchedPackages;
       } else if (lockFileInfo.type === 'yarn.lock') {
         const yarnAudit = await this.auditYarnLockFile(projectPath, lockFileInfo.content);
         result.vulnerabilities = yarnAudit.vulnerabilities;
         result.transitiveIssues = yarnAudit.transitiveIssues;
+        result.partiallyPatchedPackages = yarnAudit.partiallyPatchedPackages;
       } else if (lockFileInfo.type === 'pnpm-lock.yaml') {
         result.warnings.push({
           code: 'PNPM_PARTIAL_SUPPORT',
@@ -94,16 +113,28 @@ class DependencyAssuranceModule {
 
       await this.verifyPackageJsonLockFileSync(projectPath, result);
 
+      if (result.partiallyPatchedPackages.length > 0) {
+        result.success = false;
+        result.warnings.push({
+          code: 'PARTIALLY_PATCHED',
+          severity: 'HIGH',
+          message: `Found ${result.partiallyPatchedPackages.length} package(s) with incomplete patches`,
+          detail: 'These versions patched CVE-2025-55182 but are still vulnerable to CVE-2025-55183 (Source Code Exposure) and CVE-2025-55184 (DoS)',
+          recommendation: 'Upgrade to fully patched versions: 19.0.2, 19.1.3, or 19.2.2'
+        });
+      }
+
       if (result.vulnerabilities.length > 0 || result.transitiveIssues.length > 0) {
         result.success = false;
         result.recommendations.push({
           code: 'REINSTALL_DEPS',
-          priority: 'HIGH',
+          priority: 'CRITICAL',
           message: 'Vulnerable dependencies detected in lock file.',
           steps: [
             'Delete your lock file and node_modules',
+            'Update package.json to use patched versions: react@19.0.2, react@19.1.3, or react@19.2.2',
             'Run `npm install` (or your package manager)',
-            'Verify with `npx @neurolint/cli security:cve-2025-55182 . --dry-run`'
+            'Verify with `npx @neurolint/cli security:audit . --dry-run`'
           ]
         });
       }
@@ -139,7 +170,8 @@ class DependencyAssuranceModule {
     const result = {
       vulnerabilities: [],
       transitiveIssues: [],
-      phantomDependencies: []
+      phantomDependencies: [],
+      partiallyPatchedPackages: []
     };
 
     try {
@@ -156,12 +188,25 @@ class DependencyAssuranceModule {
           if (!version) continue;
           
           if (pkgName === 'react' || pkgName === 'react-dom') {
-            if (isVulnerableReactVersion(version)) {
+            const isPartial = isPartiallyPatchedVersion(version);
+            const isVulnerable = isVulnerableReactVersion(version);
+            
+            if (isPartial) {
+              result.partiallyPatchedPackages.push({
+                package: pkgName,
+                version: version,
+                installedPath: pkgPath,
+                vulnerableTo: ['CVE-2025-55183', 'CVE-2025-55184'],
+                severity: 'HIGH',
+                message: 'This version patched CVE-2025-55182 but is still vulnerable to DoS and Source Code Exposure'
+              });
+            } else if (isVulnerable) {
+              const cves = getVulnerabilitiesForVersion(version);
               result.vulnerabilities.push({
                 package: pkgName,
                 version: version,
                 installedPath: pkgPath,
-                cve: CVE_2025_55182.id,
+                cves: cves.map(c => c.id),
                 severity: 'CRITICAL',
                 isTransitive: pkgPath.includes('node_modules/') && pkgPath.split('node_modules/').length > 2
               });
@@ -174,7 +219,7 @@ class DependencyAssuranceModule {
                 package: pkgName,
                 version: version,
                 installedPath: pkgPath,
-                cve: CVE_2025_55182.id,
+                cves: ALL_RSC_CVES.map(c => c.id),
                 severity: 'CRITICAL',
                 isTransitive: false
               });
@@ -182,12 +227,23 @@ class DependencyAssuranceModule {
           }
           
           if (CVE_2025_55182.serverDomPackages.includes(pkgName)) {
-            if (isVulnerableReactVersion(version)) {
+            const isPartial = isPartiallyPatchedVersion(version);
+            const isVulnerable = isVulnerableReactVersion(version);
+            
+            if (isPartial) {
+              result.partiallyPatchedPackages.push({
+                package: pkgName,
+                version: version,
+                installedPath: pkgPath,
+                vulnerableTo: ['CVE-2025-55183', 'CVE-2025-55184'],
+                severity: 'HIGH'
+              });
+            } else if (isVulnerable) {
               result.vulnerabilities.push({
                 package: pkgName,
                 version: version,
                 installedPath: pkgPath,
-                cve: CVE_2025_55182.id,
+                cves: ALL_RSC_CVES.map(c => c.id),
                 severity: 'CRITICAL',
                 isTransitive: pkgPath.includes('node_modules/') && pkgPath.split('node_modules/').length > 2
               });
@@ -201,7 +257,8 @@ class DependencyAssuranceModule {
               package: vuln.package,
               version: vuln.version,
               path: vuln.installedPath,
-              message: `Transitive dependency ${vuln.package}@${vuln.version} is vulnerable to ${vuln.cve}`
+              cves: vuln.cves,
+              message: `Transitive dependency ${vuln.package}@${vuln.version} is vulnerable to ${vuln.cves.join(', ')}`
             });
           }
         }
@@ -225,12 +282,23 @@ class DependencyAssuranceModule {
       const isTransitive = parentPath !== '';
       
       if (name === 'react' || name === 'react-dom') {
-        if (isVulnerableReactVersion(version)) {
+        const isPartial = isPartiallyPatchedVersion(version);
+        const isVulnerable = isVulnerableReactVersion(version);
+        
+        if (isPartial) {
+          result.partiallyPatchedPackages.push({
+            package: name,
+            version: version,
+            installedPath: currentPath,
+            vulnerableTo: ['CVE-2025-55183', 'CVE-2025-55184'],
+            severity: 'HIGH'
+          });
+        } else if (isVulnerable) {
           result.vulnerabilities.push({
             package: name,
             version: version,
             installedPath: currentPath,
-            cve: CVE_2025_55182.id,
+            cves: ALL_RSC_CVES.map(c => c.id),
             severity: 'CRITICAL',
             isTransitive
           });
@@ -243,7 +311,7 @@ class DependencyAssuranceModule {
             package: name,
             version: version,
             installedPath: currentPath,
-            cve: CVE_2025_55182.id,
+            cves: ALL_RSC_CVES.map(c => c.id),
             severity: 'CRITICAL',
             isTransitive
           });
@@ -251,12 +319,23 @@ class DependencyAssuranceModule {
       }
       
       if (CVE_2025_55182.serverDomPackages.includes(name)) {
-        if (isVulnerableReactVersion(version)) {
+        const isPartial = isPartiallyPatchedVersion(version);
+        const isVulnerable = isVulnerableReactVersion(version);
+        
+        if (isPartial) {
+          result.partiallyPatchedPackages.push({
+            package: name,
+            version: version,
+            installedPath: currentPath,
+            vulnerableTo: ['CVE-2025-55183', 'CVE-2025-55184'],
+            severity: 'HIGH'
+          });
+        } else if (isVulnerable) {
           result.vulnerabilities.push({
             package: name,
             version: version,
             installedPath: currentPath,
-            cve: CVE_2025_55182.id,
+            cves: ALL_RSC_CVES.map(c => c.id),
             severity: 'CRITICAL',
             isTransitive
           });
@@ -272,7 +351,8 @@ class DependencyAssuranceModule {
   async auditYarnLockFile(projectPath, lockContent) {
     const result = {
       vulnerabilities: [],
-      transitiveIssues: []
+      transitiveIssues: [],
+      partiallyPatchedPackages: []
     };
 
     try {
@@ -293,11 +373,21 @@ class DependencyAssuranceModule {
             const version = versionMatch[1];
             
             if (currentPackage === 'react' || currentPackage === 'react-dom') {
-              if (isVulnerableReactVersion(version)) {
+              const isPartial = isPartiallyPatchedVersion(version);
+              const isVulnerable = isVulnerableReactVersion(version);
+              
+              if (isPartial) {
+                result.partiallyPatchedPackages.push({
+                  package: currentPackage,
+                  version: version,
+                  vulnerableTo: ['CVE-2025-55183', 'CVE-2025-55184'],
+                  severity: 'HIGH'
+                });
+              } else if (isVulnerable) {
                 result.vulnerabilities.push({
                   package: currentPackage,
                   version: version,
-                  cve: CVE_2025_55182.id,
+                  cves: ALL_RSC_CVES.map(c => c.id),
                   severity: 'CRITICAL'
                 });
               }
@@ -308,18 +398,28 @@ class DependencyAssuranceModule {
                 result.vulnerabilities.push({
                   package: currentPackage,
                   version: version,
-                  cve: CVE_2025_55182.id,
+                  cves: ALL_RSC_CVES.map(c => c.id),
                   severity: 'CRITICAL'
                 });
               }
             }
             
             if (CVE_2025_55182.serverDomPackages.includes(currentPackage)) {
-              if (isVulnerableReactVersion(version)) {
+              const isPartial = isPartiallyPatchedVersion(version);
+              const isVulnerable = isVulnerableReactVersion(version);
+              
+              if (isPartial) {
+                result.partiallyPatchedPackages.push({
+                  package: currentPackage,
+                  version: version,
+                  vulnerableTo: ['CVE-2025-55183', 'CVE-2025-55184'],
+                  severity: 'HIGH'
+                });
+              } else if (isVulnerable) {
                 result.vulnerabilities.push({
                   package: currentPackage,
                   version: version,
-                  cve: CVE_2025_55182.id,
+                  cves: ALL_RSC_CVES.map(c => c.id),
                   severity: 'CRITICAL'
                 });
               }
@@ -382,17 +482,39 @@ class DependencyAssuranceModule {
       lines.push(`\x1b[33m!\x1b[0m No lock file found`);
     }
     
-    if (auditResult.vulnerabilities.length === 0 && auditResult.transitiveIssues.length === 0) {
-      lines.push('\n\x1b[32m✓ No CVE-2025-55182 vulnerabilities detected in lock file\x1b[0m');
+    const hasIssues = auditResult.vulnerabilities.length > 0 || 
+                      auditResult.transitiveIssues.length > 0 ||
+                      auditResult.partiallyPatchedPackages.length > 0;
+    
+    if (!hasIssues) {
+      lines.push('\n\x1b[32m✓ No RSC CVE vulnerabilities detected in lock file\x1b[0m');
+      lines.push('  Checked for: CVE-2025-55182 (RCE), CVE-2025-55183 (Source Leak), CVE-2025-55184 (DoS)');
       return lines.join('\n');
     }
     
+    if (auditResult.partiallyPatchedPackages.length > 0) {
+      lines.push(`\n\x1b[33m! ${auditResult.partiallyPatchedPackages.length} partially patched package(s):\x1b[0m`);
+      lines.push('  These versions patched CVE-2025-55182 (RCE) but are still vulnerable to:');
+      lines.push('  - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)');
+      lines.push('  - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)\n');
+      
+      for (const pkg of auditResult.partiallyPatchedPackages) {
+        lines.push(`  \x1b[33m•\x1b[0m ${pkg.package}@${pkg.version}`);
+        if (pkg.installedPath && this.options.verbose) {
+          lines.push(`    \x1b[2mPath: ${pkg.installedPath}\x1b[0m`);
+        }
+      }
+      lines.push('');
+      lines.push('  \x1b[1mAction Required:\x1b[0m Upgrade to 19.0.2, 19.1.3, or 19.2.2');
+    }
+    
     if (auditResult.vulnerabilities.length > 0) {
-      lines.push(`\n\x1b[31m✗ ${auditResult.vulnerabilities.length} vulnerable package(s) found:\x1b[0m\n`);
+      lines.push(`\n\x1b[31m✗ ${auditResult.vulnerabilities.length} fully vulnerable package(s) found:\x1b[0m\n`);
       
       for (const vuln of auditResult.vulnerabilities) {
         const transitiveTag = vuln.isTransitive ? ' \x1b[33m(transitive)\x1b[0m' : '';
-        lines.push(`  \x1b[31m•\x1b[0m ${vuln.package}@${vuln.version} - ${vuln.cve}${transitiveTag}`);
+        const cveList = vuln.cves ? vuln.cves.join(', ') : 'CVE-2025-55182, CVE-2025-55183, CVE-2025-55184';
+        lines.push(`  \x1b[31m•\x1b[0m ${vuln.package}@${vuln.version} - ${cveList}${transitiveTag}`);
         if (vuln.installedPath && this.options.verbose) {
           lines.push(`    \x1b[2mPath: ${vuln.installedPath}\x1b[0m`);
         }
