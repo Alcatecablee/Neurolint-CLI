@@ -27,56 +27,56 @@ const LAYERS = [
   {
     name: "ConfigMaster",
     description:
-      "Modernizes TypeScript, Next.js, and package.json configs for maximum compatibility and best practices.",
+      "Enables 17 TypeScript strict flags, auto-upgrades JSX for React 19, configures Turbopack, and migrates next lint to Biome.",
     status: "live",
     experimental: false,
   },
   {
     name: "PatternCleanse",
     description:
-      "Cleans and restructures code entities for maintainability and clarity.",
+      "Auto-removes console.log with documented comments, converts React 19 createFactory to JSX, and fixes Next.js 15.5 deprecations.",
     status: "live",
     experimental: false,
   },
   {
     name: "ReactRepair",
     description:
-      "Improves React components with smart rewrites, import fixing, and missing key detection.",
+      "Auto-fixes missing React keys (not just detection), converts forwardRef to direct ref props, and adds accessibility attributes.",
     status: "live",
     experimental: false,
   },
   {
     name: "HydraFix",
     description:
-      "Detects and fixes hydration and SSR bugs for flawless React/Next.js deployments.",
+      "AST-based auto-fix for hydration issues. Wraps localStorage, window, and document APIs with SSR guards automatically.",
     status: "live",
     experimental: false,
   },
   {
     name: "NextGuard",
     description:
-      "Enforces Next.js conventions and integrates optimization strategies automatically.",
+      "Handles 5 React 19 DOM API migrations and 15 Next.js 15.5 deprecation patterns. Converts ReactDOM.render to createRoot.",
     status: "live",
     experimental: false,
   },
   {
     name: "TestReady",
     description:
-      "Ensures components and configs are test-ready with basic static analysis.",
+      "Detects RSC testing issues, warns about MSW + App Router conflicts, and generates test scaffolding with prop extraction.",
     status: "live",
     experimental: false,
   },
   {
     name: "Adaptive",
     description:
-      "Production-grade pattern learning with confidence scoring, smart extraction, and 41 unit tests.",
+      "Cross-layer pattern learning with 70% confidence threshold. Learns from Layers 1-8 transformations and persists rules.",
     status: "live",
     experimental: false,
   },
   {
     name: "SecurityForensics",
     description:
-      "Detects IoCs, supply chain attacks, and CVE-2025-55182 vulnerabilities with 80+ signatures.",
+      "80 IoC signatures + 27 AST-based behavioral patterns. Detects React 19 hook exploits and CVE-2025-55182 indicators.",
     status: "live",
     experimental: false,
   },
@@ -227,22 +227,16 @@ export function LandingFeatures() {
         </h3>
         <ul className="ml-5 list-disc space-y-1 text-sm text-zinc-100">
           <li>
-            <b>
-              All 8 code-fixing layers are production-ready and powerful
-              individually
-            </b>
-            : config, patterns, component repair, hydration/SSR, Next.js, testing, adaptive learning, and security forensics.
+            <b>Auto-fixes, not just detection</b>: ESLint's jsx-key only detects missing keys. Layer 3 actually fixes them. ESLint's no-console only warns. Layer 2 removes them.
           </li>
           <li>
-            Robust dry run, backup, safety, transparency, and per-layer
-            commands.
+            <b>AST + regex hybrid</b>: Uses Babel AST for robust transformations, falls back to regex for edge cases, validates syntax before accepting changes.
           </li>
           <li>
-            <span className="font-bold text-white">
-              Seeking co-founder to master the orchestration—layers are solid,
-              we need help integrating them for truly seamless, automated
-              multi-layer repair!
-            </span>
+            <b>One-pass multi-config</b>: Layer 1 optimizes tsconfig.json + next.config.js + package.json in a single command.
+          </li>
+          <li>
+            <b>Framework-aware security</b>: 80 IoC signatures + 27 behavioral patterns that understand React 19 hooks and Next.js 15.5 patterns.
           </li>
         </ul>
       </div>

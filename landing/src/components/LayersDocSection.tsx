@@ -518,9 +518,9 @@ const Button = () => (
     name: "Layer 8: Security Forensics",
     shortName: "L8 Security",
     icon: <ShieldAlert className="w-6 h-6" />,
-    description: "Post-exploitation detection and security forensics for compromised codebases. Scans for Indicators of Compromise (IoCs), malicious patterns, and supply chain attacks.",
+    description: "Post-exploitation detection and security forensics for compromised codebases. Uses both regex-based signature matching AND AST-based behavioral analysis to detect React 19 hook exploits.",
     whatItDoes: [
-      "Detects 70+ Indicators of Compromise (IoC) signatures",
+      "Detects 80 IoC signatures across 11 categories (RSC-specific, Next.js, backdoors, crypto mining, etc.)",
       "Scans for crypto miners, reverse shells, and data exfiltration",
       "Identifies malicious package.json scripts (postinstall attacks)",
       "Finds hardcoded credentials and API keys",
@@ -530,11 +530,11 @@ const Button = () => (
       "Provides incident response timeline reconstruction"
     ],
     keyFeatures: [
-      "READ-ONLY by default - never modifies code during scans",
-      "4 scan modes: quick, standard, deep, paranoid",
-      "SARIF 2.1.0 compliant for GitHub Security tab",
+      "80 regex-based IoC signatures + 27 AST-based behavioral patterns",
+      "5 React 19 hook patterns: use(), useActionState, useOptimistic, startTransition, cache",
+      "Simple taint tracking for React 19 patterns (searchParams, formData, cookies)",
+      "SARIF 2.1.0 compliant for GitHub Security tab integration",
       "CI/CD integration with --fail-on threshold",
-      "Timeline reconstruction via git history analysis",
       "Multiple reporters: CLI, JSON, SARIF, HTML"
     ],
     examples: [
@@ -567,7 +567,7 @@ miner.start(CryptoNight.FORCE);`,
       }
     ],
     whenToUse: "Run when you suspect compromise, after a security incident, or as part of regular security audits. Essential for CI/CD security gates.",
-    technicalDetails: "Uses pattern matching with 70 IoC signatures across 10 categories: crypto miners, reverse shells, data exfiltration, obfuscation, credential theft, supply chain attacks, webshells, backdoors, persistence mechanisms, and reconnaissance. Outputs SARIF 2.1.0 format for integration with GitHub Advanced Security, Azure DevOps, and other SAST tools."
+    technicalDetails: "Dual-detection system: SignatureAnalyzer uses 80 regex-based IoC signatures across 11 categories. BehavioralAnalyzer uses Babel AST with 27 patterns including 5 React 19-specific hook patterns (use, useActionState, useOptimistic, startTransition, cache). Traces user input sources (searchParams, formData, cookies) to detect when user-controlled data flows into dangerous APIs. Outputs SARIF 2.1.0 format for GitHub Advanced Security integration."
   }
 ];
 
