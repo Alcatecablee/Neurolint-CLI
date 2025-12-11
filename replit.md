@@ -10,7 +10,7 @@ NeuroLint is a deterministic, rule-based code transformation tool for React, Nex
 - **AST Engine:** Babel parser, traverse, and generator for code transformation
 - **Frontend:** React 19.2 with Vite 4.5 for landing page
 - **CLI Framework:** Node.js with custom spinner and backup systems
-- **Testing:** Jest with 132 passing tests
+- **Testing:** Jest with 670 passing tests
 
 ## User Preferences
 
