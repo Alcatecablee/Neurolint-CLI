@@ -36,7 +36,7 @@ The core engine processes code through progressive layers, each handling specifi
 
 **Layer 7 - Adaptive Learning:** Production-grade pattern learning with smart extraction (only learns from files with actual React hooks), confidence scoring (70%+ threshold), suggestion/change separation, and verbose debug logging. Stores custom rules in `.neurolint/learned-rules.json`. Backed by 41 comprehensive unit tests.
 
-**Layer 8 - Security Forensics:** Detects 80+ Indicators of Compromise (IoC) including obfuscated eval, credential leaks, and post-exploitation patterns. Includes CVE-2025-55182 (React Server Components RCE) detection and patching.
+**Layer 8 - Security Forensics (v2.3.0):** Detects 90 Indicators of Compromise (IoC) and 32 AST-based behavioral patterns. Covers three critical RSC CVEs: CVE-2025-55182 (RCE, CVSS 10.0), CVE-2025-55183 (Source Code Exposure, CVSS 5.3), and CVE-2025-55184 (DoS, CVSS 7.5). Detects post-exploitation patterns including obfuscated eval, credential leaks, infinite loops, and function source exposure.
 
 ### AST Transformation Engine
 
@@ -69,24 +69,24 @@ The core engine processes code through progressive layers, each handling specifi
 
 ### Security Architecture
 
-**CVE-2025-55182 Handler:** Critical Remote Code Execution vulnerability in React Server Components (CVSS 10.0)
-- Detects vulnerable React 19.0.0-19.2.0 and Next.js 15.x-16.x versions
-- Updates `package.json` to patched versions (React 19.0.1+, Next.js 16.0.7+)
-- Validates `react-server-dom-*` package versions
-- Provides dry-run preview before applying patches
+**RSC CVE Detection Suite (3 CVEs covered):**
+- CVE-2025-55182: Remote Code Execution (CRITICAL, CVSS 10.0) - Disclosed Dec 3, 2025
+- CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3) - Disclosed Dec 11, 2025  
+- CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5) - Disclosed Dec 11, 2025
 
-**Layer 8 IoC Detection:** 80 behavioral signatures across categories:
-- Code execution patterns (eval, Function constructor, child_process.exec)
-- Obfuscation detection (hex encoding, base64, string concatenation)
+**IMPORTANT:** Versions 19.0.1, 19.1.2, 19.2.1 patched CVE-2025-55182 but are STILL VULNERABLE to the new CVEs. Fully patched versions: 19.0.2, 19.1.3, 19.2.2
+
+**Layer 8 IoC Detection (90 signatures):**
+- Code injection patterns (eval, Function constructor, child_process.exec)
+- DoS patterns (infinite loops, recursive scheduling, deserialization attacks)
+- Source code exposure (toString, stringification, error handler leaks)
 - Data exfiltration (fetch to suspicious domains, credential patterns)
-- Persistence mechanisms (cron jobs, service installations)
+- RSC-specific attack patterns (server action exploitation, cache poisoning)
 
-**Signature Analyzer:** AST-based pattern matching with severity scoring (critical/high/medium/low). Includes 5 React 19-specific patterns:
-- BEHAV-023: User input in `use(fetch())` calls
-- BEHAV-024: Code execution in `useActionState` handlers
-- BEHAV-025: XSS risks in `useOptimistic` with dangerouslySetInnerHTML
-- BEHAV-026: Data leaks in `startTransition`
-- BEHAV-027: Cache poisoning with user-specific data
+**Behavioral Analyzer (32 AST patterns):**
+- BEHAV-023 to BEHAV-027: React 19 hook security (use, useActionState, useOptimistic, cache)
+- BEHAV-028 to BEHAV-029: CVE-2025-55184 DoS patterns (infinite loops, recursive scheduling)
+- BEHAV-030 to BEHAV-032: CVE-2025-55183 source exposure (toString, stringification, responses)
 
 ### CLI Command System
 
