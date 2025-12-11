@@ -11,9 +11,15 @@
 
 ---
 
-## 🚨 CRITICAL SECURITY ALERT: CVE-2025-55182
+## 🚨 CRITICAL SECURITY ALERT: React Server Components CVEs
 
-**A critical Remote Code Execution vulnerability (CVSS 10.0) has been discovered in React Server Components affecting all React 19 apps.**
+**Three vulnerabilities have been discovered in React Server Components affecting all React 19 apps:**
+
+| CVE | Severity | Description |
+|-----|----------|-------------|
+| **CVE-2025-55182** | CRITICAL (10.0) | Remote Code Execution |
+| **CVE-2025-55184** | HIGH (7.5) | Denial of Service |
+| **CVE-2025-55183** | MEDIUM (5.3) | Source Code Exposure |
 
 ### One-Command Fix
 
@@ -24,15 +30,20 @@ npx @neurolint/cli security:cve-2025-55182 . --dry-run
 # Apply the fix
 npx @neurolint/cli security:cve-2025-55182 . --fix
 
+# Scan for indicators of compromise
+npx @neurolint/cli security:scan-compromise . --verbose
+
 # Install patched dependencies
 npm install
 ```
 
-**Affected:** React 19.0.0-19.2.0, Next.js 15.x-16.x with App Router, React Router RSC, Vite RSC, Waku, and more.
+**Affected:** React 19.0.0-19.2.1, Next.js 15.x-16.x with App Router, React Router RSC, Vite RSC, Waku, and more.
 
 **NOT Affected:** React 18 and earlier, SPAs without React Server Components, Next.js Pages Router.
 
-**Patched versions:** React 19.0.1, 19.1.2, 19.2.1 | Next.js 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, 16.0.7+, 16.1.0+, 16.2.1+
+**Fully Patched versions:** React 19.0.2, 19.1.3, 19.2.2 | Next.js 15.0.5+, 15.1.9+, 15.2.6+, 15.3.6+, 15.4.8+, 15.5.7+, 16.0.7+, 16.1.0+, 16.2.1+
+
+**WARNING:** Versions 19.0.1, 19.1.2, 19.2.1 patched RCE but are still vulnerable to DoS and source exposure.
 
 [Read the full security advisory →](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
 

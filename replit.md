@@ -207,8 +207,15 @@ The core engine processes code through progressive layers, each handling specifi
 - **Docs SEO**: Updated Layer 4 (Hydration) and migrate-react19 docs with keyword-rich titles
 - **Structured content**: Added FAQ sections, table of contents, and internal links for better indexing
 
+### Layer 8 v2.3.0 - New CVE Detection (December 11, 2025)
+- **CVE-2025-55184 (DoS, CVSS 7.5)**: Added 5 new IoC signatures (IOC-081 to IOC-085) for infinite loops, recursive scheduling
+- **CVE-2025-55183 (Source Exposure, CVSS 5.3)**: Added 5 new IoC signatures (IOC-086 to IOC-090) for toString(), hardcoded secrets
+- **New behavioral patterns**: BEHAV-028 to BEHAV-032 for AST-based CVE detection
+- **Partial patch detection**: Warns that 19.0.1, 19.1.2, 19.2.1 are still vulnerable
+- **Fully patched versions**: 19.0.2, 19.1.3, 19.2.2
+
 ### Verified Components
-- All 132 tests passing including 60+ Layer 8 security forensics tests
+- All 137 tests passing including 70+ Layer 8 security forensics tests
 - Layer 8 CLI commands fully functional (scan-compromise, create-baseline, compare-baseline, incident-response)
-- 80 IoC signatures with behavioral and signature analyzers
-- CVE-2025-55182 detection and patching operational
+- 90 IoC signatures with behavioral and signature analyzers
+- CVE-2025-55182, CVE-2025-55184, CVE-2025-55183 detection operational

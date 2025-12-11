@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.3] - 2025-12-11
+
+### Added
+
+#### Layer 8 Security Forensics v2.3.0 - New CVE Detection
+
+Layer 8 has been updated to detect two new React Server Components vulnerabilities disclosed today:
+
+**CVE-2025-55184 (Denial of Service, CVSS 7.5)**
+- Malicious request can cause infinite loop during server-side deserialization
+- Added 5 new IoC signatures (IOC-081 to IOC-085):
+  - Server action infinite loop patterns
+  - Recursive self-call detection
+  - setImmediate/queueMicrotask/nextTick loop detection
+  - RSC payload replay loop patterns
+  - Flight protocol deserialization attack surface detection
+
+**CVE-2025-55183 (Source Code Exposure, CVSS 5.3)**
+- Malicious request can leak server function source code including hardcoded secrets
+- Added 5 new IoC signatures (IOC-086 to IOC-090):
+  - Server function toString() exposure
+  - Function stringification patterns
+  - Hardcoded secrets in server actions
+  - Database connection string exposure
+  - Error handler source code leaks
+
+**New Behavioral Patterns (BEHAV-028 to BEHAV-032)**
+- AST-based detection of infinite loops in server contexts
+- Recursive scheduling patterns (setImmediate, queueMicrotask, nextTick)
+- Function.toString() exposure in server actions
+- Response data containing source code or stack traces
+
+**Enhanced Dependency Assurance**
+- Now detects "partially patched" versions (19.0.1, 19.1.2, 19.2.1)
+- These versions patched CVE-2025-55182 (RCE) but remain vulnerable to DoS and source exposure
+- Fully patched versions: 19.0.2, 19.1.3, 19.2.2
+
+**Verified Numbers**
+- 90 total IoC signatures (up from 80)
+- 32 behavioral patterns (up from 27)
+- 137 passing tests
+
+### Changed
+- Version bumped to 1.5.3
+- Layer 8 version bumped to 2.3.0
+
 ## [1.5.2] - 2025-12-10
 
 ### Added

@@ -1,20 +1,23 @@
 # Layer 8: Security Forensics
 
-## Specification Document v2.2
+## Specification Document v2.3
 
 **Status**: Implemented  
 **Author**: NeuroLint Team  
 **Created**: December 2025  
-**Updated**: December 8, 2025 (v2.2 - React 19 Security Patterns)  
-**Related CVE**: CVE-2025-55182 (CVSS 10.0)
+**Updated**: December 11, 2025 (v2.3 - New CVE Detection)  
+**Related CVEs**: CVE-2025-55182 (CVSS 10.0), CVE-2025-55184 (CVSS 7.5), CVE-2025-55183 (CVSS 5.3)
 
-### Version 2.2 Highlights
+### Version 2.3 Highlights
 
-- **80 IoC Signatures** covering 11 detection categories
-- **5 React 19 Behavioral Patterns** (BEHAV-023 to BEHAV-027) for use(), useActionState, useOptimistic
+- **90 IoC Signatures** covering 11 detection categories (10 new for CVE-2025-55184 and CVE-2025-55183)
+- **10 React 19 Behavioral Patterns** (BEHAV-023 to BEHAV-032) including new CVE detection
+- **CVE-2025-55184 Detection**: DoS patterns - infinite loops, recursive scheduling, payload replay
+- **CVE-2025-55183 Detection**: Source exposure - toString(), hardcoded secrets, connection strings
+- **Partial Patch Detection**: Warns users that 19.0.1, 19.1.2, 19.2.1 are still vulnerable to new CVEs
 - **15 RSC-Specific Signatures** for React Server Components attack detection
 - **15 Next.js-Specific Signatures** for middleware, route handlers, and config injection
-- **132 Comprehensive Tests** with full coverage for all detection patterns
+- **137 Comprehensive Tests** with full coverage for all detection patterns
 - **AST-Based Detection** with nested property traversal for "never break code" principle
 - **ReDoS Protection** with SafeRegex utility and input chunking
 

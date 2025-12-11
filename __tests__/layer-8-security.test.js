@@ -42,8 +42,8 @@ describe('Layer 8 Security Forensics', () => {
   });
 
   describe('IoC Signature Constants', () => {
-    test('should have 80 IoC signatures defined', () => {
-      expect(constants.IOC_SIGNATURES.signatures.length).toBe(80);
+    test('should have 90 IoC signatures defined', () => {
+      expect(constants.IOC_SIGNATURES.signatures.length).toBe(90);
     });
 
     test('should have required fields for each signature', () => {
@@ -1245,6 +1245,81 @@ line4`;
       const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-027');
       expect(finding).toBeDefined();
       expect(finding.severity).toBe('high');
+    });
+
+    test('should detect CVE-2025-55184 DoS infinite loop in server context (BEHAV-028)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `'use server';
+        export async function maliciousAction() {
+          while (true) {
+            // DoS attack
+          }
+        }`;
+      
+      const findings = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-028');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect CVE-2025-55184 DoS recursive async scheduling (BEHAV-029)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `function loop() {
+        setImmediate(() => setImmediate(loop));
+      }`;
+      
+      const findings = analyzer.analyze(code, 'worker.js');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-029');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect CVE-2025-55183 server function toString exposure (BEHAV-030)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `'use server';
+        export async function leakSource() {
+          return (async function() { return process.env.API_KEY; }).toString();
+        }`;
+      
+      const findings = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-030');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect CVE-2025-55183 function stringification in server (BEHAV-031)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `'use server';
+        export async function leak() {
+          return String(function() { return process.env.SECRET; });
+        }`;
+      
+      const findings = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-031');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('high');
+    });
+
+    test('should detect CVE-2025-55183 response containing source code (BEHAV-032)', () => {
+      const analyzer = new BehavioralAnalyzer();
+      const code = `'use server';
+        export async function handler(req, res) {
+          try {
+            doSomething();
+          } catch (e) {
+            res.json({ error: e.stack.toString() });
+          }
+        }`;
+      
+      const findings = analyzer.analyze(code, 'actions.ts');
+      
+      const finding = findings.find(f => f.signatureId === 'NEUROLINT-BEHAV-032');
+      expect(finding).toBeDefined();
+      expect(finding.severity).toBe('medium');
     });
   });
 
