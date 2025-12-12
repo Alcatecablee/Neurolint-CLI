@@ -24,7 +24,7 @@ interface MetricProps {
 }
 
 const Metric: React.FC<MetricProps> = ({ icon: Icon, value, label, loading }) => (
-  <div className="flex flex-col items-center gap-2 p-4 bg-zinc-900/40 border border-zinc-800 rounded-xl backdrop-blur-sm hover:border-zinc-700 transition-colors" data-testid="trust-metric">
+  <div className="flex flex-col items-center gap-3 p-5 md:p-6 bg-zinc-900/40 border-2 border-black rounded-xl backdrop-blur-sm hover:border-zinc-800 transition-colors" data-testid="trust-metric">
     <Icon className="w-5 h-5 text-blue-400" />
     <div className="text-2xl md:text-3xl font-black text-white">
       {loading ? '...' : value}
@@ -66,7 +66,7 @@ export const TrustMetrics: React.FC<{ className?: string }> = ({ className = '' 
   }, []);
 
   return (
-    <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 ${className}`} data-testid="trust-metrics-container">
+    <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 ${className}`} data-testid="trust-metrics-container">
       <Metric
         icon={Star}
         value={githubStars}
