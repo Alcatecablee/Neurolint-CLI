@@ -507,6 +507,11 @@ export default function Index() {
             </p>
           </div>
 
+          {/* Trust Metrics - Above the fold */}
+          <div className="mb-8 md:mb-10 animate-slide-in-up animate-delay-600">
+            <TrustMetrics className="max-w-4xl mx-auto" />
+          </div>
+
           {/* Install Command */}
           <div className="mb-6 md:mb-8 animate-slide-in-up animate-delay-700">
             <div className="max-w-2xl mx-auto bg-zinc-900/80 border border-black rounded-xl p-4 md:p-5 backdrop-blur-sm relative group hover:border-black transition-colors duration-300">
