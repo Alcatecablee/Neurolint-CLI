@@ -599,6 +599,63 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Social Proof Badges - Moved up for better conversion */}
+      <section className="py-8 md:py-12 bg-black" data-testid="social-proof-section">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-80 hover:opacity-100 transition-opacity duration-500">
+            <a 
+              href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-all duration-300 hover:scale-105"
+              data-testid="producthunt-badge"
+            >
+              <img 
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
+                alt="NeuroLint CLI on Product Hunt" 
+                width="200" 
+                height="44"
+                className="h-9 sm:h-10 w-auto grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </a>
+            
+            <a 
+              href="https://startupfa.me/s/neurolint-cli?utm_source=neurolint.dev" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-all duration-300 hover:scale-105"
+              data-testid="startupfame-badge"
+            >
+              <img 
+                src="https://startupfa.me/badges/featured/dark-small-rounded.webp" 
+                alt="Featured on Startup Fame" 
+                width="180" 
+                height="28"
+                className="h-7 sm:h-8 w-auto grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </a>
+            
+            <a 
+              href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-all duration-300 hover:scale-105"
+              data-testid="github-stars-badge"
+            >
+              <img 
+                src="https://img.shields.io/github/stars/Alcatecablee/Neurolint-CLI?style=for-the-badge&logo=github&logoColor=white&labelColor=181717&color=181717" 
+                alt="GitHub Stars" 
+                height="24"
+                className="h-6 sm:h-7 w-auto"
+              />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section - High up for trust building */}
+      <TestimonialsSection />
+
       {/* Live Demo Carousel Section */}
       <section id="comprehensive-demo" className="py-12 sm:py-16 md:py-24 px-4 relative">
         <div className="max-w-6xl mx-auto">
