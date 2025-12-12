@@ -21,7 +21,7 @@ export function DocsCliReference() {
   return (
     <DocsLayout
       title="CLI Reference"
-      description="Complete reference for all NeuroLint CLI v1.5.3 commands, options, and flags with real command outputs."
+      description="Complete reference for all NeuroLint CLI v1.5.2 commands, options, and flags with real command outputs."
     >
       <section className="mb-12">
         <h2 className="text-2xl font-bold text-white mb-4">Global Options</h2>
@@ -41,7 +41,7 @@ export function DocsCliReference() {
             <tbody>
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--version, -v</td>
-                <td className="py-3 px-4 text-gray-300">Display version number (e.g., 1.5.3)</td>
+                <td className="py-3 px-4 text-gray-300">Display version number (e.g., 1.5.2)</td>
               </tr>
               <tr className="border-b border-zinc-800/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--help, -h</td>

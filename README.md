@@ -3,15 +3,21 @@
 > Deterministic code transformation for React, Next.js, and TypeScript projects
 
 [![npm version](https://img.shields.io/npm/v/@neurolint/cli.svg)](https://www.npmjs.com/package/@neurolint/cli)
+[![npm downloads](https://img.shields.io/npm/dm/@neurolint/cli.svg)](https://www.npmjs.com/package/@neurolint/cli)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
 [![Tests](https://img.shields.io/badge/tests-676%20passing-brightgreen.svg)](./__tests__)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
 **The only tool that actually FIXES your code** — deterministic, rule-based transformations (NOT AI) that automatically resolve 50+ code issues across 8 progressive layers.
 
 ---
 
-## 🚨 CRITICAL SECURITY ALERT: React Server Components CVEs
+## CRITICAL SECURITY ALERT: React Server Components CVEs
+
+[![CVE-2025-55182](https://img.shields.io/badge/CVE--2025--55182-CRITICAL%20(10.0)-red.svg)](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
+[![CVE-2025-55184](https://img.shields.io/badge/CVE--2025--55184-HIGH%20(7.5)-orange.svg)](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
+[![CVE-2025-55183](https://img.shields.io/badge/CVE--2025--55183-MEDIUM%20(5.3)-yellow.svg)](https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components)
 
 **Three vulnerabilities have been discovered in React Server Components affecting all React 19 apps:**
 
