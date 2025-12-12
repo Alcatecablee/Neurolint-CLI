@@ -39,7 +39,7 @@ export function DocsInstallation() {
 
         <Callout type="info" title="Node.js Version">
           NeuroLint requires Node.js 18+ due to glob v12 dependencies. 
-          Check your version with <code className="text-blue-400">node --version</code>.
+          Check your version with <code className="text-white">node --version</code>.
         </Callout>
       </section>
 
@@ -47,7 +47,7 @@ export function DocsInstallation() {
         <h2 className="text-2xl font-bold text-white mb-4">Global Installation</h2>
         
         <p className="text-gray-300 mb-4">
-          Install NeuroLint globally to use the <code className="text-blue-400 bg-zinc-800 px-1.5 py-0.5 rounded text-sm">neurolint</code> command 
+          Install NeuroLint globally to use the <code className="text-white bg-zinc-800 px-1.5 py-0.5 rounded text-sm">neurolint</code> command 
           from any directory:
         </p>
 
@@ -146,7 +146,7 @@ Commands:
             </p>
             <CommandBlock command="npm config get prefix" output="/usr/local" />
             <p className="text-gray-400 text-sm mt-2">
-              Add <code className="text-blue-400 bg-zinc-800 px-1.5 py-0.5 rounded text-sm">/usr/local/bin</code> (or the output path + /bin) to your PATH.
+              Add <code className="text-white bg-zinc-800 px-1.5 py-0.5 rounded text-sm">/usr/local/bin</code> (or the output path + /bin) to your PATH.
             </p>
           </div>
 
@@ -157,7 +157,7 @@ Commands:
             </p>
             <CommandBlock command="mkdir ~/.npm-global && npm config set prefix '~/.npm-global'" />
             <p className="text-gray-400 text-sm mt-2">
-              Then add <code className="text-blue-400 bg-zinc-800 px-1.5 py-0.5 rounded text-sm">~/.npm-global/bin</code> to your PATH.
+              Then add <code className="text-white bg-zinc-800 px-1.5 py-0.5 rounded text-sm">~/.npm-global/bin</code> to your PATH.
             </p>
           </div>
 

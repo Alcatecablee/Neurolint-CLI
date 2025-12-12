@@ -108,7 +108,7 @@ export function DiffViewer({ before, after, filename }: DiffViewerProps) {
         </div>
         <div className="flex items-center gap-3 text-xs font-mono">
           {removedCount > 0 && (
-            <span className="flex items-center gap-1 text-red-400">
+            <span className="flex items-center gap-1 text-gray-400">
               <Minus className="w-3 h-3" />
               {removedCount}
             </span>
@@ -144,7 +144,7 @@ export function DiffViewer({ before, after, filename }: DiffViewerProps) {
                 </td>
                 <td className="w-6 px-2 py-0.5 text-center select-none">
                   {line.type === "removed" && (
-                    <span className="text-red-400">-</span>
+                    <span className="text-gray-400">-</span>
                   )}
                   {line.type === "added" && (
                     <span className="text-green-400">+</span>

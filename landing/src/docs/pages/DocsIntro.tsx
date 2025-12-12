@@ -26,7 +26,7 @@ export function DocsIntro() {
       description="NeuroLint is a deterministic React code fixer that automatically fixes hydration errors, ESLint issues, and security vulnerabilities. AST-powered code transformation for React 19 and Next.js 16 - no AI, just reliable automated fixes."
     >
       <section className="mb-12">
-        <div className="p-6 bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-800/50 rounded-lg mb-8">
+        <div className="p-6 bg-zinc-900/50 border-2 border-black rounded-lg mb-8">
           <p className="text-gray-200 text-lg leading-relaxed">
             NeuroLint uses <strong className="text-white">Abstract Syntax Tree (AST) parsing</strong> with 
             regex fallback and <strong className="text-white">automatic validation</strong> to transform 
@@ -36,40 +36,48 @@ export function DocsIntro() {
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4 my-8">
-          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Zap className="w-5 h-5 text-yellow-400" />
-              <h3 className="font-medium text-white">AST-First Transformations</h3>
+          <div className="p-5 bg-zinc-900/50 border-2 border-black rounded-lg">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" strokeWidth={1.5} />
+              </div>
+              <h3 className="font-semibold text-white">AST-First Transformations</h3>
             </div>
             <p className="text-sm text-gray-400">
               Parses code using Babel AST for accurate transformations. Falls back to regex only when 
               AST fails. All changes are syntax-validated before saving.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Layers className="w-5 h-5 text-blue-400" />
-              <h3 className="font-medium text-white">8-Layer Architecture</h3>
+          <div className="p-5 bg-zinc-900/50 border-2 border-black rounded-lg">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center">
+                <Layers className="w-5 h-5 text-white" strokeWidth={1.5} />
+              </div>
+              <h3 className="font-semibold text-white">8-Layer Architecture</h3>
             </div>
             <p className="text-sm text-gray-400">
               Progressive layers from config fixes to security forensics. Each layer focuses on 
               specific issue types for predictable, targeted fixes.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <RefreshCw className="w-5 h-5 text-green-400" />
-              <h3 className="font-medium text-white">Automatic Backups</h3>
+          <div className="p-5 bg-zinc-900/50 border-2 border-black rounded-lg">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center">
+                <RefreshCw className="w-5 h-5 text-white" strokeWidth={1.5} />
+              </div>
+              <h3 className="font-semibold text-white">Automatic Backups</h3>
             </div>
             <p className="text-sm text-gray-400">
               Every transformation creates a backup. Restore anytime with one command. 
               Centralized backup management with list, restore, and clean operations.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Shield className="w-5 h-5 text-red-400" />
-              <h3 className="font-medium text-white">Security Forensics</h3>
+          <div className="p-5 bg-zinc-900/50 border-2 border-black rounded-lg">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center">
+                <Shield className="w-5 h-5 text-white" strokeWidth={1.5} />
+              </div>
+              <h3 className="font-semibold text-white">Security Forensics</h3>
             </div>
             <p className="text-sm text-gray-400">
               Layer 8 detects 80+ indicators of compromise, CVE-2025-55182 vulnerabilities, 
@@ -154,42 +162,42 @@ Running Layer 3 (Component Fixes) on page.tsx
             </thead>
             <tbody>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">1</td>
+                <td className="py-3 px-4 font-mono text-white">1</td>
                 <td className="py-3 px-4 text-white">Configuration</td>
                 <td className="py-3 px-4 text-gray-300">tsconfig.json, next.config.js, package.json modernization</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">2</td>
+                <td className="py-3 px-4 font-mono text-white">2</td>
                 <td className="py-3 px-4 text-white">Patterns</td>
                 <td className="py-3 px-4 text-gray-300">Console statements, legacy context, React.createFactory</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">3</td>
+                <td className="py-3 px-4 font-mono text-white">3</td>
                 <td className="py-3 px-4 text-white">Components</td>
                 <td className="py-3 px-4 text-gray-300">Missing keys, accessibility (alt, aria-label), forwardRef</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">4</td>
+                <td className="py-3 px-4 font-mono text-white">4</td>
                 <td className="py-3 px-4 text-white">Hydration</td>
                 <td className="py-3 px-4 text-gray-300">SSR guards for window, document, localStorage, sessionStorage</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">5</td>
+                <td className="py-3 px-4 font-mono text-white">5</td>
                 <td className="py-3 px-4 text-white">Next.js</td>
                 <td className="py-3 px-4 text-gray-300">'use client' directives, ReactDOM.render → createRoot</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">6</td>
+                <td className="py-3 px-4 font-mono text-white">6</td>
                 <td className="py-3 px-4 text-white">Testing</td>
                 <td className="py-3 px-4 text-gray-300">Error boundaries, prop types, loading states</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">7</td>
+                <td className="py-3 px-4 font-mono text-white">7</td>
                 <td className="py-3 px-4 text-white">Adaptive</td>
                 <td className="py-3 px-4 text-gray-300">Learns patterns from fixes, applies with confidence scoring</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-red-400">8</td>
+                <td className="py-3 px-4 font-mono text-gray-400">8</td>
                 <td className="py-3 px-4 text-white">Security Forensics</td>
                 <td className="py-3 px-4 text-gray-300">IoC detection, CVE-2025-55182, supply chain attacks (read-only)</td>
               </tr>
@@ -199,7 +207,7 @@ Running Layer 3 (Component Fixes) on page.tsx
 
         <Callout type="info" title="Layer 8 is read-only by default">
           Security Forensics (Layer 8) only analyzes code - it never modifies it unless you 
-          explicitly use <code className="text-blue-400">--quarantine</code> mode. This ensures 
+          explicitly use <code className="text-white">--quarantine</code> mode. This ensures 
           security scanning never breaks your build.
         </Callout>
       </section>
@@ -213,7 +221,7 @@ Running Layer 3 (Component Fixes) on page.tsx
 
         <div className="space-y-4">
           <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
-            <div className="w-8 h-8 bg-blue-900/50 rounded-full flex items-center justify-center text-blue-400 font-bold">1</div>
+            <div className="w-8 h-8 bg-zinc-800 border border-black rounded-full flex items-center justify-center text-white font-bold">1</div>
             <div>
               <h3 className="font-medium text-white">AST Transformation</h3>
               <p className="text-sm text-gray-400">
@@ -222,7 +230,7 @@ Running Layer 3 (Component Fixes) on page.tsx
             </div>
           </div>
           <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
-            <div className="w-8 h-8 bg-yellow-900/50 rounded-full flex items-center justify-center text-yellow-400 font-bold">2</div>
+            <div className="w-8 h-8 bg-zinc-800 border border-black rounded-full flex items-center justify-center text-white font-bold">2</div>
             <div>
               <h3 className="font-medium text-white">Regex Fallback</h3>
               <p className="text-sm text-gray-400">
@@ -231,12 +239,12 @@ Running Layer 3 (Component Fixes) on page.tsx
             </div>
           </div>
           <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
-            <div className="w-8 h-8 bg-green-900/50 rounded-full flex items-center justify-center text-green-400 font-bold">3</div>
+            <div className="w-8 h-8 bg-zinc-800 border border-black rounded-full flex items-center justify-center text-white font-bold">3</div>
             <div>
               <h3 className="font-medium text-white">Validation & Revert</h3>
               <p className="text-sm text-gray-400">
                 Validates transformed code syntax. If invalid, automatically reverts to original.
-                You'll see messages like: <code className="text-yellow-400">"[ERROR] Regex fallback produced invalid syntax - REJECTING changes"</code>
+                You'll see messages like: <code className="text-gray-300">"[ERROR] Regex fallback produced invalid syntax - REJECTING changes"</code>
               </p>
             </div>
           </div>
@@ -317,7 +325,7 @@ Running Layer 3 (Component Fixes) on page.tsx
         />
 
         <Callout type="warning" title="Security scans are non-destructive">
-          Security scanning never modifies your code. Use <code className="text-blue-400">--quarantine</code> 
+          Security scanning never modifies your code. Use <code className="text-white">--quarantine</code> 
           mode only when you explicitly want to neutralize critical threats.
         </Callout>
       </section>

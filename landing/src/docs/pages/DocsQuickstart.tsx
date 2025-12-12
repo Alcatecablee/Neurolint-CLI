@@ -91,7 +91,7 @@ Run 'neurolint fix ./your-project --dry-run' to preview fixes`}
         
         <p className="text-gray-300 mb-4">
           Before making any changes, preview what will be fixed using the 
-          <code className="text-blue-400 bg-zinc-800 px-1.5 py-0.5 rounded text-sm mx-1">--dry-run</code> 
+          <code className="text-white bg-zinc-800 px-1.5 py-0.5 rounded text-sm mx-1">--dry-run</code> 
           flag:
         </p>
 
@@ -119,7 +119,7 @@ Run without --dry-run to apply changes`}
 
         <Callout type="tip" title="Preview specific layers">
           You can preview just one layer at a time to understand each transformation:
-          <code className="block mt-2 text-blue-400">neurolint fix ./your-project --layers=4 --dry-run</code>
+          <code className="block mt-2 text-white">neurolint fix ./your-project --layers=4 --dry-run</code>
         </Callout>
       </section>
 
@@ -184,7 +184,7 @@ Backup available: neurolint restore --interactive`}
         <p className="text-gray-300 mb-4">
           For more control, apply one layer at a time. This is recommended for 
           large codebases or when you want to review each type of change. You can use either 
-          layer-specific commands or the generic <code className="text-blue-400 bg-zinc-800 px-1.5 py-0.5 rounded text-sm">--layers=N</code> flag:
+          layer-specific commands or the generic <code className="text-white bg-zinc-800 px-1.5 py-0.5 rounded text-sm">--layers=N</code> flag:
         </p>
 
         <div className="space-y-2">
@@ -209,7 +209,7 @@ Backup available: neurolint restore --interactive`}
 
         <Callout type="info" title="Multiple layers">
           You can apply multiple layers at once with the generic format: 
-          <code className="text-blue-400 ml-1">--layers=1,2,3</code>
+          <code className="text-white ml-1">--layers=1,2,3</code>
         </Callout>
       </section>
 
@@ -224,7 +224,7 @@ Backup available: neurolint restore --interactive`}
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
             <span>
-              <Link to="/docs/architecture" className="text-blue-400 hover:text-blue-300">
+              <Link to="/docs/architecture" className="text-white hover:text-blue-300">
                 The 8-Layer Architecture
               </Link>
               {" "}- understand what each layer does
@@ -233,7 +233,7 @@ Backup available: neurolint restore --interactive`}
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
             <span>
-              <Link to="/docs/cli-reference" className="text-blue-400 hover:text-blue-300">
+              <Link to="/docs/cli-reference" className="text-white hover:text-blue-300">
                 CLI Reference
               </Link>
               {" "}- all available commands and options
@@ -242,7 +242,7 @@ Backup available: neurolint restore --interactive`}
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
             <span>
-              <Link to="/docs/layers/security" className="text-blue-400 hover:text-blue-300">
+              <Link to="/docs/layers/security" className="text-white hover:text-blue-300">
                 Layer 8: Security Forensics
               </Link>
               {" "}- detect compromises and vulnerabilities
@@ -251,7 +251,7 @@ Backup available: neurolint restore --interactive`}
           <li className="flex items-start gap-2">
             <span className="text-gray-500 mt-1">-</span>
             <span>
-              <Link to="/docs/guides/ci-cd" className="text-blue-400 hover:text-blue-300">
+              <Link to="/docs/guides/ci-cd" className="text-white hover:text-blue-300">
                 CI/CD Integration
               </Link>
               {" "}- automate NeuroLint in your pipeline

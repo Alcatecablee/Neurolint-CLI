@@ -150,7 +150,7 @@ export function CommandBlock({ command, output }: CommandBlockProps) {
       <div className="flex items-center justify-between px-4 py-3 group">
         <code className="text-sm font-mono">
           <span className="text-gray-500 select-none">$ </span>
-          <span className="text-blue-400">{command}</span>
+          <span className="text-white">{command}</span>
         </code>
         <button
           onClick={handleCopy}

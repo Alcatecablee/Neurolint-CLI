@@ -152,9 +152,9 @@ export function DocsArchitecture() {
             {layers.map((layer, idx) => (
               <div 
                 key={layer.num}
-                className={`flex items-center gap-4 p-3 rounded-lg hover:bg-zinc-800/50 transition-colors ${layer.num === 8 ? 'border border-red-900/50' : ''}`}
+                className={`flex items-center gap-4 p-3 rounded-lg hover:bg-zinc-800/50 transition-colors ${layer.num === 8 ? 'border border-black' : ''}`}
               >
-                <div className={`w-8 h-8 flex items-center justify-center rounded font-mono text-sm ${layer.num === 8 ? 'bg-red-900/50 text-red-400' : 'bg-zinc-800 text-gray-400'}`}>
+                <div className={`w-8 h-8 flex items-center justify-center rounded font-mono text-sm ${layer.num === 8 ? 'bg-zinc-800 text-white' : 'bg-zinc-800 text-white'}`}>
                   {layer.num}
                 </div>
                 <div className="flex-1">
@@ -185,24 +185,24 @@ export function DocsArchitecture() {
         <div className="bg-zinc-900 border border-black rounded-lg p-5 mb-6">
           <ol className="space-y-4 text-gray-400 text-sm">
             <li className="flex items-start gap-3">
-              <span className="w-8 h-8 flex items-center justify-center bg-blue-900/50 rounded text-blue-400 font-mono text-sm">1</span>
+              <span className="w-8 h-8 flex items-center justify-center bg-zinc-800 border border-black rounded text-white font-mono text-sm">1</span>
               <div>
                 <strong className="text-white">AST Transformation</strong>
                 <p className="mt-1">First attempts AST-based transformation using Babel parser for maximum accuracy. Parses with TypeScript and JSX plugins enabled.</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-8 h-8 flex items-center justify-center bg-yellow-900/50 rounded text-yellow-400 font-mono text-sm">2</span>
+              <span className="w-8 h-8 flex items-center justify-center bg-zinc-800 border border-black rounded text-white font-mono text-sm">2</span>
               <div>
                 <strong className="text-white">Regex Fallback</strong>
                 <p className="mt-1">If AST fails or makes no changes, applies regex-based pattern matching. Uses custom patterns for console removal, SSR guards, and key props.</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
-              <span className="w-8 h-8 flex items-center justify-center bg-green-900/50 rounded text-green-400 font-mono text-sm">3</span>
+              <span className="w-8 h-8 flex items-center justify-center bg-zinc-800 border border-black rounded text-white font-mono text-sm">3</span>
               <div>
                 <strong className="text-white">Syntax Validation & Revert</strong>
-                <p className="mt-1">Validates transformed code using Babel parser. If syntax is invalid, automatically reverts to original. You'll see: <code className="text-yellow-400">"[ERROR] Regex fallback produced invalid syntax - REJECTING changes"</code></p>
+                <p className="mt-1">Validates transformed code using Babel parser. If syntax is invalid, automatically reverts to original. You'll see: <code className="text-gray-300">"[ERROR] Regex fallback produced invalid syntax - REJECTING changes"</code></p>
               </div>
             </li>
           </ol>
@@ -226,10 +226,10 @@ export function DocsArchitecture() {
           {layers.map((layer) => (
             <div 
               key={layer.num}
-              className={`border rounded-lg overflow-hidden ${layer.num === 8 ? 'border-red-900/50' : 'border-black'}`}
+              className={`border rounded-lg overflow-hidden ${layer.num === 8 ? 'border-black' : 'border-black'}`}
             >
-              <div className={`flex items-center gap-4 px-5 py-4 border-b ${layer.num === 8 ? 'bg-red-900/20 border-red-900/50' : 'bg-zinc-900/50 border-black'}`}>
-                <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-mono text-lg ${layer.num === 8 ? 'bg-red-900/50 text-red-400' : 'bg-zinc-800 text-white'}`}>
+              <div className={`flex items-center gap-4 px-5 py-4 border-b bg-zinc-900/50 border-black`}>
+                <div className="w-10 h-10 flex items-center justify-center rounded-lg font-mono text-lg bg-zinc-800 border border-black text-white">
                   {layer.num}
                 </div>
                 <div>
@@ -241,7 +241,7 @@ export function DocsArchitecture() {
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Engine:</span>
-                  <span className="text-xs text-blue-400 bg-blue-900/20 px-2 py-1 rounded">{layer.engine}</span>
+                  <span className="text-xs text-white bg-zinc-800 px-2 py-1 rounded">{layer.engine}</span>
                 </div>
                 
                 <h4 className="text-sm font-medium text-gray-300 uppercase tracking-wide mb-3">
@@ -258,7 +258,7 @@ export function DocsArchitecture() {
                 
                 <Link 
                   to={layer.link}
-                  className="inline-block mt-4 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                  className="inline-block mt-4 text-sm text-white hover:text-blue-300 transition-colors"
                 >
                   View full documentation
                 </Link>
@@ -279,7 +279,7 @@ export function DocsArchitecture() {
           <ul className="space-y-2 text-gray-400 text-sm">
             <li className="flex items-start gap-2">
               <span className="text-gray-600 mt-0.5">-</span>
-              Backups stored in centralized <code className="text-blue-400">.neurolint-backups/</code> directory
+              Backups stored in centralized <code className="text-white">.neurolint-backups/</code> directory
             </li>
             <li className="flex items-start gap-2">
               <span className="text-gray-600 mt-0.5">-</span>
@@ -287,7 +287,7 @@ export function DocsArchitecture() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-gray-600 mt-0.5">-</span>
-              Restore with <code className="text-blue-400">neurolint backups restore &lt;n&gt; --yes</code>
+              Restore with <code className="text-white">neurolint backups restore &lt;n&gt; --yes</code>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-gray-600 mt-0.5">-</span>
@@ -297,7 +297,7 @@ export function DocsArchitecture() {
         </div>
 
         <Callout type="warning" title="Layer 8 is read-only by default">
-          Layer 8 (Security Forensics) never modifies code unless you explicitly use <code className="text-blue-400">--quarantine</code> mode. 
+          Layer 8 (Security Forensics) never modifies code unless you explicitly use <code className="text-white">--quarantine</code> mode. 
           This ensures security scanning never breaks your build.
         </Callout>
       </section>
@@ -330,7 +330,7 @@ neurolint security:scan-compromise ./src --quick`}
 
         <p className="text-gray-400 text-sm mt-4">
           For large codebases, running layers incrementally (one at a time) with 
-          <code className="text-blue-400"> --dry-run</code> is recommended so you can review 
+          <code className="text-white"> --dry-run</code> is recommended so you can review 
           each category of changes before applying.
         </p>
       </section>

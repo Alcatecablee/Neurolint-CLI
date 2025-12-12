@@ -40,35 +40,35 @@ export function DocsCliReference() {
             </thead>
             <tbody>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--version, -v</td>
+                <td className="py-3 px-4 font-mono text-white">--version, -v</td>
                 <td className="py-3 px-4 text-gray-300">Display version number (e.g., 1.5.2)</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--help, -h</td>
+                <td className="py-3 px-4 font-mono text-white">--help, -h</td>
                 <td className="py-3 px-4 text-gray-300">Display help information</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--verbose</td>
+                <td className="py-3 px-4 font-mono text-white">--verbose</td>
                 <td className="py-3 px-4 text-gray-300">Enable detailed output logging with per-file details</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--dry-run</td>
+                <td className="py-3 px-4 font-mono text-white">--dry-run</td>
                 <td className="py-3 px-4 text-gray-300">Preview changes without applying them</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--backup</td>
+                <td className="py-3 px-4 font-mono text-white">--backup</td>
                 <td className="py-3 px-4 text-gray-300">Create backups before changes (default: true)</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--no-backup</td>
+                <td className="py-3 px-4 font-mono text-white">--no-backup</td>
                 <td className="py-3 px-4 text-gray-300">Skip backup creation (not recommended)</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--format json</td>
+                <td className="py-3 px-4 font-mono text-white">--format json</td>
                 <td className="py-3 px-4 text-gray-300">Output results as JSON (for CI/CD pipelines)</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-blue-400">--output &lt;file&gt;</td>
+                <td className="py-3 px-4 font-mono text-white">--output &lt;file&gt;</td>
                 <td className="py-3 px-4 text-gray-300">Save output to a file</td>
               </tr>
             </tbody>
@@ -188,7 +188,7 @@ Running Layer 4 (Hydration Fixes) on page.tsx
         />
 
         <Callout type="warning" title="Always preview first">
-          Use <code className="text-blue-400">--dry-run</code> before applying fixes 
+          Use <code className="text-white">--dry-run</code> before applying fixes 
           to understand what will change. The fix command shows exactly which layers 
           and transformations will be applied.
         </Callout>
@@ -504,7 +504,7 @@ Migration Summary:
                 <td className="py-3 px-4 text-gray-300">Common IOC patterns only</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-yellow-400">(default)</td>
+                <td className="py-3 px-4 font-mono text-gray-300">(default)</td>
                 <td className="py-3 px-4 text-gray-300">~2min</td>
                 <td className="py-3 px-4 text-gray-300">Standard balanced analysis</td>
               </tr>
@@ -514,7 +514,7 @@ Migration Summary:
                 <td className="py-3 px-4 text-gray-300">Extended pattern matching</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-red-400">--paranoid</td>
+                <td className="py-3 px-4 font-mono text-gray-400">--paranoid</td>
                 <td className="py-3 px-4 text-gray-300">~5-10min</td>
                 <td className="py-3 px-4 text-gray-300">Maximum depth with heuristic + behavioral analysis</td>
               </tr>
@@ -736,11 +736,11 @@ Use "neurolint fix <path>" to analyze and fix code, which will generate learned 
                 <td className="py-3 px-4 text-gray-300">Success - no issues or all fixed, or below --fail-on threshold</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-red-400">1</td>
+                <td className="py-3 px-4 font-mono text-gray-400">1</td>
                 <td className="py-3 px-4 text-gray-300">Findings detected at or above --fail-on threshold (for security commands)</td>
               </tr>
               <tr className="border-b border-black/50">
-                <td className="py-3 px-4 font-mono text-yellow-400">2</td>
+                <td className="py-3 px-4 font-mono text-gray-300">2</td>
                 <td className="py-3 px-4 text-gray-300">Error (invalid arguments, file access, etc.)</td>
               </tr>
             </tbody>
@@ -748,7 +748,7 @@ Use "neurolint fix <path>" to analyze and fix code, which will generate learned 
         </div>
 
         <Callout type="info" title="CI/CD Integration">
-          Use <code className="text-blue-400">--fail-on=critical</code> with security commands to fail 
+          Use <code className="text-white">--fail-on=critical</code> with security commands to fail 
           the build only on critical findings. Options: low, medium, high, critical.
         </Callout>
       </section>

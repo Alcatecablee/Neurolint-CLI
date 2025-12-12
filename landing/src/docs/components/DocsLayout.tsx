@@ -75,7 +75,7 @@ export function DocsLayout({ children, title, description }: DocsLayoutProps) {
             <div className="flex items-center gap-2">
               <Link 
                 to="/security"
-                className="px-3 py-1.5 text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-colors text-sm font-medium"
+                className="px-3 py-1.5 text-gray-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-colors text-sm font-medium"
               >
                 Security
               </Link>
