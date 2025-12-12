@@ -20,6 +20,8 @@ import { ModalDemo } from "./components/ModalDemo";
 import { LayersDocSection } from "./components/LayersDocSection";
 import { LandingFooter } from "./LandingFooter";
 import { DemoCarousel } from "./components/DemoCarousel";
+import { TestimonialsSection } from "./components/TestimonialsSection";
+import { TrustMetrics } from "./components/TrustMetrics";
 
 import {
   Target,
