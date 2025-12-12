@@ -5128,7 +5128,14 @@ async function handleSecurityCreateBaseline(targetPath, options, spinner, args) 
     });
     
     const result = await layer8.createBaseline(resolvedPath, {
-      output: outputPath
+      output: outputPath,
+      onProgress: ({ filesScanned, done }) => {
+        if (done) {
+          spinner.text = `Indexing ${filesScanned} files for baseline...`;
+        } else {
+          spinner.text = `Scanning files... (${filesScanned} indexed)`;
+        }
+      }
     });
     
     if (result.success) {
@@ -5184,7 +5191,15 @@ async function handleSecurityCompareBaseline(targetPath, options, spinner, args)
       verbose: isVerbose
     });
     
-    const result = await layer8.compareBaseline(resolvedPath, baselinePath);
+    const result = await layer8.compareBaseline(resolvedPath, baselinePath, {
+      onProgress: ({ filesScanned, currentFile, done }) => {
+        if (done) {
+          spinner.text = `Comparing ${filesScanned} files against baseline...`;
+        } else {
+          spinner.text = `Scanning files... (${filesScanned} scanned)`;
+        }
+      }
+    });
     
     spinner.stop();
     

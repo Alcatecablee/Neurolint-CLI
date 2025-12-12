@@ -49,8 +49,10 @@ class HashUtils {
   }
   
   static async hashDirectory(dirPath, options = {}) {
-    const { include = ['**/*'], exclude = [] } = options;
+    const { include = ['**/*'], exclude = [], onProgress } = options;
     const hashes = {};
+    let fileCount = 0;
+    let lastUpdate = Date.now();
     
     async function walkDir(currentPath) {
       try {
@@ -76,6 +78,11 @@ class HashUtils {
             const hash = await HashUtils.hashFile(fullPath);
             if (hash) {
               hashes[relativePath] = hash;
+              fileCount++;
+              if (onProgress && Date.now() - lastUpdate > 500) {
+                onProgress({ filesScanned: fileCount, currentFile: relativePath });
+                lastUpdate = Date.now();
+              }
             }
           }
         }
@@ -84,6 +91,9 @@ class HashUtils {
     }
     
     await walkDir(dirPath);
+    if (onProgress) {
+      onProgress({ filesScanned: fileCount, currentFile: null, done: true });
+    }
     return hashes;
   }
   

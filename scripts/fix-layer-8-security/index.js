@@ -307,7 +307,8 @@ class Layer8SecurityForensics {
     await fs.mkdir(path.dirname(outputPath), { recursive: true });
     
     const hashes = await HashUtils.hashDirectory(targetPath, {
-      exclude: this.options.exclude
+      exclude: this.options.exclude,
+      onProgress: options.onProgress
     });
     
     const baseline = {
@@ -336,7 +337,8 @@ class Layer8SecurityForensics {
     const baseline = JSON.parse(baselineContent);
     
     const currentHashes = await HashUtils.hashDirectory(targetPath, {
-      exclude: this.options.exclude
+      exclude: this.options.exclude,
+      onProgress: options.onProgress
     });
     
     const comparison = HashUtils.compareHashes(baseline.files, currentHashes);
