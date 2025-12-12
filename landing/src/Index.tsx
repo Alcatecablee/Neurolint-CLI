@@ -656,24 +656,6 @@ export default function Index() {
       {/* Testimonials Section - High up for trust building */}
       <TestimonialsSection />
 
-      {/* Live Demo Carousel Section */}
-      <section id="comprehensive-demo" className="py-12 sm:py-16 md:py-24 px-4 relative">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10 md:mb-14">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 tracking-tight text-white">
-              See It In Action
-            </h2>
-            <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto">
-              Watch the complete security workflow: patch, scan, and protect
-            </p>
-          </div>
-          
-          <DemoCarousel />
-          
-          <InstallCTA className="mt-12" />
-        </div>
-      </section>
-
       {/* Interactive Demo Section */}
       <div ref={demoSectionRef} className={`transition-all duration-1000 transform ${
         demoSectionInView
