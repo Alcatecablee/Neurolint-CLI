@@ -279,15 +279,31 @@ export default function Index() {
     };
   }, []);
 
-  const [securityBannerVisible, setSecurityBannerVisible] = React.useState(true);
+  const [securityBannerVisible, setSecurityBannerVisible] = React.useState(() => {
+    // Only show security modal once per session (less intrusive)
+    if (typeof window !== 'undefined') {
+      const hasSeenModal = sessionStorage.getItem('neurolint-security-modal-seen');
+      return !hasSeenModal;
+    }
+    return false;
+  });
+
+  const handleSecurityModalClose = () => {
+    setSecurityBannerVisible(false);
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('neurolint-security-modal-seen', 'true');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden" id="main-content">
-      {/* Security Alert Modal */}
-      {securityBannerVisible && <SecurityAlertModal onClose={() => setSecurityBannerVisible(false)} />}
+      {/* Security Alert Modal - Only show once per session */}
+      {securityBannerVisible && <SecurityAlertModal onClose={handleSecurityModalClose} />}
       
-      {/* Beta Banner */}
-      {bannerVisible && <BetaBanner onClose={() => setBannerVisible(false)} />}
+      {/* Beta Banner - Only show on desktop, not with security modal */}
+      {bannerVisible && !securityBannerVisible && window.innerWidth >= 768 && (
+        <BetaBanner onClose={() => setBannerVisible(false)} />
+      )}
 
       {/* Global Background Gradients */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
