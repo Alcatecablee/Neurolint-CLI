@@ -182,25 +182,25 @@ const useInView = (threshold = 0.1) => {
   return [ref, isInView] as const;
 };
 
-// TypewriterHeadline Component
+// Headline Component - Static main headline with animated sub-text
 const TypewriterHeadline = () => {
   const [currentText, setCurrentText] = React.useState("");
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
 
   const words = [
-    "Stop Hydration Crashes",
-    "Kill Missing Keys",
-    "Fix ESLint Errors",
-    "Prevent Deploy Bugs",
-    "Ship Clean Code",
+    "hydration crashes",
+    "missing key errors", 
+    "ESLint warnings",
+    "deploy failures",
+    "React 19 issues",
   ];
 
   React.useEffect(() => {
     let timeout: NodeJS.Timeout;
-    const typingSpeed = 100;
-    const deletingSpeed = 50;
-    const delayBetweenWords = 2000;
+    const typingSpeed = 80;
+    const deletingSpeed = 40;
+    const delayBetweenWords = 2500;
 
     const currentWord = words[currentWordIndex];
     if (!currentWord) return;
@@ -230,10 +230,17 @@ const TypewriterHeadline = () => {
   }, [currentIndex, currentText, currentWordIndex, words]);
 
   return (
-    <div className="mb-8 md:mb-12 h-[48px] xs:h-[56px] sm:h-[72px] md:h-[84px] lg:h-[100px] flex items-center justify-center">
-      <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white whitespace-nowrap">
-        {currentText}
+    <div className="mb-8 md:mb-12">
+      <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white mb-4">
+        Fix Your React Code Automatically
       </h1>
+      <p className="text-lg sm:text-xl md:text-2xl text-gray-400">
+        Eliminate{" "}
+        <span className="text-white font-semibold inline-block min-w-[180px] sm:min-w-[220px] md:min-w-[280px]">
+          {currentText}
+          <span className="animate-pulse text-gray-500">|</span>
+        </span>
+      </p>
     </div>
   );
 };
