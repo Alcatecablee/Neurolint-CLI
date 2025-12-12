@@ -189,11 +189,12 @@ const TypewriterHeadline = () => {
   const [currentWordIndex, setCurrentWordIndex] = React.useState(0);
 
   const words = [
-    "hydration crashes",
-    "missing key errors", 
-    "ESLint warnings",
-    "deploy failures",
-    "React 19 issues",
+    "hydration crashes in seconds",
+    "missing React keys automatically", 
+    "80+ security vulnerabilities",
+    "React 19 breaking changes",
+    "Next.js 15.5 deprecations",
+    "SSR guard issues instantly",
   ];
 
   React.useEffect(() => {
@@ -238,7 +239,6 @@ const TypewriterHeadline = () => {
         Eliminate{" "}
         <span className="text-white font-semibold inline-block min-w-[180px] sm:min-w-[220px] md:min-w-[280px]">
           {currentText}
-          <span className="animate-pulse text-gray-500">|</span>
         </span>
       </p>
     </div>
