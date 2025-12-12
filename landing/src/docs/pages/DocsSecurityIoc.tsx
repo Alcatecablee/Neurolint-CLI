@@ -37,7 +37,7 @@ export function DocsSecurityIoc() {
         <h2 className="text-2xl font-bold text-white mb-4">Scan Modes</h2>
         
         <div className="space-y-4">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Quick Scan</h3>
               <span className="text-xs text-gray-500">~30 seconds</span>
@@ -46,7 +46,7 @@ export function DocsSecurityIoc() {
             <CommandBlock command="neurolint security:scan-compromise ./src --quick" />
           </div>
 
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Standard Scan (Default)</h3>
               <span className="text-xs text-gray-500">~2 minutes</span>
@@ -55,7 +55,7 @@ export function DocsSecurityIoc() {
             <CommandBlock command="neurolint security:scan-compromise ./src" />
           </div>
 
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Deep Scan</h3>
               <span className="text-xs text-gray-500">~3 minutes</span>
@@ -64,7 +64,7 @@ export function DocsSecurityIoc() {
             <CommandBlock command="neurolint security:scan-compromise ./src --deep" />
           </div>
 
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Paranoid Scan</h3>
               <span className="text-xs text-gray-500">~5-10 minutes</span>
@@ -83,43 +83,43 @@ export function DocsSecurityIoc() {
         </p>
 
         <div className="space-y-2 text-sm">
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-red-400">IOC-001-010</span>
             <span className="text-gray-300">Code Injection (eval, Function constructor, child_process, setTimeout strings)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-orange-400">IOC-011-015</span>
             <span className="text-gray-300">Obfuscation (base64, hex encoding, unicode escapes, JSFuck)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-red-400">IOC-016-030</span>
             <span className="text-gray-300">RSC-Specific CVE-2025-55182 (rogue server actions, credential harvesting)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-orange-400">IOC-031-045</span>
             <span className="text-gray-300">Next.js Specific (malicious rewrites, middleware hijacking, edge runtime abuse)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-red-400">IOC-046-052</span>
             <span className="text-gray-300">Backdoors (reverse shells, webshells, hidden endpoints, SSH keys)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-red-400">IOC-053-058</span>
             <span className="text-gray-300">Data Exfiltration (network to IPs, env var theft, DNS exfil, beacons)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-orange-400">IOC-059-063</span>
             <span className="text-gray-300">Supply Chain (postinstall hooks, git hook tampering, typosquatting)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-red-400">IOC-064-067</span>
             <span className="text-gray-300">Persistence (system path writes, systemd services, registry, profile files)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-red-400">IOC-068-070</span>
             <span className="text-gray-300">Crypto Mining (mining libraries, worker miners, stratum protocol)</span>
           </div>
-          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-3 p-3 bg-zinc-900/50 border border-black rounded-lg">
             <span className="font-mono w-24 text-red-400">IOC-071-080</span>
             <span className="text-gray-300">RSC Extended (WebSocket C2, service worker attacks, PWA tampering, cache poisoning)</span>
           </div>
@@ -133,7 +133,7 @@ export function DocsSecurityIoc() {
           Here's an example of a complete incident response scan:
         </p>
 
-        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+        <div className="rounded-lg overflow-hidden border border-black mb-6">
           <img 
             src="/attached_assets/Screenshot_2025-12-09_033436_1765291802535.png" 
             alt="Security scan showing vulnerable packages detected"

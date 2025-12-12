@@ -52,7 +52,7 @@ export const TestimonialsSection: React.FC = () => {
     <section className="py-16 md:py-24 px-4 bg-gradient-to-b from-black via-zinc-900/20 to-black" data-testid="testimonials-section">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-xl backdrop-blur-sm mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-black rounded-xl backdrop-blur-sm mb-6">
             <Quote className="w-4 h-4 text-blue-400" />
             <span className="text-sm font-medium text-zinc-400">
               Loved by Developers
@@ -71,7 +71,7 @@ export const TestimonialsSection: React.FC = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 md:p-8 backdrop-blur-sm hover:border-zinc-700 transition-all duration-300 hover:shadow-xl"
+              className="bg-zinc-900/40 border border-black rounded-2xl p-6 md:p-8 backdrop-blur-sm hover:border-black transition-all duration-300 hover:shadow-xl"
               data-testid={`testimonial-${index}`}
             >
               <Quote className="w-8 h-8 text-blue-400/30 mb-4" />
@@ -81,7 +81,7 @@ export const TestimonialsSection: React.FC = () => {
               </blockquote>
               
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center border border-zinc-700">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center border border-black">
                   <span className="text-white font-bold text-lg">
                     {testimonial.author.charAt(0)}
                   </span>

@@ -36,7 +36,7 @@ export function DocsIntro() {
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4 my-8">
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Zap className="w-5 h-5 text-yellow-400" />
               <h3 className="font-medium text-white">AST-First Transformations</h3>
@@ -46,7 +46,7 @@ export function DocsIntro() {
               AST fails. All changes are syntax-validated before saving.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Layers className="w-5 h-5 text-blue-400" />
               <h3 className="font-medium text-white">8-Layer Architecture</h3>
@@ -56,7 +56,7 @@ export function DocsIntro() {
               specific issue types for predictable, targeted fixes.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <RefreshCw className="w-5 h-5 text-green-400" />
               <h3 className="font-medium text-white">Automatic Backups</h3>
@@ -66,7 +66,7 @@ export function DocsIntro() {
               Centralized backup management with list, restore, and clean operations.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <Shield className="w-5 h-5 text-red-400" />
               <h3 className="font-medium text-white">Security Forensics</h3>
@@ -146,49 +146,49 @@ Running Layer 3 (Component Fixes) on page.tsx
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Layer</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Name</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">What It Fixes</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">1</td>
                 <td className="py-3 px-4 text-white">Configuration</td>
                 <td className="py-3 px-4 text-gray-300">tsconfig.json, next.config.js, package.json modernization</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">2</td>
                 <td className="py-3 px-4 text-white">Patterns</td>
                 <td className="py-3 px-4 text-gray-300">Console statements, legacy context, React.createFactory</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">3</td>
                 <td className="py-3 px-4 text-white">Components</td>
                 <td className="py-3 px-4 text-gray-300">Missing keys, accessibility (alt, aria-label), forwardRef</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">4</td>
                 <td className="py-3 px-4 text-white">Hydration</td>
                 <td className="py-3 px-4 text-gray-300">SSR guards for window, document, localStorage, sessionStorage</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">5</td>
                 <td className="py-3 px-4 text-white">Next.js</td>
                 <td className="py-3 px-4 text-gray-300">'use client' directives, ReactDOM.render → createRoot</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">6</td>
                 <td className="py-3 px-4 text-white">Testing</td>
                 <td className="py-3 px-4 text-gray-300">Error boundaries, prop types, loading states</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">7</td>
                 <td className="py-3 px-4 text-white">Adaptive</td>
                 <td className="py-3 px-4 text-gray-300">Learns patterns from fixes, applies with confidence scoring</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-red-400">8</td>
                 <td className="py-3 px-4 text-white">Security Forensics</td>
                 <td className="py-3 px-4 text-gray-300">IoC detection, CVE-2025-55182, supply chain attacks (read-only)</td>
@@ -212,7 +212,7 @@ Running Layer 3 (Component Fixes) on page.tsx
         </p>
 
         <div className="space-y-4">
-          <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 bg-blue-900/50 rounded-full flex items-center justify-center text-blue-400 font-bold">1</div>
             <div>
               <h3 className="font-medium text-white">AST Transformation</h3>
@@ -221,7 +221,7 @@ Running Layer 3 (Component Fixes) on page.tsx
               </p>
             </div>
           </div>
-          <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 bg-yellow-900/50 rounded-full flex items-center justify-center text-yellow-400 font-bold">2</div>
             <div>
               <h3 className="font-medium text-white">Regex Fallback</h3>
@@ -230,7 +230,7 @@ Running Layer 3 (Component Fixes) on page.tsx
               </p>
             </div>
           </div>
-          <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex items-start gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 bg-green-900/50 rounded-full flex items-center justify-center text-green-400 font-bold">3</div>
             <div>
               <h3 className="font-medium text-white">Validation & Revert</h3>
@@ -347,7 +347,7 @@ Running Layer 3 (Component Fixes) on page.tsx
         <div className="grid gap-3">
           <Link 
             to="/docs/installation"
-            className="flex items-center justify-between p-4 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-colors group"
+            className="flex items-center justify-between p-4 bg-zinc-900 border border-black rounded-lg hover:bg-zinc-800 hover:border-black transition-colors group"
           >
             <div>
               <h3 className="font-medium text-white">Installation</h3>
@@ -357,7 +357,7 @@ Running Layer 3 (Component Fixes) on page.tsx
           </Link>
           <Link 
             to="/docs/quickstart"
-            className="flex items-center justify-between p-4 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-colors group"
+            className="flex items-center justify-between p-4 bg-zinc-900 border border-black rounded-lg hover:bg-zinc-800 hover:border-black transition-colors group"
           >
             <div>
               <h3 className="font-medium text-white">Quick Start</h3>
@@ -367,7 +367,7 @@ Running Layer 3 (Component Fixes) on page.tsx
           </Link>
           <Link 
             to="/docs/cli-reference"
-            className="flex items-center justify-between p-4 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-colors group"
+            className="flex items-center justify-between p-4 bg-zinc-900 border border-black rounded-lg hover:bg-zinc-800 hover:border-black transition-colors group"
           >
             <div>
               <h3 className="font-medium text-white">CLI Reference</h3>
@@ -377,7 +377,7 @@ Running Layer 3 (Component Fixes) on page.tsx
           </Link>
           <Link 
             to="/docs/architecture"
-            className="flex items-center justify-between p-4 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-colors group"
+            className="flex items-center justify-between p-4 bg-zinc-900 border border-black rounded-lg hover:bg-zinc-800 hover:border-black transition-colors group"
           >
             <div>
               <h3 className="font-medium text-white">The 8-Layer Architecture</h3>

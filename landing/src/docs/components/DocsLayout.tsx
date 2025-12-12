@@ -50,7 +50,7 @@ export function DocsLayout({ children, title, description }: DocsLayoutProps) {
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="fixed inset-0 bg-gradient-to-br from-zinc-900/20 via-black to-zinc-900/10 pointer-events-none" />
-      <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
+      <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl border-b border-black">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14">
             <div className="flex items-center gap-4">

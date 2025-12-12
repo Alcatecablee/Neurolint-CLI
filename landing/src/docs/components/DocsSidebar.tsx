@@ -120,7 +120,7 @@ export function DocsSidebar({ isOpen, onClose }: DocsSidebarProps) {
       <aside
         className={`
           fixed top-14 left-0 z-40 w-64 h-[calc(100vh-3.5rem)] 
-          bg-black/90 backdrop-blur-xl border-r border-white/5 overflow-y-auto
+          bg-black/90 backdrop-blur-xl border-r border-black overflow-y-auto
           transition-transform duration-200 ease-out
           lg:translate-x-0
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -169,7 +169,7 @@ export function DocsSidebar({ isOpen, onClose }: DocsSidebarProps) {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/5 mt-6">
+        <div className="p-4 border-t border-black mt-6">
           <div className="text-xs text-gray-500">
             <span className="block mb-1">Version 1.4.9</span>
             <a

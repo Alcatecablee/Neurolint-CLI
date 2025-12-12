@@ -147,7 +147,7 @@ export function DocsArchitecture() {
           issues, allowing you to apply fixes incrementally or all at once.
         </p>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 mb-6">
+        <div className="bg-zinc-900 border border-black rounded-lg p-6 mb-6">
           <div className="flex flex-col gap-2">
             {layers.map((layer, idx) => (
               <div 
@@ -182,7 +182,7 @@ export function DocsArchitecture() {
           your code is never left in a broken state:
         </p>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-6">
+        <div className="bg-zinc-900 border border-black rounded-lg p-5 mb-6">
           <ol className="space-y-4 text-gray-400 text-sm">
             <li className="flex items-start gap-3">
               <span className="w-8 h-8 flex items-center justify-center bg-blue-900/50 rounded text-blue-400 font-mono text-sm">1</span>
@@ -226,9 +226,9 @@ export function DocsArchitecture() {
           {layers.map((layer) => (
             <div 
               key={layer.num}
-              className={`border rounded-lg overflow-hidden ${layer.num === 8 ? 'border-red-900/50' : 'border-zinc-800'}`}
+              className={`border rounded-lg overflow-hidden ${layer.num === 8 ? 'border-red-900/50' : 'border-black'}`}
             >
-              <div className={`flex items-center gap-4 px-5 py-4 border-b ${layer.num === 8 ? 'bg-red-900/20 border-red-900/50' : 'bg-zinc-900/50 border-zinc-800'}`}>
+              <div className={`flex items-center gap-4 px-5 py-4 border-b ${layer.num === 8 ? 'bg-red-900/20 border-red-900/50' : 'bg-zinc-900/50 border-black'}`}>
                 <div className={`w-10 h-10 flex items-center justify-center rounded-lg font-mono text-lg ${layer.num === 8 ? 'bg-red-900/50 text-red-400' : 'bg-zinc-800 text-white'}`}>
                   {layer.num}
                 </div>
@@ -275,7 +275,7 @@ export function DocsArchitecture() {
           Every fix operation creates automatic backups before modifying files:
         </p>
 
-        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-5 mb-4">
+        <div className="bg-zinc-900 border border-black rounded-lg p-5 mb-4">
           <ul className="space-y-2 text-gray-400 text-sm">
             <li className="flex items-start gap-2">
               <span className="text-gray-600 mt-0.5">-</span>

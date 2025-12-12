@@ -45,37 +45,37 @@ export function DocsCommandFix() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Option</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--all-layers</td>
                 <td className="py-3 px-4 text-gray-400">Run all 8 transformation layers</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--layers=N,M</td>
                 <td className="py-3 px-4 text-gray-400">Run specific layers (comma-separated)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--dry-run</td>
                 <td className="py-3 px-4 text-gray-400">Preview changes without applying them</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--verbose</td>
                 <td className="py-3 px-4 text-gray-400">Show detailed output for each transformation</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--no-backup</td>
                 <td className="py-3 px-4 text-gray-400">Skip backup creation (not recommended)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--backup</td>
                 <td className="py-3 px-4 text-gray-400">Create backup before changes (default)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">--production</td>
                 <td className="py-3 px-4 text-gray-400">Use production-grade backups with enhanced logging and retention</td>
               </tr>
@@ -88,28 +88,28 @@ export function DocsCommandFix() {
         <h2 className="text-2xl font-bold text-white mb-4">Safety Features</h2>
         
         <div className="grid gap-4 my-6">
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Automatic Backups</h3>
             <p className="text-sm text-gray-400">
               Every fix creates a backup with SHA-256 checksums. Restore anytime 
               with <code className="text-gray-300 bg-zinc-800 px-1 rounded">neurolint restore --interactive</code>
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Dry-Run Mode</h3>
             <p className="text-sm text-gray-400">
               Preview exactly what will change before applying. Always use 
               <code className="text-gray-300 bg-zinc-800 px-1 rounded">--dry-run</code> first.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">AST-Based Transformations</h3>
             <p className="text-sm text-gray-400">
               Code is parsed into an Abstract Syntax Tree before modification, 
               preserving structure and formatting.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Validation</h3>
             <p className="text-sm text-gray-400">
               Each transformation is validated for syntax errors before writing. 

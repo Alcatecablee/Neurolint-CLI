@@ -130,19 +130,19 @@ export function DocsLayerHydration() {
         <h2 className="text-2xl font-bold text-white mb-4">Key Features</h2>
         
         <div className="space-y-3">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Automatic typeof guards</h3>
             <p className="text-sm text-gray-400">Wraps window, document, localStorage, sessionStorage access</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">useEffect cleanup</h3>
             <p className="text-sm text-gray-400">Generates return functions for event listeners</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Nested property handling</h3>
             <p className="text-sm text-gray-400">Handles deep access like window.navigator.geolocation</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Smart detection</h3>
             <p className="text-sm text-gray-400">Skips already guarded code to avoid double-wrapping</p>
           </div>

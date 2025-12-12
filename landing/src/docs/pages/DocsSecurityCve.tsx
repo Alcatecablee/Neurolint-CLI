@@ -46,24 +46,24 @@ export function DocsSecurityCve() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Package</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Vulnerable</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Patched</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">react</td>
                 <td className="py-3 px-4 text-gray-400">19.0.0, 19.1.0, 19.1.1, 19.2.0</td>
                 <td className="py-3 px-4 text-gray-300">19.0.1, 19.1.2, 19.2.1</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">next</td>
                 <td className="py-3 px-4 text-gray-400">15.0-16.2 (various)</td>
                 <td className="py-3 px-4 text-gray-300">15.0.5+, 15.1.9+, 16.0.7+</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">react-server-dom-webpack</td>
                 <td className="py-3 px-4 text-gray-400">19.0.0, 19.1.0, 19.2.0</td>
                 <td className="py-3 px-4 text-gray-300">19.0.1, 19.1.2, 19.2.1</td>
@@ -123,7 +123,7 @@ export function DocsSecurityCve() {
         <h2 className="text-2xl font-bold text-white mb-4">Example Output</h2>
         
         <p className="text-gray-400 text-sm mb-4">Scanning for vulnerable packages:</p>
-        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+        <div className="rounded-lg overflow-hidden border border-black mb-6">
           <img 
             src="/attached_assets/Screenshot_2025-12-09_033436_1765291802535.png" 
             alt="CVE-2025-55182 scan showing vulnerable packages detected"
@@ -132,7 +132,7 @@ export function DocsSecurityCve() {
         </div>
 
         <p className="text-gray-400 text-sm mb-4">Preview changes with --dry-run:</p>
-        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+        <div className="rounded-lg overflow-hidden border border-black mb-6">
           <img 
             src="/attached_assets/Screenshot_2025-12-09_034116_1765291802533.png" 
             alt="CVE-2025-55182 dry-run showing proposed changes"
@@ -141,7 +141,7 @@ export function DocsSecurityCve() {
         </div>
 
         <p className="text-gray-400 text-sm mb-4">After applying the fix:</p>
-        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+        <div className="rounded-lg overflow-hidden border border-black mb-6">
           <img 
             src="/attached_assets/Screenshot_2025-12-09_033620_1765291802534.png" 
             alt="CVE-2025-55182 fix applied showing patched packages"
@@ -150,7 +150,7 @@ export function DocsSecurityCve() {
         </div>
 
         <p className="text-gray-400 text-sm mb-4">Verification scan showing project is safe:</p>
-        <div className="rounded-lg overflow-hidden border border-zinc-800">
+        <div className="rounded-lg overflow-hidden border border-black">
           <img 
             src="/attached_assets/Screenshot_2025-12-09_034957_1765291802531.png" 
             alt="CVE-2025-55182 verification showing no vulnerable packages"

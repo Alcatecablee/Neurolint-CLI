@@ -33,28 +33,28 @@ export function DocsHowItWorks() {
         </p>
 
         <div className="grid sm:grid-cols-2 gap-4">
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Rule-Based</h3>
             <p className="text-sm text-gray-400">
               Every transformation follows predefined rules that have been tested 
               against thousands of code patterns.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Predictable</h3>
             <p className="text-sm text-gray-400">
               Run the same command twice, get the same result. No randomness, 
               no temperature settings, no surprises.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Safe</h3>
             <p className="text-sm text-gray-400">
               Automatic backups before every change. Validation after every 
               transformation. Your code is never left in a broken state.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Auditable</h3>
             <p className="text-sm text-gray-400">
               Every change is logged with before/after state. Review exactly 
@@ -72,7 +72,7 @@ export function DocsHowItWorks() {
         </p>
 
         <div className="space-y-4">
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-lg font-mono text-lg text-white">1</div>
             <div>
               <h3 className="font-medium text-white">Parse</h3>
@@ -82,7 +82,7 @@ export function DocsHowItWorks() {
               </p>
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-lg font-mono text-lg text-white">2</div>
             <div>
               <h3 className="font-medium text-white">Transform</h3>
@@ -92,7 +92,7 @@ export function DocsHowItWorks() {
               </p>
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-lg font-mono text-lg text-white">3</div>
             <div>
               <h3 className="font-medium text-white">Validate</h3>
@@ -102,7 +102,7 @@ export function DocsHowItWorks() {
               </p>
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-lg font-mono text-lg text-white">4</div>
             <div>
               <h3 className="font-medium text-white">Backup</h3>
@@ -112,7 +112,7 @@ export function DocsHowItWorks() {
               </p>
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-lg font-mono text-lg text-white">5</div>
             <div>
               <h3 className="font-medium text-white">Apply</h3>
@@ -146,19 +146,19 @@ export function DocsHowItWorks() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Approach</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Pros</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Cons</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-medium text-white">AST Parsing</td>
                 <td className="py-3 px-4 text-gray-400">Understands code structure, handles edge cases, preserves formatting</td>
                 <td className="py-3 px-4 text-gray-400">Slightly slower, requires valid syntax</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-medium text-white">Regex Replace</td>
                 <td className="py-3 px-4 text-gray-400">Fast, works on any text</td>
                 <td className="py-3 px-4 text-gray-400">Can break code, misses context, false positives</td>

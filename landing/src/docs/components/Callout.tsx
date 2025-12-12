@@ -36,7 +36,7 @@ export function Callout({ type = "info", title, children }: CalloutProps) {
   const label = title || calloutLabels[type];
 
   return (
-    <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-4 my-6">
+    <div className="rounded-lg border border-black bg-zinc-900/50 p-4 my-6">
       <div className="flex-1 min-w-0">
         <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
           {label}

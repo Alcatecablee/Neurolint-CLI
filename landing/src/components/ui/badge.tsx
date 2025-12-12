@@ -32,7 +32,7 @@ export function Badge({
     default: "border-transparent bg-zinc-700 text-white",
     secondary: "border-transparent bg-zinc-800 text-gray-300",
     destructive: "border-transparent bg-red-600 text-white",
-    outline: "border-zinc-600 text-gray-300",
+    outline: "border-black text-gray-300",
   };
 
   return (

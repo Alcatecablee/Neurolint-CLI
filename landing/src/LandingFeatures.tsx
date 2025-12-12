@@ -183,7 +183,7 @@ export function LandingFeatures() {
                     <label className="flex items-center gap-1 ml-1">
                       <input
                         type="checkbox"
-                        className="form-checkbox rounded border-zinc-400 focus:ring-2 focus:ring-zinc-400 accent-zinc-400 w-5 h-5 bg-[#26233b]"
+                        className="form-checkbox rounded border-black focus:ring-2 focus:ring-zinc-400 accent-zinc-400 w-5 h-5 bg-[#26233b]"
                         checked={experimentalStates[layer.name] || false}
                         onChange={() => handleToggle(layer.name)}
                         disabled={true}

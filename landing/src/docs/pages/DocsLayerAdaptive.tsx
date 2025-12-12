@@ -89,7 +89,7 @@ export function DocsLayerAdaptive() {
         </Callout>
 
         <div className="space-y-4 mt-6">
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">1</div>
             <div>
               <h3 className="font-medium text-white">Receive Results</h3>
@@ -98,7 +98,7 @@ export function DocsLayerAdaptive() {
               </p>
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">2</div>
             <div>
               <h3 className="font-medium text-white">Extract Patterns</h3>
@@ -107,7 +107,7 @@ export function DocsLayerAdaptive() {
               </p>
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">3</div>
             <div>
               <h3 className="font-medium text-white">Score & Store</h3>
@@ -116,7 +116,7 @@ export function DocsLayerAdaptive() {
               </p>
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">4</div>
             <div>
               <h3 className="font-medium text-white">Apply</h3>
@@ -159,23 +159,23 @@ export function DocsLayerAdaptive() {
         <h2 className="text-2xl font-bold text-white mb-4">Key Features</h2>
         
         <div className="space-y-3">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Smart pattern extraction</h3>
             <p className="text-sm text-gray-400">Only learns from files with actual React hooks - no overly broad patterns</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Confidence scoring</h3>
             <p className="text-sm text-gray-400">Only applies rules with minimum 70% confidence threshold</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Accurate metrics</h3>
             <p className="text-sm text-gray-400">Suggestions tracked separately from actual changes - no inflated counts</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Debug logging</h3>
             <p className="text-sm text-gray-400">Verbose error logging via NEUROLINT_DEBUG environment variable</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Production-grade reliability</h3>
             <p className="text-sm text-gray-400">Backed by 41 comprehensive unit tests covering all functionality</p>
           </div>

@@ -30,7 +30,7 @@ export function DocsGuideTroubleshooting() {
           If you get "command not found" after global installation:
         </p>
 
-        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg mb-4">
+        <div className="p-4 bg-zinc-900/50 border border-black rounded-lg mb-4">
           <h3 className="font-medium text-white mb-2">Check npm global path</h3>
           <CommandBlock command="npm config get prefix" />
           <p className="text-gray-400 text-sm mt-2">
@@ -38,7 +38,7 @@ export function DocsGuideTroubleshooting() {
           </p>
         </div>
 
-        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+        <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
           <h3 className="font-medium text-white mb-2">Use npx instead</h3>
           <CommandBlock command="npx @neurolint/cli analyze ./src" />
           <p className="text-gray-400 text-sm mt-2">
@@ -54,7 +54,7 @@ export function DocsGuideTroubleshooting() {
           If you encounter EACCES permission errors:
         </p>
 
-        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+        <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
           <h3 className="font-medium text-white mb-2">Configure npm to use a different directory</h3>
           <CommandBlock command="mkdir ~/.npm-global && npm config set prefix '~/.npm-global'" />
           <p className="text-gray-400 text-sm mt-2">
@@ -70,12 +70,12 @@ export function DocsGuideTroubleshooting() {
           NeuroLint requires Node.js 18+:
         </p>
 
-        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+        <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
           <h3 className="font-medium text-white mb-2">Check your version</h3>
           <CommandBlock command="node --version" />
         </div>
 
-        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg mt-4">
+        <div className="p-4 bg-zinc-900/50 border border-black rounded-lg mt-4">
           <h3 className="font-medium text-white mb-2">Update using nvm</h3>
           <CommandBlock command="nvm install 20 && nvm use 20" />
         </div>
@@ -143,12 +143,12 @@ export function DocsGuideTroubleshooting() {
           If you can't restore from a backup:
         </p>
 
-        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg mb-4">
+        <div className="p-4 bg-zinc-900/50 border border-black rounded-lg mb-4">
           <h3 className="font-medium text-white mb-2">List available backups</h3>
           <CommandBlock command="neurolint backup list" />
         </div>
 
-        <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+        <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
           <h3 className="font-medium text-white mb-2">Manual restore</h3>
           <p className="text-gray-400 text-sm mb-2">
             Backups are stored as plain files in .neurolint-backups/. 

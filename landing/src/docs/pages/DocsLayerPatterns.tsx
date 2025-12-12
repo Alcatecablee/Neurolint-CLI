@@ -127,19 +127,19 @@ function handleClick() {
         <h2 className="text-2xl font-bold text-white mb-4">React 19 Specific</h2>
         
         <div className="space-y-3">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">createFactory removal</h3>
             <p className="text-sm text-gray-400">Converts React.createFactory('div') to JSX components</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Legacy Context detection</h3>
             <p className="text-sm text-gray-400">Detects contextTypes and getChildContext (removed in React 19)</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Module pattern factories</h3>
             <p className="text-sm text-gray-400">Warns about module pattern factories (no longer supported)</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Context migration</h3>
             <p className="text-sm text-gray-400">Suggests migration to React.createContext() and useContext()</p>
           </div>

@@ -44,26 +44,26 @@ export function DocsLayerSecurity() {
         </p>
 
         <div className="grid sm:grid-cols-2 gap-4 my-8">
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">80+ IoC Signatures</h3>
             <p className="text-sm text-gray-400">
               Detect obfuscated eval, credential leaks, exfiltration patterns, and 
               post-exploitation behavior.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">AST-Based Detection</h3>
             <p className="text-sm text-gray-400">
               Deep analysis using Abstract Syntax Tree parsing, not just pattern matching.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Baseline Verification</h3>
             <p className="text-sm text-gray-400">
               Create integrity baselines and detect unauthorized changes.
             </p>
           </div>
-          <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-5 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Timeline Reconstruction</h3>
             <p className="text-sm text-gray-400">
               Trace compromise timeline through git history analysis.
@@ -82,39 +82,39 @@ export function DocsLayerSecurity() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Situation</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Command</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Purpose</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">Am I vulnerable to CVE-2025-55182?</td>
                 <td className="py-3 px-4"><code className="text-blue-400 text-xs">security:cve-2025-55182</code></td>
                 <td className="py-3 px-4 text-gray-400">Check and patch the vulnerability</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">Am I already compromised?</td>
                 <td className="py-3 px-4"><code className="text-blue-400 text-xs">security:scan-compromise</code></td>
                 <td className="py-3 px-4 text-gray-400">Quick scan for indicators of compromise</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">I need a full forensic investigation</td>
                 <td className="py-3 px-4"><code className="text-blue-400 text-xs">security:incident-response</code></td>
                 <td className="py-3 px-4 text-gray-400">Deep analysis with timeline reconstruction</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">I want to establish a clean baseline</td>
                 <td className="py-3 px-4"><code className="text-blue-400 text-xs">security:create-baseline</code></td>
                 <td className="py-3 px-4 text-gray-400">Create integrity hash baseline</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">Has my code changed unexpectedly?</td>
                 <td className="py-3 px-4"><code className="text-blue-400 text-xs">security:compare-baseline</code></td>
                 <td className="py-3 px-4 text-gray-400">Detect file tampering</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">How do I secure my server actions?</td>
                 <td className="py-3 px-4"><code className="text-blue-400 text-xs">security:harden-actions</code></td>
                 <td className="py-3 px-4 text-gray-400">Audit and secure server actions</td>
@@ -137,7 +137,7 @@ export function DocsLayerSecurity() {
           Example incident response output:
         </p>
 
-        <div className="rounded-lg overflow-hidden border border-zinc-800 mb-6">
+        <div className="rounded-lg overflow-hidden border border-black mb-6">
           <img 
             src="/attached_assets/Screenshot_2025-12-09_034612_1765291802532.png" 
             alt="Incident Response Report showing findings summary"
@@ -154,7 +154,7 @@ export function DocsLayerSecurity() {
         </p>
 
         <div className="space-y-4">
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Quick Scan</h3>
               <span className="text-xs text-gray-500">~30 seconds</span>
@@ -163,7 +163,7 @@ export function DocsLayerSecurity() {
             <CommandBlock command="neurolint security:scan-compromise ./src --quick" />
           </div>
 
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Standard Scan (Default)</h3>
               <span className="text-xs text-gray-500">~2 minutes</span>
@@ -172,7 +172,7 @@ export function DocsLayerSecurity() {
             <CommandBlock command="neurolint security:scan-compromise ./src" />
           </div>
 
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Deep Scan</h3>
               <span className="text-xs text-gray-500">~3 minutes</span>
@@ -181,7 +181,7 @@ export function DocsLayerSecurity() {
             <CommandBlock command="neurolint security:scan-compromise ./src --deep" />
           </div>
 
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <h3 className="font-medium text-white">Paranoid Scan</h3>
               <span className="text-xs text-gray-500">~5-10 minutes</span>
@@ -202,24 +202,24 @@ export function DocsLayerSecurity() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Code</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Meaning</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4"><span className="text-green-400 font-mono">0</span></td>
                 <td className="py-3 px-4 text-gray-300">No issues found (or only low severity)</td>
                 <td className="py-3 px-4 text-gray-400">All clear - safe to proceed</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4"><span className="text-yellow-400 font-mono">1</span></td>
                 <td className="py-3 px-4 text-gray-300">High severity issues detected</td>
                 <td className="py-3 px-4 text-gray-400">Review findings, may need remediation</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4"><span className="text-red-400 font-mono">2</span></td>
                 <td className="py-3 px-4 text-gray-300">Critical severity issues detected</td>
                 <td className="py-3 px-4 text-gray-400">Immediate action required</td>
@@ -339,7 +339,7 @@ export function DocsLayerSecurity() {
         </p>
 
         <div className="space-y-4">
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xs font-mono text-red-400 bg-red-400/10 px-2 py-0.5 rounded">BEHAV-023</span>
               <span className="text-sm text-gray-300">React 19 use() with User Input</span>
@@ -349,7 +349,7 @@ export function DocsLayerSecurity() {
             </p>
           </div>
 
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xs font-mono text-red-400 bg-red-400/10 px-2 py-0.5 rounded">BEHAV-024</span>
               <span className="text-sm text-gray-300">useActionState with Code Execution</span>
@@ -359,7 +359,7 @@ export function DocsLayerSecurity() {
             </p>
           </div>
 
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xs font-mono text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded">BEHAV-025</span>
               <span className="text-sm text-gray-300">useOptimistic XSS Risk</span>
@@ -369,7 +369,7 @@ export function DocsLayerSecurity() {
             </p>
           </div>
 
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xs font-mono text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded">BEHAV-026</span>
               <span className="text-sm text-gray-300">startTransition Data Leak</span>
@@ -379,7 +379,7 @@ export function DocsLayerSecurity() {
             </p>
           </div>
 
-          <div className="border border-zinc-800 rounded-lg p-4">
+          <div className="border border-black rounded-lg p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xs font-mono text-orange-400 bg-orange-400/10 px-2 py-0.5 rounded">BEHAV-027</span>
               <span className="text-sm text-gray-300">Server Cache Poisoning Risk</span>

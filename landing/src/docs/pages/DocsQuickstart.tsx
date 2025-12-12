@@ -33,17 +33,17 @@ export function DocsQuickstart() {
         </p>
 
         <div className="flex items-center gap-3 mb-8 text-sm">
-          <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg">
+          <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 border border-black rounded-lg">
             <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-400 font-mono">1</span>
             <span className="text-gray-300">Analyze</span>
           </div>
           <span className="text-gray-600">-</span>
-          <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg">
+          <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 border border-black rounded-lg">
             <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-400 font-mono">2</span>
             <span className="text-gray-300">Preview</span>
           </div>
           <span className="text-gray-600">-</span>
-          <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg">
+          <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 border border-black rounded-lg">
             <span className="w-6 h-6 flex items-center justify-center bg-zinc-800 rounded text-gray-400 font-mono">3</span>
             <span className="text-gray-300">Fix</span>
           </div>

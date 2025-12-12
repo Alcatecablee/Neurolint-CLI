@@ -63,26 +63,26 @@ export function DocsAstTransformations() {
         </p>
 
         <div className="space-y-4">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">@babel/parser</h3>
             <p className="text-sm text-gray-400">
               Parses JavaScript/TypeScript/JSX into AST with full support for modern syntax.
             </p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">@babel/traverse</h3>
             <p className="text-sm text-gray-400">
               Traverses the AST tree and allows us to visit specific node types 
               (e.g., all CallExpressions or JSXElements).
             </p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">@babel/types</h3>
             <p className="text-sm text-gray-400">
               Provides utilities to check node types and create new AST nodes safely.
             </p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">@babel/generator</h3>
             <p className="text-sm text-gray-400">
               Converts the modified AST back into code while preserving formatting.
@@ -187,7 +187,7 @@ export function DocsAstTransformations() {
         </p>
 
         <div className="space-y-4">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Arrow function bodies</h3>
             <p className="text-sm text-gray-400 mb-2">
               When removing console.log from an arrow function, we can't just delete it:
@@ -199,7 +199,7 @@ export function DocsAstTransformations() {
 // Right:  const fn = () => {} // Empty block`}
             />
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Nested member expressions</h3>
             <p className="text-sm text-gray-400 mb-2">
               Deep property access needs the root object guarded:
@@ -210,7 +210,7 @@ export function DocsAstTransformations() {
 // Must guard 'window', not the inner properties`}
             />
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Already guarded code</h3>
             <p className="text-sm text-gray-400 mb-2">
               Skip transformations when code is already safe:
@@ -236,29 +236,29 @@ if (typeof window !== 'undefined') {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Feature</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">ESLint</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">NeuroLint</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">Complex transformations</td>
                 <td className="py-3 px-4 text-gray-400">Limited (simple fixes only)</td>
                 <td className="py-3 px-4 text-gray-300">Full AST rewriting</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">Multi-file changes</td>
                 <td className="py-3 px-4 text-gray-400">No</td>
                 <td className="py-3 px-4 text-gray-300">Yes (imports, configs)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">Migration support</td>
                 <td className="py-3 px-4 text-gray-400">No</td>
                 <td className="py-3 px-4 text-gray-300">React 19, Next.js 16</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 text-gray-300">Backup system</td>
                 <td className="py-3 px-4 text-gray-400">No</td>
                 <td className="py-3 px-4 text-gray-300">Automatic with restore</td>

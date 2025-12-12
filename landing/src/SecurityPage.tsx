@@ -228,7 +228,7 @@ const SecurityPage = () => {
                   onClick={() => setActiveWorkflowStep(idx)}
                   className={`w-full text-left p-4 rounded-xl border transition-all duration-200 ${
                     activeWorkflowStep === idx 
-                      ? 'bg-zinc-800 border-zinc-600' 
+                      ? 'bg-zinc-800 border-black' 
                       : 'bg-zinc-900 border-black hover:bg-zinc-800/50'
                   }`}
                 >
@@ -382,7 +382,7 @@ const SecurityPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-black transition-colors">
                 <Search className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">80+ IoC Signatures</h3>
@@ -392,7 +392,7 @@ const SecurityPage = () => {
             </div>
 
             <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-black transition-colors">
                 <Activity className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">React 19 Behavioral Analysis</h3>
@@ -402,7 +402,7 @@ const SecurityPage = () => {
             </div>
 
             <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-black transition-colors">
                 <FileCheck className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Incident Response</h3>
@@ -412,7 +412,7 @@ const SecurityPage = () => {
             </div>
 
             <div className="bg-zinc-900 border border-black rounded-xl p-6 hover:bg-zinc-800/50 transition-colors group">
-              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-zinc-600 transition-colors">
+              <div className="w-12 h-12 bg-zinc-800 border border-black rounded-xl flex items-center justify-center mb-4 group-hover:border-black transition-colors">
                 <Database className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Baseline Verification</h3>

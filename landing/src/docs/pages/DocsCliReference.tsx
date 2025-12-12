@@ -33,41 +33,41 @@ export function DocsCliReference() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Option</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--version, -v</td>
                 <td className="py-3 px-4 text-gray-300">Display version number (e.g., 1.5.2)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--help, -h</td>
                 <td className="py-3 px-4 text-gray-300">Display help information</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--verbose</td>
                 <td className="py-3 px-4 text-gray-300">Enable detailed output logging with per-file details</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--dry-run</td>
                 <td className="py-3 px-4 text-gray-300">Preview changes without applying them</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--backup</td>
                 <td className="py-3 px-4 text-gray-300">Create backups before changes (default: true)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--no-backup</td>
                 <td className="py-3 px-4 text-gray-300">Skip backup creation (not recommended)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--format json</td>
                 <td className="py-3 px-4 text-gray-300">Output results as JSON (for CI/CD pipelines)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-blue-400">--output &lt;file&gt;</td>
                 <td className="py-3 px-4 text-gray-300">Save output to a file</td>
               </tr>
@@ -491,29 +491,29 @@ Migration Summary:
         <div className="overflow-x-auto mb-4">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Mode</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Duration</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Description</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-green-400">--quick</td>
                 <td className="py-3 px-4 text-gray-300">~30s</td>
                 <td className="py-3 px-4 text-gray-300">Common IOC patterns only</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-yellow-400">(default)</td>
                 <td className="py-3 px-4 text-gray-300">~2min</td>
                 <td className="py-3 px-4 text-gray-300">Standard balanced analysis</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-orange-400">--deep</td>
                 <td className="py-3 px-4 text-gray-300">~3min</td>
                 <td className="py-3 px-4 text-gray-300">Extended pattern matching</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-red-400">--paranoid</td>
                 <td className="py-3 px-4 text-gray-300">~5-10min</td>
                 <td className="py-3 px-4 text-gray-300">Maximum depth with heuristic + behavioral analysis</td>
@@ -725,21 +725,21 @@ Use "neurolint fix <path>" to analyze and fix code, which will generate learned 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Code</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Meaning</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-green-400">0</td>
                 <td className="py-3 px-4 text-gray-300">Success - no issues or all fixed, or below --fail-on threshold</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-red-400">1</td>
                 <td className="py-3 px-4 text-gray-300">Findings detected at or above --fail-on threshold (for security commands)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-yellow-400">2</td>
                 <td className="py-3 px-4 text-gray-300">Error (invalid arguments, file access, etc.)</td>
               </tr>

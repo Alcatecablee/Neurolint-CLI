@@ -130,19 +130,19 @@ test('Button should render correctly', () => {
         <h2 className="text-2xl font-bold text-white mb-4">Key Features</h2>
         
         <div className="space-y-3">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Import injection</h3>
             <p className="text-sm text-gray-400">Automatic testing library import injection</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Description enhancement</h3>
             <p className="text-sm text-gray-400">Improves test descriptions for clarity</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">RSC testing</h3>
             <p className="text-sm text-gray-400">Provides best practices for Server Components</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Config generation</h3>
             <p className="text-sm text-gray-400">Jest/Vitest configuration generation</p>
           </div>

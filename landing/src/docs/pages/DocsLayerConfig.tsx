@@ -142,19 +142,19 @@ export function DocsLayerConfig() {
         <h2 className="text-2xl font-bold text-white mb-4">Key Features</h2>
         
         <div className="space-y-3">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Strict TypeScript</h3>
             <p className="text-sm text-gray-400">Enforces strict: true and 17+ TypeScript compiler options</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">React 19 JSX</h3>
             <p className="text-sm text-gray-400">Sets jsx to 'react-jsx' for React 19 compatibility</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Modern Scripts</h3>
             <p className="text-sm text-gray-400">Adds type-check, build:analyze scripts</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">Turbopack</h3>
             <p className="text-sm text-gray-400">Configures experimental.turbo for 2-3x faster builds</p>
           </div>

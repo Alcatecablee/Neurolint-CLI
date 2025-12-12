@@ -406,7 +406,7 @@ export default function Index() {
             mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
-          <div className="px-4 py-4 space-y-2 bg-zinc-900/95 backdrop-blur-xl border-t border-zinc-800">
+          <div className="px-4 py-4 space-y-2 bg-zinc-900/95 backdrop-blur-xl border-t border-black">
             <a 
               href="#comprehensive-demo" 
               onClick={() => setMobileMenuOpen(false)}
@@ -447,7 +447,7 @@ export default function Index() {
             >
               Security
             </a>
-            <div className="border-t border-zinc-800 my-3"></div>
+            <div className="border-t border-black my-3"></div>
             <div className="flex items-center gap-3 px-4">
               <a 
                 href="https://github.com/Alcatecablee/Neurolint-CLI"
@@ -560,7 +560,7 @@ export default function Index() {
             
             <a
               href="#comprehensive-demo"
-              className="group relative px-8 md:px-10 py-3.5 md:py-4 bg-transparent text-white font-semibold rounded-xl border-2 border-zinc-700 hover:border-zinc-500 hover:bg-zinc-900/50 active:bg-zinc-900 transition-all duration-300 ease-out flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation min-h-[48px]"
+              className="group relative px-8 md:px-10 py-3.5 md:py-4 bg-transparent text-white font-semibold rounded-xl border-2 border-black hover:border-black hover:bg-zinc-900/50 active:bg-zinc-900 transition-all duration-300 ease-out flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation min-h-[48px]"
               aria-label="Try interactive demo - scroll to demo section"
               data-testid="hero-cta-secondary"
             >
@@ -585,7 +585,7 @@ export default function Index() {
               href="https://github.com/Alcatecablee/Neurolint-CLI"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 bg-zinc-900/60 border border-zinc-700 rounded-xl hover:bg-zinc-900 hover:border-zinc-600 transition-all duration-300 text-sm font-medium backdrop-blur-sm"
+              className="flex items-center gap-2 px-6 py-3 bg-zinc-900/60 border border-black rounded-xl hover:bg-zinc-900 hover:border-black transition-all duration-300 text-sm font-medium backdrop-blur-sm"
               aria-label="Star on GitHub"
               data-testid="github-star-button"
             >

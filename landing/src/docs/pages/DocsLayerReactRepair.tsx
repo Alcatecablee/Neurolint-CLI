@@ -143,19 +143,19 @@ export function DocsLayerReactRepair() {
         <h2 className="text-2xl font-bold text-white mb-4">Key Features</h2>
         
         <div className="space-y-3">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">WCAG 2.1 AA Compliance</h3>
             <p className="text-sm text-gray-400">Adds alt text, aria-labels, and other accessibility attributes</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">React 19 Ref Pattern</h3>
             <p className="text-sm text-gray-400">Converts forwardRef to direct ref prop access</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">String Ref Migration</h3>
             <p className="text-sm text-gray-400">Transforms string refs to callback refs</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">PropTypes Warnings</h3>
             <p className="text-sm text-gray-400">Suggests TypeScript types over PropTypes</p>
           </div>

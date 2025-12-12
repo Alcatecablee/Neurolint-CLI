@@ -98,8 +98,8 @@ export function DiffViewer({ before, after, filename }: DiffViewerProps) {
   const addedCount = diffLines.filter((l) => l.type === "added").length;
 
   return (
-    <div className="rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 my-6">
-      <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-800/50 border-b border-zinc-800">
+    <div className="rounded-lg overflow-hidden border border-black bg-zinc-900 my-6">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-800/50 border-b border-black">
         <div className="flex items-center gap-2">
           <FileCode className="w-4 h-4 text-gray-500" />
           {filename && (
@@ -136,10 +136,10 @@ export function DiffViewer({ before, after, filename }: DiffViewerProps) {
                     : ""
                 }
               >
-                <td className="w-12 px-3 py-0.5 text-right text-gray-600 select-none border-r border-zinc-800">
+                <td className="w-12 px-3 py-0.5 text-right text-gray-600 select-none border-r border-black">
                   {line.lineNumber.before || ""}
                 </td>
-                <td className="w-12 px-3 py-0.5 text-right text-gray-600 select-none border-r border-zinc-800">
+                <td className="w-12 px-3 py-0.5 text-right text-gray-600 select-none border-r border-black">
                   {line.lineNumber.after || ""}
                 </td>
                 <td className="w-6 px-2 py-0.5 text-center select-none">
@@ -181,8 +181,8 @@ interface BeforeAfterProps {
 export function BeforeAfter({ before, after, filename }: BeforeAfterProps) {
   return (
     <div className="grid md:grid-cols-2 gap-4 my-6">
-      <div className="rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900">
-        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border-b border-zinc-800">
+      <div className="rounded-lg overflow-hidden border border-black bg-zinc-900">
+        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border-b border-black">
           <div className="w-2 h-2 rounded-full bg-red-400" />
           <span className="text-sm text-gray-400">
             {before.label || "Before"}
@@ -198,8 +198,8 @@ export function BeforeAfter({ before, after, filename }: BeforeAfterProps) {
         </pre>
       </div>
 
-      <div className="rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900">
-        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border-b border-zinc-800">
+      <div className="rounded-lg overflow-hidden border border-black bg-zinc-900">
+        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border-b border-black">
           <div className="w-2 h-2 rounded-full bg-green-400" />
           <span className="text-sm text-gray-400">
             {after.label || "After"}

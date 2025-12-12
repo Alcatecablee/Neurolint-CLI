@@ -66,9 +66,9 @@ export function CodeBlock({
   };
 
   return (
-    <div className="rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 my-4">
+    <div className="rounded-lg overflow-hidden border border-black bg-zinc-900 my-4">
       {filename && (
-        <div className="flex items-center justify-between px-4 py-2 bg-zinc-800/50 border-b border-zinc-800">
+        <div className="flex items-center justify-between px-4 py-2 bg-zinc-800/50 border-b border-black">
           <div className="flex items-center gap-2">
             <Terminal className="w-4 h-4 text-gray-500" />
             <span className="text-sm text-gray-400 font-mono">{filename}</span>
@@ -146,7 +146,7 @@ export function CommandBlock({ command, output }: CommandBlockProps) {
   };
 
   return (
-    <div className="rounded-lg overflow-hidden border border-zinc-800 bg-zinc-900 my-4">
+    <div className="rounded-lg overflow-hidden border border-black bg-zinc-900 my-4">
       <div className="flex items-center justify-between px-4 py-3 group">
         <code className="text-sm font-mono">
           <span className="text-gray-500 select-none">$ </span>
@@ -165,7 +165,7 @@ export function CommandBlock({ command, output }: CommandBlockProps) {
         </button>
       </div>
       {output && (
-        <div className="px-4 py-3 bg-zinc-950 border-t border-zinc-800">
+        <div className="px-4 py-3 bg-zinc-950 border-t border-black">
           <pre className="text-sm text-gray-400 font-mono whitespace-pre-wrap">
             {output}
           </pre>

@@ -142,19 +142,19 @@ export default function Counter() {
         <h2 className="text-2xl font-bold text-white mb-4">React 19 Specific</h2>
         
         <div className="space-y-3">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">ReactDOM.render migration</h3>
             <p className="text-sm text-gray-400">Converts to createRoot with unique variable names</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">ReactDOM.hydrate migration</h3>
             <p className="text-sm text-gray-400">Converts to hydrateRoot with correct parameter order</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">act() import migration</h3>
             <p className="text-sm text-gray-400">Moves act from react-dom/test-utils to react</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-1">findDOMNode detection</h3>
             <p className="text-sm text-gray-400">Detects removed API and suggests useRef</p>
           </div>

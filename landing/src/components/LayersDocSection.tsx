@@ -618,7 +618,7 @@ export function LayersDocSection() {
                 setSelectedLayer(layerId);
                 setExpandedSections(new Set());
               }}
-              className="w-full bg-black/60 border-2 border-black text-white rounded-xl px-4 py-3 font-medium text-lg focus:outline-none focus:border-white/40 transition-colors cursor-pointer"
+              className="w-full bg-black/60 border-2 border-black text-white rounded-xl px-4 py-3 font-medium text-lg focus:outline-none focus:border-black transition-colors cursor-pointer"
             >
               <option value="" disabled>Select a layer to learn more...</option>
               {layersData.map((layer) => (

@@ -42,27 +42,27 @@ export function DocsCommandMigrateReact19() {
         <h2 className="text-2xl font-bold text-white mb-4">What It Migrates</h2>
         
         <div className="space-y-3 text-sm">
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">forwardRef to direct ref props</h3>
             <p className="text-gray-400">React 19 allows ref as a regular prop, eliminating the need for forwardRef wrapper.</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">String refs to callback refs</h3>
             <p className="text-gray-400">Converts deprecated string refs to modern callback ref pattern.</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">ReactDOM.render to createRoot</h3>
             <p className="text-gray-400">Migrates legacy render API to new concurrent-safe createRoot.</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">ReactDOM.hydrate to hydrateRoot</h3>
             <p className="text-gray-400">Updates SSR hydration to new API with correct parameter order.</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">react-dom/test-utils imports</h3>
             <p className="text-gray-400">Moves act import from react-dom/test-utils to react.</p>
           </div>
-          <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="p-4 bg-zinc-900/50 border border-black rounded-lg">
             <h3 className="font-medium text-white mb-2">Legacy Context detection</h3>
             <p className="text-gray-400">Detects contextTypes and getChildContext usage (removed in React 19).</p>
           </div>
@@ -118,35 +118,35 @@ root.render(<App />);`
         <h2 className="text-2xl font-bold text-white mb-4">Migration Workflow</h2>
         
         <div className="space-y-4">
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">1</div>
             <div>
               <h3 className="font-medium text-white">Analyze current state</h3>
               <CommandBlock command="neurolint analyze . --verbose" />
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">2</div>
             <div>
               <h3 className="font-medium text-white">Check dependency compatibility</h3>
               <CommandBlock command="neurolint check-deps . --fix" />
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">3</div>
             <div>
               <h3 className="font-medium text-white">Preview migration changes</h3>
               <CommandBlock command="neurolint migrate-react19 . --dry-run --verbose" />
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">4</div>
             <div>
               <h3 className="font-medium text-white">Apply migration</h3>
               <CommandBlock command="neurolint migrate-react19 . --verbose" />
             </div>
           </div>
-          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-zinc-800 rounded-lg">
+          <div className="flex gap-4 p-4 bg-zinc-900/50 border border-black rounded-lg">
             <div className="w-8 h-8 flex items-center justify-center bg-zinc-800 rounded font-mono text-sm text-gray-400">5</div>
             <div>
               <h3 className="font-medium text-white">Update dependencies</h3>

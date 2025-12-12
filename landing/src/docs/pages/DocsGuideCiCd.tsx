@@ -115,21 +115,21 @@ jobs:
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-800">
+              <tr className="border-b border-black">
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Code</th>
                 <th className="text-left py-3 px-4 text-gray-400 font-medium">Meaning</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">0</td>
                 <td className="py-3 px-4 text-gray-400">Success (no issues or all fixed)</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">1</td>
                 <td className="py-3 px-4 text-gray-400">Issues found (analysis) or partial fixes</td>
               </tr>
-              <tr className="border-b border-zinc-800/50">
+              <tr className="border-b border-black/50">
                 <td className="py-3 px-4 font-mono text-gray-300">2</td>
                 <td className="py-3 px-4 text-gray-400">Error (invalid arguments, file access, etc.)</td>
               </tr>
