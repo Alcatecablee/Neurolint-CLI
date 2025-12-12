@@ -686,57 +686,6 @@ export default function Index() {
       {/* Layers Documentation Section */}
       <LayersDocSection />
 
-      {/* Featured On Section */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 opacity-60 hover:opacity-80 transition-opacity duration-500">
-            <a 
-              href="https://www.producthunt.com/products/neurolint-cli?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-neurolint-cli" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-all duration-300 hover:scale-105"
-            >
-              <img 
-                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
-                alt="NeuroLint CLI on Product Hunt" 
-                width="200" 
-                height="44"
-                className="h-9 sm:h-10 w-auto grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </a>
-            
-            <a 
-              href="https://startupfa.me/s/neurolint-cli?utm_source=neurolint.dev" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-all duration-300 hover:scale-105"
-            >
-              <img 
-                src="https://startupfa.me/badges/featured/dark-small-rounded.webp" 
-                alt="Featured on Startup Fame" 
-                width="180" 
-                height="28"
-                className="h-7 sm:h-8 w-auto grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </a>
-            
-            <a 
-              href="https://github.com/Alcatecablee/Neurolint-CLI/stargazers" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-all duration-300 hover:scale-105"
-            >
-              <img 
-                src="https://img.shields.io/github/stars/Alcatecablee/Neurolint-CLI?style=for-the-badge&logo=github&logoColor=white&labelColor=181717&color=181717" 
-                alt="GitHub Stars" 
-                height="24"
-                className="h-6 sm:h-7 w-auto"
-              />
-            </a>
-          </div>
-        </div>
-      </section>
-
       {/* How It Works Section - Simplified and moved up */}
       <section ref={howItWorksSectionRef} className="py-16 md:py-24 px-4" aria-labelledby="how-it-works-heading">
         <div className="max-w-7xl mx-auto">
