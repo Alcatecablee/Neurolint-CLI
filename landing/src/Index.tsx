@@ -532,13 +532,39 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-in-up animate-delay-800">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-in-up animate-delay-800">
+            <a
+              href="https://www.npmjs.com/package/@neurolint/cli"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative px-8 md:px-10 py-3.5 md:py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 ease-out flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation min-h-[48px]"
+              aria-label="Install NeuroLint CLI - Primary action"
+              data-testid="hero-cta-primary"
+            >
+              Install Free CLI
+              <svg
+                className="w-5 h-5 group-hover:translate-x-0.5 transition-transform duration-300 ease-out"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </a>
+            
             <a
               href="#comprehensive-demo"
-              className="group relative px-8 md:px-10 py-3.5 md:py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 ease-out flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation min-h-[48px]"
+              className="group relative px-8 md:px-10 py-3.5 md:py-4 bg-transparent text-white font-semibold rounded-xl border-2 border-zinc-700 hover:border-zinc-500 hover:bg-zinc-900/50 active:bg-zinc-900 transition-all duration-300 ease-out flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation min-h-[48px]"
               aria-label="Try interactive demo - scroll to demo section"
+              data-testid="hero-cta-secondary"
             >
-              Try Interactive Demo
+              Watch Demo
               <svg
                 className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-300 ease-out"
                 fill="none"
@@ -553,6 +579,20 @@ export default function Index() {
                   d="M19 9l-7 7-7-7"
                 />
               </svg>
+            </a>
+            
+            <a
+              href="https://github.com/Alcatecablee/Neurolint-CLI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-6 py-3 bg-zinc-900/60 border border-zinc-700 rounded-xl hover:bg-zinc-900 hover:border-zinc-600 transition-all duration-300 text-sm font-medium backdrop-blur-sm"
+              aria-label="Star on GitHub"
+              data-testid="github-star-button"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span>Star on GitHub</span>
             </a>
           </div>
 
