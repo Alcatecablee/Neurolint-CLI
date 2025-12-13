@@ -22,6 +22,7 @@ import { LandingFooter } from "./LandingFooter";
 import { DemoCarousel } from "./components/DemoCarousel";
 import { TestimonialsSection } from "./components/TestimonialsSection";
 import { TrustMetrics } from "./components/TrustMetrics";
+import { StarField } from "./components/StarField";
 
 import {
   Target,
@@ -306,12 +307,6 @@ export default function Index() {
         <BetaBanner onClose={() => setBannerVisible(false)} />
       )}
 
-      {/* Global Background Gradients */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-1/2 h-1/2 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-gradient-to-tl from-green-500/15 to-blue-600/15 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/3 h-1/3 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl"></div>
-      </div>
 
       {/* Navigation Header - Mobile First */}
       <nav 
@@ -476,13 +471,15 @@ export default function Index() {
 
       {/* Hero Section - Clean Demora-style */}
       <section
-        className="min-h-[90vh] flex items-center justify-center text-center px-4 py-16 pt-24 relative"
+        className="min-h-[90vh] flex items-center justify-center text-center px-4 py-16 pt-24 relative bg-[#050508]"
         aria-label="Hero section"
         role="main"
       >
+        {/* Animated Stars */}
+        <StarField />
+        
         {/* Subtle gradient glow */}
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/5 via-transparent to-black pointer-events-none" />
 
         <div className="max-w-4xl mx-auto z-10 animate-fade-in-blur">
           {/* Badge */}
