@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Key, AlertTriangle, Droplets, Terminal, Settings, FileCode, RefreshCw, GitBranch, Github, ThumbsUp, Wrench, Search, Layers } from "lucide-react";
+import { ArrowRight, Key, AlertTriangle, Droplets, Terminal, Settings, FileCode, RefreshCw, GitBranch, Github, ThumbsUp, Wrench, Search, Layers, Server, Clock } from "lucide-react";
 
 interface FixCard {
   slug: string;
@@ -56,6 +56,23 @@ const fixCategories = [
         layer: 4,
         searches: "8,100/mo",
       },
+      {
+        slug: "useeffect-cleanup-patterns",
+        title: "useEffect Cleanup Patterns",
+        description: "Auto-add cleanup functions to prevent memory leaks. Matches addEventListener→removeEventListener patterns.",
+        icon: <Clock className="w-5 h-5" />,
+        layer: 4,
+        searches: "6,600/mo",
+      },
+      {
+        slug: "rsc-common-errors",
+        title: "Fix RSC Boundary Errors",
+        description: "Auto-add 'use client' directives and extract client components from Server Components.",
+        icon: <Server className="w-5 h-5" />,
+        layer: 6,
+        searches: "3,200/mo",
+        badge: "React 18+",
+      },
     ],
   },
   {
@@ -85,6 +102,15 @@ const fixCategories = [
         layer: 2,
         searches: "1,800/mo",
         badge: "Urgent",
+      },
+      {
+        slug: "nextjs-15-migration",
+        title: "Next.js 15 Async APIs",
+        description: "Migrate to async cookies(), headers(), params, and searchParams. Auto-update TypeScript types.",
+        icon: <GitBranch className="w-5 h-5" />,
+        layer: 5,
+        searches: "4,400/mo",
+        badge: "Breaking",
       },
     ],
   },

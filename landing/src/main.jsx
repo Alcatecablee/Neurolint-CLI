@@ -60,8 +60,12 @@ import {
   ConsoleLogRemoval,
   TypeScriptStrictMode,
   React19Migration,
-  ForwardRefRemoval
+  ForwardRefRemoval,
+  UseEffectCleanup,
+  NextJS15Migration,
+  RSCCommonErrors
 } from './fixes'
+import { ESLintComparison, BiomeComparison } from './compare'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -84,7 +88,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="typescript-strict-mode" element={<TypeScriptStrictMode />} />
           <Route path="react-19-migration" element={<React19Migration />} />
           <Route path="forwardref-removal" element={<ForwardRefRemoval />} />
+          <Route path="useeffect-cleanup-patterns" element={<UseEffectCleanup />} />
+          <Route path="nextjs-15-migration" element={<NextJS15Migration />} />
+          <Route path="rsc-common-errors" element={<RSCCommonErrors />} />
         </Route>
+        
+        {/* Comparison Routes */}
+        <Route path="/compare/eslint" element={<ESLintComparison />} />
+        <Route path="/compare/biome" element={<BiomeComparison />} />
         
         {/* Documentation Routes */}
         <Route path="/docs" element={<DocsIntro />} />
