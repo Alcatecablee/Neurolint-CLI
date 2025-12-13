@@ -32,12 +32,6 @@ export function LandingHero() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
       
       <div className="relative z-10 flex flex-col items-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 mb-8 backdrop-blur-sm">
-          <Play className="w-3 h-3 fill-blue-400 text-blue-400" />
-          <span>100% Free CLI Tool</span>
-        </div>
-
         {/* Main Heading */}
         <h1
           id="hero-heading"

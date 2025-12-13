@@ -308,166 +308,145 @@ export default function Index() {
       )}
 
 
-      {/* Navigation Header - Mobile First */}
-      <nav 
-        className="fixed top-0 w-full z-50 bg-zinc-900/80 backdrop-blur-xl border-b border-black transition-all duration-300"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-14 md:h-16">
-            <a href="/" className="flex items-center group">
-              <img src="/logo.png" alt="NeuroLint" className="h-8 md:h-9 transition-transform duration-200 group-hover:scale-105" />
+      {/* Floating Centered Navigation */}
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4">
+        <nav className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+          {/* Brand */}
+          <a href="/" className="flex items-center gap-2 shrink-0 pr-3 border-r border-white/10">
+            <img src="/logo.png" alt="NeuroLint" className="h-6 transition-transform duration-200 hover:scale-105" />
+            <span className="font-semibold text-white text-sm tracking-tight hidden sm:inline">
+              NEURO<span className="text-zinc-400">LINT</span>
+            </span>
+          </a>
+
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex items-center gap-1">
+            <a 
+              href="#comprehensive-demo" 
+              className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+            >
+              Demo
             </a>
-            
+            <a 
+              href="/quick-start" 
+              className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+            >
+              Quick Start
+            </a>
+            <a 
+              href="#faq" 
+              className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+            >
+              FAQ
+            </a>
+            <a 
+              href="/blog" 
+              className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+            >
+              Blog
+            </a>
+            <a 
+              href="/docs"
+              className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+            >
+              Docs
+            </a>
+            <a 
+              href="/security"
+              className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+            >
+              Security
+            </a>
+          </div>
+
+          {/* Divider and Actions */}
+          <div className="flex items-center gap-2 pl-3 border-l border-white/10">
+            <a 
+              href="https://github.com/Alcatecablee/Neurolint-CLI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition-colors p-1"
+              aria-label="GitHub"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+              </svg>
+            </a>
+            <a 
+              href="https://www.npmjs.com/package/@neurolint/cli"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white hover:bg-white/5 text-sm font-medium px-3 py-1.5 rounded-full transition-colors"
+            >
+              Install
+            </a>
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-3 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 touch-manipulation"
+              className="md:hidden p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-all duration-200"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
             </button>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1">
-              <a 
-                href="#comprehensive-demo" 
-                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
-              >
-                Demo
-              </a>
-              <a 
-                href="/quick-start" 
-                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
-              >
-                Quick Start
-              </a>
-              <a 
-                href="#faq" 
-                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
-              >
-                FAQ
-              </a>
-              <a 
-                href="/blog" 
-                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
-              >
-                Blog
-              </a>
-              <a 
-                href="/docs"
-                className="px-4 py-2 min-h-[44px] flex items-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-sm font-medium"
-              >
-                Docs
-              </a>
-              <a 
-                href="/security"
-                className="px-4 py-2 min-h-[44px] flex items-center text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-sm font-medium"
-              >
-                Security
-              </a>
-              <div className="w-px h-6 bg-white/10 mx-2"></div>
-              <a 
-                href="https://github.com/Alcatecablee/Neurolint-CLI"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
-                aria-label="GitHub"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                </svg>
-              </a>
-              <a 
-                href="https://www.npmjs.com/package/@neurolint/cli"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ml-2 px-5 py-2 min-h-[44px] flex items-center bg-white text-black rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 text-sm"
-              >
-                Install
-              </a>
-            </div>
           </div>
-        </div>
-        
+        </nav>
+
         {/* Mobile Menu Dropdown */}
-        <div 
-          className={`md:hidden transition-all duration-300 ease-out overflow-hidden ${
-            mobileMenuOpen ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <div className="px-4 py-4 space-y-2 bg-zinc-900/95 backdrop-blur-xl border-t border-black">
+        {mobileMenuOpen && (
+          <div className="absolute top-full mt-2 left-4 right-4 md:hidden bg-zinc-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 space-y-2">
             <a 
               href="#comprehensive-demo" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Demo
             </a>
             <a 
               href="/quick-start" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Quick Start
             </a>
             <a 
               href="#faq" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               FAQ
             </a>
             <a 
               href="/blog" 
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Blog
             </a>
             <a 
               href="/docs"
-              className="block px-4 py-3 min-h-[48px] text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Docs
             </a>
             <a 
               href="/security"
-              className="block px-4 py-3 min-h-[48px] text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium touch-manipulation"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Security
             </a>
-            <div className="border-t border-black my-3"></div>
-            <div className="flex items-center gap-3 px-4">
-              <a 
-                href="https://github.com/Alcatecablee/Neurolint-CLI"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 min-h-[48px] min-w-[48px] flex items-center justify-center text-gray-300 hover:text-white bg-white/5 rounded-lg transition-all duration-200 touch-manipulation"
-                aria-label="GitHub"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                </svg>
-              </a>
-              <a 
-                href="https://www.npmjs.com/package/@neurolint/cli"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 px-5 py-3 min-h-[48px] flex items-center justify-center bg-white text-black rounded-lg font-semibold hover:bg-gray-100 transition-all duration-200 text-base touch-manipulation"
-              >
-                Install CLI
-              </a>
-            </div>
           </div>
-        </div>
-      </nav>
+        )}
+      </div>
 
       {/* Hero Section - Clean Demora-style */}
       <section
@@ -482,14 +461,6 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/5 via-transparent to-black pointer-events-none" />
 
         <div className="max-w-4xl mx-auto z-10 animate-fade-in-blur">
-          {/* Badge */}
-          <div className="mb-8 animate-slide-in-down animate-delay-200">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-black text-sm text-gray-300 backdrop-blur-sm">
-              <Zap className="w-3 h-3 text-blue-400" />
-              100% Free CLI Tool
-            </span>
-          </div>
-
           {/* Main Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6 tracking-tight">
             Fix React & Next.js Bugs
