@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.5] - 2025-12-13
+
+### Fixed
+
+#### Official Codemods Integration - Corrected Command Syntax
+
+Fixed the official codemods integration to use the correct, working command syntax:
+
+**React 19 Codemods (Corrected):**
+- Now uses `npx codemod@latest react/19/<transform> --target <path>` (recommended by React team)
+- Previously used non-existent `@react-codemod/*` packages that would fail
+
+**Codemods now integrated:**
+- `react/19/replace-reactdom-render` - Converts ReactDOM.render() to createRoot()
+- `react/19/replace-string-ref` - Converts string refs to callback refs
+- `react/19/replace-act-import` - Updates act import from react-dom/test-utils
+- `react/19/replace-use-form-state` - Replaces useFormState with useActionState
+
+**Next.js 15 Codemods (New):**
+- `next-async-request-api` - Makes cookies(), headers(), params async
+- `next-request-geo-ip` - Migrates geo/ip to @vercel/functions
+- `app-dir-runtime-config-experimental-edge` - Changes experimental-edge to edge
+
+**Next.js 16 Codemods (Updated):**
+- `remove-experimental-ppr` - Removes experimental_ppr Route Segment Config
+- `remove-unstable-prefix` - Removes unstable_ prefix from stabilized APIs
+- `middleware-to-proxy` - Migrates middleware convention to proxy
+
+**Security Fix:**
+- Added path escaping in shell commands to handle spaces and special characters safely
+
+### Changed
+- Updated `docs/OFFICIAL-CODEMODS-INTEGRATION.md` with correct command syntax
+- Updated tests to validate correct codemod CLI usage
+- Node.js requirement updated from 16+ to 18+ for codemod support
+
 ## [1.5.4] - 2025-12-13
 
 ### Added
@@ -22,18 +58,6 @@ New `--with-official-codemods` flag for `migrate-react19` and `migrate-nextjs-16
 **Phase 2: NeuroLint Enhancements**  
 - Runs NeuroLint's comprehensive transformations
 - Handles 50+ additional fixes that official codemods don't cover
-
-**React 19 Codemods Integrated:**
-- `@react-codemod/replace-reactdom-render` - Converts ReactDOM.render() to createRoot()
-- `@react-codemod/replace-string-ref` - Converts string refs to callback refs
-- `@react-codemod/use-context-hook` - Converts Context.Consumer to useContext()
-- `@react-codemod/rename-unsafe-lifecycles` - Adds UNSAFE_ prefix to deprecated lifecycles
-
-**Next.js 16 Codemods Integrated:**
-- `@next/codemod new-link` - Removes nested <a> from <Link> components
-- `@next/codemod app-dir-imports` - Updates imports for App Router
-- `@next/codemod metadata` - Converts Head to generateMetadata
-- `@next/codemod next-request-geo-ip` - Updates geo/ip access patterns
 
 **Features:**
 - Graceful degradation if npx not available
