@@ -14,7 +14,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Download, Star, Code, Users } from 'lucide-react';
+import { ArrowDownToLine, GitBranch, CheckCircle2, UserCheck } from 'lucide-react';
 
 interface MetricProps {
   icon: React.ElementType;
@@ -24,8 +24,10 @@ interface MetricProps {
 }
 
 const Metric: React.FC<MetricProps> = ({ icon: Icon, value, label, loading }) => (
-  <div className="flex flex-col items-center gap-3 p-5 md:p-6 bg-zinc-900/40 border-2 border-black rounded-xl backdrop-blur-sm hover:border-black transition-colors" data-testid="trust-metric">
-    <Icon className="w-5 h-5 text-blue-400" />
+  <div className="flex flex-col items-center gap-3 p-5 md:p-6 bg-zinc-900/40 border border-zinc-800 rounded-xl backdrop-blur-sm hover:border-zinc-700 transition-colors" data-testid="trust-metric">
+    <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20">
+      <Icon className="w-5 h-5 text-blue-400" strokeWidth={1.5} />
+    </div>
     <div className="text-2xl md:text-3xl font-black text-white">
       {loading ? '...' : value}
     </div>
@@ -68,25 +70,25 @@ export const TrustMetrics: React.FC<{ className?: string }> = ({ className = '' 
   return (
     <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 ${className}`} data-testid="trust-metrics-container">
       <Metric
-        icon={Star}
+        icon={GitBranch}
         value={githubStars}
         label="GitHub Stars"
         loading={loading}
       />
       <Metric
-        icon={Download}
+        icon={ArrowDownToLine}
         value={npmDownloads}
         label="Monthly Downloads"
         loading={loading}
       />
       <Metric
-        icon={Code}
+        icon={CheckCircle2}
         value="700+"
         label="Issues Fixed"
         loading={false}
       />
       <Metric
-        icon={Users}
+        icon={UserCheck}
         value="1K+"
         label="Developers"
         loading={false}
