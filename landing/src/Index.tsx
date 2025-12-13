@@ -39,6 +39,7 @@ import {
   CheckSquare,
   FileCheck,
   X,
+  ArrowRight,
 } from "lucide-react";
 import { InstallCTA } from "./components/InstallCTA";
 
@@ -473,129 +474,80 @@ export default function Index() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - Clean Demora-style */}
       <section
-        className="min-h-screen flex items-center justify-center text-center px-4 py-16 pt-20 relative"
+        className="min-h-[90vh] flex items-center justify-center text-center px-4 py-16 pt-24 relative"
         aria-label="Hero section"
         role="main"
       >
+        {/* Subtle gradient glow */}
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto z-10 animate-fade-in-blur">
-          <div className="mb-6 md:mb-8 animate-slide-in-down animate-delay-200">
-            <span
-              className="inline-block px-4 md:px-5 py-1.5 md:py-2 bg-white text-black rounded-full text-xs md:text-sm font-bold shadow-md hover:shadow-lg transition-shadow duration-300 cursor-default"
-              role="banner"
-              aria-label="Product category"
-            >
-              The Only Tool That Actually Fixes Your Code
+        <div className="max-w-4xl mx-auto z-10 animate-fade-in-blur">
+          {/* Badge */}
+          <div className="mb-8 animate-slide-in-down animate-delay-200">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 backdrop-blur-sm">
+              <Zap className="w-3 h-3 text-blue-400" />
+              100% Free CLI Tool
             </span>
           </div>
 
-          <TypewriterHeadline />
+          {/* Main Heading */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] mb-6 tracking-tight">
+            Fix React & Next.js Bugs
+            <br />
+            <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">in Seconds</span>
+          </h1>
 
-          <div className="mb-8 md:mb-10 animate-slide-in-up animate-delay-500">
-            <p className="text-base md:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-4">
-              While other tools tell you what's wrong, we{" "}
-              <span className="text-white font-bold">
-                actually fix your code
-              </span>
-              . Rule-based transformations (not AI) with{" "}
-              <span className="text-white font-bold">
-                deterministic fixes in seconds
-              </span>
-              .
-            </p>
-          </div>
+          {/* Subtitle */}
+          <p className="text-lg sm:text-xl text-gray-400 font-normal mb-10 max-w-xl mx-auto leading-relaxed">
+            Auto-fix hydration errors, missing keys, and ESLint issues. No AI guesswork.
+          </p>
 
-          {/* Trust Metrics - Above the fold */}
-          <div className="mb-8 md:mb-10 animate-slide-in-up animate-delay-600">
-            <TrustMetrics className="max-w-4xl mx-auto" />
-          </div>
-
-          {/* Install Command */}
-          <div className="mb-6 md:mb-8 animate-slide-in-up animate-delay-700">
-            <div className="max-w-2xl mx-auto bg-zinc-900/80 border border-black rounded-xl p-4 md:p-5 backdrop-blur-sm relative group hover:border-black transition-colors duration-300">
-              <code className="text-blue-400 font-mono text-sm md:text-base lg:text-lg block text-center pr-10">
-                $ npm install -g @neurolint/cli
-              </code>
-              <button
-                onClick={copyToClipboard}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-white/10 rounded-md transition-colors"
-                aria-label="Copy install command"
-              >
-                {copied ? (
-                  <Check className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
-                ) : (
-                  <Copy className="w-4 h-4 md:w-5 md:h-5 text-gray-400 group-hover:text-white" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-slide-in-up animate-delay-800">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <a
               href="https://www.npmjs.com/package/@neurolint/cli"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative px-8 md:px-10 py-3.5 md:py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-100 active:bg-gray-200 transition-all duration-300 ease-out flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation min-h-[48px]"
-              aria-label="Install NeuroLint CLI - Primary action"
-              data-testid="hero-cta-primary"
+              className="px-6 py-3 text-base font-medium rounded-lg bg-white hover:bg-gray-100 text-black transition-all duration-200 shadow-lg flex items-center gap-2"
             >
-              Install Free CLI
-              <svg
-                className="w-5 h-5 group-hover:translate-x-0.5 transition-transform duration-300 ease-out"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
+              Get Started
+              <ArrowRight className="w-4 h-4" />
             </a>
-            
             <a
-              href="#comprehensive-demo"
-              className="group relative px-8 md:px-10 py-3.5 md:py-4 bg-transparent text-white font-semibold rounded-xl border-2 border-black hover:border-black hover:bg-zinc-900/50 active:bg-zinc-900 transition-all duration-300 ease-out flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black touch-manipulation min-h-[48px]"
-              aria-label="Try interactive demo - scroll to demo section"
-              data-testid="hero-cta-secondary"
+              href="/docs"
+              className="px-6 py-3 text-base font-medium rounded-lg bg-transparent border border-white/20 text-white hover:bg-white/5 transition-all duration-200"
             >
-              Watch Demo
-              <svg
-                className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-300 ease-out"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </a>
-            
-            <a
-              href="https://github.com/Alcatecablee/Neurolint-CLI"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3 bg-zinc-900/60 border border-black rounded-xl hover:bg-zinc-900 hover:border-black transition-all duration-300 text-sm font-medium backdrop-blur-sm"
-              aria-label="Star on GitHub"
-              data-testid="github-star-button"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              <span>Star on GitHub</span>
+              View Docs
             </a>
           </div>
+        </div>
+      </section>
 
+      {/* Trust Metrics Section */}
+      <section className="py-16 px-4 relative z-10">
+        <TrustMetrics className="max-w-4xl mx-auto" />
+      </section>
+
+      {/* Install Command Section */}
+      <section className="py-8 px-4 relative z-10">
+        <div className="max-w-2xl mx-auto bg-zinc-900/80 border border-white/10 rounded-xl p-4 md:p-5 backdrop-blur-sm relative group hover:border-white/20 transition-colors duration-300">
+          <code className="text-blue-400 font-mono text-sm md:text-base lg:text-lg block text-center pr-10">
+            $ npm install -g @neurolint/cli
+          </code>
+          <button
+            onClick={copyToClipboard}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-white/10 rounded-md transition-colors"
+            aria-label="Copy install command"
+          >
+            {copied ? (
+              <Check className="w-4 h-4 text-blue-400" />
+            ) : (
+              <Copy className="w-4 h-4 text-gray-400 group-hover:text-white" />
+            )}
+          </button>
         </div>
       </section>
 
