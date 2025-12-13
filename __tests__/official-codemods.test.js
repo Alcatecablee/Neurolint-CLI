@@ -79,8 +79,11 @@ describe('Official Codemods Integration', () => {
       expect(cliContent).toContain('function runOfficialCodemods');
     });
     
-    test('should accept framework, targetPath, dryRun, verbose, and codemodVersion parameters', () => {
-      expect(cliContent).toContain('runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVersion })');
+    test('should accept framework, targetPath, dryRun, verbose, codemodVersion, enableBackup and trackChanges parameters', () => {
+      expect(cliContent).toContain('async function runOfficialCodemods');
+      expect(cliContent).toContain('framework, targetPath, dryRun, verbose, codemodVersion');
+      expect(cliContent).toContain('enableBackup');
+      expect(cliContent).toContain('trackChanges');
     });
     
     test('should support version pinning', () => {
@@ -105,8 +108,12 @@ describe('Official Codemods Integration', () => {
       expect(cliContent).toContain('Codemod errors are non-blocking');
     });
     
-    test('should return results object with success, skipped, errors counts and version', () => {
-      expect(cliContent).toContain('return { success: successCount, skipped: skipCount, errors: errorCount, results, version:');
+    test('should return results object with success, skipped, errors counts, version, manifest and backup', () => {
+      expect(cliContent).toContain('success: successCount');
+      expect(cliContent).toContain('skipped: skipCount');
+      expect(cliContent).toContain('errors: errorCount');
+      expect(cliContent).toContain('manifest');
+      expect(cliContent).toContain('backup: backupInfo');
     });
     
     test('should use correct React codemod command syntax', () => {

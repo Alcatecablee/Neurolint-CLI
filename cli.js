@@ -843,7 +843,68 @@ const OFFICIAL_CODEMODS = {
 };
 
 /**
+ * Capture file hashes for change detection
+ * @param {string} targetPath - Directory to scan
+ * @returns {Promise<Map<string, string>>} Map of file paths to content hashes
+ */
+async function captureFileHashes(targetPath) {
+  const crypto = require('crypto');
+  const fileHashes = new Map();
+  
+  try {
+    const files = await getFiles(targetPath, ['**/*.{ts,tsx,js,jsx}'], [
+      '**/node_modules/**', '**/dist/**', '**/.next/**', '**/build/**'
+    ]);
+    
+    for (const file of files) {
+      try {
+        const content = await fs.readFile(file, 'utf8');
+        const hash = crypto.createHash('sha256').update(content).digest('hex');
+        fileHashes.set(file, hash);
+      } catch (e) {
+        // Skip unreadable files
+      }
+    }
+  } catch (e) {
+    // Return empty map on error
+  }
+  
+  return fileHashes;
+}
+
+/**
+ * Compare file hashes to detect changes
+ * @param {Map<string, string>} before - Hashes before changes
+ * @param {Map<string, string>} after - Hashes after changes
+ * @returns {Object} Changed, added, and removed files
+ */
+function compareFileHashes(before, after) {
+  const changed = [];
+  const added = [];
+  const removed = [];
+  
+  // Check for changed and removed files
+  for (const [file, hash] of before) {
+    if (!after.has(file)) {
+      removed.push(file);
+    } else if (after.get(file) !== hash) {
+      changed.push(file);
+    }
+  }
+  
+  // Check for added files
+  for (const file of after.keys()) {
+    if (!before.has(file)) {
+      added.push(file);
+    }
+  }
+  
+  return { changed, added, removed };
+}
+
+/**
  * Run official framework codemods (Phase 1)
+ * Now with backup support and file change tracking for auditability
  * @param {Object} config - Configuration object
  * @param {string} config.framework - 'react19', 'react19Recipe', 'nextjs15', or 'nextjs16'
  * @param {string} config.targetPath - Path to the project
@@ -852,12 +913,14 @@ const OFFICIAL_CODEMODS = {
  * @param {string} [config.codemodVersion] - Optional version to pin codemods (e.g., '1.0.0')
  *                                           For React: pins 'codemod' package (e.g., codemod@1.0.0)
  *                                           For Next.js: pins '@next/codemod' package (e.g., @next/codemod@15.0.0)
- * @returns {Object} Results summary
+ * @param {boolean} [config.enableBackup=true] - Whether to create backups before codemods
+ * @param {boolean} [config.trackChanges=true] - Whether to track file-level changes
+ * @returns {Promise<Object>} Results summary with file manifest
  */
-function runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVersion }) {
+async function runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVersion, enableBackup = true, trackChanges = true }) {
   const codemods = OFFICIAL_CODEMODS[framework];
   if (!codemods || codemods.length === 0) {
-    return { success: 0, skipped: 0, errors: 0, results: [] };
+    return { success: 0, skipped: 0, errors: 0, results: [], manifest: { changed: [], added: [], removed: [] } };
   }
 
   const isReactFramework = framework.startsWith('react');
@@ -887,7 +950,8 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVe
       skipped: codemods.length, 
       errors: 0, 
       results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'dry-run' })),
-      version: codemodVersion || 'latest'
+      version: codemodVersion || 'latest',
+      manifest: { changed: [], added: [], removed: [] }
     };
   }
 
@@ -903,8 +967,58 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVe
       skipped: codemods.length, 
       errors: 0, 
       results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'npx not found' })),
-      version: codemodVersion || 'latest'
+      version: codemodVersion || 'latest',
+      manifest: { changed: [], added: [], removed: [] }
     };
+  }
+
+  // Capture file state before codemods for change tracking
+  let beforeHashes = new Map();
+  if (trackChanges) {
+    console.log('  [INFO] Capturing file state for change tracking...');
+    beforeHashes = await captureFileHashes(targetPath);
+  }
+
+  // Create backup before running official codemods (for rollback safety)
+  let backupInfo = null;
+  if (enableBackup && !dryRun) {
+    try {
+      const backupManager = createBackupManager({ verbose });
+      console.log('  [INFO] Creating backup before official codemods...');
+      
+      // Backup files that will be affected
+      const filesToBackup = await getFiles(targetPath, ['**/*.{ts,tsx,js,jsx}'], [
+        '**/node_modules/**', '**/dist/**', '**/.next/**', '**/build/**'
+      ]);
+      
+      const backupResults = [];
+      for (const file of filesToBackup.slice(0, 100)) { // Limit to first 100 files for performance
+        try {
+          const result = await backupManager.createBackup(file, `phase1-${framework}`);
+          if (result && result.backupPath) {
+            backupResults.push({ file, backupPath: result.backupPath });
+          }
+        } catch (e) {
+          // Continue on backup errors for individual files
+        }
+      }
+      
+      backupInfo = {
+        timestamp: new Date().toISOString(),
+        framework,
+        filesBackedUp: backupResults.length,
+        backupPaths: backupResults.slice(0, 10).map(r => r.backupPath) // First 10 for reference
+      };
+      
+      if (verbose) {
+        console.log(`  [INFO] Backed up ${backupResults.length} files`);
+      }
+    } catch (error) {
+      console.log('  [WARN] Backup creation failed, continuing without backup');
+      if (verbose) {
+        console.log(`       ${error.message}`);
+      }
+    }
   }
 
   const results = [];
@@ -989,14 +1103,45 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVe
     }
   }
 
+  // Capture file state after codemods for change detection
+  let manifest = { changed: [], added: [], removed: [] };
+  if (trackChanges) {
+    console.log('  [INFO] Detecting file changes...');
+    const afterHashes = await captureFileHashes(targetPath);
+    manifest = compareFileHashes(beforeHashes, afterHashes);
+    
+    if (manifest.changed.length > 0 || manifest.added.length > 0) {
+      console.log(`  [INFO] Files modified: ${manifest.changed.length}, added: ${manifest.added.length}`);
+      if (verbose && manifest.changed.length > 0) {
+        console.log('  [MANIFEST] Changed files:');
+        manifest.changed.slice(0, 10).forEach(f => console.log(`       - ${f}`));
+        if (manifest.changed.length > 10) {
+          console.log(`       ... and ${manifest.changed.length - 10} more`);
+        }
+      }
+    }
+  }
+
   // Summary
   console.log(`  [DONE] Phase 1 complete: ${successCount} success, ${skipCount} skipped, ${errorCount} errors`);
   
   if (errorCount > 0) {
     console.log('  [NOTE] Codemod errors are non-blocking. NeuroLint will continue.');
   }
+  
+  if (backupInfo) {
+    console.log(`  [INFO] Rollback available: ${backupInfo.filesBackedUp} files backed up`);
+  }
 
-  return { success: successCount, skipped: skipCount, errors: errorCount, results, version: codemodVersion || 'latest' };
+  return { 
+    success: successCount, 
+    skipped: skipCount, 
+    errors: errorCount, 
+    results, 
+    version: codemodVersion || 'latest',
+    manifest,
+    backup: backupInfo
+  };
 }
 
 // Handle analyze command
@@ -1565,7 +1710,7 @@ async function handleReact19Migration(targetPath, options, spinner) {
         logInfo('Using migration-recipe for faster all-in-one migration');
       }
       
-      phase1Results = runOfficialCodemods({
+      phase1Results = await runOfficialCodemods({
         framework,
         targetPath,
         dryRun: options.dryRun,
@@ -3093,7 +3238,7 @@ Examples:
           if (isNextjs15Alias) {
             logInfo('migrate-nextjs-15 includes official codemods by default');
           }
-          nextjs15Phase1Results = runOfficialCodemods({
+          nextjs15Phase1Results = await runOfficialCodemods({
             framework: 'nextjs15',
             targetPath,
             dryRun: options.dryRun,
@@ -3133,7 +3278,7 @@ Examples:
         const shouldRunNextjs16Codemods = options.withOfficialCodemods && !options.skipOfficialCodemods;
         if (shouldRunNextjs16Codemods) {
           spinner.stop();
-          nextjs16Phase1Results = runOfficialCodemods({
+          nextjs16Phase1Results = await runOfficialCodemods({
             framework: 'nextjs16',
             targetPath,
             dryRun: options.dryRun,
