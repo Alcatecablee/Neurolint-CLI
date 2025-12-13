@@ -286,14 +286,7 @@ export default function Index() {
     };
   }, []);
 
-  const [securityBannerVisible, setSecurityBannerVisible] = React.useState(() => {
-    // Only show security modal once per session (less intrusive)
-    if (typeof window !== 'undefined') {
-      const hasSeenModal = sessionStorage.getItem('neurolint-security-modal-seen');
-      return !hasSeenModal;
-    }
-    return false;
-  });
+  const [securityBannerVisible, setSecurityBannerVisible] = React.useState(false);
 
   const handleSecurityModalClose = () => {
     setSecurityBannerVisible(false);

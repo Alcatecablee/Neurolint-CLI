@@ -15,7 +15,7 @@
 
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function LandingHero() {
@@ -23,42 +23,58 @@ export function LandingHero() {
 
   return (
     <section
-      className="w-full flex flex-col items-center justify-center section-padding container-padding bg-black"
+      className="w-full min-h-[90vh] flex flex-col items-center justify-center section-padding container-padding bg-[#0a0a0f] relative overflow-hidden"
       role="banner"
       aria-labelledby="hero-heading"
     >
-      {/* Main logo */}
-      <img
-        src="https://cdn.builder.io/api/v1/image/assets%2Faab978f39ff64270b6e29ab49582f574%2F38b5bfac1a6242ebb67f91834016d010?format=webp&width=800"
-        alt="NeuroLint - Advanced Code Transformation Platform"
-        className="w-32 h-auto mb-8 sm:w-40 select-none pointer-events-none hover-lift"
-        draggable={false}
-        loading="eager"
-      />
-      <h1
-        id="hero-heading"
-        className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-bold text-white text-center leading-tight mb-6 tracking-tight"
-      >
-        Fix React & Next.js <br className="hidden xs:block" />
-        <span className="text-white">Bugs Before They Ship</span>
-      </h1>
-      <p className="text-lg sm:text-xl text-gray-300 font-medium mb-8 max-w-2xl text-center px-4 leading-relaxed">
-        No AI. No guesswork. Just working code.
-        <br />
-        Deterministic fixes for hydration crashes, missing keys, ESLint errors & more.
-      </p>
-      <p className="text-base sm:text-lg text-zinc-400 font-medium mb-12 max-w-xl text-center px-4">
-        100% Free • No API Keys • Automatic Backups
-      </p>
-      <Button
-        className="w-full max-w-sm py-4 px-8 text-lg font-bold rounded-xl bg-white hover:bg-zinc-100 text-black hover-lift shadow-xl hover:shadow-2xl transition-all duration-300 touch-manipulation focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 focus:ring-offset-black"
-        onClick={() => window.open("https://www.npmjs.com/package/@neurolint/cli", "_blank")}
-        size="lg"
-        aria-label="Install NeuroLint CLI from npm - 100% Free"
-      >
-        <ArrowRight className="mr-3 w-5 h-5" aria-hidden="true" />
-        Install Free CLI
-      </Button>
+      {/* Subtle gradient glow */}
+      <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="relative z-10 flex flex-col items-center">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 mb-8 backdrop-blur-sm">
+          <Play className="w-3 h-3 fill-blue-400 text-blue-400" />
+          <span>100% Free CLI Tool</span>
+        </div>
+
+        {/* Main Heading */}
+        <h1
+          id="hero-heading"
+          className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-bold text-white text-center leading-[1.1] mb-6 tracking-tight"
+        >
+          Fix Your React Code
+          <br />
+          <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">in Seconds</span>
+        </h1>
+
+        {/* Subtitle */}
+        <p className="text-lg sm:text-xl text-gray-400 font-normal mb-10 max-w-xl text-center leading-relaxed">
+          Deterministic fixes for hydration errors, missing keys, and ESLint issues. No AI guesswork.
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <Button
+            className="px-6 py-3 text-base font-medium rounded-lg bg-white hover:bg-gray-100 text-black transition-all duration-200 shadow-lg"
+            onClick={() => window.open("https://www.npmjs.com/package/@neurolint/cli", "_blank")}
+            size="lg"
+            aria-label="Install NeuroLint CLI"
+          >
+            Get Started
+            <ArrowRight className="ml-2 w-4 h-4" aria-hidden="true" />
+          </Button>
+          <Button
+            variant="outline"
+            className="px-6 py-3 text-base font-medium rounded-lg bg-transparent border border-white/20 text-white hover:bg-white/5 transition-all duration-200"
+            onClick={() => navigate("/docs")}
+            size="lg"
+            aria-label="View Documentation"
+          >
+            View Docs
+          </Button>
+        </div>
+      </div>
     </section>
   );
 }
