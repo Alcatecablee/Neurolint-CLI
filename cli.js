@@ -4060,8 +4060,8 @@ async function executeMigration(files, options, apiKey, projectId) {
  * Migrate a single file
  */
 async function migrateFile(filePath, options, apiKey, projectId) {
-  const fs = require('fs');
-  const content = fs.readFileSync(filePath, 'utf8');
+  const fsSync = require('fs');
+  const content = fsSync.readFileSync(filePath, 'utf8');
 
   // Call the migration API
   const response = await fetch('https://app.neurolint.dev/api/analyze', {
@@ -4091,8 +4091,16 @@ async function migrateFile(filePath, options, apiKey, projectId) {
   const result = await response.json();
 
   if (result.success && !options.dryRun) {
+    // Create backup before modifying user code
+    try {
+      const backupManager = createBackupManager({ verbose: options.verbose });
+      await backupManager.createBackup(filePath, 'migration-api');
+    } catch (backupError) {
+      console.warn(`  [WARN] Backup failed for ${filePath}: ${backupError.message}`);
+    }
+    
     // Apply the migrated code
-    fs.writeFileSync(filePath, result.code);
+    fsSync.writeFileSync(filePath, result.code);
   }
 
   return result;
@@ -5142,6 +5150,14 @@ async function updateDependencies(targetPath, step, options) {
     }
     
     if (changed) {
+      // Create backup before modifying package.json
+      try {
+        const backupManager = createBackupManager({ verbose: options.verbose });
+        await backupManager.createBackup(packageJsonPath, 'update-dependencies');
+      } catch (backupError) {
+        console.warn(`  [WARN] Backup failed for package.json: ${backupError.message}`);
+      }
+      
       await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
     }
     
