@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Key, AlertTriangle, Droplets, Terminal, Settings, Zap } from "lucide-react";
+import { ArrowRight, Key, AlertTriangle, Droplets, Terminal, Settings, FileCode, RefreshCw, GitBranch } from "lucide-react";
 
 interface FixCard {
   slug: string;
@@ -23,8 +23,16 @@ const fixCategories = [
         description: "ESLint only detects missing keys. NeuroLint auto-fixes them with smart ID inference.",
         icon: <Key className="w-5 h-5" />,
         layer: 3,
-        searches: "720/mo",
+        searches: "890/mo",
         badge: "Flagship",
+      },
+      {
+        slug: "forwardref-removal",
+        title: "Remove forwardRef Wrapper",
+        description: "React 19 passes ref as a regular prop. Auto-remove forwardRef and clean up imports.",
+        icon: <RefreshCw className="w-5 h-5" />,
+        layer: 3,
+        searches: "1,200/mo",
       },
     ],
   },
@@ -38,7 +46,22 @@ const fixCategories = [
         description: "Auto-wrap browser APIs with SSR guards. No more hydration mismatches.",
         icon: <Droplets className="w-5 h-5" />,
         layer: 4,
-        searches: "3,400/mo",
+        searches: "8,100/mo",
+      },
+    ],
+  },
+  {
+    name: "React 19 Migration",
+    description: "Breaking changes in React 19",
+    fixes: [
+      {
+        slug: "react-19-migration",
+        title: "React 19 Breaking Changes",
+        description: "Auto-migrate ReactDOM.render to createRoot, hydrate to hydrateRoot, and forwardRef removal.",
+        icon: <GitBranch className="w-5 h-5" />,
+        layer: 5,
+        searches: "2,400/mo",
+        badge: "Breaking",
       },
     ],
   },
@@ -54,6 +77,34 @@ const fixCategories = [
         layer: 2,
         searches: "1,800/mo",
         badge: "Urgent",
+      },
+    ],
+  },
+  {
+    name: "TypeScript Configuration",
+    description: "Optimal TypeScript setup for Next.js",
+    fixes: [
+      {
+        slug: "typescript-strict-mode",
+        title: "TypeScript Strict Mode Setup",
+        description: "strict: true only enables 7 flags. NeuroLint enables 17 strictness flags automatically.",
+        icon: <Settings className="w-5 h-5" />,
+        layer: 1,
+        searches: "8,900/mo",
+      },
+    ],
+  },
+  {
+    name: "Build/Production Issues",
+    description: "Clean code for production builds",
+    fixes: [
+      {
+        slug: "console-log-removal",
+        title: "Remove console.log from Production",
+        description: "ESLint no-console only detects. NeuroLint auto-removes with documented comments.",
+        icon: <FileCode className="w-5 h-5" />,
+        layer: 2,
+        searches: "3,600/mo",
       },
     ],
   },
@@ -77,8 +128,10 @@ function FixCardComponent({ fix }: { fix: FixCard }) {
             {fix.badge && (
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                 fix.badge === "Flagship" 
-                  ? "bg-blue-500/10 text-blue-400" 
-                  : "bg-orange-500/10 text-orange-400"
+                  ? "bg-zinc-800 text-gray-300 border border-black" 
+                  : fix.badge === "Urgent"
+                  ? "bg-zinc-800 text-gray-300 border border-black"
+                  : "bg-zinc-800 text-gray-300 border border-black"
               }`}>
                 {fix.badge}
               </span>
@@ -105,7 +158,6 @@ export function FixesHub() {
       <section className="py-16 md:py-24 px-4 text-center">
         <div className="max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-black text-gray-300 rounded-full text-sm font-medium mb-6">
-            <Zap className="w-4 h-4 text-green-400" />
             One-Command Fixes
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
@@ -138,9 +190,9 @@ export function FixesHub() {
 
       <section className="py-16 px-4 bg-zinc-900/30 border-t border-black">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">More Fixes Coming Soon</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Request a Fix</h2>
           <p className="text-gray-400 mb-6">
-            We're adding more automated fixes for TypeScript strict mode, console.log removal, and React 19 breaking changes.
+            Have a common React/Next.js problem that needs an automated fix? Let us know.
           </p>
           <a
             href="https://github.com/Alcatecablee/Neurolint-CLI/issues"

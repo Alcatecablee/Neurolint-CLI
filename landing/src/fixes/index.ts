@@ -8,3 +8,7 @@ export { CompetitorCompare } from "./components/CompetitorCompare";
 export { ReactKeysAutoFix } from "./pages/ReactKeysAutoFix";
 export { NextLintDeprecated } from "./pages/NextLintDeprecated";
 export { HydrationMismatch } from "./pages/HydrationMismatch";
+export { ConsoleLogRemoval } from "./pages/ConsoleLogRemoval";
+export { TypeScriptStrictMode } from "./pages/TypeScriptStrictMode";
+export { React19Migration } from "./pages/React19Migration";
+export { ForwardRefRemoval } from "./pages/ForwardRefRemoval";
