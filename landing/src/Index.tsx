@@ -310,13 +310,10 @@ export default function Index() {
 
       {/* Floating Centered Navigation */}
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4">
-        <nav className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+        <nav className="inline-flex items-center gap-8 px-10 py-2.5 rounded-full bg-white/5 border border-black backdrop-blur-sm w-[1100px] justify-between">
           {/* Brand */}
-          <a href="/" className="flex items-center gap-2 shrink-0 pr-3 border-r border-white/10">
-            <img src="/logo.png" alt="NeuroLint" className="h-6 transition-transform duration-200 hover:scale-105" />
-            <span className="font-semibold text-white text-sm tracking-tight hidden sm:inline">
-              NEURO<span className="text-zinc-400">LINT</span>
-            </span>
+          <a href="/" className="flex items-center shrink-0">
+            <img src="/logo.png" alt="NeuroLint" className="h-7 transition-transform duration-200 hover:scale-105" />
           </a>
 
           {/* Desktop Navigation Links */}
@@ -359,8 +356,8 @@ export default function Index() {
             </a>
           </div>
 
-          {/* Divider and Actions */}
-          <div className="flex items-center gap-2 pl-3 border-l border-white/10">
+          {/* Actions */}
+          <div className="flex items-center gap-3">
             <a 
               href="https://github.com/Alcatecablee/Neurolint-CLI"
               target="_blank"
