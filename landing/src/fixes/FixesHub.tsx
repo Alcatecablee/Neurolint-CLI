@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Key, AlertTriangle, Droplets, Terminal, Settings, FileCode, RefreshCw, GitBranch } from "lucide-react";
+import { ArrowRight, Key, AlertTriangle, Droplets, Terminal, Settings, FileCode, RefreshCw, GitBranch, Github, ThumbsUp, Wrench, Search, Layers } from "lucide-react";
 
 interface FixCard {
   slug: string;
@@ -10,6 +10,10 @@ interface FixCard {
   layer: number;
   searches: string;
   badge?: string;
+  githubIssue?: {
+    number: string;
+    reactions: string;
+  };
 }
 
 const fixCategories = [
@@ -25,6 +29,10 @@ const fixCategories = [
         layer: 3,
         searches: "890/mo",
         badge: "Flagship",
+        githubIssue: {
+          number: "#3215",
+          reactions: "115",
+        },
       },
       {
         slug: "forwardref-removal",
@@ -121,7 +129,7 @@ function FixCardComponent({ fix }: { fix: FixCard }) {
           {fix.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
             <h3 className="text-base font-semibold text-white group-hover:text-blue-400 transition-colors truncate">
               {fix.title}
             </h3>
@@ -136,6 +144,22 @@ function FixCardComponent({ fix }: { fix: FixCard }) {
                 {fix.badge}
               </span>
             )}
+            {fix.githubIssue && (
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  window.open(`https://github.com/jsx-eslint/eslint-plugin-react/issues/${fix.githubIssue!.number.replace('#', '')}`, '_blank');
+                }}
+                className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-zinc-800 text-gray-400 border border-black hover:bg-zinc-700 hover:text-gray-300 transition-colors cursor-pointer"
+              >
+                <Github className="w-3 h-3" />
+                {fix.githubIssue.number}
+                <ThumbsUp className="w-3 h-3 ml-1" />
+                {fix.githubIssue.reactions}
+              </button>
+            )}
           </div>
           <p className="text-sm text-gray-400 line-clamp-2 mb-2">{fix.description}</p>
           <div className="flex items-center gap-3 text-xs text-gray-500">
@@ -144,6 +168,10 @@ function FixCardComponent({ fix }: { fix: FixCard }) {
               Layer {fix.layer}
             </span>
             <span>{fix.searches} searches</span>
+            <span className="flex items-center gap-1 text-blue-400 group-hover:text-blue-300">
+              View Solution
+              <ArrowRight className="w-3 h-3" />
+            </span>
           </div>
         </div>
         <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0" />
@@ -163,10 +191,40 @@ export function FixesHub() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Fix Common React Problems
           </h1>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
             Each page shows the exact problem, why existing tools fail, and the one-command NeuroLint fix.
             Verified with source code references.
           </p>
+          
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-gray-400" />
+              </div>
+              <div className="text-left">
+                <div className="text-xl font-bold text-white">50+</div>
+                <div className="text-xs text-gray-500">Auto-fixes</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center">
+                <Search className="w-5 h-5 text-gray-400" />
+              </div>
+              <div className="text-left">
+                <div className="text-xl font-bold text-white">14,390</div>
+                <div className="text-xs text-gray-500">Monthly searches</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-lg flex items-center justify-center">
+                <Layers className="w-5 h-5 text-gray-400" />
+              </div>
+              <div className="text-left">
+                <div className="text-xl font-bold text-white">7</div>
+                <div className="text-xs text-gray-500">Layer system</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
