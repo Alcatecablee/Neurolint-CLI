@@ -7,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.4] - 2025-12-13
+
+### Added
+
+#### Official Codemods Integration
+
+New `--with-official-codemods` flag for `migrate-react19` and `migrate-nextjs-16` commands enables a two-phase migration:
+
+**Phase 1: Official Framework Codemods**
+- Runs battle-tested codemods from React and Next.js core teams
+- Handles breaking changes between framework versions
+
+**Phase 2: NeuroLint Enhancements**  
+- Runs NeuroLint's comprehensive transformations
+- Handles 50+ additional fixes that official codemods don't cover
+
+**React 19 Codemods Integrated:**
+- `@react-codemod/replace-reactdom-render` - Converts ReactDOM.render() to createRoot()
+- `@react-codemod/replace-string-ref` - Converts string refs to callback refs
+- `@react-codemod/use-context-hook` - Converts Context.Consumer to useContext()
+- `@react-codemod/rename-unsafe-lifecycles` - Adds UNSAFE_ prefix to deprecated lifecycles
+
+**Next.js 16 Codemods Integrated:**
+- `@next/codemod new-link` - Removes nested <a> from <Link> components
+- `@next/codemod app-dir-imports` - Updates imports for App Router
+- `@next/codemod metadata` - Converts Head to generateMetadata
+- `@next/codemod next-request-geo-ip` - Updates geo/ip access patterns
+
+**Features:**
+- Graceful degradation if npx not available
+- Non-blocking errors (logs and continues)
+- Dry-run support (shows what would run without executing)
+- Detailed Phase 1/Phase 2 summary in output
+
+**Usage:**
+```bash
+neurolint migrate-react19 . --with-official-codemods --verbose
+neurolint migrate-nextjs-16 . --with-official-codemods --dry-run
+```
+
+**Documentation:**
+- New `docs/OFFICIAL-CODEMODS-INTEGRATION.md` with full integration strategy
+- Updated `CLI_USAGE.md` with new flag documentation
+
+### Changed
+- Version bumped to 1.5.4
+
 ## [1.5.3] - 2025-12-11
 
 ### Added
