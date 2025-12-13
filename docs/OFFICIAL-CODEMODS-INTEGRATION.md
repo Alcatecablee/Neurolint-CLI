@@ -146,6 +146,21 @@ If official codemods are not available (npm not installed, network issues):
 
 ## Command Usage
 
+### CLI Flags for Official Codemods
+
+| Flag | Description |
+|------|-------------|
+| `--with-official-codemods` | Run official React/Next.js codemods before NeuroLint enhancements |
+| `--skip-official` | Skip official codemods (use with `--with-official-codemods` or `migrate-nextjs-15`) |
+| `--recipe` | Use `migration-recipe` for faster all-in-one React 19 migration |
+| `--codemod-version <ver>` | Pin codemod package version for reproducibility |
+
+**Note on `--codemod-version`:** This flag pins the version of the codemod package used by the specific command:
+- For `migrate-react19`: Pins `codemod@<version>` (React codemods)
+- For `migrate-nextjs-15/16`: Pins `@next/codemod@<version>` (Next.js codemods)
+
+These are different npm packages with different version lines, so use version numbers appropriate for each.
+
 ### React 19 Migration with Official Codemods
 
 ```bash
@@ -155,17 +170,38 @@ neurolint migrate-react19 . --with-official-codemods --dry-run --verbose
 # Apply all migrations
 neurolint migrate-react19 . --with-official-codemods --verbose
 
+# Use migration-recipe for faster all-in-one migration
+neurolint migrate-react19 . --with-official-codemods --recipe --verbose
+
+# Pin codemod version for reproducibility
+neurolint migrate-react19 . --with-official-codemods --codemod-version 1.0.0 --verbose
+
 # Apply without official codemods (NeuroLint only)
 neurolint migrate-react19 . --verbose
 ```
 
-### Next.js 15/16 Migration with Official Codemods
+### Next.js 15 Migration
+
+The `migrate-nextjs-15` command runs official Next.js 15 codemods **by default**:
 
 ```bash
-# For Next.js 15 upgrades
-neurolint migrate-nextjs-15 . --with-official-codemods --dry-run --verbose
+# Preview Next.js 15 migration (runs official codemods by default)
+neurolint migrate-nextjs-15 . --dry-run --verbose
 
-# For Next.js 16 upgrades
+# Apply Next.js 15 migration
+neurolint migrate-nextjs-15 . --verbose
+
+# Skip official codemods, run NeuroLint enhancements only
+neurolint migrate-nextjs-15 . --skip-official --verbose
+```
+
+### Next.js 16 Migration with Official Codemods
+
+```bash
+# For Next.js 16 upgrades (requires --with-official-codemods)
+neurolint migrate-nextjs-16 . --with-official-codemods --dry-run --verbose
+
+# Apply Next.js 16 migration
 neurolint migrate-nextjs-16 . --with-official-codemods --verbose
 ```
 

@@ -715,6 +715,9 @@ function parseOptions(args) {
     production: args.includes('--production'),
     backup: !args.includes('--no-backup'),
     withOfficialCodemods: args.includes('--with-official-codemods'),
+    skipOfficialCodemods: args.includes('--skip-official'),
+    useRecipe: args.includes('--recipe'),
+    codemodVersion: null,
     layers: args.includes('--layers') ? args[args.indexOf('--layers') + 1].split(',').map(Number) : null,
     allLayers: args.includes('--all-layers'),
     include: args.includes('--include') ? args[args.indexOf('--include') + 1].split(',') : ['**/*.{ts,tsx,js,jsx,json}'],
@@ -779,6 +782,10 @@ function parseOptions(args) {
       options.import = args[i].split('=')[1];
     } else if (args[i].startsWith('--target=')) {
       options.target = args[i].split('=')[1];
+    } else if (args[i] === '--codemod-version' && i + 1 < args.length) {
+      options.codemodVersion = args[i + 1];
+    } else if (args[i].startsWith('--codemod-version=')) {
+      options.codemodVersion = args[i].split('=')[1];
     }
   }
   
@@ -842,29 +849,45 @@ const OFFICIAL_CODEMODS = {
  * @param {string} config.targetPath - Path to the project
  * @param {boolean} config.dryRun - Whether to skip execution (just report)
  * @param {boolean} config.verbose - Whether to show detailed output
+ * @param {string} [config.codemodVersion] - Optional version to pin codemods (e.g., '1.0.0')
+ *                                           For React: pins 'codemod' package (e.g., codemod@1.0.0)
+ *                                           For Next.js: pins '@next/codemod' package (e.g., @next/codemod@15.0.0)
  * @returns {Object} Results summary
  */
-function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
+function runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVersion }) {
   const codemods = OFFICIAL_CODEMODS[framework];
   if (!codemods || codemods.length === 0) {
     return { success: 0, skipped: 0, errors: 0, results: [] };
   }
 
-  const frameworkLabel = framework.startsWith('react') ? 'React 19' : 
+  const isReactFramework = framework.startsWith('react');
+  const frameworkLabel = isReactFramework ? 'React 19' : 
                          framework === 'nextjs15' ? 'Next.js 15' : 'Next.js 16';
+  
+  // Determine package version suffix - only for the relevant package type
+  const reactCodemodPkg = codemodVersion && isReactFramework ? `codemod@${codemodVersion}` : 'codemod@latest';
+  const nextCodemodPkg = codemodVersion && !isReactFramework ? `@next/codemod@${codemodVersion}` : '@next/codemod@latest';
+  
   console.log(`\n[Phase 1] Running official ${frameworkLabel} codemods...`);
+  if (codemodVersion) {
+    const pinnedPkg = isReactFramework ? `codemod@${codemodVersion}` : `@next/codemod@${codemodVersion}`;
+    console.log(`  [INFO] Using pinned version: ${pinnedPkg}`);
+  }
+  console.log(`  [INFO] Target: ${targetPath}`);
+  console.log(`  [INFO] Codemods to run: ${codemods.length}`);
 
   if (dryRun) {
     console.log('  [INFO] Dry-run mode - skipping official codemods execution');
     console.log('  [INFO] The following codemods would run:');
-    codemods.forEach(codemod => {
-      console.log(`    - ${codemod.name}: ${codemod.description}`);
+    codemods.forEach((codemod, index) => {
+      console.log(`    ${index + 1}/${codemods.length} ${codemod.name}: ${codemod.description}`);
     });
     return { 
       success: 0, 
       skipped: codemods.length, 
       errors: 0, 
-      results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'dry-run' }))
+      results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'dry-run' })),
+      version: codemodVersion || 'latest'
     };
   }
 
@@ -879,7 +902,8 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
       success: 0, 
       skipped: codemods.length, 
       errors: 0, 
-      results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'npx not found' }))
+      results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'npx not found' })),
+      version: codemodVersion || 'latest'
     };
   }
 
@@ -888,23 +912,29 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
   let skipCount = 0;
   let errorCount = 0;
 
-  // Escape path for shell safety (handle spaces and special chars)
-  const escapedPath = `"${targetPath.replace(/"/g, '\\"')}"`;
+  // Escape path for shell safety (handle spaces, quotes, and special chars)
+  const escapedPath = `"${targetPath.replace(/["'\\`$]/g, '\\$&')}"`;
 
-  for (const codemod of codemods) {
+  for (let i = 0; i < codemods.length; i++) {
+    const codemod = codemods[i];
+    const progress = `[${i + 1}/${codemods.length}]`;
+    
     try {
       // Build command based on framework type
       let command;
       if (framework.startsWith('react')) {
-        // React codemods use: npx codemod@latest <transform> --target <path>
-        command = `npx --yes codemod@latest ${codemod.transform} --target ${escapedPath}`;
+        // React codemods use: npx codemod@<version> <transform> --target <path>
+        command = `npx --yes ${reactCodemodPkg} ${codemod.transform} --target ${escapedPath}`;
       } else {
-        // Next.js codemods use: npx @next/codemod@latest <transform> <path>
-        command = `npx --yes @next/codemod@latest ${codemod.transform} ${escapedPath}`;
+        // Next.js codemods use: npx @next/codemod@<version> <transform> <path>
+        command = `npx --yes ${nextCodemodPkg} ${codemod.transform} ${escapedPath}`;
       }
 
+      // Show progress with codemod name
+      console.log(`  ${progress} Running ${codemod.name}...`);
+      
       if (verbose) {
-        console.log(`  [RUN] ${command}`);
+        console.log(`       Command: ${command}`);
       }
 
       const output = execSync(command, {
@@ -921,7 +951,7 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
                            output.includes('file');
       
       if (hasTransforms) {
-        console.log(`  [OK] ${codemod.name} - completed`);
+        console.log(`  ${progress} [OK] ${codemod.name} - completed`);
         if (verbose && output.trim()) {
           const lines = output.trim().split('\n').slice(0, 5);
           lines.forEach(line => console.log(`       ${line}`));
@@ -932,7 +962,7 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
         results.push({ name: codemod.name, status: 'success', output: output.trim() });
         successCount++;
       } else {
-        console.log(`  [SKIP] ${codemod.name} - no changes needed`);
+        console.log(`  ${progress} [SKIP] ${codemod.name} - no changes needed`);
         results.push({ name: codemod.name, status: 'skipped', reason: 'no changes needed' });
         skipCount++;
       }
@@ -944,11 +974,11 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
       if (stderr.includes('No files matched') || 
           stderr.includes('no files') || 
           stdout.includes('0 files')) {
-        console.log(`  [SKIP] ${codemod.name} - no matching files`);
+        console.log(`  ${progress} [SKIP] ${codemod.name} - no matching files`);
         results.push({ name: codemod.name, status: 'skipped', reason: 'no matching files' });
         skipCount++;
       } else {
-        console.log(`  [ERROR] ${codemod.name} - command failed`);
+        console.log(`  ${progress} [ERROR] ${codemod.name} - command failed`);
         if (verbose) {
           console.log(`       ${error.message}`);
           if (stderr) console.log(`       ${stderr.slice(0, 200)}`);
@@ -959,11 +989,14 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
     }
   }
 
+  // Summary
+  console.log(`  [DONE] Phase 1 complete: ${successCount} success, ${skipCount} skipped, ${errorCount} errors`);
+  
   if (errorCount > 0) {
-    console.log('\n  [NOTE] Codemod errors are non-blocking. NeuroLint will continue.');
+    console.log('  [NOTE] Codemod errors are non-blocking. NeuroLint will continue.');
   }
 
-  return { success: successCount, skipped: skipCount, errors: errorCount, results };
+  return { success: successCount, skipped: skipCount, errors: errorCount, results, version: codemodVersion || 'latest' };
 }
 
 // Handle analyze command
@@ -1518,18 +1551,31 @@ async function handleReact19Migration(targetPath, options, spinner) {
   try {
     logInfo('Starting React 19 migration...');
     
-    // Phase 1: Run official React codemods if requested
+    // Phase 1: Run official React codemods if requested (unless --skip-official is set)
     let phase1Results = null;
-    if (options.withOfficialCodemods) {
+    const shouldRunOfficialCodemods = options.withOfficialCodemods && !options.skipOfficialCodemods;
+    
+    if (shouldRunOfficialCodemods) {
       spinner.stop();
+      
+      // Use recipe mode if --recipe flag is set (faster, all-in-one migration)
+      const framework = options.useRecipe ? 'react19Recipe' : 'react19';
+      
+      if (options.useRecipe) {
+        logInfo('Using migration-recipe for faster all-in-one migration');
+      }
+      
       phase1Results = runOfficialCodemods({
-        framework: 'react19',
+        framework,
         targetPath,
         dryRun: options.dryRun,
-        verbose: options.verbose
+        verbose: options.verbose,
+        codemodVersion: options.codemodVersion
       });
       console.log(`\n[Phase 2] Running NeuroLint enhancements...`);
       spinner.start();
+    } else if (options.skipOfficialCodemods && options.withOfficialCodemods) {
+      logInfo('Skipping official codemods (--skip-official flag set)');
     }
     
     const files = await getFiles(targetPath, options.include, options.exclude);
@@ -2879,6 +2925,7 @@ Analysis Commands:
   simplify [path]         Simplify project complexity (convert Next.js to React, etc.)
   migrate [path]         One-time migration service (enterprise)
   migrate-nextjs-16 [path] Migrate project to Next.js 16 compatibility
+  migrate-nextjs-15 [path]  Migrate project to Next.js 15 (includes official codemods)
   migrate-nextjs-15.5 [path] Migrate project to Next.js 15.5 compatibility
   migrate-react19 [path] Migrate project to React 19 compatibility
   migrate-biome [path]   Migrate from ESLint to Biome
@@ -2947,6 +2994,9 @@ Options:
   --layers <list>        Specify layers to run (e.g., 1,2,3)
   --all-layers           Apply all layers (1-7)
   --with-official-codemods  Run official React/Next.js codemods before NeuroLint
+  --skip-official           Skip official codemods (use with --with-official-codemods)
+  --recipe                  Use migration-recipe for faster all-in-one React 19 migration
+  --codemod-version <ver>   Pin codemod package version for reproducibility (e.g., 1.0.0)
   --help, -h            Show this help message
   --version, -v         Show version information
 
@@ -3027,11 +3077,43 @@ Examples:
         const fixMaster = require('./fix-master.js');
         await fixMaster.handleBiomeMigrationCommand(args);
         break;
+      case 'migrate-nextjs-15':
       case 'migrate-nextjs-15.5':
-        // Handle Next.js 15.5 migration command - now free!
+        // Handle Next.js 15/15.5 migration command - now free!
+        // migrate-nextjs-15 is an alias for migrate-nextjs-15.5 with official codemods
+        spinner.text = 'Running Next.js 15 migration...';
+        
+        // Phase 1: Run official Next.js 15 codemods if requested or if using migrate-nextjs-15 alias
+        let nextjs15Phase1Results = null;
+        const isNextjs15Alias = command === 'migrate-nextjs-15';
+        const shouldRunNextjs15Codemods = (options.withOfficialCodemods || isNextjs15Alias) && !options.skipOfficialCodemods;
+        
+        if (shouldRunNextjs15Codemods) {
+          spinner.stop();
+          if (isNextjs15Alias) {
+            logInfo('migrate-nextjs-15 includes official codemods by default');
+          }
+          nextjs15Phase1Results = runOfficialCodemods({
+            framework: 'nextjs15',
+            targetPath,
+            dryRun: options.dryRun,
+            verbose: options.verbose,
+            codemodVersion: options.codemodVersion
+          });
+          console.log(`\n[Phase 2] Running NeuroLint enhancements...`);
+          spinner.start();
+        }
+        
         // Import and use the Next.js 15.5 migration from fix-master
         const fixMasterNextJS = require('./fix-master.js');
         await fixMasterNextJS.handleMigrationCommand(args);
+        
+        // Show Phase 1 results if applicable
+        if (nextjs15Phase1Results) {
+          console.log(`\n[NEXT.JS 15 MIGRATION SUMMARY]`);
+          console.log(`  [Phase 1] Official Codemods:`);
+          console.log(`    Success: ${nextjs15Phase1Results.success}, Skipped: ${nextjs15Phase1Results.skipped}, Errors: ${nextjs15Phase1Results.errors}`);
+        }
         break;
       case 'migrate-react19':
         // Handle React 19 migration command - now free!
@@ -3329,6 +3411,7 @@ Analysis Commands:
   simplify [path]         Simplify project complexity (convert Next.js to React, etc.)
   migrate [path]         One-time migration service (enterprise)
   migrate-nextjs-16 [path] Migrate project to Next.js 16 compatibility
+  migrate-nextjs-15 [path]  Migrate project to Next.js 15 (includes official codemods)
   migrate-nextjs-15.5 [path] Migrate project to Next.js 15.5 compatibility
   migrate-react19 [path] Migrate project to React 19 compatibility
   migrate-biome [path]   Migrate from ESLint to Biome

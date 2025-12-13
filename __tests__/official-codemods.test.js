@@ -50,6 +50,22 @@ describe('Official Codemods Integration', () => {
       const cliContent = require('fs').readFileSync(cliPath, 'utf8');
       expect(cliContent).toContain("withOfficialCodemods: args.includes('--with-official-codemods')");
     });
+    
+    test('should parse --skip-official flag', () => {
+      const cliContent = require('fs').readFileSync(cliPath, 'utf8');
+      expect(cliContent).toContain("skipOfficialCodemods: args.includes('--skip-official')");
+    });
+    
+    test('should parse --recipe flag', () => {
+      const cliContent = require('fs').readFileSync(cliPath, 'utf8');
+      expect(cliContent).toContain("useRecipe: args.includes('--recipe')");
+    });
+    
+    test('should parse --codemod-version flag', () => {
+      const cliContent = require('fs').readFileSync(cliPath, 'utf8');
+      expect(cliContent).toContain('codemodVersion');
+      expect(cliContent).toContain('--codemod-version');
+    });
   });
   
   describe('runOfficialCodemods function', () => {
@@ -63,8 +79,13 @@ describe('Official Codemods Integration', () => {
       expect(cliContent).toContain('function runOfficialCodemods');
     });
     
-    test('should accept framework, targetPath, dryRun, and verbose parameters', () => {
-      expect(cliContent).toContain('runOfficialCodemods({ framework, targetPath, dryRun, verbose })');
+    test('should accept framework, targetPath, dryRun, verbose, and codemodVersion parameters', () => {
+      expect(cliContent).toContain('runOfficialCodemods({ framework, targetPath, dryRun, verbose, codemodVersion })');
+    });
+    
+    test('should support version pinning', () => {
+      expect(cliContent).toContain('codemodVersion &&');
+      expect(cliContent).toContain('Using pinned version');
     });
     
     test('should check for npx availability', () => {
@@ -84,17 +105,22 @@ describe('Official Codemods Integration', () => {
       expect(cliContent).toContain('Codemod errors are non-blocking');
     });
     
-    test('should return results object with success, skipped, errors counts', () => {
-      expect(cliContent).toContain('return { success: successCount, skipped: skipCount, errors: errorCount, results }');
+    test('should return results object with success, skipped, errors counts and version', () => {
+      expect(cliContent).toContain('return { success: successCount, skipped: skipCount, errors: errorCount, results, version:');
     });
     
     test('should use correct React codemod command syntax', () => {
-      expect(cliContent).toContain('npx --yes codemod@latest');
+      expect(cliContent).toContain('${reactCodemodPkg}');
       expect(cliContent).toContain('--target');
     });
     
     test('should use correct Next.js codemod command syntax', () => {
-      expect(cliContent).toContain('npx --yes @next/codemod@latest');
+      expect(cliContent).toContain('${nextCodemodPkg}');
+    });
+    
+    test('should default to @latest when no version specified', () => {
+      expect(cliContent).toContain("codemod@latest");
+      expect(cliContent).toContain("@next/codemod@latest");
     });
     
     test('should escape paths for shell safety', () => {
@@ -111,11 +137,19 @@ describe('Official Codemods Integration', () => {
     });
     
     test('should check for withOfficialCodemods option', () => {
-      expect(cliContent).toContain('if (options.withOfficialCodemods)');
+      expect(cliContent).toContain('shouldRunOfficialCodemods');
     });
     
-    test('should call runOfficialCodemods with react19 framework', () => {
-      expect(cliContent).toContain("framework: 'react19'");
+    test('should support --recipe flag for migration-recipe', () => {
+      expect(cliContent).toContain("options.useRecipe ? 'react19Recipe' : 'react19'");
+    });
+    
+    test('should support --skip-official flag', () => {
+      expect(cliContent).toContain('options.skipOfficialCodemods');
+    });
+    
+    test('should call runOfficialCodemods with react19 or react19Recipe framework', () => {
+      expect(cliContent).toContain("'react19Recipe' : 'react19'");
     });
     
     test('should log Phase 2 after codemods', () => {
@@ -125,6 +159,27 @@ describe('Official Codemods Integration', () => {
     test('should include phase1Results in summary', () => {
       expect(cliContent).toContain('if (phase1Results)');
       expect(cliContent).toContain('[Phase 1] Official Codemods:');
+    });
+  });
+  
+  describe('migrate-nextjs-15 integration', () => {
+    let cliContent;
+    
+    beforeAll(async () => {
+      cliContent = await fs.readFile(cliPath, 'utf8');
+    });
+    
+    test('should define migrate-nextjs-15 as alias case', () => {
+      expect(cliContent).toContain("case 'migrate-nextjs-15':");
+    });
+    
+    test('should run official codemods by default for migrate-nextjs-15', () => {
+      expect(cliContent).toContain('isNextjs15Alias');
+      expect(cliContent).toContain("framework: 'nextjs15'");
+    });
+    
+    test('should respect --skip-official for migrate-nextjs-15', () => {
+      expect(cliContent).toContain('shouldRunNextjs15Codemods');
     });
   });
   
