@@ -3128,18 +3128,22 @@ Examples:
         // Handle Next.js 16 migration command
         spinner.text = 'Running Next.js 16 migration...';
         
-        // Phase 1: Run official Next.js codemods if requested
+        // Phase 1: Run official Next.js codemods if requested (unless --skip-official is set)
         let nextjs16Phase1Results = null;
-        if (options.withOfficialCodemods) {
+        const shouldRunNextjs16Codemods = options.withOfficialCodemods && !options.skipOfficialCodemods;
+        if (shouldRunNextjs16Codemods) {
           spinner.stop();
           nextjs16Phase1Results = runOfficialCodemods({
             framework: 'nextjs16',
             targetPath,
             dryRun: options.dryRun,
-            verbose: options.verbose
+            verbose: options.verbose,
+            codemodVersion: options.codemodVersion
           });
           console.log(`\n[Phase 2] Running NeuroLint enhancements...`);
           spinner.start();
+        } else if (options.skipOfficialCodemods && options.withOfficialCodemods) {
+          logInfo('Skipping official codemods (--skip-official flag set)');
         }
         
         const NextJS16Migrator = require('./scripts/migrate-nextjs-16.js');

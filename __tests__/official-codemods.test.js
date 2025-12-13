@@ -202,6 +202,15 @@ describe('Official Codemods Integration', () => {
       expect(cliContent).toContain('[NEXT.JS 16 MIGRATION SUMMARY]');
       expect(cliContent).toContain('if (nextjs16Phase1Results)');
     });
+    
+    test('should respect --skip-official for migrate-nextjs-16', () => {
+      expect(cliContent).toContain('shouldRunNextjs16Codemods');
+      expect(cliContent).toContain('!options.skipOfficialCodemods');
+    });
+    
+    test('should pass codemodVersion to runOfficialCodemods for migrate-nextjs-16', () => {
+      expect(cliContent).toMatch(/migrate-nextjs-16[\s\S]*?codemodVersion:\s*options\.codemodVersion/);
+    });
   });
   
   describe('CLI help text', () => {
