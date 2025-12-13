@@ -487,7 +487,7 @@ export default function Index() {
         <div className="max-w-4xl mx-auto z-10 animate-fade-in-blur">
           {/* Badge */}
           <div className="mb-8 animate-slide-in-down animate-delay-200">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-black text-sm text-gray-300 backdrop-blur-sm">
               <Zap className="w-3 h-3 text-blue-400" />
               100% Free CLI Tool
             </span>
@@ -518,7 +518,7 @@ export default function Index() {
             </a>
             <a
               href="/docs"
-              className="px-6 py-3 text-base font-medium rounded-lg bg-transparent border border-white/20 text-white hover:bg-white/5 transition-all duration-200"
+              className="px-6 py-3 text-base font-medium rounded-lg bg-transparent border border-black text-white hover:bg-white/5 transition-all duration-200"
             >
               View Docs
             </a>
@@ -533,7 +533,7 @@ export default function Index() {
 
       {/* Install Command Section */}
       <section className="py-8 px-4 relative z-10">
-        <div className="max-w-2xl mx-auto bg-zinc-900/80 border border-white/10 rounded-xl p-4 md:p-5 backdrop-blur-sm relative group hover:border-white/20 transition-colors duration-300">
+        <div className="max-w-2xl mx-auto bg-zinc-900/80 border border-black rounded-xl p-4 md:p-5 backdrop-blur-sm relative group hover:border-black transition-colors duration-300">
           <code className="text-blue-400 font-mono text-sm md:text-base lg:text-lg block text-center pr-10">
             $ npm install -g @neurolint/cli
           </code>
