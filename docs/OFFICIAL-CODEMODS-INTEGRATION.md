@@ -42,22 +42,31 @@ NeuroLint complements official codemods by:
 
 ### React 19 Codemods
 
-| Codemod | What It Does | Command |
-|---------|--------------|---------|
-| `replace-reactdom-render` | Converts `ReactDOM.render()` to `createRoot().render()` | `npx @react-codemod/replace-reactdom-render` |
-| `replace-string-ref` | Converts string refs to callback refs | `npx @react-codemod/replace-string-ref` |
-| `use-context-hook` | Converts `Context.Consumer` to `useContext()` | `npx @react-codemod/use-context-hook` |
-| `rename-unsafe-lifecycles` | Adds `UNSAFE_` prefix to deprecated lifecycles | `npx @react-codemod/rename-unsafe-lifecycles` |
-
-### Next.js Codemods
+React 19 codemods are run via the `codemod` CLI tool (recommended by React team):
 
 | Codemod | What It Does | Command |
 |---------|--------------|---------|
-| `new-link` | Removes nested `<a>` from `<Link>` components | `npx @next/codemod new-link` |
-| `next-image-experimental` | Updates Image component API | `npx @next/codemod next-image-experimental` |
-| `app-dir-imports` | Updates imports for App Router | `npx @next/codemod app-dir-imports` |
-| `metadata` | Converts `Head` to `generateMetadata` | `npx @next/codemod metadata` |
-| `next-request-geo-ip` | Updates geo/ip access patterns | `npx @next/codemod next-request-geo-ip` |
+| `migration-recipe` | Runs ALL React 19 codemods at once | `npx codemod@latest react/19/migration-recipe` |
+| `replace-reactdom-render` | Converts `ReactDOM.render()` to `createRoot().render()` | `npx codemod@latest react/19/replace-reactdom-render --target ./src` |
+| `replace-string-ref` | Converts string refs to callback refs | `npx codemod@latest react/19/replace-string-ref --target ./src` |
+| `replace-act-import` | Updates act import from react-dom/test-utils to react | `npx codemod@latest react/19/replace-act-import --target ./src` |
+| `replace-use-form-state` | Replaces useFormState with useActionState | `npx codemod@latest react/19/replace-use-form-state --target ./src` |
+
+### Next.js 15 Codemods
+
+| Codemod | What It Does | Command |
+|---------|--------------|---------|
+| `next-async-request-api` | Makes `cookies()`, `headers()`, `params` async | `npx @next/codemod@latest next-async-request-api .` |
+| `next-request-geo-ip` | Migrates geo/ip to `@vercel/functions` | `npx @next/codemod@latest next-request-geo-ip .` |
+| `app-dir-runtime-config-experimental-edge` | Changes `experimental-edge` to `edge` runtime | `npx @next/codemod@latest app-dir-runtime-config-experimental-edge .` |
+
+### Next.js 16 Codemods
+
+| Codemod | What It Does | Command |
+|---------|--------------|---------|
+| `remove-experimental-ppr` | Removes `experimental_ppr` Route Segment Config | `npx @next/codemod@latest remove-experimental-ppr .` |
+| `remove-unstable-prefix` | Removes `unstable_` prefix from stabilized APIs | `npx @next/codemod@latest remove-unstable-prefix .` |
+| `middleware-to-proxy` | Migrates middleware convention to proxy | `npx @next/codemod@latest middleware-to-proxy .` |
 
 ---
 
@@ -93,9 +102,10 @@ Official codemods handle breaking changes. NeuroLint handles everything else:
 ┌─────────────────────────────────────────────────────────────┐
 │  PHASE 1: Official Codemods (Breaking Changes)              │
 │  ─────────────────────────────────────────────              │
-│  • npx @react-codemod/replace-reactdom-render               │
-│  • npx @react-codemod/replace-string-ref                    │
-│  • npx @react-codemod/use-context-hook                      │
+│  • npx codemod@latest react/19/replace-reactdom-render      │
+│  • npx codemod@latest react/19/replace-string-ref           │
+│  • npx codemod@latest react/19/replace-act-import           │
+│  • npx codemod@latest react/19/replace-use-form-state       │
 │                                                              │
 │  Status: Each codemod runs independently                    │
 │  Failure: Logged but does not block Phase 2                 │
@@ -149,14 +159,23 @@ neurolint migrate-react19 . --with-official-codemods --verbose
 neurolint migrate-react19 . --verbose
 ```
 
-### Next.js 16 Migration with Official Codemods
+### Next.js 15/16 Migration with Official Codemods
 
 ```bash
-# Preview what will happen
-neurolint migrate-nextjs-16 . --with-official-codemods --dry-run --verbose
+# For Next.js 15 upgrades
+neurolint migrate-nextjs-15 . --with-official-codemods --dry-run --verbose
 
-# Apply all migrations
+# For Next.js 16 upgrades
 neurolint migrate-nextjs-16 . --with-official-codemods --verbose
+```
+
+### Using the Full Upgrade Command (Recommended)
+
+For the most comprehensive upgrade experience, use Next.js's built-in upgrade:
+
+```bash
+# Upgrades Next.js, React, and applies all relevant codemods
+npx @next/codemod upgrade major
 ```
 
 ### Manual Sequential Workflow
@@ -164,9 +183,8 @@ neurolint migrate-nextjs-16 . --with-official-codemods --verbose
 If you prefer to run codemods manually:
 
 ```bash
-# Step 1: Run official codemods
-npx @react-codemod/replace-reactdom-render src/ --force
-npx @react-codemod/replace-string-ref src/ --force
+# Step 1: Run React 19 migration recipe (all codemods at once)
+npx codemod@latest react/19/migration-recipe --target ./src
 
 # Step 2: Run NeuroLint for comprehensive modernization
 neurolint fix . --all-layers --verbose
@@ -185,17 +203,24 @@ neurolint security:scan-compromise .
 |---------|---------|-------------|
 | `replace-reactdom-render` | Yes | Critical for React 19 |
 | `replace-string-ref` | Yes | Deprecated in React 19 |
-| `use-context-hook` | Yes | Modern context pattern |
-| `rename-unsafe-lifecycles` | Yes | Lifecycle method safety |
+| `replace-act-import` | Yes | Updated test utilities |
+| `replace-use-form-state` | Yes | Renamed to useActionState |
+
+### Next.js 15 Migration (`--with-official-codemods`)
+
+| Codemod | Applied | Description |
+|---------|---------|-------------|
+| `next-async-request-api` | Yes | Async cookies/headers/params |
+| `next-request-geo-ip` | Yes | Request API updates |
+| `app-dir-runtime-config-experimental-edge` | Yes | Runtime config update |
 
 ### Next.js 16 Migration (`--with-official-codemods`)
 
 | Codemod | Applied | Description |
 |---------|---------|-------------|
-| `new-link` | Yes | Link component update |
-| `app-dir-imports` | Yes | App Router compatibility |
-| `metadata` | Yes | Metadata API migration |
-| `next-request-geo-ip` | Yes | Request API updates |
+| `remove-experimental-ppr` | Yes | PPR config cleanup |
+| `remove-unstable-prefix` | Yes | API stabilization |
+| `middleware-to-proxy` | Yes | Middleware migration |
 
 ---
 
@@ -204,10 +229,10 @@ neurolint security:scan-compromise .
 ### Codemod Execution Errors
 
 ```
-[Phase 1] Running official React codemods...
-  [OK] replace-reactdom-render - 5 files transformed
-  [SKIP] replace-string-ref - No string refs found
-  [ERROR] use-context-hook - Command failed (see below)
+[Phase 1] Running official React 19 codemods...
+  [OK] replace-reactdom-render - completed
+  [SKIP] replace-string-ref - no changes needed
+  [ERROR] replace-act-import - command failed (see below)
   
   Note: Codemod errors are non-blocking. NeuroLint will continue.
   
@@ -217,9 +242,9 @@ neurolint security:scan-compromise .
 ### npx Not Available
 
 ```
-[Phase 1] Running official React codemods...
+[Phase 1] Running official React 19 codemods...
   [WARN] npx not found. Skipping official codemods.
-  [INFO] Install Node.js 16+ for codemod support.
+  [INFO] Install Node.js 18+ for codemod support.
   [INFO] You can run codemods manually later.
   
 [Phase 2] Running NeuroLint enhancements...
@@ -228,8 +253,8 @@ neurolint security:scan-compromise .
 ### Network Issues
 
 ```
-[Phase 1] Running official React codemods...
-  [WARN] Could not download @react-codemod/replace-reactdom-render
+[Phase 1] Running official React 19 codemods...
+  [WARN] Could not download codemod@latest
   [INFO] Check your network connection or run codemods manually.
   
 [Phase 2] Running NeuroLint enhancements...
@@ -305,13 +330,17 @@ Yes. Simply omit the `--with-official-codemods` flag. NeuroLint's Layer 5 includ
 
 Both. Official codemods are maintained by framework authors. NeuroLint adds comprehensive validation, backup, and rollback that official codemods lack.
 
+### Q: What's the difference between `react-codemod` and `codemod`?
+
+The `codemod` CLI (from codemod.com) is now recommended by the React team. It runs faster, handles more complex migrations, and has better TypeScript support. NeuroLint uses `npx codemod@latest` for React codemods.
+
 ---
 
 ## Version Compatibility
 
 | NeuroLint Version | React Codemods | Next.js Codemods |
 |-------------------|----------------|------------------|
-| 1.5.0+ | @react-codemod/* | @next/codemod |
+| 1.5.0+ | codemod@latest (react/19/*) | @next/codemod@latest |
 | 1.4.x | Not supported | Not supported |
 
 ---

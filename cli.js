@@ -811,25 +811,34 @@ function logComplete(message) {
 }
 
 // Official codemods configuration
+// React codemods use: npx codemod@latest react/19/<transform> --target <path>
+// Next.js codemods use: npx @next/codemod@latest <transform> <path>
 const OFFICIAL_CODEMODS = {
   react19: [
-    { name: 'replace-reactdom-render', package: '@react-codemod/replace-reactdom-render', description: 'Converts ReactDOM.render() to createRoot().render()' },
-    { name: 'replace-string-ref', package: '@react-codemod/replace-string-ref', description: 'Converts string refs to callback refs' },
-    { name: 'use-context-hook', package: '@react-codemod/use-context-hook', description: 'Converts Context.Consumer to useContext()' },
-    { name: 'rename-unsafe-lifecycles', package: '@react-codemod/rename-unsafe-lifecycles', description: 'Adds UNSAFE_ prefix to deprecated lifecycles' }
+    { name: 'replace-reactdom-render', transform: 'react/19/replace-reactdom-render', description: 'Converts ReactDOM.render() to createRoot().render()' },
+    { name: 'replace-string-ref', transform: 'react/19/replace-string-ref', description: 'Converts string refs to callback refs' },
+    { name: 'replace-act-import', transform: 'react/19/replace-act-import', description: 'Updates act import from react-dom/test-utils to react' },
+    { name: 'replace-use-form-state', transform: 'react/19/replace-use-form-state', description: 'Replaces useFormState with useActionState' }
+  ],
+  react19Recipe: [
+    { name: 'migration-recipe', transform: 'react/19/migration-recipe', description: 'Runs all React 19 codemods at once (recommended)' }
+  ],
+  nextjs15: [
+    { name: 'next-async-request-api', transform: 'next-async-request-api', description: 'Makes cookies(), headers(), params async' },
+    { name: 'next-request-geo-ip', transform: 'next-request-geo-ip', description: 'Migrates geo/ip to @vercel/functions' },
+    { name: 'app-dir-runtime-config-experimental-edge', transform: 'app-dir-runtime-config-experimental-edge', description: 'Changes experimental-edge to edge runtime' }
   ],
   nextjs16: [
-    { name: 'new-link', package: '@next/codemod', description: 'Removes nested <a> from <Link> components' },
-    { name: 'app-dir-imports', package: '@next/codemod', description: 'Updates imports for App Router' },
-    { name: 'metadata', package: '@next/codemod', description: 'Converts Head to generateMetadata' },
-    { name: 'next-request-geo-ip', package: '@next/codemod', description: 'Updates geo/ip access patterns' }
+    { name: 'remove-experimental-ppr', transform: 'remove-experimental-ppr', description: 'Removes experimental_ppr Route Segment Config' },
+    { name: 'remove-unstable-prefix', transform: 'remove-unstable-prefix', description: 'Removes unstable_ prefix from stabilized APIs' },
+    { name: 'middleware-to-proxy', transform: 'middleware-to-proxy', description: 'Migrates middleware convention to proxy' }
   ]
 };
 
 /**
  * Run official framework codemods (Phase 1)
  * @param {Object} config - Configuration object
- * @param {string} config.framework - 'react19' or 'nextjs16'
+ * @param {string} config.framework - 'react19', 'react19Recipe', 'nextjs15', or 'nextjs16'
  * @param {string} config.targetPath - Path to the project
  * @param {boolean} config.dryRun - Whether to skip execution (just report)
  * @param {boolean} config.verbose - Whether to show detailed output
@@ -841,7 +850,9 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
     return { success: 0, skipped: 0, errors: 0, results: [] };
   }
 
-  console.log(`\n[Phase 1] Running official ${framework === 'react19' ? 'React' : 'Next.js'} codemods...`);
+  const frameworkLabel = framework.startsWith('react') ? 'React 19' : 
+                         framework === 'nextjs15' ? 'Next.js 15' : 'Next.js 16';
+  console.log(`\n[Phase 1] Running official ${frameworkLabel} codemods...`);
 
   if (dryRun) {
     console.log('  [INFO] Dry-run mode - skipping official codemods execution');
@@ -862,7 +873,7 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
     execSync('npx --version', { stdio: 'pipe' });
   } catch (error) {
     console.log('  [WARN] npx not found. Skipping official codemods.');
-    console.log('  [INFO] Install Node.js 16+ for codemod support.');
+    console.log('  [INFO] Install Node.js 18+ for codemod support.');
     console.log('  [INFO] You can run codemods manually later.');
     return { 
       success: 0, 
@@ -877,14 +888,19 @@ function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
   let skipCount = 0;
   let errorCount = 0;
 
+  // Escape path for shell safety (handle spaces and special chars)
+  const escapedPath = `"${targetPath.replace(/"/g, '\\"')}"`;
+
   for (const codemod of codemods) {
     try {
-      // Build command based on framework
+      // Build command based on framework type
       let command;
-      if (framework === 'react19') {
-        command = `npx --yes ${codemod.package} ${targetPath} --force`;
+      if (framework.startsWith('react')) {
+        // React codemods use: npx codemod@latest <transform> --target <path>
+        command = `npx --yes codemod@latest ${codemod.transform} --target ${escapedPath}`;
       } else {
-        command = `npx --yes ${codemod.package}@latest ${codemod.name} ${targetPath} --force`;
+        // Next.js codemods use: npx @next/codemod@latest <transform> <path>
+        command = `npx --yes @next/codemod@latest ${codemod.transform} ${escapedPath}`;
       }
 
       if (verbose) {

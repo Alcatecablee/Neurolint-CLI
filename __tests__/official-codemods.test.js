@@ -17,21 +17,31 @@ describe('Official Codemods Integration', () => {
       cliContent = await fs.readFile(cliPath, 'utf8');
     });
     
-    test('should define React 19 codemods', () => {
+    test('should define React 19 codemods with correct transform paths', () => {
       expect(cliContent).toContain('react19:');
-      expect(cliContent).toContain('@react-codemod/replace-reactdom-render');
-      expect(cliContent).toContain('@react-codemod/replace-string-ref');
-      expect(cliContent).toContain('@react-codemod/use-context-hook');
-      expect(cliContent).toContain('@react-codemod/rename-unsafe-lifecycles');
+      expect(cliContent).toContain("transform: 'react/19/replace-reactdom-render'");
+      expect(cliContent).toContain("transform: 'react/19/replace-string-ref'");
+      expect(cliContent).toContain("transform: 'react/19/replace-act-import'");
+      expect(cliContent).toContain("transform: 'react/19/replace-use-form-state'");
+    });
+    
+    test('should define React 19 migration recipe', () => {
+      expect(cliContent).toContain('react19Recipe:');
+      expect(cliContent).toContain("transform: 'react/19/migration-recipe'");
+    });
+    
+    test('should define Next.js 15 codemods', () => {
+      expect(cliContent).toContain('nextjs15:');
+      expect(cliContent).toContain("transform: 'next-async-request-api'");
+      expect(cliContent).toContain("transform: 'next-request-geo-ip'");
+      expect(cliContent).toContain("transform: 'app-dir-runtime-config-experimental-edge'");
     });
     
     test('should define Next.js 16 codemods', () => {
       expect(cliContent).toContain('nextjs16:');
-      expect(cliContent).toContain('@next/codemod');
-      expect(cliContent).toContain('new-link');
-      expect(cliContent).toContain('app-dir-imports');
-      expect(cliContent).toContain('metadata');
-      expect(cliContent).toContain('next-request-geo-ip');
+      expect(cliContent).toContain("transform: 'remove-experimental-ppr'");
+      expect(cliContent).toContain("transform: 'remove-unstable-prefix'");
+      expect(cliContent).toContain("transform: 'middleware-to-proxy'");
     });
   });
   
@@ -76,6 +86,20 @@ describe('Official Codemods Integration', () => {
     
     test('should return results object with success, skipped, errors counts', () => {
       expect(cliContent).toContain('return { success: successCount, skipped: skipCount, errors: errorCount, results }');
+    });
+    
+    test('should use correct React codemod command syntax', () => {
+      expect(cliContent).toContain('npx --yes codemod@latest');
+      expect(cliContent).toContain('--target');
+    });
+    
+    test('should use correct Next.js codemod command syntax', () => {
+      expect(cliContent).toContain('npx --yes @next/codemod@latest');
+    });
+    
+    test('should escape paths for shell safety', () => {
+      expect(cliContent).toContain('escapedPath');
+      expect(cliContent).toContain('targetPath.replace');
     });
   });
   
@@ -173,12 +197,34 @@ describe('Official Codemods Integration', () => {
         
         expect(output).toContain('[Phase 1]');
         expect(output).toContain('Dry-run mode');
-        expect(output).toContain('new-link');
+        expect(output).toContain('remove-experimental-ppr');
       } catch (error) {
         if (error.stdout) {
           expect(error.stdout).toContain('[Phase 1]');
         }
       }
+    });
+  });
+  
+  describe('Command syntax validation', () => {
+    let cliContent;
+    
+    beforeAll(async () => {
+      cliContent = await fs.readFile(cliPath, 'utf8');
+    });
+    
+    test('should use codemod@latest for React transforms (not @react-codemod)', () => {
+      expect(cliContent).not.toContain('@react-codemod/replace-reactdom-render');
+      expect(cliContent).not.toContain('@react-codemod/replace-string-ref');
+      expect(cliContent).toContain('codemod@latest');
+    });
+    
+    test('should use @next/codemod@latest for Next.js transforms', () => {
+      expect(cliContent).toContain('@next/codemod@latest');
+    });
+    
+    test('should use --target flag for React codemods', () => {
+      expect(cliContent).toContain('--target');
     });
   });
 });
@@ -192,12 +238,10 @@ describe('CLI_USAGE.md documentation', () => {
   
   test('should document --with-official-codemods for migrate-react19', () => {
     expect(docContent).toContain('migrate-react19 . --with-official-codemods');
-    expect(docContent).toContain('@react-codemod');
   });
   
   test('should document --with-official-codemods for migrate-nextjs-16', () => {
     expect(docContent).toContain('migrate-nextjs-16 . --with-official-codemods');
-    expect(docContent).toContain('@next/codemod');
   });
   
   test('should explain Phase 1 and Phase 2', () => {
@@ -217,16 +261,22 @@ describe('OFFICIAL-CODEMODS-INTEGRATION.md documentation', () => {
     expect(docContent).toContain('Official Codemods Integration');
   });
   
-  test('should document React 19 codemods', () => {
-    expect(docContent).toContain('replace-reactdom-render');
-    expect(docContent).toContain('replace-string-ref');
-    expect(docContent).toContain('use-context-hook');
+  test('should document React 19 codemods with correct syntax', () => {
+    expect(docContent).toContain('npx codemod@latest react/19/replace-reactdom-render');
+    expect(docContent).toContain('npx codemod@latest react/19/replace-string-ref');
+    expect(docContent).toContain('npx codemod@latest react/19/migration-recipe');
   });
   
-  test('should document Next.js codemods', () => {
-    expect(docContent).toContain('new-link');
-    expect(docContent).toContain('app-dir-imports');
-    expect(docContent).toContain('metadata');
+  test('should document Next.js 15 codemods', () => {
+    expect(docContent).toContain('next-async-request-api');
+    expect(docContent).toContain('next-request-geo-ip');
+    expect(docContent).toContain('app-dir-runtime-config-experimental-edge');
+  });
+  
+  test('should document Next.js 16 codemods', () => {
+    expect(docContent).toContain('remove-experimental-ppr');
+    expect(docContent).toContain('remove-unstable-prefix');
+    expect(docContent).toContain('middleware-to-proxy');
   });
   
   test('should explain sequential execution model', () => {
@@ -238,5 +288,10 @@ describe('OFFICIAL-CODEMODS-INTEGRATION.md documentation', () => {
   test('should document error handling', () => {
     expect(docContent).toContain('non-blocking');
     expect(docContent).toContain('Error Handling');
+  });
+  
+  test('should explain codemod CLI vs react-codemod', () => {
+    expect(docContent).toMatch(/`?codemod`?\s+CLI/);
+    expect(docContent).toContain('codemod@latest');
   });
 });
