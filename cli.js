@@ -22,6 +22,7 @@ const path = require('path');
 const ora = require('./simple-ora');
 const { performance } = require('perf_hooks');
 const https = require('https');
+const { execSync } = require('child_process');
 
 // Import shared core and existing modules
 const sharedCore = require('./shared-core');
@@ -713,6 +714,7 @@ function parseOptions(args) {
     verbose: args.includes('--verbose'),
     production: args.includes('--production'),
     backup: !args.includes('--no-backup'),
+    withOfficialCodemods: args.includes('--with-official-codemods'),
     layers: args.includes('--layers') ? args[args.indexOf('--layers') + 1].split(',').map(Number) : null,
     allLayers: args.includes('--all-layers'),
     include: args.includes('--include') ? args[args.indexOf('--include') + 1].split(',') : ['**/*.{ts,tsx,js,jsx,json}'],
@@ -806,6 +808,146 @@ function logProgress(message) {
 
 function logComplete(message) {
   process.stdout.write(`[COMPLETE] ${message}\n`);
+}
+
+// Official codemods configuration
+const OFFICIAL_CODEMODS = {
+  react19: [
+    { name: 'replace-reactdom-render', package: '@react-codemod/replace-reactdom-render', description: 'Converts ReactDOM.render() to createRoot().render()' },
+    { name: 'replace-string-ref', package: '@react-codemod/replace-string-ref', description: 'Converts string refs to callback refs' },
+    { name: 'use-context-hook', package: '@react-codemod/use-context-hook', description: 'Converts Context.Consumer to useContext()' },
+    { name: 'rename-unsafe-lifecycles', package: '@react-codemod/rename-unsafe-lifecycles', description: 'Adds UNSAFE_ prefix to deprecated lifecycles' }
+  ],
+  nextjs16: [
+    { name: 'new-link', package: '@next/codemod', description: 'Removes nested <a> from <Link> components' },
+    { name: 'app-dir-imports', package: '@next/codemod', description: 'Updates imports for App Router' },
+    { name: 'metadata', package: '@next/codemod', description: 'Converts Head to generateMetadata' },
+    { name: 'next-request-geo-ip', package: '@next/codemod', description: 'Updates geo/ip access patterns' }
+  ]
+};
+
+/**
+ * Run official framework codemods (Phase 1)
+ * @param {Object} config - Configuration object
+ * @param {string} config.framework - 'react19' or 'nextjs16'
+ * @param {string} config.targetPath - Path to the project
+ * @param {boolean} config.dryRun - Whether to skip execution (just report)
+ * @param {boolean} config.verbose - Whether to show detailed output
+ * @returns {Object} Results summary
+ */
+function runOfficialCodemods({ framework, targetPath, dryRun, verbose }) {
+  const codemods = OFFICIAL_CODEMODS[framework];
+  if (!codemods || codemods.length === 0) {
+    return { success: 0, skipped: 0, errors: 0, results: [] };
+  }
+
+  console.log(`\n[Phase 1] Running official ${framework === 'react19' ? 'React' : 'Next.js'} codemods...`);
+
+  if (dryRun) {
+    console.log('  [INFO] Dry-run mode - skipping official codemods execution');
+    console.log('  [INFO] The following codemods would run:');
+    codemods.forEach(codemod => {
+      console.log(`    - ${codemod.name}: ${codemod.description}`);
+    });
+    return { 
+      success: 0, 
+      skipped: codemods.length, 
+      errors: 0, 
+      results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'dry-run' }))
+    };
+  }
+
+  // Check if npx is available
+  try {
+    execSync('npx --version', { stdio: 'pipe' });
+  } catch (error) {
+    console.log('  [WARN] npx not found. Skipping official codemods.');
+    console.log('  [INFO] Install Node.js 16+ for codemod support.');
+    console.log('  [INFO] You can run codemods manually later.');
+    return { 
+      success: 0, 
+      skipped: codemods.length, 
+      errors: 0, 
+      results: codemods.map(c => ({ name: c.name, status: 'skipped', reason: 'npx not found' }))
+    };
+  }
+
+  const results = [];
+  let successCount = 0;
+  let skipCount = 0;
+  let errorCount = 0;
+
+  for (const codemod of codemods) {
+    try {
+      // Build command based on framework
+      let command;
+      if (framework === 'react19') {
+        command = `npx --yes ${codemod.package} ${targetPath} --force`;
+      } else {
+        command = `npx --yes ${codemod.package}@latest ${codemod.name} ${targetPath} --force`;
+      }
+
+      if (verbose) {
+        console.log(`  [RUN] ${command}`);
+      }
+
+      const output = execSync(command, {
+        cwd: process.cwd(),
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'pipe'],
+        timeout: 120000 // 2 minute timeout per codemod
+      });
+
+      // Parse output to determine if changes were made
+      const hasTransforms = output.includes('transform') || 
+                           output.includes('changed') || 
+                           output.includes('modified') ||
+                           output.includes('file');
+      
+      if (hasTransforms) {
+        console.log(`  [OK] ${codemod.name} - completed`);
+        if (verbose && output.trim()) {
+          const lines = output.trim().split('\n').slice(0, 5);
+          lines.forEach(line => console.log(`       ${line}`));
+          if (output.trim().split('\n').length > 5) {
+            console.log('       ...(truncated)');
+          }
+        }
+        results.push({ name: codemod.name, status: 'success', output: output.trim() });
+        successCount++;
+      } else {
+        console.log(`  [SKIP] ${codemod.name} - no changes needed`);
+        results.push({ name: codemod.name, status: 'skipped', reason: 'no changes needed' });
+        skipCount++;
+      }
+    } catch (error) {
+      // Check if it's a legitimate error vs just "no changes"
+      const stderr = error.stderr || '';
+      const stdout = error.stdout || '';
+      
+      if (stderr.includes('No files matched') || 
+          stderr.includes('no files') || 
+          stdout.includes('0 files')) {
+        console.log(`  [SKIP] ${codemod.name} - no matching files`);
+        results.push({ name: codemod.name, status: 'skipped', reason: 'no matching files' });
+        skipCount++;
+      } else {
+        console.log(`  [ERROR] ${codemod.name} - command failed`);
+        if (verbose) {
+          console.log(`       ${error.message}`);
+          if (stderr) console.log(`       ${stderr.slice(0, 200)}`);
+        }
+        results.push({ name: codemod.name, status: 'error', error: error.message });
+        errorCount++;
+      }
+    }
+  }
+
+  if (errorCount > 0) {
+    console.log('\n  [NOTE] Codemod errors are non-blocking. NeuroLint will continue.');
+  }
+
+  return { success: successCount, skipped: skipCount, errors: errorCount, results };
 }
 
 // Handle analyze command
@@ -1360,6 +1502,20 @@ async function handleReact19Migration(targetPath, options, spinner) {
   try {
     logInfo('Starting React 19 migration...');
     
+    // Phase 1: Run official React codemods if requested
+    let phase1Results = null;
+    if (options.withOfficialCodemods) {
+      spinner.stop();
+      phase1Results = runOfficialCodemods({
+        framework: 'react19',
+        targetPath,
+        dryRun: options.dryRun,
+        verbose: options.verbose
+      });
+      console.log(`\n[Phase 2] Running NeuroLint enhancements...`);
+      spinner.start();
+    }
+    
     const files = await getFiles(targetPath, options.include, options.exclude);
     let processedFiles = 0;
     let successfulMigrations = 0;
@@ -1463,7 +1619,8 @@ async function handleReact19Migration(targetPath, options, spinner) {
           processedFiles,
           successfulMigrations,
           noChange: noChangeCount,
-          errors: errorCount
+          errors: errorCount,
+          officialCodemods: phase1Results || null
         },
         migrations: migrationResults,
         timestamp: new Date().toISOString(),
@@ -1474,12 +1631,22 @@ async function handleReact19Migration(targetPath, options, spinner) {
     } else {
       // Console output
       console.log(`\n[REACT 19 MIGRATION SUMMARY]`);
-      console.log(`  Total Files: ${files.length}`);
-      console.log(`  Processed Files: ${processedFiles}`);
-      console.log(`  Successful Migrations: ${successfulMigrations}`);
-      console.log(`  No Changes Needed: ${noChangeCount}`);
-      console.log(`  Errors: ${errorCount}`);
-      console.log(`  Success Rate: ${((successfulMigrations / processedFiles) * 100).toFixed(1)}%`);
+      
+      // Phase 1 summary if official codemods were run
+      if (phase1Results) {
+        console.log(`  [Phase 1] Official Codemods:`);
+        console.log(`    Success: ${phase1Results.success}, Skipped: ${phase1Results.skipped}, Errors: ${phase1Results.errors}`);
+      }
+      
+      console.log(`  [Phase 2] NeuroLint Enhancements:`);
+      console.log(`    Total Files: ${files.length}`);
+      console.log(`    Processed Files: ${processedFiles}`);
+      console.log(`    Successful Migrations: ${successfulMigrations}`);
+      console.log(`    No Changes Needed: ${noChangeCount}`);
+      console.log(`    Errors: ${errorCount}`);
+      if (processedFiles > 0) {
+        console.log(`    Success Rate: ${((successfulMigrations / processedFiles) * 100).toFixed(1)}%`);
+      }
       
       if (options.verbose && migrationResults.length > 0) {
         console.log(`\n[MIGRATION DETAILS]`);
@@ -1501,13 +1668,15 @@ async function handleReact19Migration(targetPath, options, spinner) {
         });
       }
       
-      if (successfulMigrations > 0) {
+      if (successfulMigrations > 0 || (phase1Results && phase1Results.success > 0)) {
         console.log(`\n[NEXT STEPS]`);
         console.log(`  1. Update package.json to use React 19: npm install react@19 react-dom@19`);
         console.log(`  2. Update @types/react and @types/react-dom if using TypeScript`);
         console.log(`  3. Test your application thoroughly`);
         console.log(`  4. Review warnings for manual migration tasks`);
-        console.log(`  5. Consider running official React 19 codemods for additional fixes`);
+        if (!options.withOfficialCodemods) {
+          console.log(`  5. Consider running with --with-official-codemods for additional fixes`);
+        }
       }
     }
     
@@ -2761,6 +2930,7 @@ Options:
   --no-backup            Skip backup creation
   --layers <list>        Specify layers to run (e.g., 1,2,3)
   --all-layers           Apply all layers (1-7)
+  --with-official-codemods  Run official React/Next.js codemods before NeuroLint
   --help, -h            Show this help message
   --version, -v         Show version information
 
@@ -2769,6 +2939,8 @@ Examples:
   neurolint analyze src/ --verbose
   neurolint fix . --layers=1,2,7 --dry-run
   neurolint components fix src/ --verbose
+  neurolint migrate-react19 . --with-official-codemods --verbose
+  neurolint migrate-nextjs-16 . --with-official-codemods --dry-run
   neurolint security:scan-compromise . --quick
   neurolint security:scan-compromise . --paranoid --fail-on=critical
   neurolint security:create-baseline .
@@ -2857,6 +3029,21 @@ Examples:
       case 'migrate-nextjs-16':
         // Handle Next.js 16 migration command
         spinner.text = 'Running Next.js 16 migration...';
+        
+        // Phase 1: Run official Next.js codemods if requested
+        let nextjs16Phase1Results = null;
+        if (options.withOfficialCodemods) {
+          spinner.stop();
+          nextjs16Phase1Results = runOfficialCodemods({
+            framework: 'nextjs16',
+            targetPath,
+            dryRun: options.dryRun,
+            verbose: options.verbose
+          });
+          console.log(`\n[Phase 2] Running NeuroLint enhancements...`);
+          spinner.start();
+        }
+        
         const NextJS16Migrator = require('./scripts/migrate-nextjs-16.js');
         const nextjs16Migrator = new NextJS16Migrator({ 
           verbose: options.verbose, 
@@ -2865,7 +3052,15 @@ Examples:
         const nextjs16Result = await nextjs16Migrator.migrate(targetPath);
         
         spinner.succeed('Next.js 16 migration completed!');
-        console.log(`\nApplied ${nextjs16Result.changes.length} changes`);
+        
+        // Summary output
+        console.log(`\n[NEXT.JS 16 MIGRATION SUMMARY]`);
+        if (nextjs16Phase1Results) {
+          console.log(`  [Phase 1] Official Codemods:`);
+          console.log(`    Success: ${nextjs16Phase1Results.success}, Skipped: ${nextjs16Phase1Results.skipped}, Errors: ${nextjs16Phase1Results.errors}`);
+        }
+        console.log(`  [Phase 2] NeuroLint Enhancements:`);
+        console.log(`    Applied ${nextjs16Result.changes.length} changes`);
         if (options.verbose) {
           console.log(JSON.stringify(nextjs16Result.summary, null, 2));
         }
@@ -3184,6 +3379,7 @@ Migration Options:
   --all-layers           Apply all layers (1-7)
   --backup               Create backups (default: true)
   --no-backup            Skip backup creation
+  --with-official-codemods  Run official React/Next.js codemods first (Phase 1)
   --report               Generate migration report
   --rollback             Enable rollback points
   --incremental          Migrate only changed files
@@ -3223,7 +3419,8 @@ Examples:
   neurolint migrate . --dry-run --verbose
   neurolint migrate src/ --layers=1,2,3,4,5,6,7 --report
   neurolint migrate-nextjs-15.5 . --dry-run --verbose
-  neurolint migrate-react19 . --dry-run --verbose
+  neurolint migrate-react19 . --with-official-codemods --verbose
+  neurolint migrate-nextjs-16 . --with-official-codemods --dry-run
   neurolint migrate-biome . --dry-run --verbose
   neurolint layers --verbose
   neurolint init-config --init

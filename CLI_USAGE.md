@@ -264,7 +264,13 @@ neurolint migrate-nextjs-16 . --dry-run --verbose
 
 # Apply migration
 neurolint migrate-nextjs-16 . --verbose
+
+# Apply with official Next.js codemods (recommended)
+neurolint migrate-nextjs-16 . --with-official-codemods --verbose
 ```
+
+**Options:**
+- `--with-official-codemods` - Run official @next/codemod transformations first (Phase 1), then NeuroLint enhancements (Phase 2)
 
 **What it does:**
 - Renames `middleware.ts` → `proxy.ts`
@@ -291,9 +297,15 @@ neurolint migrate-react19 . --dry-run --verbose
 # Apply migration
 neurolint migrate-react19 . --verbose
 
+# Apply with official React codemods (recommended)
+neurolint migrate-react19 . --with-official-codemods --verbose
+
 # Save migration report
 neurolint migrate-react19 . --format=json --output=migration-report.json
 ```
+
+**Options:**
+- `--with-official-codemods` - Run official @react-codemod transformations first (Phase 1), then NeuroLint enhancements (Phase 2). This runs codemods for: replace-reactdom-render, replace-string-ref, use-context-hook, rename-unsafe-lifecycles
 
 **What it does:**
 - Converts `forwardRef` to direct ref props
