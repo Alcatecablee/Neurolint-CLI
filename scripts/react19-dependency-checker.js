@@ -18,6 +18,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const https = require('https');
+const BackupManager = require('../backup-manager');
 
 class React19DependencyChecker {
   constructor(options = {}) {
@@ -381,12 +382,55 @@ class React19DependencyChecker {
     for (const fix of fixes) {
       if (fix.type === 'config' && fix.file === '.npmrc') {
         const npmrcPath = path.join(this.projectPath, '.npmrc');
+        
+        // Create backup before modifying .npmrc if it exists
+        try {
+          await fs.access(npmrcPath);
+          // File exists, create backup
+          try {
+            const backupManager = new BackupManager({
+              backupDir: '.neurolint-backups',
+              maxBackups: 10
+            });
+            const backupResult = await backupManager.createBackup(npmrcPath, 'react19-dependency-checker');
+            if (backupResult.success) {
+              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
+            } else {
+              this.log(`Warning: Could not create backup: ${backupResult.error}`, 'warning');
+            }
+          } catch (backupError) {
+            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
+          }
+        } catch (accessError) {
+          // File doesn't exist (ENOENT), no backup needed - this is expected
+          if (accessError.code !== 'ENOENT') {
+            this.log(`Warning: Could not check .npmrc: ${accessError.message}`, 'warning');
+          }
+        }
+
         await fs.writeFile(npmrcPath, fix.content, 'utf8');
         this.log(`Created ${fix.file}`, 'success');
       }
 
       if (fix.type === 'override' && fix.file === 'package.json') {
         const packageJsonPath = path.join(this.projectPath, 'package.json');
+        
+        // Create backup before modifying package.json
+        try {
+          const backupManager = new BackupManager({
+            backupDir: '.neurolint-backups',
+            maxBackups: 10
+          });
+          const backupResult = await backupManager.createBackup(packageJsonPath, 'react19-dependency-checker');
+          if (backupResult.success) {
+            this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
+          } else {
+            this.log(`Warning: Could not create backup: ${backupResult.error}`, 'warning');
+          }
+        } catch (backupError) {
+          this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
+        }
+
         const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
         
         packageJson.overrides = {

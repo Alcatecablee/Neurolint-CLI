@@ -17,6 +17,7 @@ const fs = require('fs').promises;
 const path = require('path');
 const parser = require('@babel/parser');
 const ASTTransformer = require('../ast-transformer');
+const BackupManager = require('../backup-manager');
 
 async function isRegularFile(filePath) {
   try {
@@ -467,6 +468,23 @@ async function transform(code, options = {}) {
 
     // Write file if not in dry-run mode
     if (changeCount > 0 && existsAsFile) {
+      // Create backup before modifying file
+      try {
+        const backupManager = new BackupManager({
+          backupDir: '.neurolint-backups',
+          maxBackups: 10
+        });
+        const backupResult = await backupManager.createBackup(filePath, 'layer-3-components');
+        if (backupResult.success) {
+          results.push({ type: 'backup', file: filePath, success: true, backupPath: backupResult.backupPath });
+          if (verbose) process.stdout.write(`[INFO] Created backup: ${path.basename(backupResult.backupPath)}\n`);
+        } else {
+          if (verbose) process.stderr.write(`[WARNING] Could not create backup: ${backupResult.error}\n`);
+        }
+      } catch (backupError) {
+        if (verbose) process.stderr.write(`[WARNING] Backup creation failed: ${backupError.message}\n`);
+      }
+
       await fs.writeFile(filePath, updatedCode);
       results.push({ type: 'write', file: filePath, success: true, changes: changeCount });
     }

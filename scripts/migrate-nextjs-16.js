@@ -21,6 +21,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const BackupManager = require('../backup-manager');
 
 class NextJS16Migrator {
   constructor(options = {}) {
@@ -30,8 +31,11 @@ class NextJS16Migrator {
   }
 
   log(message, level = 'info') {
-    if (this.verbose || level === 'error') {
-      const prefix = level === 'error' ? '[ERROR]' : level === 'success' ? '[SUCCESS]' : '[INFO]';
+    // Always show errors and warnings; show info/success only in verbose mode
+    if (this.verbose || level === 'error' || level === 'warning') {
+      const prefix = level === 'error' ? '[ERROR]' : 
+                     level === 'warning' ? '[WARNING]' :
+                     level === 'success' ? '[SUCCESS]' : '[INFO]';
       console.log(`${prefix} ${message}`);
     }
   }
@@ -119,6 +123,20 @@ class NextJS16Migrator {
         newContent = migrationComment + newContent;
 
         if (!this.dryRun) {
+          // Create backup before modifying file
+          try {
+            const backupManager = new BackupManager({
+              backupDir: '.neurolint-backups',
+              maxBackups: 10
+            });
+            const backupResult = await backupManager.createBackup(middlewarePath, 'migrate-nextjs-16-middleware');
+            if (backupResult.success) {
+              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
+            }
+          } catch (backupError) {
+            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
+          }
+
           await fs.writeFile(proxyPath, newContent, 'utf8');
           this.log(`Created ${proxyPath}`, 'success');
           
@@ -212,6 +230,20 @@ class NextJS16Migrator {
           newContent = migrationComment + newContent;
 
           if (!this.dryRun) {
+            // Create backup before modifying config
+            try {
+              const backupManager = new BackupManager({
+                backupDir: '.neurolint-backups',
+                maxBackups: 10
+              });
+              const backupResult = await backupManager.createBackup(configPath, 'migrate-nextjs-16-ppr');
+              if (backupResult.success) {
+                this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
+              }
+            } catch (backupError) {
+              this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
+            }
+
             await fs.writeFile(configPath, newContent, 'utf8');
             this.log(`Updated ${configPath}`, 'success');
           }
@@ -280,6 +312,20 @@ class NextJS16Migrator {
         }
 
         if (modified && !this.dryRun) {
+          // Create backup before modifying config
+          try {
+            const backupManager = new BackupManager({
+              backupDir: '.neurolint-backups',
+              maxBackups: 10
+            });
+            const backupResult = await backupManager.createBackup(configPath, 'migrate-nextjs-16-config');
+            if (backupResult.success) {
+              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
+            }
+          } catch (backupError) {
+            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
+          }
+
           await fs.writeFile(configPath, newContent, 'utf8');
           this.log(`Updated ${configPath} for Next.js 16 compatibility`, 'success');
           
@@ -365,6 +411,20 @@ class NextJS16Migrator {
         }
 
         if (modified && !this.dryRun) {
+          // Create backup before modifying file
+          try {
+            const backupManager = new BackupManager({
+              backupDir: '.neurolint-backups',
+              maxBackups: 10
+            });
+            const backupResult = await backupManager.createBackup(filePath, 'migrate-nextjs-16-caching');
+            if (backupResult.success) {
+              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
+            }
+          } catch (backupError) {
+            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
+          }
+
           await fs.writeFile(filePath, newContent, 'utf8');
           this.changes.push({
             type: 'caching_api_migration',
@@ -502,6 +562,20 @@ class NextJS16Migrator {
         }
 
         if (modified && !this.dryRun) {
+          // Create backup before modifying file
+          try {
+            const backupManager = new BackupManager({
+              backupDir: '.neurolint-backups',
+              maxBackups: 10
+            });
+            const backupResult = await backupManager.createBackup(filePath, 'migrate-nextjs-16-async-api');
+            if (backupResult.success) {
+              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
+            }
+          } catch (backupError) {
+            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
+          }
+
           await fs.writeFile(filePath, newContent, 'utf8');
           this.changes.push({
             type: 'async_api_update',
