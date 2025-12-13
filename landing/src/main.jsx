@@ -51,6 +51,13 @@ import {
   DocsGuideBackup,
   DocsGuideTroubleshooting
 } from './docs/pages'
+import { 
+  FixesLayout, 
+  FixesHub, 
+  ReactKeysAutoFix, 
+  NextLintDeprecated, 
+  HydrationMismatch 
+} from './fixes'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -62,6 +69,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/quick-start" element={<QuickStart />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        
+        {/* Fixes Routes */}
+        <Route path="/fixes" element={<FixesLayout />}>
+          <Route index element={<FixesHub />} />
+          <Route path="react-keys-auto-fix" element={<ReactKeysAutoFix />} />
+          <Route path="next-lint-deprecated" element={<NextLintDeprecated />} />
+          <Route path="hydration-mismatch-window-undefined" element={<HydrationMismatch />} />
+        </Route>
         
         {/* Documentation Routes */}
         <Route path="/docs" element={<DocsIntro />} />

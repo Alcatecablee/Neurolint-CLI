@@ -349,6 +349,12 @@ export default function Index() {
               Docs
             </a>
             <a 
+              href="/fixes"
+              className="text-green-400 hover:text-green-300 text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
+            >
+              Fixes
+            </a>
+            <a 
               href="/security"
               className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
@@ -433,6 +439,13 @@ export default function Index() {
               className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Docs
+            </a>
+            <a 
+              href="/fixes"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-4 py-3 text-green-400 hover:text-green-300 hover:bg-green-500/5 rounded-lg transition-all duration-200 text-base font-medium"
+            >
+              Fixes
             </a>
             <a 
               href="/security"
