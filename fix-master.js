@@ -218,6 +218,17 @@ const {
 } = require('./scripts/fix-layer-5-nextjs');
 const { transform: layer6Transform } = require('./scripts/fix-layer-6-testing');
 const { transform: layer7Transform } = require('./scripts/fix-layer-7-adaptive');
+const Layer8SecurityForensics = require('./scripts/fix-layer-8-security');
+
+// Layer 8 wrapper function to match layer transform signature
+const layer8Transform = async (code, options = {}) => {
+  const layer8 = new Layer8SecurityForensics({
+    verbose: options.verbose,
+    dryRun: options.dryRun,
+    quarantine: options.quarantine || false
+  });
+  return layer8.transform(code, options);
+};
 
 // Validator import
 const TransformationValidator = require('./validator');
@@ -232,7 +243,8 @@ class LayerOrchestrator {
       { id: 4, name: 'Hydration', transform: layer4Transform },
       { id: 5, name: 'Next.js', transform: layer5Transform },
       { id: 6, name: 'Testing', transform: layer6Transform },
-      { id: 7, name: 'Adaptive Pattern Learning', transform: layer7Transform }
+      { id: 7, name: 'Adaptive Pattern Learning', transform: layer7Transform },
+      { id: 8, name: 'Security Forensics', transform: layer8Transform }
     ];
     
     // Initialize centralized backup manager
@@ -382,7 +394,8 @@ async function executeLayers(code, layers, options = {}) {
     4: { transform: layer4Transform, name: 'Hydration Fixes' },
     5: { transform: layer5Transform, name: 'Next.js Fixes' },
     6: { transform: layer6Transform, name: 'Testing Fixes' },
-    7: { transform: layer7Transform, name: 'Adaptive Pattern Learning' }
+    7: { transform: layer7Transform, name: 'Adaptive Pattern Learning' },
+    8: { transform: layer8Transform, name: 'Security Forensics' }
   };
 
   // Filter layers based on flags
@@ -396,7 +409,8 @@ async function executeLayers(code, layers, options = {}) {
     4: [1, 2, 3], // Layer 4 depends on Layers 1, 2, 3
     5: [1, 2, 3, 4], // Layer 5 depends on Layers 1, 2, 3, 4
     6: [1, 2, 3, 4, 5], // Layer 6 depends on Layers 1, 2, 3, 4, 5
-    7: [1, 2, 3, 4, 5, 6] // Layer 7 depends on all previous layers
+    7: [1, 2, 3, 4, 5, 6], // Layer 7 depends on all previous layers
+    8: [1, 2, 3, 4, 5, 6, 7] // Layer 8 depends on all previous layers
   };
   
   // Add layers based on flags
@@ -478,7 +492,7 @@ async function executeLayers(code, layers, options = {}) {
 
   for (const layerNum of filteredLayers) {
     // Validate layer number
-    if (layerNum < 1 || layerNum > 7) {
+    if (layerNum < 1 || layerNum > 8) {
       if (verbose) {
         process.stderr.write(`[WARNING] Invalid layer number: ${layerNum}. Skipping.\n`);
       }

@@ -22,16 +22,26 @@
 const fs = require('fs').promises;
 const path = require('path');
 const BackupManager = require('../backup-manager');
+const ora = require('../simple-ora');
 
 class NextJS16Migrator {
   constructor(options = {}) {
     this.verbose = options.verbose || false;
     this.dryRun = options.dryRun || false;
+    this.format = options.format || 'text';
     this.changes = [];
+    this.backupManager = new BackupManager({
+      backupDir: '.neurolint-backups',
+      maxBackups: 10,
+      verbose: this.verbose
+    });
+    this.backupSession = [];
+    this.createdFiles = [];
+    this.renamedFiles = [];
   }
 
   log(message, level = 'info') {
-    // Always show errors and warnings; show info/success only in verbose mode
+    if (this.format === 'json') return;
     if (this.verbose || level === 'error' || level === 'warning') {
       const prefix = level === 'error' ? '[ERROR]' : 
                      level === 'warning' ? '[WARNING]' :
@@ -40,36 +50,250 @@ class NextJS16Migrator {
     }
   }
 
+  outputJSON(data) {
+    console.log(JSON.stringify(data, null, 2));
+  }
+
+  formatError(error) {
+    if (this.verbose) {
+      return error.stack || error.message;
+    }
+    return error.message;
+  }
+
+  /**
+   * Collect all files that will be modified by the migration
+   */
+  async collectFilesToModify(projectPath) {
+    const filesToBackup = [];
+
+    const possibleMiddlewarePaths = [
+      path.join(projectPath, 'middleware.ts'),
+      path.join(projectPath, 'middleware.js'),
+      path.join(projectPath, 'src', 'middleware.ts'),
+      path.join(projectPath, 'src', 'middleware.js')
+    ];
+    for (const middlewarePath of possibleMiddlewarePaths) {
+      const exists = await fs.access(middlewarePath).then(() => true).catch(() => false);
+      if (exists) {
+        filesToBackup.push(middlewarePath);
+        break;
+      }
+    }
+
+    const configPaths = [
+      path.join(projectPath, 'next.config.js'),
+      path.join(projectPath, 'next.config.mjs'),
+      path.join(projectPath, 'next.config.ts')
+    ];
+    for (const configPath of configPaths) {
+      const exists = await fs.access(configPath).then(() => true).catch(() => false);
+      if (exists) {
+        filesToBackup.push(configPath);
+        break;
+      }
+    }
+
+    const sourceFiles = await this.findSourceFiles(projectPath);
+    for (const filePath of sourceFiles) {
+      try {
+        const content = await fs.readFile(filePath, 'utf8');
+        if (this.fileNeedsModification(content)) {
+          filesToBackup.push(filePath);
+        }
+      } catch {
+        // Skip files that can't be read
+      }
+    }
+
+    return [...new Set(filesToBackup)];
+  }
+
+  /**
+   * Check if a file needs modification based on content analysis
+   */
+  fileNeedsModification(content) {
+    const needsUseCacheDirective = this.shouldAddUseCacheDirective(content) && 
+                                    !content.includes("'use cache'") && 
+                                    !content.includes('"use cache"');
+    const hasUnstableCache = content.includes('unstable_cache');
+    const hasRevalidateTag = content.includes('revalidateTag(') && !content.includes('cacheLife');
+    const hasManualInvalidation = content.includes('fetch') && 
+                                   content.includes('POST') && 
+                                   !content.includes('updateTag') &&
+                                   content.match(/(?:mutate|invalidate|refresh).*cache/i);
+    const hasSyncParams = content.match(/\(\s*{\s*params\s*(?:,\s*searchParams\s*)?\}\s*\)/);
+    const hasSyncCookies = content.match(/const\s+\w+\s*=\s*cookies\(\)/) && !content.includes('await cookies()');
+    const hasSyncHeaders = content.match(/const\s+\w+\s*=\s*headers\(\)/) && !content.includes('await headers()');
+
+    return needsUseCacheDirective || hasUnstableCache || hasRevalidateTag || 
+           hasManualInvalidation || hasSyncParams || hasSyncCookies || hasSyncHeaders;
+  }
+
+  /**
+   * Create backups for all files that will be modified
+   */
+  async createBackupSession(filesToBackup) {
+    this.backupSession = [];
+    
+    for (const filePath of filesToBackup) {
+      try {
+        const backupResult = await this.backupManager.createBackup(filePath, 'migrate-nextjs-16');
+        if (backupResult.success) {
+          this.backupSession.push({
+            originalPath: filePath,
+            backupPath: backupResult.backupPath,
+            timestamp: backupResult.timestamp
+          });
+          this.log(`Backed up: ${path.relative(process.cwd(), filePath)}`, 'info');
+        }
+      } catch (error) {
+        this.log(`Warning: Could not backup ${filePath}: ${error.message}`, 'warning');
+      }
+    }
+
+    return this.backupSession;
+  }
+
+  /**
+   * Restore all files from the backup session and clean up artifacts
+   */
+  async rollbackAll() {
+    let restored = 0;
+    let cleaned = 0;
+    const errors = [];
+
+    for (const createdFile of this.createdFiles) {
+      try {
+        await fs.unlink(createdFile);
+        cleaned++;
+        this.log(`Deleted created file: ${path.relative(process.cwd(), createdFile)}`, 'info');
+      } catch (error) {
+        if (error.code !== 'ENOENT') {
+          errors.push({ file: createdFile, error: `Failed to delete: ${error.message}` });
+        }
+      }
+    }
+
+    for (const rename of this.renamedFiles) {
+      try {
+        const renamedExists = await fs.access(rename.to).then(() => true).catch(() => false);
+        if (renamedExists) {
+          await fs.rename(rename.to, rename.from);
+          cleaned++;
+          this.log(`Restored rename: ${path.relative(process.cwd(), rename.to)} → ${path.relative(process.cwd(), rename.from)}`, 'info');
+        }
+      } catch (error) {
+        errors.push({ file: rename.from, error: `Failed to undo rename: ${error.message}` });
+      }
+    }
+
+    for (const backup of this.backupSession) {
+      try {
+        const result = await this.backupManager.restoreFromBackup(backup.backupPath, backup.originalPath);
+        if (result.success) {
+          restored++;
+          this.log(`Restored: ${path.relative(process.cwd(), backup.originalPath)}`, 'info');
+        } else {
+          errors.push({ file: backup.originalPath, error: result.error });
+        }
+      } catch (error) {
+        errors.push({ file: backup.originalPath, error: error.message });
+      }
+    }
+
+    return { 
+      success: errors.length === 0, 
+      restored, 
+      cleaned,
+      total: this.backupSession.length + this.createdFiles.length + this.renamedFiles.length,
+      errors 
+    };
+  }
+
   /**
    * Main migration entry point
    */
   async migrate(projectPath = process.cwd()) {
-    this.log('Starting Next.js 16 migration...', 'info');
+    this.changes = [];
+    this.backupSession = [];
+    this.createdFiles = [];
+    this.renamedFiles = [];
     
+    const spinner = this.format !== 'json' ? ora('Starting Next.js 16 migration...').start() : null;
+
     try {
-      // Step 1: Migrate middleware.ts to proxy.ts
+      if (this.dryRun) {
+        spinner?.succeed('Running in dry-run mode - no files will be modified');
+      }
+
+      spinner?.succeed('Analyzing project...');
+      const collectSpinner = this.format !== 'json' ? ora('Collecting files to modify...').start() : null;
+      const filesToModify = await this.collectFilesToModify(projectPath);
+      collectSpinner?.succeed(`Found ${filesToModify.length} files to process`);
+
+      if (!this.dryRun && filesToModify.length > 0) {
+        const backupSpinner = this.format !== 'json' ? ora('Creating backup session...').start() : null;
+        await this.backupManager.initialize();
+        await this.createBackupSession(filesToModify);
+        backupSpinner?.succeed(`Created ${this.backupSession.length} backups`);
+      }
+
+      const migrateSpinner = this.format !== 'json' ? ora('Running migrations...').start() : null;
+      
       await this.migrateMiddlewareToProxy(projectPath);
-      
-      // Step 2: Migrate experimental.ppr to Cache Components
       await this.migratePPRToCacheComponents(projectPath);
-      
-      // Step 3: Update next.config files for Next.js 16 compatibility
       await this.updateNextConfig(projectPath);
-      
-      // Step 4: Migrate caching APIs
       await this.migrateCachingAPIs(projectPath);
-      
-      // Step 5: Update async request APIs
       await this.updateAsyncAPIs(projectPath);
       
-      this.log(`Migration complete! ${this.changes.length} changes made.`, 'success');
-      return {
+      migrateSpinner?.succeed(`Migration complete! ${this.changes.length} changes made.`);
+
+      const result = {
         success: true,
+        dryRun: this.dryRun,
         changes: this.changes,
-        summary: this.generateSummary()
+        summary: this.generateSummary(),
+        backups: this.backupSession.length
       };
+
+      if (this.format === 'json') {
+        this.outputJSON(result);
+      }
+
+      return result;
+
     } catch (error) {
-      this.log(`Migration failed: ${error.message}`, 'error');
+      spinner?.fail(`Migration failed: ${this.formatError(error)}`);
+
+      const hasChangesToRollback = !this.dryRun && (this.backupSession.length > 0 || this.createdFiles.length > 0 || this.renamedFiles.length > 0);
+      if (hasChangesToRollback) {
+        const rollbackSpinner = this.format !== 'json' ? ora('Rolling back changes...').start() : null;
+        const rollbackResult = await this.rollbackAll();
+        
+        if (rollbackResult.success) {
+          rollbackSpinner?.succeed(`Rolled back ${rollbackResult.restored} files, cleaned ${rollbackResult.cleaned} artifacts`);
+        } else {
+          rollbackSpinner?.fail(`Rollback completed with errors`);
+          if (rollbackResult.errors.length > 0) {
+            for (const err of rollbackResult.errors) {
+              this.log(`Failed to restore ${err.file}: ${err.error}`, 'error');
+            }
+          }
+        }
+      }
+
+      const errorResult = {
+        success: false,
+        error: this.formatError(error),
+        dryRun: this.dryRun,
+        rolledBack: this.backupSession.length > 0
+      };
+
+      if (this.format === 'json') {
+        this.outputJSON(errorResult);
+      }
+
       throw error;
     }
   }
@@ -97,52 +321,35 @@ class NextJS16Migrator {
         const dir = path.dirname(middlewarePath);
         const proxyPath = path.join(dir, `proxy${ext}`);
 
-        // Transform the content
         let newContent = content;
 
-        // 1. Rename exported function from 'middleware' to 'proxy'
         newContent = newContent.replace(
           /export\s+(async\s+)?function\s+middleware\s*\(/g,
           'export $1function proxy('
         );
 
-        // 2. Update default export if it references middleware
         newContent = newContent.replace(
           /export\s+default\s+middleware/g,
           'export default proxy'
         );
 
-        // 3. Ensure Node.js runtime is specified
         if (!newContent.includes('export const runtime')) {
           const runtimeDeclaration = `\n// Next.js 16 requires explicit runtime declaration\nexport const runtime = "nodejs";\n\n`;
           newContent = runtimeDeclaration + newContent;
         }
 
-        // 4. Add migration comment
         const migrationComment = `/**\n * Migrated from middleware.ts to proxy.ts for Next.js 16\n * The proxy.ts file makes the app's network boundary explicit\n * and runs on the Node.js runtime.\n */\n\n`;
         newContent = migrationComment + newContent;
 
         if (!this.dryRun) {
-          // Create backup before modifying file
-          try {
-            const backupManager = new BackupManager({
-              backupDir: '.neurolint-backups',
-              maxBackups: 10
-            });
-            const backupResult = await backupManager.createBackup(middlewarePath, 'migrate-nextjs-16-middleware');
-            if (backupResult.success) {
-              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
-            }
-          } catch (backupError) {
-            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
-          }
-
           await fs.writeFile(proxyPath, newContent, 'utf8');
+          this.createdFiles.push(proxyPath);
           this.log(`Created ${proxyPath}`, 'success');
           
-          // Keep original file with .backup extension
-          await fs.rename(middlewarePath, `${middlewarePath}.backup`);
-          this.log(`Backed up original to ${middlewarePath}.backup`, 'info');
+          const backupPath = `${middlewarePath}.backup`;
+          await fs.rename(middlewarePath, backupPath);
+          this.renamedFiles.push({ from: middlewarePath, to: backupPath });
+          this.log(`Backed up original to ${backupPath}`, 'info');
         }
 
         this.changes.push({
@@ -155,7 +362,6 @@ class NextJS16Migrator {
         this.log('Successfully migrated middleware to proxy', 'success');
         return;
       } catch (error) {
-        // Continue to next path
         continue;
       }
     }
@@ -182,11 +388,9 @@ class NextJS16Migrator {
 
         const content = await fs.readFile(configPath, 'utf8');
         
-        // More flexible pattern matching for ppr detection
         if (content.includes('experimental.ppr') || content.match(/experimental\s*:\s*{[^}]*ppr\s*:/)) {
           let newContent = content;
 
-          // Remove experimental.ppr
           newContent = newContent.replace(
             /experimental:\s*{\s*ppr:\s*['"]?(?:true|incremental)['"]?\s*,?\s*}/g,
             'experimental: {}'
@@ -197,13 +401,11 @@ class NextJS16Migrator {
             ''
           );
 
-          // Clean up empty experimental objects
           newContent = newContent.replace(
             /experimental:\s*{\s*}/g,
             ''
           );
 
-          // Add Cache Components configuration
           const cacheComponentsConfig = `
   // Next.js 16: Cache Components replace experimental.ppr
   // Use 'use cache' directive in components for explicit caching
@@ -212,7 +414,6 @@ class NextJS16Migrator {
     dynamicIO: true, // Enable dynamic data fetching improvements
   },`;
 
-          // Insert before the closing brace of module.exports or export default
           if (newContent.includes('module.exports')) {
             newContent = newContent.replace(
               /(const\s+nextConfig\s*=\s*{)/,
@@ -225,25 +426,10 @@ class NextJS16Migrator {
             );
           }
 
-          // Add migration comment
           const migrationComment = `/**\n * Next.js 16 Migration:\n * - Removed experimental.ppr (deprecated)\n * - Cache Components are now the default\n * - Use 'use cache' directive in components for explicit caching\n * - See: https://nextjs.org/docs/app/api-reference/directives/use-cache\n */\n\n`;
           newContent = migrationComment + newContent;
 
           if (!this.dryRun) {
-            // Create backup before modifying config
-            try {
-              const backupManager = new BackupManager({
-                backupDir: '.neurolint-backups',
-                maxBackups: 10
-              });
-              const backupResult = await backupManager.createBackup(configPath, 'migrate-nextjs-16-ppr');
-              if (backupResult.success) {
-                this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
-              }
-            } catch (backupError) {
-              this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
-            }
-
             await fs.writeFile(configPath, newContent, 'utf8');
             this.log(`Updated ${configPath}`, 'success');
           }
@@ -286,7 +472,6 @@ class NextJS16Migrator {
         let newContent = content;
         let modified = false;
 
-        // Add Turbopack filesystem caching if not present
         if (!newContent.includes('turbopackFileSystemCacheForDev') && 
             !newContent.includes('experimental')) {
           const turbopackConfig = `
@@ -302,7 +487,6 @@ class NextJS16Migrator {
           modified = true;
         }
 
-        // Remove deprecated image optimization settings
         if (newContent.includes('images: {') && newContent.includes('domains:')) {
           newContent = newContent.replace(
             /domains:\s*\[.*?\],?\s*/gs,
@@ -312,20 +496,6 @@ class NextJS16Migrator {
         }
 
         if (modified && !this.dryRun) {
-          // Create backup before modifying config
-          try {
-            const backupManager = new BackupManager({
-              backupDir: '.neurolint-backups',
-              maxBackups: 10
-            });
-            const backupResult = await backupManager.createBackup(configPath, 'migrate-nextjs-16-config');
-            if (backupResult.success) {
-              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
-            }
-          } catch (backupError) {
-            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
-          }
-
           await fs.writeFile(configPath, newContent, 'utf8');
           this.log(`Updated ${configPath} for Next.js 16 compatibility`, 'success');
           
@@ -357,7 +527,6 @@ class NextJS16Migrator {
         let newContent = content;
         let modified = false;
 
-        // 1. Auto-add 'use cache' to components that fetch data
         const shouldAddUseCache = this.shouldAddUseCacheDirective(content);
         if (shouldAddUseCache && !content.includes("'use cache'") && !content.includes('"use cache"')) {
           newContent = this.addUseCacheDirective(newContent);
@@ -365,7 +534,6 @@ class NextJS16Migrator {
           this.log(`Added 'use cache' directive to ${path.basename(filePath)}`, 'success');
         }
 
-        // 2. Replace unstable_cache with 'use cache' pattern
         if (content.includes('unstable_cache')) {
           newContent = newContent.replace(
             /unstable_cache\(/g,
@@ -374,11 +542,7 @@ class NextJS16Migrator {
           modified = true;
         }
 
-        // 3. Add cacheLife recommendation (not modification to revalidateTag)
-        // revalidateTag() signature remains: revalidateTag(tag: string)
-        // cacheLife should be used in cache definition, not in revalidateTag call
         if (content.includes('revalidateTag(') && !content.includes('cacheLife')) {
-          // Add comment recommending cacheLife usage at cache definition
           const cacheLifeComment = `
 // Next.js 16: Consider using cacheLife() in your cache configuration
 // Example: 
@@ -393,8 +557,6 @@ class NextJS16Migrator {
           }
         }
 
-        // 4. Add new Next.js 16 caching APIs (updateTag, refresh)
-        // Detect manual cache invalidation patterns and suggest updateTag
         if (content.includes('fetch') && content.includes('POST') && !content.includes('updateTag')) {
           const hasManualInvalidation = content.match(/(?:mutate|invalidate|refresh).*cache/i);
           if (hasManualInvalidation) {
@@ -411,20 +573,6 @@ class NextJS16Migrator {
         }
 
         if (modified && !this.dryRun) {
-          // Create backup before modifying file
-          try {
-            const backupManager = new BackupManager({
-              backupDir: '.neurolint-backups',
-              maxBackups: 10
-            });
-            const backupResult = await backupManager.createBackup(filePath, 'migrate-nextjs-16-caching');
-            if (backupResult.success) {
-              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
-            }
-          } catch (backupError) {
-            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
-          }
-
           await fs.writeFile(filePath, newContent, 'utf8');
           this.changes.push({
             type: 'caching_api_migration',
@@ -433,7 +581,6 @@ class NextJS16Migrator {
           });
         }
       } catch (error) {
-        // Skip files that can't be processed
         continue;
       }
     }
@@ -447,12 +594,10 @@ class NextJS16Migrator {
    * Check if component should have 'use cache' directive
    */
   shouldAddUseCacheDirective(content) {
-    // Don't add to client components
     if (content.includes("'use client'") || content.includes('"use client"')) {
       return false;
     }
 
-    // Add to components that fetch data
     const hasFetch = content.includes('await fetch') || content.includes('fetch(');
     const hasDatabase = content.match(/(?:prisma|db|database)\./i);
     const hasAsyncComponent = content.match(/export\s+(?:default\s+)?async\s+function/);
@@ -467,7 +612,6 @@ class NextJS16Migrator {
     const lines = content.split('\n');
     let insertIndex = 0;
     
-    // Find position after imports
     for (let i = 0; i < lines.length; i++) {
       if (lines[i].trim().startsWith('import ') || 
           lines[i].trim().startsWith('const ') ||
@@ -497,18 +641,12 @@ class NextJS16Migrator {
         let newContent = content;
         let modified = false;
 
-        // 1. Auto-convert sync params destructuring to async
-        // Pattern: ({ params }) => { const { slug } = params }
-        // Convert to: async (props) => { const { slug } = await props.params }
         if (content.match(/\(\s*{\s*params\s*(?:,\s*searchParams\s*)?\}\s*\)/)) {
           newContent = this.convertSyncParamsToAsync(newContent);
           modified = true;
           this.log(`Converted sync params to async in ${path.basename(filePath)}`, 'success');
         }
 
-        // 2. Auto-add await to cookies() and headers()
-        // Pattern: const x = cookies()
-        // Convert to: const x = await cookies()
         const cookiesMatch = content.match(/const\s+(\w+)\s*=\s*cookies\(\)/g);
         const headersMatch = content.match(/const\s+(\w+)\s*=\s*headers\(\)/g);
         
@@ -533,12 +671,10 @@ class NextJS16Migrator {
             this.log(`Added await to headers() in ${path.basename(filePath)}`, 'success');
           }
 
-          // Add explanatory comment at the top of the file
           if (!newContent.includes('cookies() and headers() are now async')) {
             const lines = newContent.split('\n');
             let insertIndex = 0;
             
-            // Find position after imports
             for (let i = 0; i < lines.length; i++) {
               if (lines[i].trim().startsWith('import ') ||
                   lines[i].trim().startsWith('type ') ||
@@ -556,26 +692,11 @@ class NextJS16Migrator {
           }
         }
 
-        // 3. Ensure function is async if using await
         if (modified && newContent.includes('await') && !content.match(/export\s+(?:default\s+)?async\s+function/)) {
           newContent = this.ensureFunctionIsAsync(newContent);
         }
 
         if (modified && !this.dryRun) {
-          // Create backup before modifying file
-          try {
-            const backupManager = new BackupManager({
-              backupDir: '.neurolint-backups',
-              maxBackups: 10
-            });
-            const backupResult = await backupManager.createBackup(filePath, 'migrate-nextjs-16-async-api');
-            if (backupResult.success) {
-              this.log(`Created backup: ${path.basename(backupResult.backupPath)}`, 'info');
-            }
-          } catch (backupError) {
-            this.log(`Warning: Backup creation failed: ${backupError.message}`, 'warning');
-          }
-
           await fs.writeFile(filePath, newContent, 'utf8');
           this.changes.push({
             type: 'async_api_update',
@@ -593,37 +714,27 @@ class NextJS16Migrator {
    * Convert sync params destructuring to async
    */
   convertSyncParamsToAsync(content) {
-    // Pattern 1: Page component with params
-    // export default function Page({ params }) { const { id } = params }
-    // → export default async function Page(props) { const { id} = await props.params }
-    
     let newContent = content;
 
-    // Convert ({ params }) to (props) and add async
     newContent = newContent.replace(
       /(export\s+default\s+)(function\s+(\w+))\s*\(\s*{\s*params\s*(,\s*searchParams\s*)?\}\s*\)/g,
       '$1async $2(props)'
     );
 
-    // Convert params usage inside function
-    // const { id } = params → const { id } = await props.params
     newContent = newContent.replace(
       /const\s+{([^}]+)}\s*=\s*params(?!\.)/g,
       'const {$1} = await props.params'
     );
 
-    // Convert searchParams usage
     newContent = newContent.replace(
       /const\s+{([^}]+)}\s*=\s*searchParams(?!\.)/g,
       'const {$1} = await props.searchParams'
     );
 
-    // Add explanatory comment at the top of the file
     if (!newContent.includes('params and searchParams are now async')) {
       const lines = newContent.split('\n');
       let insertIndex = 0;
       
-      // Find position after imports
       for (let i = 0; i < lines.length; i++) {
         if (lines[i].trim().startsWith('import ') ||
             lines[i].trim().startsWith('type ') ||
@@ -645,13 +756,11 @@ class NextJS16Migrator {
    * Ensure function is async
    */
   ensureFunctionIsAsync(content) {
-    // Add async to export default function if not present
     let newContent = content.replace(
       /export\s+default\s+function(?!\s+async)/g,
       'export default async function'
     );
 
-    // Add async to named exports
     newContent = newContent.replace(
       /export\s+function\s+(?!async)/g,
       'export async function '
