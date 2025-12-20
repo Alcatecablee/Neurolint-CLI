@@ -26,14 +26,16 @@
  * 
  * Signature Coverage (90 IoC Signatures):
  * - CVE-2025-55182: React Server Components RCE (CRITICAL, CVSS 10.0)
- * - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3) - NEW Dec 11, 2025
- * - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5) - NEW Dec 11, 2025
+ * - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)
+ * - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)
+ * - CVE-2025-67779: Incomplete DoS Fix (HIGH, CVSS 7.5)
  * - Next.js 13-16 specific attack patterns
  * - General supply-chain and persistence patterns
  * 
- * IMPORTANT: Versions 19.0.1, 19.1.2, 19.2.1 patched CVE-2025-55182 but are
- * STILL VULNERABLE to CVE-2025-55183 and CVE-2025-55184.
- * Fully patched versions: 19.0.2, 19.1.3, 19.2.2
+ * IMPORTANT PATCH HISTORY:
+ * - 19.0.1, 19.1.2, 19.2.1 patched CVE-2025-55182 only
+ * - 19.0.2, 19.1.3, 19.2.2 have INCOMPLETE DoS fix (CVE-2025-67779)
+ * - Fully patched versions: 19.0.3, 19.1.4, 19.2.3
  */
 
 'use strict';
@@ -72,7 +74,7 @@ const IOC_CATEGORIES = {
 
 const IOC_SIGNATURES = {
   version: LAYER_8_VERSION,
-  lastUpdated: '2025-12-11',
+  lastUpdated: '2025-12-20',
   
   signatures: [
     // ============================================================
@@ -1093,7 +1095,7 @@ const IOC_SIGNATURES = {
       type: 'regex',
       description: 'Direct RSC Flight protocol deserialization - attack surface for CVE-2025-55184',
       references: ['CVE-2025-55184', 'CVE-2025-55182'],
-      remediation: 'Ensure RSC packages are updated to patched versions (19.0.2+, 19.1.3+, 19.2.2+)',
+      remediation: 'Ensure RSC packages are updated to patched versions (19.0.3+, 19.1.4+, 19.2.3+)',
       fileTypes: ['.tsx', '.ts', '.jsx', '.js'],
       contextRequired: true
     },

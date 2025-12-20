@@ -17,7 +17,7 @@ The core engine processes code through a progressive 8-layer system, each target
 - **Layer 5 - Next.js Optimization:** Migrates deprecated Next.js features, adds `'use client'` directives, and handles React 19 breaking changes.
 - **Layer 6 - Testing Infrastructure:** Provides error boundary suggestions and guidance for test scaffolding.
 - **Layer 7 - Adaptive Learning:** Learns and stores custom transformation rules based on production patterns with confidence scoring.
-- **Layer 8 - Security Forensics:** Detects Indicators of Compromise (IoC) and AST-based behavioral patterns to identify security vulnerabilities, including critical RSC CVEs (CVE-2025-55182, CVE-2025-55183, CVE-2025-55184).
+- **Layer 8 - Security Forensics:** Detects Indicators of Compromise (IoC) and AST-based behavioral patterns to identify security vulnerabilities, including critical RSC CVEs (CVE-2025-55182, CVE-2025-55183, CVE-2025-55184, CVE-2025-67779).
 
 ### AST Transformation Engine
 The engine uses Babel for parsing, traversing, and generating code, ensuring TypeScript/JSX support. It follows a Parse → Transform → Validate → Backup → Apply design pattern. All transformations are validated, with automatic backups and fallbacks if validation fails. Production-grade error handling includes an error aggregator, circuit breaker pattern, and ReDoS protection.
@@ -28,9 +28,9 @@ The engine uses Babel for parsing, traversing, and generating code, ensuring Typ
 - **React Compiler Detector:** Identifies manual memoization patterns and suggests optimization opportunities for React Compiler adoption.
 
 ### Security Architecture
-- **RSC CVE Detection Suite:** Comprehensive detection for CVE-2025-55182 (RCE), CVE-2025-55183 (Source Code Exposure), and CVE-2025-55184 (DoS). It also identifies partially patched versions and recommends fully patched ones (19.0.2, 19.1.3, 19.2.2).
+- **RSC CVE Detection Suite:** Comprehensive detection for CVE-2025-55182 (RCE), CVE-2025-55183 (Source Code Exposure), CVE-2025-55184 (DoS), and CVE-2025-67779 (Incomplete DoS Fix). Identifies partially patched versions (19.0.1-19.0.2, 19.1.2-19.1.3, 19.2.1-19.2.2) and recommends fully patched ones (19.0.3, 19.1.4, 19.2.3).
 - **Layer 8 IoC Detection:** Incorporates 90 signatures for various attack patterns, including code injection, DoS, data exfiltration, and RSC-specific exploits.
-- **Behavioral Analyzer:** Utilizes 32 AST patterns to detect suspicious behaviors related to React 19 hooks and specific CVEs.
+- **Behavioral Analyzer:** Utilizes 33 AST patterns to detect suspicious behaviors related to React 19 hooks and specific CVEs.
 
 ### CLI Command System
 NeuroLint provides commands for analyzing (`analyze`), fixing (`fix`, `fix-all`), and migrating (`migrate-react19`, `migrate-nextjs-16`) code. It includes global flags like `--dry-run` for previewing changes and `--verbose` for detailed logging. A robust backup system automatically creates timestamped backups with SHA-256 checksums and manages retention.

@@ -21,12 +21,14 @@
  * - CVE-2025-55182: Remote Code Execution (CRITICAL, CVSS 10.0)
  * - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)
  * - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)
+ * - CVE-2025-67779: Incomplete DoS Fix (HIGH, CVSS 7.5) - Dec 11, 2025
  * 
- * IMPORTANT: The patches for CVE-2025-55182 (19.0.1, 19.1.2, 19.2.1) are 
- * STILL VULNERABLE to CVE-2025-55183 and CVE-2025-55184.
- * Users must upgrade to 19.0.2, 19.1.3, or 19.2.2 to be fully protected.
+ * IMPORTANT PATCH HISTORY:
+ * - 19.0.1, 19.1.2, 19.2.1 patched CVE-2025-55182 only
+ * - 19.0.2, 19.1.3, 19.2.2 attempted to patch CVE-2025-55184 but fix was INCOMPLETE (CVE-2025-67779)
+ * - 19.0.3, 19.1.4, 19.2.3 are FULLY PATCHED for all vulnerabilities
  * 
- * Last updated: December 11, 2025
+ * Last updated: December 20, 2025
  */
 
 const CVE_2025_55182 = {
@@ -37,13 +39,13 @@ const CVE_2025_55182 = {
   disclosed: '2025-12-03',
   
   react: {
-    vulnerable: ['19.0.0', '19.0.1', '19.1.0', '19.1.1', '19.1.2', '19.2.0', '19.2.1'],
+    vulnerable: ['19.0.0', '19.0.1', '19.0.2', '19.1.0', '19.1.1', '19.1.2', '19.1.3', '19.2.0', '19.2.1', '19.2.2'],
     patched: {
-      '19.0': '19.0.2',
-      '19.1': '19.1.3',
-      '19.2': '19.2.2'
+      '19.0': '19.0.3',
+      '19.1': '19.1.4',
+      '19.2': '19.2.3'
     },
-    defaultPatched: '19.2.2'
+    defaultPatched: '19.2.3'
   },
   
   nextjs: {
@@ -53,10 +55,9 @@ const CVE_2025_55182 = {
       '15.2': '15.2.6',
       '15.3': '15.3.6',
       '15.4': '15.4.8',
-      '15.5': '15.5.7',
-      '16.0': '16.0.7',
-      '16.1': '16.1.0',
-      '16.2': '16.2.1'
+      '15.5': '15.5.9',
+      '16.0': '16.0.10',
+      '16.1': '16.1.1'
     }
   },
   
@@ -82,13 +83,13 @@ const CVE_2025_55183 = {
   disclosed: '2025-12-11',
   
   react: {
-    vulnerable: ['19.0.0', '19.0.1', '19.1.0', '19.1.1', '19.1.2', '19.2.0', '19.2.1'],
+    vulnerable: ['19.0.0', '19.0.1', '19.0.2', '19.1.0', '19.1.1', '19.1.2', '19.1.3', '19.2.0', '19.2.1', '19.2.2'],
     patched: {
-      '19.0': '19.0.2',
-      '19.1': '19.1.3',
-      '19.2': '19.2.2'
+      '19.0': '19.0.3',
+      '19.1': '19.1.4',
+      '19.2': '19.2.3'
     },
-    defaultPatched: '19.2.2'
+    defaultPatched: '19.2.3'
   },
   
   serverDomPackages: [
@@ -114,13 +115,13 @@ const CVE_2025_55184 = {
   disclosed: '2025-12-11',
   
   react: {
-    vulnerable: ['19.0.0', '19.0.1', '19.1.0', '19.1.1', '19.1.2', '19.2.0', '19.2.1'],
+    vulnerable: ['19.0.0', '19.0.1', '19.0.2', '19.1.0', '19.1.1', '19.1.2', '19.1.3', '19.2.0', '19.2.1', '19.2.2'],
     patched: {
-      '19.0': '19.0.2',
-      '19.1': '19.1.3',
-      '19.2': '19.2.2'
+      '19.0': '19.0.3',
+      '19.1': '19.1.4',
+      '19.2': '19.2.3'
     },
-    defaultPatched: '19.2.2'
+    defaultPatched: '19.2.3'
   },
   
   serverDomPackages: [
@@ -138,20 +139,53 @@ const CVE_2025_55184 = {
   ]
 };
 
-const ALL_RSC_CVES = [CVE_2025_55182, CVE_2025_55183, CVE_2025_55184];
+const CVE_2025_67779 = {
+  id: 'CVE-2025-67779',
+  cvss: 7.5,
+  severity: 'HIGH',
+  description: 'React Server Components Denial of Service (Incomplete Fix for CVE-2025-55184)',
+  disclosed: '2025-12-11',
+  
+  react: {
+    vulnerable: ['19.0.2', '19.1.3', '19.2.2'],
+    patched: {
+      '19.0': '19.0.3',
+      '19.1': '19.1.4',
+      '19.2': '19.2.3'
+    },
+    defaultPatched: '19.2.3'
+  },
+  
+  serverDomPackages: [
+    'react-server-dom-webpack',
+    'react-server-dom-parcel',
+    'react-server-dom-turbopack'
+  ],
+  
+  exploitPattern: 'Bypass for CVE-2025-55184 fix - same DoS impact via alternative payload structure',
+  
+  indicators: [
+    'Same as CVE-2025-55184',
+    'Affects versions that claim to be patched for CVE-2025-55184'
+  ]
+};
+
+const ALL_RSC_CVES = [CVE_2025_55182, CVE_2025_55183, CVE_2025_55184, CVE_2025_67779];
 
 const FULLY_PATCHED_VERSIONS = {
   react: {
-    '19.0': '19.0.2',
-    '19.1': '19.1.3',
-    '19.2': '19.2.2'
+    '19.0': '19.0.3',
+    '19.1': '19.1.4',
+    '19.2': '19.2.3'
   },
-  defaultPatched: '19.2.2'
+  defaultPatched: '19.2.3'
 };
 
 const PARTIALLY_PATCHED_VERSIONS = {
-  react: ['19.0.1', '19.1.2', '19.2.1'],
-  description: 'These versions patched CVE-2025-55182 but are still vulnerable to CVE-2025-55183 and CVE-2025-55184'
+  react: ['19.0.1', '19.0.2', '19.1.2', '19.1.3', '19.2.1', '19.2.2'],
+  rceOnlyPatched: ['19.0.1', '19.1.2', '19.2.1'],
+  incompleteDoSPatched: ['19.0.2', '19.1.3', '19.2.2'],
+  description: 'Versions 19.0.1/19.1.2/19.2.1 patched CVE-2025-55182 only. Versions 19.0.2/19.1.3/19.2.2 have incomplete DoS fix (CVE-2025-67779).'
 };
 
 function isVulnerableReactVersion(version, cveId = null) {
@@ -196,7 +230,14 @@ function getVulnerabilitiesForVersion(version, includePartialPatch = false) {
   const cleanVersion = version.replace(/[\^~>=<]/g, '');
   const vulnerabilities = [];
   
-  if (PARTIALLY_PATCHED_VERSIONS.react.includes(cleanVersion)) {
+  if (PARTIALLY_PATCHED_VERSIONS.incompleteDoSPatched.includes(cleanVersion)) {
+    vulnerabilities.push(CVE_2025_55183);
+    vulnerabilities.push(CVE_2025_67779);
+    if (includePartialPatch) {
+      vulnerabilities.unshift(CVE_2025_55182);
+      vulnerabilities.push(CVE_2025_55184);
+    }
+  } else if (PARTIALLY_PATCHED_VERSIONS.rceOnlyPatched.includes(cleanVersion)) {
     vulnerabilities.push(CVE_2025_55183);
     vulnerabilities.push(CVE_2025_55184);
     if (includePartialPatch) {
@@ -260,6 +301,7 @@ module.exports = {
   CVE_2025_55182,
   CVE_2025_55183,
   CVE_2025_55184,
+  CVE_2025_67779,
   ALL_RSC_CVES,
   FULLY_PATCHED_VERSIONS,
   PARTIALLY_PATCHED_VERSIONS,
