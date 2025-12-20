@@ -35,6 +35,11 @@ The engine uses Babel for parsing, traversing, and generating code, ensuring Typ
 ### CLI Command System
 NeuroLint provides commands for analyzing (`analyze`), fixing (`fix`, `fix-all`), and migrating (`migrate-react19`, `migrate-nextjs-16`) code. It includes global flags like `--dry-run` for previewing changes and `--verbose` for detailed logging. A robust backup system automatically creates timestamped backups with SHA-256 checksums and manages retention.
 
+### Recent Improvements (December 2025)
+- **Full 8-Layer Pipeline:** Layer 8 (Security Forensics) is now fully wired into the fix pipeline alongside Layers 1-7.
+- **Next.js 16 Migrator Robustness:** The migration command now creates a centralized backup session before any modifications and supports complete rollback on failure, including cleanup of newly created files and undo of file renames.
+- **CLI Standards Alignment:** The Next.js 16 migrator now follows CLI standards with spinner progress feedback, JSON output format support, and clean error handling.
+
 ## External Dependencies
 
 ### Code Transformation Stack
