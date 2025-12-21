@@ -39,6 +39,7 @@ NeuroLint provides commands for analyzing (`analyze`), fixing (`fix`, `fix-all`)
 - **Full 8-Layer Pipeline:** Layer 8 (Security Forensics) is now fully wired into the fix pipeline alongside Layers 1-7.
 - **Next.js 16 Migrator Robustness:** The migration command now creates a centralized backup session before any modifications and supports complete rollback on failure, including cleanup of newly created files and undo of file renames.
 - **CLI Standards Alignment:** The Next.js 16 migrator now follows CLI standards with spinner progress feedback, JSON output format support, and clean error handling.
+- **CVE-2025-67779 Integration:** Added detection for the Incomplete DoS Fix vulnerability. Partially patched versions are now split into two categories: rceOnlyPatched (19.0.1/19.1.2/19.2.1) and incompleteDoSPatched (19.0.2/19.1.3/19.2.2). CLI reports dynamically display CVEs per package.
 
 ## External Dependencies
 

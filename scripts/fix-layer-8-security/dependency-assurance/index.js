@@ -507,16 +507,20 @@ class DependencyAssuranceModule {
     
     if (auditResult.partiallyPatchedPackages.length > 0) {
       lines.push(`\n\x1b[33m! ${auditResult.partiallyPatchedPackages.length} partially patched package(s):\x1b[0m`);
-      lines.push('  These versions patched CVE-2025-55182 (RCE) but are still vulnerable to:');
-      lines.push('  - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)');
-      lines.push('  - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)\n');
+      lines.push('  These versions have incomplete patches and remain vulnerable:\n');
       
       for (const pkg of auditResult.partiallyPatchedPackages) {
-        lines.push(`  \x1b[33m•\x1b[0m ${pkg.package}@${pkg.version}`);
+        const cves = pkg.vulnerableTo || [];
+        lines.push(`  \x1b[33m•\x1b[0m ${pkg.package}@${pkg.version} - ${cves.join(', ')}`);
         if (pkg.installedPath && this.options.verbose) {
           lines.push(`    \x1b[2mPath: ${pkg.installedPath}\x1b[0m`);
         }
       }
+      lines.push('');
+      lines.push('  CVE Reference:');
+      lines.push('  - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)');
+      lines.push('  - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)');
+      lines.push('  - CVE-2025-67779: Incomplete DoS Fix (HIGH, CVSS 7.5)');
       lines.push('');
       lines.push('  \x1b[1mAction Required:\x1b[0m Upgrade to 19.0.3, 19.1.4, or 19.2.3');
     }
