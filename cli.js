@@ -3070,8 +3070,7 @@ Analysis Commands:
   simplify [path]         Simplify project complexity (convert Next.js to React, etc.)
   migrate [path]         One-time migration service (enterprise)
   migrate-nextjs-16 [path] Migrate project to Next.js 16 compatibility
-  migrate-nextjs-15 [path]  Migrate project to Next.js 15 (includes official codemods)
-  migrate-nextjs-15.5 [path] Migrate project to Next.js 15.5 compatibility
+  migrate-nextjs-15 [path] Migrate project to Next.js 15 (includes official codemods)
   migrate-react19 [path] Migrate project to React 19 compatibility
   migrate-biome [path]   Migrate from ESLint to Biome
   check-deps [path]      Check React 19 dependency compatibility (--fix to apply)
@@ -3560,8 +3559,7 @@ Analysis Commands:
   simplify [path]         Simplify project complexity (convert Next.js to React, etc.)
   migrate [path]         One-time migration service (enterprise)
   migrate-nextjs-16 [path] Migrate project to Next.js 16 compatibility
-  migrate-nextjs-15 [path]  Migrate project to Next.js 15 (includes official codemods)
-  migrate-nextjs-15.5 [path] Migrate project to Next.js 15.5 compatibility
+  migrate-nextjs-15 [path] Migrate project to Next.js 15 (includes official codemods)
   migrate-react19 [path] Migrate project to React 19 compatibility
   migrate-biome [path]   Migrate from ESLint to Biome
   check-deps [path]      Check React 19 dependency compatibility (--fix to apply)
@@ -3666,7 +3664,7 @@ Examples:
   neurolint fix . --layers=1,2,7 --dry-run
   neurolint migrate . --dry-run --verbose
   neurolint migrate src/ --layers=1,2,3,4,5,6,7 --report
-  neurolint migrate-nextjs-15.5 . --dry-run --verbose
+  neurolint migrate-nextjs-15 . --dry-run --verbose
   neurolint migrate-react19 . --with-official-codemods --verbose
   neurolint migrate-nextjs-16 . --with-official-codemods --dry-run
   neurolint migrate-biome . --dry-run --verbose

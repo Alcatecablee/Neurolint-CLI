@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.6] - 2025-12-21
+
+### Added
+
+#### Complete Next.js 16 Modernization
+
+Comprehensive version modernization across all 8 layers to support the latest Next.js 16.x and React 19.2:
+
+**Layer Updates:**
+- **Layer 1 (Configuration):** Updated Next.js config recommendations from 15.5 to 16.x, including Turbopack as default bundler
+- **Layer 2 (Patterns):** Updated pattern detection for Next.js 16 conventions
+- **Layer 5 (Next.js):** Renamed all `NextJS15*` classes/functions to `NextJS16*`, updated version checker to support 13.4.0 - 16.1.0
+- **Layer 6 (Testing):** Updated testing library versions to latest (Jest 30.x, @testing-library/react 16.3.1, user-event 14.6.1)
+- **Layer 8 (Security):** Added CVE-2025-67779 detection with dynamic per-package CVE reporting
+
+**Next.js 16 Features Now Supported:**
+- Turbopack as default bundler
+- Cache Components with `'use cache'` directive
+- Async Dynamic APIs (params, searchParams, cookies, headers)
+- React 19.2 Activity component and useEffectEvent hook
+
+**CLI Updates:**
+- New `migrate-nextjs-16` command for Next.js 16 migration
+- New `--nextjs-16` flag for Layer 5 patterns
+- Updated help text and examples
+
+**CVE Detection Enhancement:**
+- Partially patched versions split into `rceOnlyPatched` (19.0.1/19.1.2/19.2.1) and `incompleteDoSPatched` (19.0.2/19.1.3/19.2.2)
+- Dynamic CVE list per package version in CLI reports
+- Fully patched versions: React 19.0.3, 19.1.4, 19.2.3
+
+**Documentation:**
+- Updated CLI_USAGE.md with Next.js 16 migration instructions
+- Updated replit.md with modernization notes
+
+### Changed
+- Version bumped to 1.5.6
+- Removed deprecated `migrate-nextjs-15.5` from CLI help (command still works for backward compatibility)
+
 ## [1.5.5] - 2025-12-13
 
 ### Fixed
