@@ -11,7 +11,7 @@
 /**
  * Layer 5: Next.js Fixes (AST-based)
  * Optimizes App Router with directives and imports using proper code parsing
- * Enhanced for Next.js 15.5 compatibility with Type Safe Routing
+ * Enhanced for Next.js 16 compatibility with Type Safe Routing
  * React 19 Integration: Handles ReactDOM.render, ReactDOM.hydrate, unmountComponentAtNode, findDOMNode
  */
 
@@ -432,7 +432,7 @@ async function isRegularFile(filePath) {
 }
 
 /**
- * Type Safe Routing Transformer for Next.js 15.5
+ * Type Safe Routing Transformer for Next.js 16
  * Implements comprehensive type-safe routing with AST-based transformations
  */
 class TypeSafeRoutingTransformer {
@@ -696,10 +696,10 @@ class TypeSafeRoutingTransformer {
 }
 
 /**
- * Next.js 15.5 File Discovery and Processing System
+ * Next.js 16 File Discovery and Processing System
  * Implements intelligent file discovery for route components with comprehensive processing
  */
-class NextJS15FileDiscoverer {
+class NextJS16FileDiscoverer {
   constructor() {
     this.routePatterns = [
       'app/**/page.tsx',
@@ -874,10 +874,10 @@ class NextJS15FileDiscoverer {
    */
   generateOverallCategorization(results) {
     const overallStats = {
-      'Successfully migrated': { count: 0, percentage: '0.0', description: 'Files that were successfully updated for Next.js 15.5 compatibility' },
-      'Skipped (no migration needed)': { count: 0, percentage: '0.0', description: 'Files that don\'t require Next.js 15.5 specific changes' },
-      'Skipped (already compatible)': { count: 0, percentage: '0.0', description: 'Files that already have Next.js 15.5 features implemented' },
-      'Skipped (not applicable)': { count: 0, percentage: '0.0', description: 'Files that are not relevant for Next.js 15.5 migration (configs, assets, etc.)' },
+      'Successfully migrated': { count: 0, percentage: '0.0', description: 'Files that were successfully updated for Next.js 16 compatibility' },
+      'Skipped (no migration needed)': { count: 0, percentage: '0.0', description: 'Files that don\'t require Next.js 16 specific changes' },
+      'Skipped (already compatible)': { count: 0, percentage: '0.0', description: 'Files that already have Next.js 16 features implemented' },
+      'Skipped (not applicable)': { count: 0, percentage: '0.0', description: 'Files that are not relevant for Next.js 16 migration (configs, assets, etc.)' },
       'Skipped (third-party)': { count: 0, percentage: '0.0', description: 'Third-party files that should not be modified' },
       'Failed to process': { count: 0, percentage: '0.0', description: 'Files that encountered errors during processing' }
     };
@@ -1135,22 +1135,22 @@ class NextJS15FileDiscoverer {
         'Successfully migrated': {
           count: successfulCount,
           percentage: summary.successRate,
-          description: 'Files that were successfully updated for Next.js 15.5 compatibility'
+          description: 'Files that were successfully updated for Next.js 16 compatibility'
         },
         'Skipped (no migration needed)': {
           count: skippedByReason['no-migration-needed']?.length || 0,
           percentage: totalFiles > 0 ? (((skippedByReason['no-migration-needed']?.length || 0) / totalFiles) * 100).toFixed(1) : '0.0',
-          description: 'Files that don\'t require Next.js 15.5 specific changes'
+          description: 'Files that don\'t require Next.js 16 specific changes'
         },
         'Skipped (already compatible)': {
           count: skippedByReason['already-compatible']?.length || 0,
           percentage: totalFiles > 0 ? (((skippedByReason['already-compatible']?.length || 0) / totalFiles) * 100).toFixed(1) : '0.0',
-          description: 'Files that already have Next.js 15.5 features implemented'
+          description: 'Files that already have Next.js 16 features implemented'
         },
         'Skipped (not applicable)': {
           count: skippedByReason['not-applicable']?.length || 0,
           percentage: totalFiles > 0 ? (((skippedByReason['not-applicable']?.length || 0) / totalFiles) * 100).toFixed(1) : '0.0',
-          description: 'Files that are not relevant for Next.js 15.5 migration (configs, assets, etc.)'
+          description: 'Files that are not relevant for Next.js 16 migration (configs, assets, etc.)'
         },
         'Skipped (third-party)': {
           count: skippedByReason['third-party']?.length || 0,
@@ -1168,7 +1168,7 @@ class NextJS15FileDiscoverer {
 }
 
 /**
- * Enhanced Server Actions wrapper for Next.js 15.5
+ * Enhanced Server Actions wrapper for Next.js 16
  */
 function enhanceServerActions(code) {
   const changes = [];
@@ -1215,10 +1215,10 @@ function enhanceServerActions(code) {
       
       // Only enhance if no proper error handling exists
       if (!hasTryCatch && !hasErrorBoundary && !hasReturnError) {
-        // Add enhanced error handling wrapper with Next.js 15.5 patterns
+        // Add enhanced error handling wrapper with Next.js 16 patterns
         const enhancedBody = `
   try {
-    // Enhanced error handling for Next.js 15.5
+    // Enhanced error handling for Next.js 16
     const result = await (async () => {
 ${functionBody}
     })();
@@ -1235,7 +1235,7 @@ ${functionBody}
         
         code = beforeFunction + '{' + enhancedBody + '}' + afterFunction;
         changes.push({
-          description: `Enhanced Server Action ${functionName} with Next.js 15.5 error handling`,
+          description: `Enhanced Server Action ${functionName} with Next.js 16 error handling`,
           location: { line: code.substring(0, startIndex).split('\n').length }
         });
       }
@@ -1246,7 +1246,7 @@ ${functionBody}
 }
 
 /**
- * Enhanced Metadata API for Next.js 15.5
+ * Enhanced Metadata API for Next.js 16
  */
 function enhanceMetadataAPI(code) {
   const changes = [];
@@ -1297,7 +1297,7 @@ function enhanceMetadataAPI(code) {
         
         code = beforeFunction + enhancedSignature + '{' + functionBody + '}' + afterFunction;
         changes.push({
-          description: 'Enhanced generateMetadata with Next.js 15.5 typing',
+          description: 'Enhanced generateMetadata with Next.js 16 typing',
           location: { line: code.substring(0, startIndex).split('\n').length }
         });
       }
@@ -1308,7 +1308,7 @@ function enhanceMetadataAPI(code) {
 }
 
 /**
- * Detect and warn about Next.js 15.5 deprecations
+ * Detect and warn about Next.js 16 deprecations
  */
 function detectDeprecations(code) {
   const warnings = [];
@@ -1317,7 +1317,7 @@ function detectDeprecations(code) {
   if (code.includes('legacyBehavior')) {
     warnings.push({
       type: 'deprecation',
-      message: 'legacyBehavior is deprecated in Next.js 15.5. Consider using the new Link behavior.',
+      message: 'legacyBehavior is deprecated in Next.js 16. Consider using the new Link behavior.',
       recommendation: 'Remove legacyBehavior prop from Link components'
     });
   }
@@ -1344,7 +1344,7 @@ function detectDeprecations(code) {
 }
 
 /**
- * Configure Turbopack for Next.js 15.5
+ * Configure Turbopack for Next.js 16
  */
 function configureTurbopack(code) {
   const changes = [];
@@ -1376,7 +1376,7 @@ function configureTurbopack(code) {
       
       code = code.replace(configBlock, enhancedConfig);
       changes.push({
-        description: 'Added Turbopack configuration for Next.js 15.5',
+        description: 'Added Turbopack configuration for Next.js 16',
         location: { line: code.substring(0, match.index).split('\n').length }
       });
     }
@@ -1386,7 +1386,7 @@ function configureTurbopack(code) {
 }
 
 /**
- * Suggest caching optimizations for Next.js 15.5
+ * Suggest caching optimizations for Next.js 16
  */
 function suggestCachingOptimizations(code) {
   const suggestions = [];
@@ -1533,7 +1533,7 @@ async function transform(code, options = {}) {
       }
     }
 
-    // Step 1: Apply Type Safe Routing for Next.js 15.5 (only for actual route files)
+    // Step 1: Apply Type Safe Routing for Next.js 16 (only for actual route files)
     const fileName = path.basename(filePath);
     const isRouteFile = fileName.match(/^(page|layout|loading|error|not-found)\.(tsx|ts|jsx|js)$/);
     
@@ -1545,7 +1545,7 @@ async function transform(code, options = {}) {
       typeSafeRoutingResult.warnings?.forEach(w => warnings.push(w));
     }
 
-    // Step 2: Apply Next.js 15.5 specific enhancements
+    // Step 2: Apply Next.js 16 specific enhancements
     const serverActionsResult = enhanceServerActions(updatedCode);
     updatedCode = serverActionsResult.code;
     serverActionsResult.changes.forEach(c => changes.push(c));
@@ -1554,7 +1554,7 @@ async function transform(code, options = {}) {
     updatedCode = metadataResult.code;
     metadataResult.changes.forEach(c => changes.push(c));
 
-    // Step 2: Configure Turbopack for Next.js 15.5
+    // Step 2: Configure Turbopack for Next.js 16
     const turbopackResult = configureTurbopack(updatedCode);
     updatedCode = turbopackResult.code;
     turbopackResult.changes.forEach(c => changes.push(c));
@@ -1656,7 +1656,7 @@ async function transform(code, options = {}) {
 
     if (dryRun) {
       if (verbose && changeCount > 0) {
-        process.stdout.write(`[SUCCESS] Layer 5 identified ${changeCount} Next.js 15.5 fixes (dry-run)\n`);
+        process.stdout.write(`[SUCCESS] Layer 5 identified ${changeCount} Next.js 16 fixes (dry-run)\n`);
       }
       if (warnings.length > 0) {
         process.stdout.write(`[WARNING] Found ${warnings.length} deprecation warnings\n`);
@@ -1684,7 +1684,7 @@ async function transform(code, options = {}) {
     }
 
     if (verbose && changeCount > 0) {
-      process.stdout.write(`[SUCCESS] Layer 5 applied ${changeCount} Next.js 15.5 fixes to ${path.basename(filePath)}\n`);
+      process.stdout.write(`[SUCCESS] Layer 5 applied ${changeCount} Next.js 16 fixes to ${path.basename(filePath)}\n`);
     }
 
     if (verbose && warnings.length > 0) {
@@ -1706,7 +1706,7 @@ async function transform(code, options = {}) {
       });
     }
 
-    // Node Runtime on Middleware (Next.js 15.5 stable feature)
+    // Node Runtime on Middleware (Next.js 16 stable feature)
     const isMiddleware = (
       path.basename(filePath) === 'middleware.ts' || 
       path.basename(filePath) === 'middleware.js' ||
@@ -1730,21 +1730,21 @@ async function transform(code, options = {}) {
           if (lastImportMatch) {
             const insertPosition = lastImportMatch.index + lastImportMatch[0].length;
             updatedCode = updatedCode.slice(0, insertPosition) + 
-              "// Next.js 15.5: Node runtime is now stable for middleware\nexport const runtime = 'nodejs';\n\n" + 
+              "// Next.js 16: Node runtime is now stable for middleware\nexport const runtime = 'nodejs';\n\n" + 
               updatedCode.slice(insertPosition);
             
             changes.push({
-              type: 'next15.5-middleware-runtime',
-              description: 'Added Node runtime configuration to middleware (stable in Next.js 15.5)',
+              type: 'next16-middleware-runtime',
+              description: 'Added Node runtime configuration to middleware (stable in Next.js 16)',
               location: insertPosition
             });
           } else {
             // No imports, add at the beginning of the file
-            updatedCode = "// Next.js 15.5: Node runtime is now stable for middleware\nexport const runtime = 'nodejs';\n\n" + updatedCode;
+            updatedCode = "// Next.js 16: Node runtime is now stable for middleware\nexport const runtime = 'nodejs';\n\n" + updatedCode;
             
             changes.push({
-              type: 'next15.5-middleware-runtime',
-              description: 'Added Node runtime configuration to middleware (stable in Next.js 15.5)',
+              type: 'next16-middleware-runtime',
+              description: 'Added Node runtime configuration to middleware (stable in Next.js 16)',
               location: 0
             });
           }
@@ -1757,21 +1757,21 @@ async function transform(code, options = {}) {
           if (lastRequireMatch) {
             const insertPosition = lastRequireMatch.index + lastRequireMatch[0].length;
             updatedCode = updatedCode.slice(0, insertPosition) + 
-              "// Next.js 15.5: Node runtime is now stable for middleware\nexports.runtime = 'nodejs';\n\n" + 
+              "// Next.js 16: Node runtime is now stable for middleware\nexports.runtime = 'nodejs';\n\n" + 
               updatedCode.slice(insertPosition);
             
             changes.push({
-              type: 'next15.5-middleware-runtime',
-              description: 'Added Node runtime configuration to middleware (stable in Next.js 15.5)',
+              type: 'next16-middleware-runtime',
+              description: 'Added Node runtime configuration to middleware (stable in Next.js 16)',
               location: insertPosition
             });
           } else {
             // No requires, add at the beginning of the file
-            updatedCode = "// Next.js 15.5: Node runtime is now stable for middleware\nexports.runtime = 'nodejs';\n\n" + updatedCode;
+            updatedCode = "// Next.js 16: Node runtime is now stable for middleware\nexports.runtime = 'nodejs';\n\n" + updatedCode;
             
             changes.push({
-              type: 'next15.5-middleware-runtime',
-              description: 'Added Node runtime configuration to middleware (stable in Next.js 15.5)',
+              type: 'next16-middleware-runtime',
+              description: 'Added Node runtime configuration to middleware (stable in Next.js 16)',
               location: 0
             });
           }
@@ -1818,7 +1818,7 @@ async function migrateTypeSafeRouting(projectPath, options = {}) {
     }
 
     // Initialize file discoverer
-    const discoverer = new NextJS15FileDiscoverer();
+    const discoverer = new NextJS16FileDiscoverer();
     
     // Discover route files
     if (verbose) console.log(`[PROCESSING] Discovering route files...`);
@@ -1989,7 +1989,7 @@ async function migrateNextJSLint(projectPath, options = {}) {
 
 /**
  * Biome Migration Transformer
- * Migrates ESLint configurations to Biome (Next.js 15.5 recommended)
+ * Migrates ESLint configurations to Biome (Next.js 16 recommended)
  */
 class BiomeMigrationTransformer {
   constructor() {
@@ -2274,10 +2274,10 @@ class BiomeMigrationTransformer {
 }
 
 /**
- * Next.js 15.5 Deprecation Handler
+ * Next.js 16 Deprecation Handler
  * Detects and fixes deprecated patterns
  */
-class NextJS15DeprecationHandler {
+class NextJS16DeprecationHandler {
   constructor() {
     this.deprecationPatterns = {
       legacyBehavior: {
@@ -2290,19 +2290,19 @@ class NextJS15DeprecationHandler {
         pattern: /"next lint"|"next lint .*?"|'next lint'|'next lint .*?'/g,
         replacement: '"biome lint ./src"',
         autoFix: true,
-        description: 'Replace "next lint" with Biome (deprecated in Next.js 15.5)'
+        description: 'Replace "next lint" with Biome (deprecated in Next.js 16)'
       },
       nextLintScript: {
         pattern: /"lint":\s*"next lint.*?"/g,
         replacement: '"lint": "biome lint ./src"',
         autoFix: true,
-        description: 'Replace next lint script with Biome in package.json (deprecated in Next.js 15.5)'
+        description: 'Replace next lint script with Biome in package.json (deprecated in Next.js 16)'
       },
       eslintConfig: {
         pattern: /"eslintConfig":\s*\{[^}]*\}/g,
         replacement: '"$&",\n  "biome": { "enabled": true, "linter": true, "formatter": true }',
         autoFix: false,
-        description: 'Consider adding Biome configuration alongside ESLint (Next.js 15.5 recommends Biome)'
+        description: 'Consider adding Biome configuration alongside ESLint (Next.js 16 recommends Biome)'
       },
       oldImageComponent: {
         pattern: /from\s+["']next\/legacy\/image["']/g,
@@ -2334,7 +2334,7 @@ class NextJS15DeprecationHandler {
         autoFix: false,
         description: 'Replace unstable APIs with stable alternatives'
       },
-      // Next.js 15.5 specific patterns
+      // Next.js 16 specific patterns
       oldMetadataAPI: {
         pattern: /export\s+const\s+metadata\s*=\s*\{/g,
         replacement: 'export const metadata: Metadata = {',
@@ -2410,7 +2410,7 @@ class NextJS15DeprecationHandler {
     
     try {
       if (verbose) {
-        console.log(`[INFO] Processing Next.js 15.5 deprecations for: ${projectPath}`);
+        console.log(`[INFO] Processing Next.js 16 deprecations for: ${projectPath}`);
       }
 
       const results = {
@@ -2538,10 +2538,10 @@ class NextJS15DeprecationHandler {
 
 
 /**
- * Comprehensive Next.js 15.5 Migration Function
+ * Comprehensive Next.js 16 Migration Function
  * Combines all Phase 1 and Phase 2 features
  */
-async function migrateNextJS15Comprehensive(projectPath, options = {}) {
+async function migrateNextJS16Comprehensive(projectPath, options = {}) {
   const { 
     dryRun = false, 
     verbose = false, 
@@ -2550,7 +2550,7 @@ async function migrateNextJS15Comprehensive(projectPath, options = {}) {
   
   try {
     if (verbose) {
-      console.log(`[INFO] Starting comprehensive Next.js 15.5 migration for: ${projectPath}`);
+      console.log(`[INFO] Starting comprehensive Next.js 16 migration for: ${projectPath}`);
       console.log(`[INFO] Features: ${features.join(', ')}`);
       console.log(`[INFO] Mode: ${dryRun ? 'Dry Run' : 'Apply Changes'}`);
     }
@@ -2573,7 +2573,7 @@ async function migrateNextJS15Comprehensive(projectPath, options = {}) {
     // Phase 2: Deprecation Handling
     if (features.includes('deprecation-handling')) {
       if (verbose) console.log(`[PROCESSING] Phase 2: Deprecation Handling...`);
-      const deprecationHandler = new NextJS15DeprecationHandler();
+      const deprecationHandler = new NextJS16DeprecationHandler();
       results.deprecationHandling = await deprecationHandler.processDeprecations(projectPath, { dryRun, verbose, autoFix: true });
     }
 
@@ -2593,7 +2593,7 @@ async function migrateNextJS15Comprehensive(projectPath, options = {}) {
     };
 
     if (verbose) {
-      console.log(`[COMPLETE] Comprehensive Next.js 15.5 migration completed`);
+      console.log(`[COMPLETE] Comprehensive Next.js 16 migration completed`);
       console.log(`[SUMMARY] Features Processed: ${summary.totalFeatures}`);
       console.log(`[SUMMARY] Successful: ${summary.successfulFeatures}`);
       console.log(`[SUMMARY] Failed: ${summary.failedFeatures}`);
@@ -2653,11 +2653,11 @@ function suggestStaticAPIMigration(code) {
   return { warnings };
 }
 
-// Add after the migrateNextJS15Comprehensive function (around line 2444)
+// Add after the migrateNextJS16Comprehensive function (around line 2444)
 
 /**
- * Generate Biome configuration for Next.js 15.5 projects
- * Next.js 15.5 officially recommends Biome over ESLint
+ * Generate Biome configuration for Next.js 16 projects
+ * Next.js 16 officially recommends Biome over ESLint
  */
 async function generateBiomeConfig(projectPath, options = {}) {
   const { dryRun = false, verbose = false } = options;
@@ -2673,7 +2673,7 @@ async function generateBiomeConfig(projectPath, options = {}) {
       return { success: true, message: 'Biome configuration already exists', results };
     }
     
-    // Create a Next.js 15.5 optimized Biome configuration
+    // Create a Next.js 16 optimized Biome configuration
     const biomeConfig = {
       "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
       "organizeImports": {
@@ -2725,7 +2725,7 @@ async function generateBiomeConfig(projectPath, options = {}) {
         type: 'biome-config',
         file: biomeConfigPath,
         success: true,
-        message: 'Created Biome configuration for Next.js 15.5'
+        message: 'Created Biome configuration for Next.js 16'
       });
     } else {
       results.push({
@@ -2733,7 +2733,7 @@ async function generateBiomeConfig(projectPath, options = {}) {
         file: biomeConfigPath,
         success: true,
         dryRun: true,
-        message: 'Would create Biome configuration for Next.js 15.5'
+        message: 'Would create Biome configuration for Next.js 16'
       });
     }
     
@@ -2794,12 +2794,12 @@ async function generateBiomeConfig(projectPath, options = {}) {
 // Add to the module exports
 module.exports = {
   transform,
-  migrateNextJS15Comprehensive,
+  migrateNextJS16Comprehensive,
   generateBiomeConfig, // Add this line
   migrateTypeSafeRouting,
   migrateNextJSLint,
   TypeSafeRoutingTransformer,
-  NextJS15FileDiscoverer,
+  NextJS16FileDiscoverer,
   BiomeMigrationTransformer,
-  NextJS15DeprecationHandler
+  NextJS16DeprecationHandler
 }; 

@@ -62,7 +62,7 @@ import {
   React19Migration,
   ForwardRefRemoval,
   UseEffectCleanup,
-  NextJS15Migration,
+  NextJS16Migration,
   RSCCommonErrors
 } from './fixes'
 import { ESLintComparison, BiomeComparison } from './compare'
@@ -89,7 +89,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="react-19-migration" element={<React19Migration />} />
           <Route path="forwardref-removal" element={<ForwardRefRemoval />} />
           <Route path="useeffect-cleanup-patterns" element={<UseEffectCleanup />} />
-          <Route path="nextjs-15-migration" element={<NextJS15Migration />} />
+          <Route path="nextjs-16-migration" element={<NextJS16Migration />} />
           <Route path="rsc-common-errors" element={<RSCCommonErrors />} />
         </Route>
         

@@ -7,7 +7,7 @@ import { CompetitorCompare } from "../components/CompetitorCompare";
 import { CodeBlock } from "../../docs/components/CodeBlock";
 import { Callout } from "../../docs/components/Callout";
 
-export function NextJS15Migration() {
+export function NextJS16Migration() {
   return (
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">
@@ -31,22 +31,22 @@ export function NextJS15Migration() {
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-          Next.js 15 Migration Guide
+          Next.js 16 Migration Guide
         </h1>
         <p className="text-lg text-gray-400 mb-8">
-          Next.js 15 introduces async Request APIs and removes legacy patterns.
+          Next.js 16 introduces async Request APIs and removes legacy patterns.
           NeuroLint auto-migrates your codebase with AST transformations.
         </p>
 
         <TLDRCommandCard
-          command="npx @neurolint/cli migrate:nextjs-15 ./src"
-          description="Auto-migrate to Next.js 15 async APIs. Updates cookies(), headers(), params, and searchParams."
+          command="npx @neurolint/cli migrate:nextjs-16 ./src"
+          description="Auto-migrate to Next.js 16 async APIs. Updates cookies(), headers(), params, and searchParams."
         />
 
         <section className="prose prose-invert max-w-none">
-          <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Breaking Changes in Next.js 15</h2>
+          <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Breaking Changes in Next.js 16</h2>
           <p className="text-gray-300">
-            Next.js 15 makes several Request APIs async that were previously synchronous. 
+            Next.js 16 makes several Request APIs async that were previously synchronous. 
             This is a <strong className="text-white">breaking change</strong> that affects most apps:
           </p>
 
@@ -54,7 +54,7 @@ export function NextJS15Migration() {
             <div className="flex items-start gap-4">
               <AlertCircle className="w-6 h-6 text-amber-400 flex-shrink-0 mt-1" />
               <div>
-                <p className="text-white font-medium mb-1">APIs Now Async in Next.js 15</p>
+                <p className="text-white font-medium mb-1">APIs Now Async in Next.js 16</p>
                 <ul className="text-gray-400 text-sm space-y-1">
                   <li>• <code className="text-blue-400">cookies()</code> - Must await or use <code className="text-blue-400">React.use()</code></li>
                   <li>• <code className="text-blue-400">headers()</code> - Must await or use <code className="text-blue-400">React.use()</code></li>
@@ -70,7 +70,7 @@ export function NextJS15Migration() {
             code={`Error: Route "/dashboard/[id]" used \`params.id\`. \`params\` should be awaited 
 before using its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis`}
             language="text"
-            filename="Next.js 15 Error"
+            filename="Next.js 16 Error"
           />
 
           <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Manual Migration is Tedious</h2>
@@ -98,12 +98,12 @@ before using its properties. Learn more: https://nextjs.org/docs/messages/sync-d
           <p className="text-gray-300">Page and layout params are now Promises:</p>
 
           <CodeBlock
-            code={`// Before (Next.js 14)
+            code={`// Before (Next.js 15)
 export default function Page({ params }: { params: { id: string } }) {
   return <div>ID: {params.id}</div>;
 }
 
-// After (Next.js 15) - NeuroLint auto-converts
+// After (Next.js 16) - NeuroLint auto-converts
 export default async function Page({ 
   params 
 }: { 
@@ -118,7 +118,7 @@ export default async function Page({
 
           <h3 className="text-xl font-semibold text-white mt-8 mb-4">2. Async cookies() and headers()</h3>
           <CodeBlock
-            code={`// Before (Next.js 14)
+            code={`// Before (Next.js 15)
 import { cookies } from 'next/headers';
 
 export default function Page() {
@@ -127,7 +127,7 @@ export default function Page() {
   return <div>Token: {token?.value}</div>;
 }
 
-// After (Next.js 15) - NeuroLint auto-converts
+// After (Next.js 16) - NeuroLint auto-converts
 import { cookies } from 'next/headers';
 
 export default async function Page() {
@@ -141,7 +141,7 @@ export default async function Page() {
 
           <h3 className="text-xl font-semibold text-white mt-8 mb-4">3. SearchParams Migration</h3>
           <CodeBlock
-            code={`// Before (Next.js 14)
+            code={`// Before (Next.js 15)
 export default function SearchPage({
   searchParams,
 }: {
@@ -150,7 +150,7 @@ export default function SearchPage({
   return <div>Search: {searchParams.q}</div>;
 }
 
-// After (Next.js 15) - NeuroLint auto-converts
+// After (Next.js 16) - NeuroLint auto-converts
 export default async function SearchPage({
   searchParams,
 }: {
@@ -167,11 +167,11 @@ export default async function SearchPage({
             <p>
               For Client Components that can't be async, NeuroLint uses <code>React.use()</code> 
               to unwrap the Promise synchronously. This maintains compatibility while following 
-              Next.js 15 patterns.
+              Next.js 16 patterns.
             </p>
           </Callout>
 
-          <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Additional Next.js 15 Changes</h2>
+          <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Additional Next.js 16 Changes</h2>
           
           <div className="bg-zinc-900 border border-black rounded-xl overflow-hidden my-6">
             <table className="w-full text-sm">
@@ -204,21 +204,21 @@ export default async function SearchPage({
 
           <Callout type="success" title="Verified in Source Code">
             <p>
-              The Next.js 15 migration logic is implemented in <code>scripts/fix-layer-5-nextjs.js</code>.
+              The Next.js 16 migration logic is implemented in <code>scripts/fix-layer-5-nextjs.js</code>.
               It uses AST traversal to find all usages of async APIs and transforms them appropriately.
             </p>
           </Callout>
 
           <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Run It Now</h2>
           <CodeBlock
-            code={`# Migrate to Next.js 15 async APIs
-npx @neurolint/cli migrate:nextjs-15 ./app
+            code={`# Migrate to Next.js 16 async APIs
+npx @neurolint/cli migrate:nextjs-16 ./app
 
 # Preview changes without applying
-npx @neurolint/cli migrate:nextjs-15 ./app --dry-run
+npx @neurolint/cli migrate:nextjs-16 ./app --dry-run
 
 # Also update TypeScript types
-npx @neurolint/cli migrate:nextjs-15 ./app --update-types`}
+npx @neurolint/cli migrate:nextjs-16 ./app --update-types`}
             language="bash"
           />
 

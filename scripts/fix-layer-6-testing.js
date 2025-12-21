@@ -326,13 +326,13 @@ async function setupTestingEnvironment(projectPath, options = {}) {
     const packageJsonPath = path.join(projectPath, 'package.json');
     const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
     
-    // Add testing dependencies if missing
+    // Add testing dependencies if missing (updated December 2025)
     const testingDeps = {
-      '@testing-library/react': '^13.0.0',
-      '@testing-library/jest-dom': '^5.16.5',
-      '@testing-library/user-event': '^14.0.0',
-      'jest': '^29.0.0',
-      'jest-environment-jsdom': '^29.0.0'
+      '@testing-library/react': '^16.3.1',
+      '@testing-library/jest-dom': '^6.6.3',
+      '@testing-library/user-event': '^14.6.1',
+      'jest': '^30.0.0',
+      'jest-environment-jsdom': '^30.0.0'
     };
     
     let updated = false;

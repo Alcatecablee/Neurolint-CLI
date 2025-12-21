@@ -596,7 +596,7 @@ async function transform(code, options = {}) {
     
     if (updatedCode !== beforeReact19) states.push(updatedCode);
 
-    // 6) Next.js 15.5 Deprecation Patterns
+    // 6) Next.js 16 Deprecation Patterns
     const beforeDeprecations = updatedCode;
     const deprecationPatterns = {
       legacyBehavior: {
@@ -662,7 +662,7 @@ export async function GET(request: NextRequest) {
   }
 }`;
         },
-        description: 'Convert basic API handler to structured Next.js 15.5 route'
+        description: 'Convert basic API handler to structured Next.js 16 route'
       },
       
       // Phase 3: Add validation with Zod
@@ -728,7 +728,7 @@ export async function GET(request: NextRequest) {
     }
   });`;
         },
-        description: 'Add Next.js 15.5 caching strategies to fetch calls'
+        description: 'Add Next.js 16 caching strategies to fetch calls'
       },
       
       // Phase 3: Add revalidation patterns

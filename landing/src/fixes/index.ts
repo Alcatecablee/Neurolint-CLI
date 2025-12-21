@@ -13,5 +13,5 @@ export { TypeScriptStrictMode } from "./pages/TypeScriptStrictMode";
 export { React19Migration } from "./pages/React19Migration";
 export { ForwardRefRemoval } from "./pages/ForwardRefRemoval";
 export { UseEffectCleanup } from "./pages/UseEffectCleanup";
-export { NextJS15Migration } from "./pages/NextJS15Migration";
+export { NextJS16Migration } from "./pages/NextJS16Migration";
 export { RSCCommonErrors } from "./pages/RSCCommonErrors";

@@ -26,7 +26,7 @@ async function detectNextJSVersion(projectRoot) {
     
     if (!nextVersion) return null;
     
-    // Extract version from range (e.g., "^15.5.0" -> "15.5.0")
+    // Extract version from range (e.g., "^16.1.0" -> "16.1.0")
     const versionMatch = nextVersion.match(/[\d.]+/);
     return versionMatch ? versionMatch[0] : null;
   } catch (error) {
@@ -54,7 +54,7 @@ function isTurbopackSupported(version) {
   const parsed = parseVersion(version);
   if (!parsed) return false;
   
-  // Turbopack is available in Next.js 13.1+ but stable in 15.0+
+  // Turbopack is available in Next.js 13.1+, stable in 15.0+, and is the default bundler in 16.0+
   return parsed.major >= 13 && parsed.minor >= 1;
 }
 
@@ -67,8 +67,8 @@ function generateTurbopackSuggestions(nextVersion) {
   if (!isTurbopackSupported(nextVersion)) {
     suggestions.push({
       type: 'turbopack',
-      message: 'Turbopack requires Next.js 13.1+ for basic support, 15.0+ for stable features',
-      recommendation: 'Upgrade to Next.js 15.0+ for stable Turbopack support'
+      message: 'Turbopack requires Next.js 13.1+ for basic support, 16.0+ where it is the default bundler',
+      recommendation: 'Upgrade to Next.js 16.0+ for Turbopack as the default bundler'
     });
     return suggestions;
   }
@@ -82,12 +82,12 @@ function generateTurbopackSuggestions(nextVersion) {
     recommendation: 'Add --turbo flag to dev script: "dev": "next dev --turbo"'
   });
   
-  // Next.js 15.0+ specific Turbopack features
-  if (parsed.major >= 15) {
+  // Next.js 16.0+ Turbopack is the default bundler
+  if (parsed.major >= 16) {
     suggestions.push({
       type: 'turbopack',
-      message: 'Turbopack build is available in Next.js 15.0+',
-      recommendation: 'Add --turbo flag to build script: "build": "next build --turbo"'
+      message: 'Turbopack is the default bundler in Next.js 16.0+',
+      recommendation: 'Turbopack is now enabled by default - no additional configuration needed'
     });
     
     suggestions.push({
@@ -225,13 +225,13 @@ async function transform(input, options = {}) {
         }
       }
 
-      // Phase 3: Next.js 15.5 specific TypeScript improvements
+      // Phase 3: Next.js 16 specific TypeScript improvements
       if (originalCompilerOptions.target !== 'ES2022') {
         updatedCompilerOptions.target = 'ES2022';
         tsChanges++;
         suggestions.push({
           type: 'typescript-target',
-          message: 'Updated TypeScript target to ES2022 for Next.js 15.5 compatibility',
+          message: 'Updated TypeScript target to ES2022 for Next.js 16 compatibility',
           recommendation: 'ES2022 provides better performance and modern JavaScript features'
         });
       }
@@ -241,7 +241,7 @@ async function transform(input, options = {}) {
         tsChanges++;
         suggestions.push({
           type: 'typescript-module',
-          message: 'Updated TypeScript module to ESNext for Next.js 15.5',
+          message: 'Updated TypeScript module to ESNext for Next.js 16',
           recommendation: 'ESNext enables modern module features and better tree-shaking'
         });
       }
@@ -251,7 +251,7 @@ async function transform(input, options = {}) {
         tsChanges++;
         suggestions.push({
           type: 'typescript-module-resolution',
-          message: 'Updated module resolution to bundler for Next.js 15.5',
+          message: 'Updated module resolution to bundler for Next.js 16',
           recommendation: 'Bundler resolution provides better compatibility with modern bundlers'
         });
       }
@@ -265,7 +265,7 @@ async function transform(input, options = {}) {
       }
     }
 
-    // Phase 3: Enhanced Next.js 15.5 Config Updates (Layer 1)
+    // Phase 3: Enhanced Next.js 16 Config Updates (Layer 1)
     let nextConfig = '';
     if (files[1]) {
       const nextConfigContent = await fs.readFile(nextConfigPath, 'utf8');
@@ -293,12 +293,12 @@ async function transform(input, options = {}) {
           suggestions.push({
             type: 'deprecated-flag',
             message: `Removed deprecated experimental flag: ${flag}`,
-            recommendation: 'This flag is no longer needed in Next.js 15.5'
+            recommendation: 'This flag is no longer needed in Next.js 16'
           });
         }
       });
 
-      // Phase 3: Add Next.js 15.5 performance optimizations
+      // Phase 3: Add Next.js 16 performance optimizations
       if (!nextConfig.includes('experimental.turbo')) {
         const turboConfig = `
   experimental: {
@@ -319,7 +319,7 @@ async function transform(input, options = {}) {
           nextConfigChanges++;
           suggestions.push({
             type: 'turbo-config',
-            message: 'Added Turbopack configuration for Next.js 15.5',
+            message: 'Added Turbopack configuration for Next.js 16',
             recommendation: 'Turbopack provides faster builds and development experience'
           });
         }
@@ -343,7 +343,7 @@ async function transform(input, options = {}) {
           nextConfigChanges++;
           suggestions.push({
             type: 'image-optimization',
-            message: 'Added image optimization configuration for Next.js 15.5',
+            message: 'Added image optimization configuration for Next.js 16',
             recommendation: 'Remote patterns enable optimized image loading from external sources'
           });
         }
@@ -352,7 +352,7 @@ async function transform(input, options = {}) {
       if (nextConfigChanges > 0) {
         changeCount += nextConfigChanges;
         if (verbose) {
-          process.stdout.write(`[INFO] Applied ${nextConfigChanges} Next.js 15.5 config improvements\n`);
+          process.stdout.write(`[INFO] Applied ${nextConfigChanges} Next.js 16 config improvements\n`);
         }
       }
     }
@@ -364,7 +364,7 @@ async function transform(input, options = {}) {
       const originalPackageJson = JSON.parse(packageJsonContent);
       packageJson = { ...originalPackageJson };
 
-      // Phase 3: Migrate to Biome for Next.js 15.5
+      // Phase 3: Migrate to Biome for Next.js 16
       if (packageJson.scripts?.lint === 'next lint') {
         packageJson.scripts.lint = 'biome lint ./src';
         packageJson.scripts.check = 'biome check ./src';
@@ -380,8 +380,8 @@ async function transform(input, options = {}) {
         changeCount += 1;
         suggestions.push({
           type: 'lint-migration',
-          message: 'Migrated from deprecated "next lint" to Biome for Next.js 15.5',
-          recommendation: 'Biome is faster, requires less configuration, and is the recommended linter for Next.js 15.5'
+          message: 'Migrated from deprecated "next lint" to Biome for Next.js 16',
+          recommendation: 'Biome is faster, requires less configuration, and is the recommended linter for Next.js 16'
         });
       }
 
@@ -409,16 +409,16 @@ async function transform(input, options = {}) {
 
       // Phase 3: Update Next.js version if needed
       const nextVersion = packageJson.dependencies?.next || packageJson.devDependencies?.next;
-      if (nextVersion && !nextVersion.includes('15.5')) {
+      if (nextVersion && !nextVersion.includes('16.')) {
         packageJson.dependencies = {
           ...packageJson.dependencies,
-          next: '^15.5.0'
+          next: '^16.1.0'
         };
         changeCount += 1;
         suggestions.push({
           type: 'nextjs-upgrade',
-          message: 'Updated Next.js to version 15.5.0',
-          recommendation: 'Next.js 15.5 provides improved performance and new features'
+          message: 'Updated Next.js to version 16.1.0',
+          recommendation: 'Next.js 16 provides improved performance, Turbopack as default, and React 19.2 support'
         });
       }
     }
@@ -428,11 +428,11 @@ async function transform(input, options = {}) {
     if (nextVersion && isTurbopackSupported(nextVersion)) {
       const parsed = parseVersion(nextVersion);
       
-      if (parsed && parsed.major >= 15) {
+      if (parsed && parsed.major >= 16) {
         suggestions.push({
           type: 'turbopack-build',
-          message: 'Turbopack build is available in Next.js 15.5+',
-          recommendation: 'Add --turbo flag to build script: "build": "next build --turbo"'
+          message: 'Turbopack is the default bundler in Next.js 16+',
+          recommendation: 'Turbopack is now enabled by default - no --turbo flag needed'
         });
       }
       

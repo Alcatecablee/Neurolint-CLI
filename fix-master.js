@@ -62,8 +62,8 @@ class NextJSVersionChecker {
   constructor() {
     this.supportedVersions = {
       min: '13.4.0',
-      max: '15.5.9',
-      recommended: '15.5.9'
+      max: '16.1.0',
+      recommended: '16.1.0'
     };
   }
 
@@ -212,9 +212,9 @@ const { transform: layer3Transform } = require('./scripts/fix-layer-3-components
 const { transform: layer4Transform } = require('./scripts/fix-layer-4-hydration');
 const { 
   transform: layer5Transform, 
-  migrateNextJS15Comprehensive,
+  migrateNextJS16Comprehensive,
   BiomeMigrationTransformer,
-  NextJS15DeprecationHandler 
+  NextJS16DeprecationHandler 
 } = require('./scripts/fix-layer-5-nextjs');
 const { transform: layer6Transform } = require('./scripts/fix-layer-6-testing');
 const { transform: layer7Transform } = require('./scripts/fix-layer-7-adaptive');
@@ -891,10 +891,10 @@ async function processDirectory(dirPath, options = {}) {
 }
 
 /**
- * Next.js 15.5 Migration Orchestrator
+ * Next.js 16 Migration Orchestrator
  * Handles the complete migration process with validation, transformation, and rollback
  */
-class NextJS15MigrationOrchestrator {
+class NextJS16MigrationOrchestrator {
   constructor() {
     this.versionChecker = new NextJSVersionChecker();
     this.orchestrator = new LayerOrchestrator();
@@ -1073,20 +1073,20 @@ class NextJS15MigrationOrchestrator {
   }
 
   /**
-   * Execute Next.js 15.5 migration
+   * Execute Next.js 16 migration
    */
-  async migrateNextJS15(projectPath, options = {}) {
+  async migrateNextJS16(projectPath, options = {}) {
     const { 
       dryRun = false, 
       verbose = false, 
       createRollback = false,
-      layers = [5] // Focus on Layer 5 for Next.js 15.5 specific changes
+      layers = [5] // Focus on Layer 5 for Next.js 16 specific changes
     } = options;
 
     const startTime = Date.now();
     
     if (verbose) {
-      logInfo(`Starting Next.js 15.5 migration for: ${projectPath}`);
+      logInfo(`Starting Next.js 16 migration for: ${projectPath}`);
       logInfo(`Mode: ${dryRun ? 'Dry Run' : 'Apply Changes'}`);
     }
 
@@ -1657,17 +1657,17 @@ Features:
     return;
   }
 
-  const projectPath = args.find(arg => !arg.startsWith('--') && !['migrate-nextjs-15.5'].includes(arg)) || '.';
+  const projectPath = args.find(arg => !arg.startsWith('--') && !['migrate-nextjs-16'].includes(arg)) || '.';
 
   try {
-    const migrationOrchestrator = new NextJS15MigrationOrchestrator();
-    const result = await migrationOrchestrator.migrateNextJS15(projectPath, options);
+    const migrationOrchestrator = new NextJS16MigrationOrchestrator();
+    const result = await migrationOrchestrator.migrateNextJS16(projectPath, options);
 
     // Display results
     if (result.success) {
       const report = result.report;
       
-      process.stdout.write(`\n[SUCCESS] Next.js 15.5 migration completed!\n`);
+      process.stdout.write(`\n[SUCCESS] Next.js 16 migration completed!\n`);
       process.stdout.write(`\nMigration Summary:\n`);
       process.stdout.write(`  Files processed: ${report.summary.totalFiles}\n`);
       process.stdout.write(`  Successful: ${report.summary.successfulFiles}\n`);
@@ -1850,7 +1850,7 @@ async function handleDeprecationCommand(args) {
   // Show deprecation fixes help
   if (args.includes('--help') || args.includes('-h')) {
     process.stdout.write(`
-NeuroLint Next.js 15.5 Deprecation Fixes
+NeuroLint Next.js 16 Deprecation Fixes
 
 Usage: neurolint fix-deprecations [options] <project-path>
 
@@ -1882,7 +1882,7 @@ Features:
   const projectPath = args.find(arg => !arg.startsWith('--')) || '.';
 
   try {
-    const deprecationHandler = new NextJS15DeprecationHandler();
+    const deprecationHandler = new NextJS16DeprecationHandler();
     const result = await deprecationHandler.processDeprecations(projectPath, options);
 
     if (result.success) {
@@ -1921,7 +1921,7 @@ module.exports = {
   main,
   LayerOrchestrator,
   NextJSVersionChecker,
-  NextJS15MigrationOrchestrator,
+  NextJS16MigrationOrchestrator,
   handleBiomeMigrationCommand,
   handleMigrationCommand,
   // Export logging functions
