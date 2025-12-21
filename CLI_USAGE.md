@@ -319,12 +319,12 @@ neurolint migrate-react19 . --format=json --output=migration-report.json
 
 ---
 
-#### `neurolint migrate-nextjs-15.5 [path]`
+#### `neurolint migrate-nextjs-16 [path]`
 
-Migrates your project to Next.js 15.5 compatibility.
+Migrates your project to Next.js 16 compatibility.
 
 ```bash
-# Apply all layers for Next.js 15.5
+# Apply all layers for Next.js 16
 neurolint fix . --all-layers --dry-run --verbose
 
 # Add Node runtime to middleware (now stable)
@@ -333,18 +333,19 @@ neurolint fix middleware.ts --layers=5 --verbose
 
 **What it does:**
 - Type-safe routing with automatic interface generation
-- Adds stable Node.js runtime to middleware
-- Recommends Biome integration
+- Turbopack configuration (now default bundler in Next.js 16)
+- Cache Components and 'use cache' directive support
+- Async Dynamic APIs migration (params, searchParams, cookies, headers)
+- React 19.2 compatibility (Activity component, useEffectEvent)
 - Enhances Server Actions with error handling
 - Modernizes Metadata API with stricter TypeScript typing
 - Adds caching optimizations
-- Configures Turbopack for Next.js 15+
 
 ---
 
 #### `neurolint migrate-biome [path]`
 
-Migrates from ESLint to Biome (Next.js 15.5 recommendation).
+Migrates from ESLint to Biome (Next.js 16 recommendation).
 
 ```bash
 # Preview migration
@@ -365,7 +366,7 @@ neurolint migrate-biome . --verbose
 
 #### `neurolint fix-deprecations [path]`
 
-Fixes Next.js 15.5 deprecations.
+Fixes Next.js 16 deprecations.
 
 ```bash
 # Fix all deprecations

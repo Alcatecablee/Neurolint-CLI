@@ -121,7 +121,7 @@ class NextJSVersionChecker {
         return { version: null, error: 'Next.js not found in package.json' };
       }
 
-      // Extract version from range (e.g., "^15.5.0" -> "15.5.0")
+      // Extract version from range (e.g., "^16.1.0" -> "16.1.0")
       const versionMatch = nextVersion.match(/[\d.]+/);
       if (!versionMatch) {
         return { version: null, error: 'Invalid Next.js version format' };
@@ -142,7 +142,7 @@ class NextJSVersionChecker {
   }
 
   /**
-   * Validate project for Next.js 15.5 migration
+   * Validate project for Next.js 16 migration
    */
   async validateProjectForMigration(projectPath = process.cwd()) {
     const versionInfo = await this.detectNextJSVersion(projectPath);
@@ -373,7 +373,7 @@ async function executeLayers(code, layers, options = {}) {
     strictTs = false,
     apiRoutes = false,
     ecommerce = false,
-    nextjs155 = false,
+    nextjs16 = false,
     progressive = false
   } = options;
   const results = [];
@@ -431,7 +431,7 @@ async function executeLayers(code, layers, options = {}) {
     }
   }
   
-  if (nextjs155 && !filteredLayers.includes(5)) {
+  if (nextjs16 && !filteredLayers.includes(5)) {
     filteredLayers.push(5);
   }
   
@@ -463,15 +463,15 @@ async function executeLayers(code, layers, options = {}) {
     if (strictTs) enabledFlags.push('TypeScript strictness');
     if (apiRoutes) enabledFlags.push('API route patterns');
     if (ecommerce) enabledFlags.push('E-commerce patterns');
-    if (nextjs155) enabledFlags.push('Next.js 15.5 patterns');
+    if (nextjs16) enabledFlags.push('Next.js 16 patterns');
     
     if (enabledFlags.length > 0) {
       process.stdout.write(`[INFO] Enabled patterns: ${enabledFlags.join(', ')}\n`);
     }
     
     // Show warnings for potential conflicts
-    if (nextjs155 && !strictTs) {
-      process.stderr.write(`[WARNING] Next.js 15.5 patterns enabled but TypeScript strictness not enabled. Consider adding --strict-ts for better compatibility.\n`);
+    if (nextjs16 && !strictTs) {
+      process.stderr.write(`[WARNING] Next.js 16 patterns enabled but TypeScript strictness not enabled. Consider adding --strict-ts for better compatibility.\n`);
     }
     
     if (ecommerce && !apiRoutes) {
@@ -694,7 +694,7 @@ async function processFile(filePath, options = {}) {
     strictTs = false,
     apiRoutes = false,
     ecommerce = false,
-    nextjs155 = false
+    nextjs16 = false
   } = options;
 
   try {
@@ -721,7 +721,7 @@ async function processFile(filePath, options = {}) {
       strictTs,
       apiRoutes,
       ecommerce,
-      nextjs155,
+      nextjs16,
       noDeps: options.noDeps
     });
 
@@ -754,7 +754,7 @@ async function processDirectory(dirPath, options = {}) {
     strictTs = false,
     apiRoutes = false,
     ecommerce = false,
-    nextjs155 = false
+    nextjs16 = false
   } = options;
   
   const validExtensions = ['.ts', '.tsx', '.js', '.jsx'];
@@ -981,8 +981,8 @@ class NextJS16MigrationOrchestrator {
       report.recommendations.push(`Success rate is ${report.summary.successRate}% - consider reviewing file discovery settings`);
     }
 
-    if (validation.version && validation.version !== '15.5.0') {
-      report.recommendations.push('Consider upgrading to Next.js 15.5.0 for latest features');
+    if (validation.version && validation.version !== '16.1.0') {
+      report.recommendations.push('Consider upgrading to Next.js 16.1.0 for latest features');
     }
 
     if (report.summary.filesWithChanges > 0) {
@@ -1014,17 +1014,17 @@ class NextJS16MigrationOrchestrator {
         categorized['Skipped (no migration needed)'] = {
           count: Math.round(failedFiles * 0.7),
           percentage: '70.0',
-          description: 'don\'t require Next.js 15.5 specific changes'
+          description: 'don\'t require Next.js 16 specific changes'
         };
         categorized['Skipped (already compatible)'] = {
           count: Math.round(failedFiles * 0.2),
           percentage: '20.0',
-          description: 'already have Next.js 15.5 features implemented'
+          description: 'already have Next.js 16 features implemented'
         };
         categorized['Skipped (not applicable)'] = {
           count: Math.round(failedFiles * 0.1),
           percentage: '10.0',
-          description: 'are not relevant for Next.js 15.5 migration (configs, assets, etc.)'
+          description: 'are not relevant for Next.js 16 migration (configs, assets, etc.)'
         };
       } else {
         // Some files actually failed
@@ -1468,7 +1468,7 @@ async function main() {
   const args = process.argv.slice(2);
   
   // Check for migration command
-  if (args.includes('migrate-nextjs-15.5')) {
+  if (args.includes('migrate-nextjs-16')) {
     await handleMigrationCommand(args);
     return;
   }
@@ -1491,7 +1491,7 @@ async function main() {
     strictTs: args.includes('--strict-ts'),
     apiRoutes: args.includes('--api-routes'),
     ecommerce: args.includes('--ecommerce'),
-    nextjs155: args.includes('--nextjs-15.5'),
+    nextjs16: args.includes('--nextjs-16'),
     noDeps: args.includes('--no-deps'),
     layers: (() => {
       // Support both --layers=3,4 and --layers 3,4 syntax
@@ -1528,9 +1528,9 @@ Usage: neurolint <command> [options] <path>
 
 Commands:
   fix                    Apply automated fixes to code (default)
-  migrate-nextjs-15.5    Migrate project to Next.js 15.5 compatibility
+  migrate-nextjs-16      Migrate project to Next.js 16 compatibility
   migrate-biome          Migrate from ESLint to Biome
-  fix-deprecations       Fix Next.js 15.5 deprecations
+  fix-deprecations       Fix Next.js 16 deprecations
 
 Options:
   --dry-run           Show what would be done without making changes
@@ -1540,7 +1540,7 @@ Options:
   --strict-ts         Enable TypeScript strictness patterns (Layer 1)
   --api-routes        Enable API route structure patterns (Layer 2)
   --ecommerce         Enable e-commerce optimization patterns (Layers 2,7)
-  --nextjs-15.5       Enable Next.js 15.5 migration patterns (Layer 5)
+  --nextjs-16         Enable Next.js 16 migration patterns (Layer 5)
   --help, -h         Show this help message
 
 Layers:
@@ -1561,16 +1561,16 @@ Examples:
   neurolint fix --strict-ts .       # Enable TypeScript strictness
   neurolint fix --api-routes .      # Enable API route patterns
   neurolint fix --ecommerce .       # Enable e-commerce patterns
-  neurolint fix --nextjs-15.5 .     # Enable Next.js 15.5 patterns
-  neurolint migrate-nextjs-15.5 .   # Migrate to Next.js 15.5 compatibility
+  neurolint fix --nextjs-16 .       # Enable Next.js 16 patterns
+  neurolint migrate-nextjs-16 .     # Migrate to Next.js 16 compatibility
   neurolint migrate-biome .         # Migrate from ESLint to Biome
-  neurolint fix-deprecations .      # Fix Next.js 15.5 deprecations
+  neurolint fix-deprecations .      # Fix Next.js 16 deprecations
 `);
     return;
   }
 
   // Find the target path (first non-flag argument that's not a command)
-  const commands = ['fix', 'migrate-nextjs-15.5', 'migrate-biome', 'fix-deprecations'];
+  const commands = ['fix', 'migrate-nextjs-16', 'migrate-biome', 'fix-deprecations'];
   
   // Get layers argument value to exclude it from target path
   const layersIndex = args.indexOf('--layers');
@@ -1613,7 +1613,7 @@ Examples:
 }
 
 /**
- * Handle the migrate-nextjs-15.5 command
+ * Handle the migrate-nextjs-16 command
  */
 async function handleMigrationCommand(args) {
   const options = {
@@ -1625,9 +1625,9 @@ async function handleMigrationCommand(args) {
   // Show migration help
   if (args.includes('--help') || args.includes('-h')) {
     process.stdout.write(`
-NeuroLint Next.js 15.5 Migration Tool
+NeuroLint Next.js 16 Migration Tool
 
-Usage: neurolint migrate-nextjs-15.5 [options] <project-path>
+Usage: neurolint migrate-nextjs-16 [options] <project-path>
 
 Options:
   --dry-run           Show what would be done without making changes
@@ -1637,20 +1637,22 @@ Options:
   --help, -h         Show this help message
 
 Examples:
-  neurolint migrate-nextjs-15.5 .                    # Migrate current directory
-  neurolint migrate-nextjs-15.5 ./src               # Migrate specific directory
-  neurolint migrate-nextjs-15.5 --dry-run .         # Preview migration changes
-  neurolint migrate-nextjs-15.5 --verbose .         # Show detailed migration output
-  neurolint migrate-nextjs-15.5 --apply .           # Apply changes with rollback plan
+  neurolint migrate-nextjs-16 .                    # Migrate current directory
+  neurolint migrate-nextjs-16 ./src               # Migrate specific directory
+  neurolint migrate-nextjs-16 --dry-run .         # Preview migration changes
+  neurolint migrate-nextjs-16 --verbose .         # Show detailed migration output
+  neurolint migrate-nextjs-16 --apply .           # Apply changes with rollback plan
 
 Features:
-  - Validates Next.js version compatibility (13.4.0 - 15.5.0)
-  - Applies Layer 5 optimizations for Next.js 15.5
+  - Validates Next.js version compatibility (13.4.0 - 16.1.0)
+  - Applies Layer 5 optimizations for Next.js 16
+  - Turbopack (now default bundler) configuration
+  - Cache Components and 'use cache' directive support
+  - Async Dynamic APIs migration (params, searchParams, cookies, headers)
+  - React 19.2 compatibility (Activity component, useEffectEvent)
   - Server Actions enhancement with error handling
   - Metadata API modernization
   - Deprecation detection and warnings
-  - Caching strategy suggestions
-  - Turbopack guidance
   - Comprehensive migration report
   - Automatic rollback plan generation
 `);
