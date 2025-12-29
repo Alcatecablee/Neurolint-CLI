@@ -18,6 +18,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Menu, X, Search, ExternalLink } from "lucide-react";
 import { DocsSidebar } from "./DocsSidebar";
+import { useMetaTags } from "../../hooks/useMetaTags";
 
 interface DocsLayoutProps {
   children: React.ReactNode;
@@ -28,6 +29,18 @@ interface DocsLayoutProps {
 export function DocsLayout({ children, title, description }: DocsLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+
+  useMetaTags({
+    title: `${title} - NeuroLint Documentation`,
+    description: description || `Learn about ${title} in NeuroLint documentation`,
+    ogTitle: `${title} - NeuroLint Docs`,
+    ogDescription: description || `Learn about ${title} in NeuroLint documentation`,
+    ogUrl: `https://www.neurolint.dev${location.pathname}`,
+    ogImage: "https://www.neurolint.dev/og-image.png",
+    canonical: `https://www.neurolint.dev${location.pathname}`,
+    twitterCard: "summary",
+    twitterCreator: "@neurolint",
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);

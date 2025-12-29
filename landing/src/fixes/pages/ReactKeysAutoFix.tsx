@@ -6,8 +6,21 @@ import { TLDRCommandCard } from "../components/TLDRCommandCard";
 import { CompetitorCompare } from "../components/CompetitorCompare";
 import { CodeBlock } from "../../docs/components/CodeBlock";
 import { Callout } from "../../docs/components/Callout";
+import { useMetaTags } from "../../hooks/useMetaTags";
 
 export function ReactKeysAutoFix() {
+  useMetaTags({
+    title: "Auto-fix Missing React Keys - NeuroLint",
+    description: "Automatically add stable keys to React .map() renders. ESLint detects missing keys but can't fix them. NeuroLint fixes them intelligently with ID inference.",
+    keywords: "React keys, jsx-key, auto-fix, ESLint alternative, code fixer",
+    ogTitle: "Auto-fix Missing React Keys",
+    ogDescription: "Automatically add stable keys to React .map() renders with NeuroLint",
+    ogUrl: "https://www.neurolint.dev/fixes/react-keys-auto-fix",
+    ogImage: "https://www.neurolint.dev/og-image.png",
+    canonical: "https://www.neurolint.dev/fixes/react-keys-auto-fix",
+    twitterCard: "summary_large_image",
+    twitterCreator: "@neurolint",
+  });
   return (
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">

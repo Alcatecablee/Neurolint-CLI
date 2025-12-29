@@ -6,8 +6,21 @@ import { TLDRCommandCard } from "../components/TLDRCommandCard";
 import { CompetitorCompare } from "../components/CompetitorCompare";
 import { CodeBlock } from "../../docs/components/CodeBlock";
 import { Callout } from "../../docs/components/Callout";
+import { useMetaTags } from "../../hooks/useMetaTags";
 
 export function HydrationMismatch() {
+  useMetaTags({
+    title: "Fix 'window is not defined' Hydration Errors - NeuroLint",
+    description: "Automatically fix React hydration errors including 'window is not defined', 'document is not defined', and SSR mismatches with AST-based code transformation.",
+    keywords: "hydration error, window not defined, React SSR, Next.js hydration, code fixer",
+    ogTitle: "Fix 'window is not defined' Errors",
+    ogDescription: "Auto-fix React hydration errors and SSR mismatches with NeuroLint",
+    ogUrl: "https://www.neurolint.dev/fixes/hydration-mismatch-window-undefined",
+    ogImage: "https://www.neurolint.dev/og-image.png",
+    canonical: "https://www.neurolint.dev/fixes/hydration-mismatch-window-undefined",
+    twitterCard: "summary_large_image",
+    twitterCreator: "@neurolint",
+  });
   return (
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">
