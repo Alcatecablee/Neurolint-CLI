@@ -50,7 +50,7 @@ const fixCategories = [
     description: "Server-side rendering and hydration errors",
     fixes: [
       {
-        slug: "hydration-mismatch-window-undefined",
+        slug: "hydration-mismatch",
         title: "Fix window is not defined",
         description: "Auto-wrap browser APIs with SSR guards. No more hydration mismatches.",
         icon: <Droplets className="w-5 h-5" />,

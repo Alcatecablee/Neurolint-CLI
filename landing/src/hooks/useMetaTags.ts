@@ -57,7 +57,12 @@ export const useMetaTags = (tags: MetaTags) => {
         canonical.rel = 'canonical';
         document.head.appendChild(canonical);
       }
-      canonical.href = tags.canonical;
+      // Force HTTPS and strip query params/hashes for canonical
+      const canonicalUrl = new URL(tags.canonical, 'https://www.neurolint.dev');
+      canonicalUrl.protocol = 'https:';
+      canonicalUrl.search = '';
+      canonicalUrl.hash = '';
+      canonical.href = canonicalUrl.toString();
     }
 
     // Update Twitter tags

@@ -14,7 +14,7 @@
   
   <!-- Quick Start Guide -->
   <url>
-    <loc>https://www.neurolint.dev/quick-start</loc>
+    <loc>https://www.neurolint.dev/quickstart</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -45,7 +45,7 @@
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/react2shell-cve-2025-55182-exploit-explained</loc>
+    <loc>https://www.neurolint.dev/blog/react2shell-exploit-explained</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
@@ -290,7 +290,7 @@
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/fixes/hydration-mismatch-window-undefined</loc>
+    <loc>https://www.neurolint.dev/fixes/hydration-mismatch</loc>
     <lastmod>2025-12-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.95</priority>
