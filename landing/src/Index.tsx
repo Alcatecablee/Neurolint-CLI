@@ -234,9 +234,9 @@ const TypewriterHeadline = () => {
 
   return (
     <div className="mb-8 md:mb-12">
-      <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white mb-4">
+      <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-white mb-4">
         Fix Your React Code Automatically
-      </h1>
+      </h2>
       <p className="text-lg sm:text-xl md:text-2xl text-gray-400">
         Eliminate{" "}
         <span className="text-white font-semibold inline-block min-w-[180px] sm:min-w-[220px] md:min-w-[280px]">
