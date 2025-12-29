@@ -287,9 +287,9 @@ export function QuickStart() {
             </span>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white animate-fadeIn">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white animate-fadeIn">
             Quick Start
-          </h1>
+          </h2>
           
           <div className="mb-12 md:mb-16 animate-fadeIn">
             <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2 sm:px-4">

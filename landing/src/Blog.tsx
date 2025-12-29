@@ -171,7 +171,7 @@ const BlogList: React.FC = () => {
 const Header: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-      <h1 className="text-4xl sm:text-5xl font-black text-white mb-4">NeuroLint Blog</h1>
+      <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">NeuroLint Blog</h2>
       <p className="text-xl text-gray-300 max-w-2xl mx-auto">
         Expert insights on React, Next.js, code fixing, and security. Stay updated with the latest development practices.
       </p>

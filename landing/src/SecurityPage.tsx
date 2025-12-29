@@ -165,10 +165,10 @@ const SecurityPage = () => {
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 animate-fade-in-blur">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6 animate-fade-in-blur">
             You Patched the CVE.<br />
             <span className="text-red-400">Were You Already Compromised?</span>
-          </h1>
+          </h2>
 
           <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
             Patching closes the door. But the intruder may already be inside. NeuroLint provides 
@@ -301,7 +301,7 @@ const SecurityPage = () => {
                 <div className="relative">
                   <img 
                     src={workflowSteps[activeWorkflowStep].screenshot}
-                    alt={workflowSteps[activeWorkflowStep].screenshotAlt}
+                    alt={workflowSteps[activeWorkflowStep].screenshotAlt || "Security scan screenshot"}
                     className="w-full"
                   />
                 </div>
