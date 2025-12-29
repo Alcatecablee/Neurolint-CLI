@@ -105,9 +105,9 @@ const fixCategories = [
         badge: "Urgent",
       },
       {
-        slug: "nextjs-15-migration",
-        title: "Next.js 15 Async APIs",
-        description: "Migrate to async cookies(), headers(), params, and searchParams. Auto-update TypeScript types.",
+        slug: "nextjs-16-migration",
+        title: "Next.js 16 Migration",
+        description: "Automate migration to Next.js 16. Handles middleware renames, Cache Components, and async dynamic APIs.",
         icon: <GitBranch className="w-5 h-5" />,
         layer: 5,
         searches: "4,400/mo",
@@ -148,6 +148,7 @@ const fixCategories = [
 function FixCardComponent({ fix }: { fix: FixCard }) {
   return (
     <Link
+      key={fix.slug}
       to={`/fixes/${fix.slug}`}
       className="group block bg-zinc-900 border border-black rounded-xl p-5 hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-200"
     >

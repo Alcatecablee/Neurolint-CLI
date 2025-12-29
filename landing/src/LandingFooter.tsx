@@ -33,12 +33,12 @@ export function LandingFooter() {
             <h4 className="text-white font-medium mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a
-                  href="/docs"
+                <Link
+                  to="/docs"
                   className="text-zinc-400 hover:text-white transition-colors"
                 >
                   Documentation
-                </a>
+                </Link>
               </li>
               <li>
                 <Link

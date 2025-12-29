@@ -324,42 +324,42 @@ export default function Index() {
             >
               Demo
             </a>
-            <a 
-              href="/quick-start" 
+            <Link 
+              to="/quickstart" 
               className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
               Quick Start
-            </a>
+            </Link>
             <a 
               href="#faq" 
               className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
               FAQ
             </a>
-            <a 
-              href="/blog" 
+            <Link 
+              to="/blog" 
               className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
               Blog
-            </a>
-            <a 
-              href="/docs"
+            </Link>
+            <Link 
+              to="/docs"
               className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
               Docs
-            </a>
-            <a 
-              href="/fixes"
+            </Link>
+            <Link 
+              to="/fixes"
               className="text-green-400 hover:text-green-300 text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
               Fixes
-            </a>
-            <a 
-              href="/security"
+            </Link>
+            <Link 
+              to="/security"
               className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
               Security
-            </a>
+            </Link>
           </div>
 
           {/* Actions */}
@@ -412,13 +412,13 @@ export default function Index() {
             >
               Demo
             </a>
-            <a 
-              href="/quick-start" 
+            <Link 
+              to="/quickstart" 
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Quick Start
-            </a>
+            </Link>
             <a 
               href="#faq" 
               onClick={() => setMobileMenuOpen(false)}
@@ -426,34 +426,34 @@ export default function Index() {
             >
               FAQ
             </a>
-            <a 
-              href="/blog" 
+            <Link 
+              to="/blog" 
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Blog
-            </a>
-            <a 
-              href="/docs"
+            </Link>
+            <Link 
+              to="/docs"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Docs
-            </a>
-            <a 
-              href="/fixes"
+            </Link>
+            <Link 
+              to="/fixes"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-3 text-green-400 hover:text-green-300 hover:bg-green-500/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Fixes
-            </a>
-            <a 
-              href="/security"
+            </Link>
+            <Link 
+              to="/security"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/5 rounded-lg transition-all duration-200 text-base font-medium"
             >
               Security
-            </a>
+            </Link>
           </div>
         )}
       </div>
@@ -494,12 +494,12 @@ export default function Index() {
               Get Started
               <ArrowRight className="w-4 h-4" />
             </a>
-            <a
-              href="/docs"
+            <Link
+              to="/docs"
               className="px-6 py-3 text-base font-medium rounded-lg bg-transparent border border-black text-white hover:bg-white/5 transition-all duration-200"
             >
               View Docs
-            </a>
+            </Link>
           </div>
         </div>
       </section>
