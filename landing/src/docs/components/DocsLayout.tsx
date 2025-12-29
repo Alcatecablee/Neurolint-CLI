@@ -76,7 +76,7 @@ export function DocsLayout({ children, title, description }: DocsLayoutProps) {
               </button>
               
               <Link to="/" className="flex items-center">
-                <img src="/docs-logo.png" alt="NeuroLint" className="h-7" />
+                <img src="/docs-logo.png" alt="NeuroLint Logo" className="h-7" />
               </Link>
               
               <div className="hidden sm:flex items-center text-sm text-gray-500">

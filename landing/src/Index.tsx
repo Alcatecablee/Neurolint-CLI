@@ -313,7 +313,7 @@ export default function Index() {
         <nav className="inline-flex items-center gap-8 px-10 py-2.5 rounded-full bg-white/5 border border-black backdrop-blur-sm w-[1100px] justify-between">
           {/* Brand */}
           <a href="/" className="flex items-center shrink-0">
-            <img src="/logo.png" alt="NeuroLint" className="h-7 transition-transform duration-200 hover:scale-105" />
+            <img src="/logo.png" alt="NeuroLint Logo" className="h-7 transition-transform duration-200 hover:scale-105" />
           </a>
 
           {/* Desktop Navigation Links */}

@@ -230,9 +230,9 @@ export function FixesHub() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-900 border border-black text-gray-300 rounded-full text-sm font-medium mb-6">
             One-Command Fixes
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Fix Common React Problems
-          </h1>
+          </h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
             Each page shows the exact problem, why existing tools fail, and the one-command NeuroLint fix.
             Verified with source code references.

@@ -33,14 +33,14 @@ export function LandingHero() {
       
       <div className="relative z-10 flex flex-col items-center">
         {/* Main Heading */}
-        <h1
+        <h2
           id="hero-heading"
           className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl font-bold text-white text-center leading-[1.1] mb-6 tracking-tight"
         >
           Fix Your React Code
           <br />
           <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">in Seconds</span>
-        </h1>
+        </h2>
 
         {/* Subtitle */}
         <p className="text-lg sm:text-xl text-gray-400 font-normal mb-10 max-w-xl text-center leading-relaxed">
