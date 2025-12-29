@@ -384,12 +384,22 @@ Running Layer 3 (Component Fixes) on page.tsx
             <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
           </Link>
           <Link 
-            to="/docs/architecture"
+            to="/docs/layers/security"
             className="flex items-center justify-between p-4 bg-zinc-900 border border-black rounded-lg hover:bg-zinc-800 hover:border-black transition-colors group"
           >
             <div>
-              <h3 className="font-medium text-white">The 8-Layer Architecture</h3>
-              <p className="text-sm text-gray-400">Deep dive into how each layer transforms your code</p>
+              <h3 className="font-medium text-white">Security Forensics</h3>
+              <p className="text-sm text-gray-400">Detect CVE-2025-55182 and supply chain attacks</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
+          </Link>
+          <Link 
+            to="/fixes"
+            className="flex items-center justify-between p-4 bg-zinc-900 border border-black rounded-lg hover:bg-zinc-800 hover:border-black transition-colors group"
+          >
+            <div>
+              <h3 className="font-medium text-white">Fixes Hub</h3>
+              <p className="text-sm text-gray-400">Browse 50+ automated fixes for React & Next.js</p>
             </div>
             <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
           </Link>

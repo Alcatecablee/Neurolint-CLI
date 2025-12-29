@@ -15,9 +15,9 @@ export function HydrationMismatch() {
     keywords: "hydration error, window not defined, React SSR, Next.js hydration, code fixer",
     ogTitle: "Fix 'window is not defined' Errors",
     ogDescription: "Auto-fix React hydration errors and SSR mismatches with NeuroLint",
-    ogUrl: "https://www.neurolint.dev/fixes/hydration-mismatch-window-undefined",
+    ogUrl: "https://www.neurolint.dev/fixes/hydration-mismatch",
     ogImage: "https://www.neurolint.dev/og-image.png",
-    canonical: "https://www.neurolint.dev/fixes/hydration-mismatch-window-undefined",
+    canonical: "https://www.neurolint.dev/fixes/hydration-mismatch",
     twitterCard: "summary_large_image",
     twitterCreator: "@neurolint",
   });

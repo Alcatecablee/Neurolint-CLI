@@ -119,7 +119,7 @@ const HydrationErrorsPost: React.FC = () => {
         </p>
 
         <p>
-          In this comprehensive guide, we'll explore exactly what hydration errors are, why they happen, and most importantly, how to fix them - both manually and automatically using tools like <a href="https://www.neurolint.dev">NeuroLint</a>. For a quick reference, check out our <Link to="/docs/layers/hydration">Layer 4: Hydration documentation</Link>.
+          In this comprehensive guide, we'll explore exactly what hydration errors are, why they happen, and most importantly, how to fix them - both manually and automatically using tools like <Link to="/">NeuroLint</Link>. For a quick reference, check out our <Link to="/docs/layers/hydration">Layer 4: Hydration documentation</Link>.
         </p>
 
         <h2 id="what-are-hydration-errors" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
@@ -429,7 +429,7 @@ neurolint fix --layers 4,5 --dry-run ./src`}</code>
         </p>
 
         <p>
-          For existing codebases with hydration issues, tools like <a href="https://www.neurolint.dev">NeuroLint</a> can automatically detect and fix these problems, saving hours of manual debugging. Check out our <Link to="/docs/layers/hydration">Hydration layer documentation</Link> and the <Link to="/blog/eight-layer-pipeline-deep-dive">8-Layer Pipeline deep dive</Link> for more information.
+          For existing codebases with hydration issues, tools like <Link to="/">NeuroLint</Link> can automatically detect and fix these problems, saving hours of manual debugging. Check out our <Link to="/docs/layers/hydration">Hydration layer documentation</Link> and the <Link to="/blog/eight-layer-pipeline-deep-dive">8-Layer Pipeline deep dive</Link> for more information.
         </p>
 
         <div className="bg-zinc-900/50 border border-black rounded-xl p-6 my-8 not-prose">

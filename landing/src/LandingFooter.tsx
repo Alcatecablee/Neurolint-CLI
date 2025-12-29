@@ -14,6 +14,9 @@
  */
 
 
+import React from "react";
+import { Link } from "react-router-dom";
+
 export function LandingFooter() {
   return (
     <footer className="w-full py-8 px-6 bg-zinc-900 border-t border-black">
@@ -27,41 +30,39 @@ export function LandingFooter() {
           </div>
 
           <div>
-            <h4 className="text-white font-medium mb-4">Links</h4>
+            <h4 className="text-white font-medium mb-4">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <a
-                  href="https://www.npmjs.com/package/@neurolint/cli"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/docs"
                   className="text-zinc-400 hover:text-white transition-colors"
                 >
-                  npm Package
+                  Documentation
                 </a>
               </li>
               <li>
-                <a
-                  href="#comprehensive-demo"
+                <Link
+                  to="/fixes"
                   className="text-zinc-400 hover:text-white transition-colors"
                 >
-                  Demo
-                </a>
+                  Automated Fixes
+                </Link>
               </li>
               <li>
-                <a
-                  href="#faq"
+                <Link
+                  to="/security"
                   className="text-zinc-400 hover:text-white transition-colors"
                 >
-                  FAQ
-                </a>
+                  Security Forensics
+                </Link>
               </li>
               <li>
-                <a
-                  href="/blog"
+                <Link
+                  to="/blog"
                   className="text-zinc-400 hover:text-white transition-colors"
                 >
                   Blog
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

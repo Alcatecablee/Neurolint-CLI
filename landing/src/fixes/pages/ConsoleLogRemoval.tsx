@@ -6,9 +6,15 @@ import { TLDRCommandCard } from "../components/TLDRCommandCard";
 import { CompetitorCompare } from "../components/CompetitorCompare";
 import { CodeBlock } from "../../docs/components/CodeBlock";
 import { Callout } from "../../docs/components/Callout";
+import { useMetaTags } from "../../hooks/useMetaTags";
 
 export function ConsoleLogRemoval() {
-  return (
+    useMetaTags({
+        title: "Remove console.log from Production - NeuroLint",
+        description: "ESLint no-console only detects issues. NeuroLint automatically removes console.log statements with documented replacement comments.",
+        canonical: "https://www.neurolint.dev/fixes/console-log-removal"
+    });
+    return (
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">
         <Link

@@ -9,19 +9,19 @@ import { Callout } from "../../docs/components/Callout";
 import { useMetaTags } from "../../hooks/useMetaTags";
 
 export function ReactKeysAutoFix() {
-  useMetaTags({
-    title: "Auto-fix Missing React Keys - NeuroLint",
-    description: "Automatically add stable keys to React .map() renders. ESLint detects missing keys but can't fix them. NeuroLint fixes them intelligently with ID inference.",
-    keywords: "React keys, jsx-key, auto-fix, ESLint alternative, code fixer",
-    ogTitle: "Auto-fix Missing React Keys",
-    ogDescription: "Automatically add stable keys to React .map() renders with NeuroLint",
-    ogUrl: "https://www.neurolint.dev/fixes/react-keys-auto-fix",
-    ogImage: "https://www.neurolint.dev/og-image.png",
-    canonical: "https://www.neurolint.dev/fixes/react-keys-auto-fix",
-    twitterCard: "summary_large_image",
-    twitterCreator: "@neurolint",
-  });
-  return (
+    useMetaTags({
+        title: "Auto-fix Missing React Keys - NeuroLint",
+        description: "Automatically add stable keys to React .map() renders. ESLint detects missing keys but can't fix them. NeuroLint fixes them intelligently with ID inference.",
+        keywords: "React keys, jsx-key, auto-fix, ESLint alternative, code fixer",
+        ogTitle: "Auto-fix Missing React Keys",
+        ogDescription: "Automatically add stable keys to React .map() renders with NeuroLint",
+        ogUrl: "https://www.neurolint.dev/fixes/react-keys-auto-fix",
+        ogImage: "https://www.neurolint.dev/og-image.png",
+        canonical: "https://www.neurolint.dev/fixes/react-keys-auto-fix",
+        twitterCard: "summary_large_image",
+        twitterCreator: "@neurolint",
+    });
+    return (
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-3xl mx-auto">
         <Link
@@ -185,16 +185,16 @@ npx @neurolint/cli fix:react-keys ./src --dry-run`}
           <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Related Fixes</h2>
           <div className="flex flex-wrap gap-3 my-6">
             <Link
-              to="/fixes/hydration-mismatch-window-undefined"
+              to="/fixes/hydration-mismatch"
               className="px-4 py-2 bg-zinc-800 border border-black text-gray-300 rounded-lg hover:bg-zinc-700 hover:text-white transition-colors text-sm"
             >
               Fix window is not defined
             </Link>
             <Link
-              to="/fixes/next-lint-deprecated"
+              to="/fixes/console-log-removal"
               className="px-4 py-2 bg-zinc-800 border border-black text-gray-300 rounded-lg hover:bg-zinc-700 hover:text-white transition-colors text-sm"
             >
-              next lint deprecated migration
+              Remove console.log
             </Link>
           </div>
         </section>
