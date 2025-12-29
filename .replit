@@ -16,15 +16,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "NeuroLint CLI"
+args = "Run CLI Help"
 
 [[workflows.workflow]]
-name = "NeuroLint CLI"
+name = "Run CLI Help"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm test"
+args = "node cli.js --help"
 
 [workflows.workflow.metadata]
 outputType = "console"
