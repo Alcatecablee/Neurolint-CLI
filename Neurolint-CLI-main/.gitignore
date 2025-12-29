@@ -1,0 +1,34 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+
+# NeuroLint artifacts
+.neurolint
+.neurolint-backups
+.neurolintrc
+*.neurolint-restore-tmp-*
+*.backup-*
+**/*.backup-*
+
+# Temporary files
+attached_assets/
+client/
+*.tmp
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Testing
+coverage/
+
+# Build
+build/

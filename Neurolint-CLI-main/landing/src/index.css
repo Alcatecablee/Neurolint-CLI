@@ -1,0 +1,110 @@
+/**
+ * Copyright (c) 2025 NeuroLint
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-enterprise-slate-950 text-enterprise-slate-50 font-sans antialiased;
+  }
+
+  :root {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 16%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 0 0% 65%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+  
+  @keyframes marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+}
+
+@layer components {
+  /* Enterprise card component */
+  .enterprise-card {
+    @apply bg-enterprise-slate-900/50 backdrop-blur-sm border border-enterprise-slate-800 rounded-2xl p-6 shadow-enterprise transition-all duration-300 hover:shadow-enterprise-lg hover:border-enterprise-slate-700;
+  }
+
+  /* Enterprise button */
+  .enterprise-btn-primary {
+    @apply px-8 py-4 bg-enterprise-blue-600 text-white font-semibold rounded-xl hover:bg-enterprise-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95;
+  }
+
+  .enterprise-btn-secondary {
+    @apply px-8 py-4 bg-enterprise-slate-800 text-white font-semibold rounded-xl border border-enterprise-slate-700 hover:bg-enterprise-slate-700 transition-all duration-200 hover:shadow-lg active:scale-95;
+  }
+
+  /* Enterprise gradient backgrounds */
+  .enterprise-gradient-1 {
+    @apply bg-gradient-to-br from-enterprise-blue-600/20 to-enterprise-purple-600/20;
+  }
+
+  .enterprise-gradient-2 {
+    @apply bg-gradient-to-br from-enterprise-purple-600/10 to-enterprise-blue-600/10;
+  }
+}
