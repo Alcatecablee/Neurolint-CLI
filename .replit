@@ -7,24 +7,3 @@ packages = ["unzip"]
 expertMode = true
 
 [workflows]
-runButton = "Project"
-
-[[workflows.workflow]]
-name = "Project"
-mode = "parallel"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "NeuroLint CLI"
-
-[[workflows.workflow]]
-name = "NeuroLint CLI"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm test"
-
-[workflows.workflow.metadata]
-outputType = "console"
