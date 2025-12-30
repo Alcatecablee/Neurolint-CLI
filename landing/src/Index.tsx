@@ -823,6 +823,75 @@ export default function Index() {
         </div>
       </section>
 
+      {/* ESLint Alternative Section - SEO Keyword Targeting */}
+      <section className="py-20 md:py-32 px-4 bg-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 md:mb-20">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white">
+              ESLint Alternative with Automatic Fixes
+            </h2>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium leading-relaxed">
+              The only ESLint replacement that doesn't just flag errors — it fixes them automatically
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+              {/* ESLint Column */}
+              <div className="bg-black/60 border-2 border-black rounded-2xl p-6 md:p-8 backdrop-blur-xl">
+                <h3 className="text-xl md:text-2xl font-black text-zinc-400 mb-6">
+                  Traditional ESLint
+                </h3>
+                <div className="space-y-4 text-zinc-400 text-sm md:text-base">
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
+                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
+                    <span>Reports errors only — you fix manually</span>
+                  </div>
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
+                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
+                    <span>Hundreds of plugins to configure</span>
+                  </div>
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
+                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
+                    <span>Slow, I/O heavy during builds</span>
+                  </div>
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
+                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
+                    <span>Requires manual refactoring for each issue</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* NeuroLint Column */}
+              <div className="bg-black/60 border-2 border-black rounded-2xl p-6 md:p-8 backdrop-blur-xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                <h3 className="text-xl md:text-2xl font-black text-white mb-6 relative">
+                  NeuroLint
+                </h3>
+                <div className="space-y-4 text-gray-200 text-sm md:text-base relative">
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
+                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
+                    <span>Auto-fixes 700+ issues instantly</span>
+                  </div>
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
+                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
+                    <span>Zero configuration needed</span>
+                  </div>
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
+                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
+                    <span>Lightning fast — pure AST transformations</span>
+                  </div>
+                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
+                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
+                    <span>One command fixes your entire codebase</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <div ref={faqSectionRef} className={`transition-all duration-1000 transform ${
         faqSectionInView
