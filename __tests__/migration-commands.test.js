@@ -124,14 +124,14 @@ export default MyComponent;
     });
   });
 
-  describe('migrate-nextjs-15.5 command', () => {
-    test('should show help for migrate-nextjs-15.5', () => {
-      const result = runCLI('migrate-nextjs-15.5 --help');
-      expect(result.stdout).toContain('migrate-nextjs-15.5');
+  describe('migrate-nextjs-15 command', () => {
+    test('should show help for migrate-nextjs-15', () => {
+      const result = runCLI('migrate-nextjs-15 --help');
+      expect(result.stdout).toContain('migrate-nextjs-15');
       expect(result.exitCode).toBe(0);
     });
 
-    test('should handle migrate-nextjs-15.5 with dry-run', () => {
+    test('should handle migrate-nextjs-15 with dry-run', () => {
       // Create package.json with Next.js
       fs.writeFileSync(path.join(testDir, 'package.json'), JSON.stringify({
         name: 'test-nextjs',
@@ -145,7 +145,7 @@ export function middleware(request) {
 }
       `);
 
-      const result = runCLI(`migrate-nextjs-15.5 ${testDir} --dry-run`, { cwd: testDir });
+      const result = runCLI(`migrate-nextjs-15 ${testDir} --dry-run`, { cwd: testDir });
       
       expect(result.exitCode).toBe(0);
       const output = result.stdout + result.stderr;
@@ -153,7 +153,7 @@ export function middleware(request) {
       expect(output).toMatch(/next|migration|middleware/i);
     });
 
-    test('should process Next.js 15.5 migration', () => {
+    test('should process Next.js 15 migration', () => {
       // Create package.json with Next.js
       fs.writeFileSync(path.join(testDir, 'package.json'), JSON.stringify({
         name: 'test-nextjs',
@@ -167,7 +167,7 @@ export default function Page() {
 }
       `);
 
-      const result = runCLI(`migrate-nextjs-15.5 ${testDir}`, { cwd: testDir });
+      const result = runCLI(`migrate-nextjs-15 ${testDir}`, { cwd: testDir });
       
       expect(result.exitCode).toBe(0);
       const output = result.stdout + result.stderr;
@@ -189,7 +189,7 @@ export function middleware(req) {
 }
       `);
 
-      const result = runCLI(`migrate-nextjs-15.5 ${testDir} --verbose`, { cwd: testDir });
+      const result = runCLI(`migrate-nextjs-15 ${testDir} --verbose`, { cwd: testDir });
       
       expect(result.exitCode).toBe(0);
     });

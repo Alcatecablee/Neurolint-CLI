@@ -1623,7 +1623,7 @@ async function handleMigrationCommand(args) {
   };
 
   // Detect which command was used
-  const commandName = args.find(arg => arg.startsWith('migrate-nextjs-')) || 'migrate-nextjs-15.5';
+  const commandName = args.find(arg => arg.startsWith('migrate-nextjs-')) || 'migrate-nextjs-15';
 
   // Show migration help
   if (args.includes('--help') || args.includes('-h')) {
@@ -1657,7 +1657,7 @@ Features:
     return;
   }
 
-  const projectPath = args.find(arg => !arg.startsWith('--') && !['migrate-nextjs-16', 'migrate-nextjs-15.5', 'migrate-nextjs-15', 'migrate-react19', 'migrate-biome'].includes(arg)) || '.';
+  const projectPath = args.find(arg => !arg.startsWith('--') && !['migrate-nextjs-16', 'migrate-nextjs-15', 'migrate-react19', 'migrate-biome'].includes(arg)) || '.';
 
   try {
     const migrationOrchestrator = new NextJS16MigrationOrchestrator();
