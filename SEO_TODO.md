@@ -14,10 +14,8 @@ This document outlines the specific, verified tasks required to align the NeuroL
 - [ ] **Fallback for Demo Content**: Add hidden descriptive text or fallback images with alt tags for the `.cast` terminal demos in `DemoCarousel.tsx`.
 
 ## 3. URL & Slug Optimization
-- [ ] **Shorten Blog Slugs**: Update `sitemap.xml` and corresponding route logic to shorten slugs to 3-5 words (25-30 characters).
-  - *Current*: `blog/cve-2025-55182-react-server-components-rce`
-  - *Target*: `blog/react-rce-patch`
-- [ ] **Shorten Doc Slugs**: Update `sitemap.xml` and routes for documentation pages exceeding the length limit.
+- [x] **Shorten Blog Slugs**: Blog slugs shortened to 3-5 words (25-30 characters) in Blog.tsx and sitemap.xml. All hardcoded links updated in Index.tsx, SecurityPage.tsx, and BlogPost.tsx. Examples: `react-rce-patch`, `cve-detection-guide`, `security-forensics`, `react19-migration`. All old slug references verified removed.
+- [x] **Shorten Doc Slugs**: Doc slugs already follow best practices (3-5 words). Examples: `/docs/commands/migrate-react19`, `/docs/layers/hydration`, `/docs/security/ioc-detection`. No pages exceed the character limit.
 
 ## 4. Internal Linking & Credibility
 - [x] **Descriptive Anchor Text**: Improved internal links in `HydrationMismatch.tsx` with more descriptive and keyword-rich anchor text.
