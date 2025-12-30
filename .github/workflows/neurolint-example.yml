@@ -24,6 +24,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install dependencies
+        run: npm ci
+
       # Example 1: Run all 8 layers (comprehensive check)
       # This scans the root directory since we don't have ./src yet
       - name: NeuroLint - All Layers (Dry Run)
