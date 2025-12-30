@@ -836,11 +836,11 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="bg-zinc-900/50 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm shadow-2xl">
+          <div className="bg-zinc-900/50 border border-black rounded-2xl overflow-hidden backdrop-blur-sm shadow-2xl">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/5 bg-white/[0.02]">
+                  <tr className="border-b border-black bg-white/[0.02]">
                     <th className="py-6 px-8 text-sm font-semibold text-gray-400 uppercase tracking-wider">Feature</th>
                     <th className="py-6 px-8 text-sm font-semibold text-gray-400 uppercase tracking-wider text-center">ESLint Plugins</th>
                     <th className="py-6 px-8 text-sm font-semibold text-white uppercase tracking-wider text-center bg-white/[0.03]">
@@ -850,7 +850,7 @@ export default function Index() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-black">
                   {[
                     { feature: "Detect window/document usage", eslint: "check", neuro: "check" },
                     { feature: "Auto-wrap with SSR guards", eslint: "cross", neuro: "check" },
@@ -878,7 +878,7 @@ export default function Index() {
                           )}
                         </div>
                       </td>
-                      <td className="py-5 px-8 text-center bg-white/[0.02] border-x border-white/5">
+                      <td className="py-5 px-8 text-center bg-white/[0.02] border-x border-black">
                         <div className="flex justify-center">
                           <Check className="w-5 h-5 text-green-400" />
                         </div>
