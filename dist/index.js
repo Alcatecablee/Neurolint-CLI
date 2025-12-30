@@ -60,8 +60,8 @@ async function main() {
     console.log(`Exclude patterns: ${excludePatterns}`);
     console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
 
-    // Build NeuroLint command
-    let command = 'npx --yes @neurolint/cli fix';
+    // Build NeuroLint command - use absolute path to npm/npx if available
+    let command = process.env.NPM_PREFIX ? `${process.env.NPM_PREFIX}/npx --yes @neurolint/cli fix` : 'npx --yes @neurolint/cli fix';
     
     // Add path
     command += ` "${targetPath}"`;
