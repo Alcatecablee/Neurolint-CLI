@@ -60,8 +60,14 @@ async function main() {
     console.log(`Exclude patterns: ${excludePatterns}`);
     console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
 
-    // Build NeuroLint command - use absolute path to npm/npx if available
-    let command = process.env.NPM_PREFIX ? `${process.env.NPM_PREFIX}/npx --yes @neurolint/cli fix` : 'npx --yes @neurolint/cli fix';
+    // Build NeuroLint command
+    // Check if we're running in the neurolint-cli repo itself (local development/action)
+    const localCliPath = path.join(process.cwd(), 'cli.js');
+    const useLocalCli = fs.existsSync(localCliPath);
+    
+    let command = useLocalCli 
+      ? `node "${localCliPath}" fix`
+      : 'npx --yes @neurolint/cli fix';
     
     // Add path
     command += ` "${targetPath}"`;
