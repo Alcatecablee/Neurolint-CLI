@@ -1,11 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, AlertCircle } from "lucide-react";
+import { useMetaTags } from "../hooks/useMetaTags";
 import { CompetitorCompare } from "../fixes/components/CompetitorCompare";
 import { CodeBlock } from "../docs/components/CodeBlock";
 import { Callout } from "../docs/components/Callout";
 
 export function BiomeComparison() {
+  useMetaTags({
+    title: "NeuroLint vs Biome: Migration and Security Comparison | NeuroLint",
+    description: "Biome handles linting and formatting fast. NeuroLint automates React 19 and Next.js 15/16 migrations plus security scanning. See how they complement each other for complete code modernization.",
+    keywords: "Biome vs NeuroLint, Next.js migration, linter comparison, Rust formatter, code modernization",
+    ogTitle: "NeuroLint vs Biome: Complete Tooling Stack",
+    ogDescription: "Biome for speed, NeuroLint for migrations and security. The recommended workflow for Next.js projects.",
+    ogUrl: "https://www.neurolint.dev/fixes/compare/biome",
+    ogImage: "https://www.neurolint.dev/og-image.png",
+    canonical: "https://www.neurolint.dev/fixes/compare/biome",
+    twitterCard: "summary_large_image",
+    twitterCreator: "@neurolint",
+    twitterImage: "https://www.neurolint.dev/og-image.png",
+    articleSection: "Comparisons"
+  });
+
   return (
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-4xl mx-auto">
@@ -154,7 +170,7 @@ npx @neurolint/cli migrate:next-lint
               next lint deprecated migration
             </Link>
             <Link
-              to="/compare/eslint"
+              to="../eslint"
               className="px-4 py-2 bg-zinc-800 border border-black text-gray-300 rounded-lg hover:bg-zinc-700 hover:text-white transition-colors text-sm"
             >
               NeuroLint vs ESLint

@@ -1,11 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { useMetaTags } from "../hooks/useMetaTags";
 import { CompetitorCompare } from "../fixes/components/CompetitorCompare";
 import { CodeBlock } from "../docs/components/CodeBlock";
 import { Callout } from "../docs/components/Callout";
 
 export function ESLintComparison() {
+  useMetaTags({
+    title: "NeuroLint vs ESLint: Auto-Fix Comparison | NeuroLint",
+    description: "See how NeuroLint's automatic fixing capabilities compare to ESLint's detection-only approach. Learn why ESLint can't auto-fix missing React keys and how NeuroLint solves this with smart ID inference.",
+    keywords: "ESLint vs NeuroLint, auto-fix, React keys, linting comparison, code fixer, JavaScript",
+    ogTitle: "NeuroLint vs ESLint: Who Auto-Fixes React Issues?",
+    ogDescription: "ESLint detects, NeuroLint fixes. Comprehensive comparison of auto-fix capabilities for React and Next.js.",
+    ogUrl: "https://www.neurolint.dev/fixes/compare/eslint",
+    ogImage: "https://www.neurolint.dev/og-image.png",
+    canonical: "https://www.neurolint.dev/fixes/compare/eslint",
+    twitterCard: "summary_large_image",
+    twitterCreator: "@neurolint",
+    twitterImage: "https://www.neurolint.dev/og-image.png",
+    articleSection: "Comparisons"
+  });
+
   return (
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-4xl mx-auto">
@@ -148,7 +164,7 @@ npx @neurolint/cli fix:all ./src --dry-run`}
               Auto-fix missing React keys
             </Link>
             <Link
-              to="/compare/biome"
+              to="../biome"
               className="px-4 py-2 bg-zinc-800 border border-black text-gray-300 rounded-lg hover:bg-zinc-700 hover:text-white transition-colors text-sm"
             >
               NeuroLint vs Biome
