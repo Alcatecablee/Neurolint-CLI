@@ -103,7 +103,7 @@ const SecurityAlertModal = ({ onClose }: { onClose: () => void }) => {
           
           <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href="/blog/cve-2025-55182-react-server-components-rce"
+              href="/blog/react-rce-patch"
               className="flex-1 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 border border-black text-white rounded-lg font-medium text-sm text-center transition-colors"
             >
               Learn More

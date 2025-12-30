@@ -355,7 +355,7 @@ const SecurityPage = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link 
-                to="/blog/cve-2025-55182-react-server-components-rce"
+                to="/blog/react-rce-patch"
                 className="px-5 py-3 bg-zinc-800 border border-black text-white rounded-lg hover:bg-zinc-700 transition-colors text-center text-sm font-medium"
               >
                 Read Full Advisory

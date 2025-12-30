@@ -795,7 +795,7 @@ const EightLayerPost: React.FC = () => {
         </div>
 
         <p>
-          Layer 8 is essential for post-incident analysis and can detect if your codebase was compromised before you patched a vulnerability. For a deep dive, see our guide: <Link to="/blog/layer-8-security-forensics-deep-dive" className="text-blue-400 hover:text-blue-300">Layer 8 Security Forensics Deep Dive</Link>. Also check the <Link to="/docs/layers/security" className="text-blue-400 hover:text-blue-300">Layer 8 documentation</Link> and <Link to="/docs/security/ioc-detection" className="text-blue-400 hover:text-blue-300">IoC Detection guide</Link>.
+          Layer 8 is essential for post-incident analysis and can detect if your codebase was compromised before you patched a vulnerability. For a deep dive, see our guide: <Link to="/blog/security-forensics" className="text-blue-400 hover:text-blue-300">Layer 8 Security Forensics Deep Dive</Link>. Also check the <Link to="/docs/layers/security" className="text-blue-400 hover:text-blue-300">Layer 8 documentation</Link> and <Link to="/docs/security/ioc-detection" className="text-blue-400 hover:text-blue-300">IoC Detection guide</Link>.
         </p>
 
         <h2 id="how-it-works" className="text-3xl font-bold text-white mt-12 mb-6 scroll-mt-24">
@@ -1368,13 +1368,13 @@ npx @neurolint/cli security:cve-2025-55182 . --dry-run`}</code>
               Open GitHub Issue
             </a>
             <Link
-              to="/blog/detecting-post-exploitation-cve-2025-55182"
+              to="/blog/cve-detection-guide"
               className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
             >
               Post-Exploitation Guide
             </Link>
             <Link
-              to="/blog/layer-8-security-forensics-deep-dive"
+              to="/blog/security-forensics"
               className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
             >
               Layer 8 Deep Dive
@@ -1743,13 +1743,13 @@ npx @neurolint/cli security:compare-baseline .`}</code>
           <h4 className="text-white font-semibold mb-4">Related Resources</h4>
           <div className="flex flex-wrap gap-3">
             <Link
-              to="/blog/cve-2025-55182-react-server-components-rce"
+              to="/blog/react-rce-patch"
               className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
             >
               CVE-2025-55182 Overview
             </Link>
             <Link
-              to="/blog/layer-8-security-forensics-deep-dive"
+              to="/blog/security-forensics"
               className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
             >
               Layer 8 Deep Dive
@@ -2097,13 +2097,13 @@ jobs:
           <h4 className="text-white font-semibold mb-4">Related Resources</h4>
           <div className="flex flex-wrap gap-3">
             <Link
-              to="/blog/cve-2025-55182-react-server-components-rce"
+              to="/blog/react-rce-patch"
               className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
             >
               CVE-2025-55182 Overview
             </Link>
             <Link
-              to="/blog/detecting-post-exploitation-cve-2025-55182"
+              to="/blog/cve-detection-guide"
               className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 text-white rounded-lg hover:bg-zinc-700 transition-colors text-sm"
             >
               Post-Exploitation Guide
