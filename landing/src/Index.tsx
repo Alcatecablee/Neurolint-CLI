@@ -823,73 +823,85 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ESLint Alternative Section - SEO Keyword Targeting */}
-      <section className="py-20 md:py-32 px-4 bg-black">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 md:mb-20">
-            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white">
-              ESLint Alternative with Automatic Fixes
+      {/* ESLint Comparison Section - Professional stylish implementation */}
+      <section className="py-24 px-4 bg-black relative overflow-hidden" id="eslint-alternative">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+              Existing Tools Don't Fix This
             </h2>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium leading-relaxed">
-              The only ESLint replacement that doesn't just flag errors — it fixes them automatically
+            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+              There are ESLint plugins for SSR and React, but they only <strong className="text-white font-semibold">detect</strong> the issue—they don't fix it.
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-              {/* ESLint Column */}
-              <div className="bg-black/60 border-2 border-black rounded-2xl p-6 md:p-8 backdrop-blur-xl">
-                <h3 className="text-xl md:text-2xl font-black text-zinc-400 mb-6">
-                  Traditional ESLint
-                </h3>
-                <div className="space-y-4 text-zinc-400 text-sm md:text-base">
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
-                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
-                    <span>Reports errors only — you fix manually</span>
-                  </div>
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
-                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
-                    <span>Hundreds of plugins to configure</span>
-                  </div>
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
-                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
-                    <span>Slow, I/O heavy during builds</span>
-                  </div>
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/5 border border-black">
-                    <span className="text-red-500 font-bold text-lg flex-shrink-0">✕</span>
-                    <span>Requires manual refactoring for each issue</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* NeuroLint Column */}
-              <div className="bg-black/60 border-2 border-black rounded-2xl p-6 md:p-8 backdrop-blur-xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
-                <h3 className="text-xl md:text-2xl font-black text-white mb-6 relative">
-                  NeuroLint
-                </h3>
-                <div className="space-y-4 text-gray-200 text-sm md:text-base relative">
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
-                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
-                    <span>Auto-fixes 700+ issues instantly</span>
-                  </div>
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
-                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
-                    <span>Zero configuration needed</span>
-                  </div>
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
-                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
-                    <span>Lightning fast — pure AST transformations</span>
-                  </div>
-                  <div className="flex items-start gap-4 p-3 rounded-xl bg-white/10 border border-black">
-                    <span className="text-green-400 font-bold text-lg flex-shrink-0">✓</span>
-                    <span>One command fixes your entire codebase</span>
-                  </div>
-                </div>
-              </div>
+          <div className="bg-zinc-900/50 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-sm shadow-2xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-white/5 bg-white/[0.02]">
+                    <th className="py-6 px-8 text-sm font-semibold text-gray-400 uppercase tracking-wider">Feature</th>
+                    <th className="py-6 px-8 text-sm font-semibold text-gray-400 uppercase tracking-wider text-center">ESLint Plugins</th>
+                    <th className="py-6 px-8 text-sm font-semibold text-white uppercase tracking-wider text-center bg-white/[0.03]">
+                      <div className="flex flex-col items-center gap-1">
+                        <img src="/logo.png" alt="NeuroLint" className="h-4 opacity-90" />
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {[
+                    { feature: "Detect window/document usage", eslint: "check", neuro: "check" },
+                    { feature: "Auto-wrap with SSR guards", eslint: "cross", neuro: "check" },
+                    { feature: "Detect missing React keys", eslint: "check", neuro: "check" },
+                    { feature: "Auto-fix missing keys", eslint: "cross", neuro: "check" },
+                    { feature: "Detect localStorage usage", eslint: "warning", neuro: "check" },
+                    { feature: "Avoid double-wrapping", eslint: "cross", neuro: "check" },
+                    { feature: "React 19 migration fixes", eslint: "cross", neuro: "check" },
+                  ].map((row, i) => (
+                    <tr key={i} className="hover:bg-white/[0.01] transition-colors group">
+                      <td className="py-5 px-8 text-gray-300 font-medium group-hover:text-white transition-colors">{row.feature}</td>
+                      <td className="py-5 px-8 text-center">
+                        <div className="flex justify-center">
+                          {row.eslint === "check" ? (
+                            <Check className="w-5 h-5 text-green-500/80" />
+                          ) : row.eslint === "warning" ? (
+                            <div className="flex flex-col items-center gap-0.5">
+                              <AlertCircle className="w-5 h-5 text-amber-500/80" />
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center gap-0.5">
+                              <X className="w-5 h-5 text-red-500/60" />
+                              <span className="text-[10px] text-gray-600 font-bold uppercase tracking-tighter">N/A</span>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-5 px-8 text-center bg-white/[0.02] border-x border-white/5">
+                        <div className="flex justify-center">
+                          <Check className="w-5 h-5 text-green-400" />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
+          
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Link 
+              to="/compare/eslint" 
+              className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-medium"
+            >
+              View detailed comparison
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </div>
+        
+        {/* Decorative background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl aspect-square bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
       </section>
 
       {/* Hydration Errors Section - SEO Keyword Targeting */}
