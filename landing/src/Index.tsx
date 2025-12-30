@@ -42,6 +42,7 @@ import {
   FileCheck,
   X,
   ArrowRight,
+  AlertCircle,
 } from "lucide-react";
 import { InstallCTA } from "./components/InstallCTA";
 
