@@ -19,6 +19,20 @@ interface FixCard {
 
 const fixCategories = [
   {
+    name: "Compare Tools",
+    description: "See how NeuroLint compares to other tools",
+    fixes: [
+      {
+        slug: "compare",
+        title: "Tool Comparisons",
+        description: "Compare NeuroLint with ESLint and Biome. Understand the differences and how they work together.",
+        icon: <Search className="w-5 h-5" />,
+        layer: 0,
+        searches: "Compare",
+      },
+    ],
+  },
+  {
     name: "React/JSX Issues",
     description: "Common React patterns that need auto-fixing",
     fixes: [

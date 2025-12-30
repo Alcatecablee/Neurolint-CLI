@@ -10,11 +10,11 @@ export function ESLintComparison() {
     <article className="py-12 md:py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <Link
-          to="/fixes"
+          to="/fixes/compare"
           className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Fixes
+          Back to Comparisons
         </Link>
 
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
