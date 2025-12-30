@@ -2,6 +2,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "landing/dist",
   "rewrites": [
+    { "source": "/fixes/hydration-mismatch", "destination": "/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "regions": ["iad1"]
