@@ -94,12 +94,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="useeffect-cleanup-patterns" element={<UseEffectCleanup />} />
           <Route path="nextjs-16-migration" element={<NextJS16Migration />} />
           <Route path="rsc-common-errors" element={<RSCCommonErrors />} />
+          
+          {/* Comparison Routes - nested under Fixes */}
+          <Route path="compare" element={<ComparisonIndex />} />
+          <Route path="compare/eslint" element={<ESLintComparison />} />
+          <Route path="compare/biome" element={<BiomeComparison />} />
         </Route>
-        
-        {/* Comparison Routes - nested under Fixes */}
-        <Route path="/fixes/compare" element={<ComparisonIndex />} />
-        <Route path="/fixes/compare/eslint" element={<ESLintComparison />} />
-        <Route path="/fixes/compare/biome" element={<BiomeComparison />} />
         
         {/* Documentation Routes */}
         <Route path="/docs" element={<DocsIntro />} />
