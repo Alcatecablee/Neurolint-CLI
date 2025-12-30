@@ -168,16 +168,22 @@
     "incident-response",
     "sarif",
     "baseline-integrity",
-    "cve-2025-55182"
+    "cve-2025-55182",
+    "abstract-syntax-tree",
+    "syntax-analysis",
+    "deterministic",
+    "deterministic-transformation",
+    "orchestration-pattern",
+    "two-phase-validation"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Alcatecablee/Neurolint.git"
+    "url": "git+https://github.com/Alcatecablee/Neurolint-CLI.git"
   },
   "bugs": {
-    "url": "https://github.com/Alcatecablee/Neurolint/issues"
+    "url": "https://github.com/Alcatecablee/Neurolint-CLI/issues"
   },
-  "homepage": "https://github.com/Alcatecablee/Neurolint#readme",
+  "homepage": "https://github.com/Alcatecablee/Neurolint-CLI#readme",
   "license": "Apache-2.0",
   "author": "NeuroLint"
 }

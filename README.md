@@ -387,8 +387,8 @@ Manual fixes are slow, error-prone, and expensive. NeuroLint processes hundreds 
 
 ## Support
 
-- **Issues:** [github.com/Alcatecablee/Neurolint/issues](https://github.com/Alcatecablee/Neurolint/issues)
-- **Discussions:** [github.com/Alcatecablee/Neurolint/discussions](https://github.com/Alcatecablee/Neurolint/discussions)
+- **Issues:** [github.com/Alcatecablee/Neurolint-CLI/issues](https://github.com/Alcatecablee/Neurolint-CLI/issues)
+- **Discussions:** [github.com/Alcatecablee/Neurolint-CLI/discussions](https://github.com/Alcatecablee/Neurolint-CLI/discussions)
 - **Email:** clivemakazhu@gmail.com
 
 ---
