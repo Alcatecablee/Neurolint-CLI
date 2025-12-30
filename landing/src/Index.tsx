@@ -828,11 +828,11 @@ export default function Index() {
       <section className="py-24 px-4 bg-black relative overflow-hidden" id="eslint-alternative">
         <div className="max-w-4xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
-              Existing Tools Don't Fix This
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white">
+              ESLint Alternative with Automatic Fixes
             </h2>
-            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              There are ESLint plugins for SSR and React, but they only <strong className="text-white font-semibold">detect</strong> the issue—they don't fix it.
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium leading-relaxed">
+              The only ESLint replacement that doesn't just flag errors — it fixes them automatically
             </p>
           </div>
 
