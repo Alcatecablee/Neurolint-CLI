@@ -922,7 +922,8 @@ export default function Index() {
             <div className="bg-zinc-900/40 border border-black rounded-2xl p-8 md:p-10 backdrop-blur-sm group hover:border-blue-500/20 transition-all duration-500">
               <div className="flex flex-col md:flex-row gap-10 items-start">
                 <div className="flex-1 space-y-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-black text-xs font-bold text-blue-400 uppercase tracking-widest">
+                  <div className="text-sm font-bold text-blue-400 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-8 h-px bg-blue-500/30"></span>
                     Browser API Guarding
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
@@ -971,7 +972,8 @@ export default function Index() {
             <div className="bg-zinc-900/40 border border-black rounded-2xl p-8 md:p-10 backdrop-blur-sm group hover:border-purple-500/20 transition-all duration-500">
               <div className="flex flex-col md:flex-row-reverse gap-10 items-start">
                 <div className="flex-1 space-y-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-black text-xs font-bold text-purple-400 uppercase tracking-widest">
+                  <div className="text-sm font-bold text-purple-400 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-8 h-px bg-purple-500/30"></span>
                     Lifecycle Hardening
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
