@@ -24,7 +24,7 @@ const path = require('path');
 class ConfigManager {
   constructor() {
     this.config = {
-      enabledLayers: [1, 2, 3, 4, 5, 6, 7],
+      enabledLayers: [1, 2, 3, 4, 5, 6, 7, 8],
       include: ['**/*.{ts,tsx,js,jsx,json}'],
       exclude: ['**/node_modules/**', '**/dist/**', '**/.next/**'],
       verbose: false,
@@ -108,7 +108,7 @@ class ConfigManager {
    * Get enabled layers for analysis
    */
   getEnabledLayers() {
-    return this.config.enabledLayers || [1, 2, 3, 4, 5, 6, 7];
+    return this.config.enabledLayers || [1, 2, 3, 4, 5, 6, 7, 8];
   }
 
   /**

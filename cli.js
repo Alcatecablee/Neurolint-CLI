@@ -1174,7 +1174,7 @@ async function handleAnalyze(targetPath, options, spinner) {
         const analysisResult = await sharedCore.analyze(code, {
           filename: file,
           platform: 'cli',
-          layers: options.layers || [1, 2, 3, 4, 5, 6, 7],
+          layers: options.layers || [1, 2, 3, 4, 5, 6, 7, 8],
           verbose: options.verbose
         });
         
@@ -1368,7 +1368,7 @@ async function handleInitConfig(options, spinner) {
     
     if (options.init) {
       const defaultConfig = {
-        enabledLayers: [1, 2, 3, 4, 5, 6, 7],
+        enabledLayers: [1, 2, 3, 4, 5, 6, 7, 8],
         include: ['**/*.{ts,tsx,js,jsx,json}'],
         exclude: ['**/node_modules/**', '**/dist/**', '**/.next/**'],
         backup: true,

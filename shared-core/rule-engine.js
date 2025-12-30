@@ -187,7 +187,7 @@ class RuleEngine {
     }
     
     if (options.layers) {
-      const validLayers = [1, 2, 3, 4, 5, 6, 7];
+      const validLayers = [1, 2, 3, 4, 5, 6, 7, 8];
       for (const layer of options.layers) {
         if (!validLayers.includes(layer)) {
           errors.push(`Invalid layer: ${layer}`);

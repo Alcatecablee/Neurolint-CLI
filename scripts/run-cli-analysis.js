@@ -40,7 +40,7 @@ function main() {
   const args = process.argv.slice(2);
   
   let filePath = null;
-  let layers = [1, 2, 3, 4, 5, 6, 7];
+  let layers = [1, 2, 3, 4, 5, 6, 7, 8];
   let applyFixes = false;
   
   for (let i = 0; i < args.length; i++) {
