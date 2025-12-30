@@ -65,7 +65,7 @@ import {
   NextJS16Migration,
   RSCCommonErrors
 } from './fixes'
-import { ESLintComparison, BiomeComparison } from './compare'
+import { ComparisonIndex, ESLintComparison, BiomeComparison } from './compare'
 import { ScrollToTop } from './components/ScrollToTop'
 import './index.css'
 
@@ -97,6 +97,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </Route>
         
         {/* Comparison Routes */}
+        <Route path="/compare" element={<ComparisonIndex />} />
         <Route path="/compare/eslint" element={<ESLintComparison />} />
         <Route path="/compare/biome" element={<BiomeComparison />} />
         
