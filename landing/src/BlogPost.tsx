@@ -26,6 +26,40 @@ interface TableOfContentsItem {
   level: number;
 }
 
+// Helper to inject Article schema JSON-LD
+const useArticleSchema = (title: string, description: string, publishedDate: string, author: string, slug: string) => {
+  React.useEffect(() => {
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": title,
+      "description": description,
+      "author": {
+        "@type": "Organization",
+        "name": author
+      },
+      "datePublished": publishedDate,
+      "dateModified": new Date().toISOString(),
+      "url": `https://www.neurolint.dev/blog/${slug}`
+    };
+    
+    let script = document.querySelector('script[type="application/ld+json"][data-article-schema="true"]') as HTMLScriptElement;
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.setAttribute('data-article-schema', 'true');
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify(schema);
+    
+    return () => {
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, [title, description, publishedDate, author, slug]);
+};
+
 const HydrationErrorsPost: React.FC = () => {
   const [copied, setCopied] = React.useState(false);
 
