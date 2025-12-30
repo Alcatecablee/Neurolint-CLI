@@ -905,125 +905,138 @@ export default function Index() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl aspect-square bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
       </section>
 
-      {/* Hydration Errors Section - SEO Keyword Targeting */}
-      <section className="py-20 md:py-32 px-4 bg-black">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 md:mb-20">
+      {/* Hydration Errors Section - Professional stylish implementation */}
+      <section className="py-24 px-4 bg-black relative overflow-hidden" id="hydration-fixes">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white">
               Fix Hydration Errors Automatically
             </h2>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium leading-relaxed">
-              Prevents hydration mismatches in Next.js SSR by guarding browser APIs
+              Prevents hydration mismatches in Next.js SSR by guarding browser APIs. No more "window is not defined".
             </p>
           </div>
 
-          <div className="max-w-5xl mx-auto">
-            {/* Real Example 1: localStorage SSR Guard */}
-            <div className="mb-12">
-              <h3 className="text-2xl font-bold text-white mb-4">localStorage SSR Guard</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl">
-                  <p className="text-gray-400 text-sm font-mono mb-3">❌ Causes Hydration Error:</p>
-                  <div className="bg-zinc-900 border border-red-500/30 rounded-lg p-4">
-                    <code className="text-sm text-red-300 font-mono">
-                      localStorage.getItem('theme') || 'light'
-                    </code>
+          <div className="grid grid-cols-1 gap-8">
+            {/* Feature 1: Smart SSR Guards */}
+            <div className="bg-zinc-900/40 border border-black rounded-2xl p-8 md:p-10 backdrop-blur-sm group hover:border-blue-500/20 transition-all duration-500">
+              <div className="flex flex-col md:flex-row gap-10 items-start">
+                <div className="flex-1 space-y-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-black text-xs font-bold text-blue-400 uppercase tracking-widest">
+                    Browser API Guarding
                   </div>
-                  <p className="text-gray-500 text-xs mt-3">ReferenceError: localStorage is not defined on server</p>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+                    localStorage & Window Safety
+                  </h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    NeuroLint detects usage of browser-only APIs and automatically wraps them in <code className="text-blue-400">typeof window !== 'undefined'</code> guards. It intelligently handles initial state, expressions, and assignments.
+                  </p>
+                  <ul className="space-y-3">
+                    {[
+                      "Auto-wraps localStorage.getItem()",
+                      "Guards window.innerWidth/Height",
+                      "Protects document.querySelector",
+                      "Handles nested object access safely"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-sm text-gray-300">
+                        <Check className="w-4 h-4 text-green-500" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
-                  <p className="text-gray-300 text-sm font-mono mb-3 relative">✓ NeuroLint Fixes:</p>
-                  <div className="bg-zinc-900 border border-green-500/30 rounded-lg p-4 relative">
-                    <code className="text-sm text-green-300 font-mono">
-                      {`(typeof window !== "undefined" ?
-  localStorage.getItem('theme') : null)
-  || 'light'`}
-                    </code>
+                <div className="flex-1 w-full bg-black/60 border border-black rounded-xl overflow-hidden p-6 font-mono text-sm relative">
+                  <div className="absolute top-3 right-3 flex gap-1.5">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500/20" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500/20" />
                   </div>
-                  <p className="text-gray-500 text-xs mt-3 relative">Safe on both server and client</p>
+                  <div className="space-y-4">
+                    <div>
+                      <span className="text-zinc-600 block mb-2">// ❌ Hydration Error</span>
+                      <code className="text-red-400 block break-all">const val = localStorage.getItem('key')</code>
+                    </div>
+                    <div className="pt-4 border-t border-white/5">
+                      <span className="text-zinc-400 block mb-2">// ✓ NeuroLint Fixed</span>
+                      <code className="text-green-400 block break-all">
+                        const val = typeof window !== 'undefined' ? localStorage.getItem('key') : null
+                      </code>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Real Example 2: Event Listener Cleanup */}
-            <div className="mb-12">
-              <h3 className="text-2xl font-bold text-white mb-4">Event Listener Cleanup</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl">
-                  <p className="text-gray-400 text-sm font-mono mb-3">❌ Memory Leak Risk:</p>
-                  <div className="bg-zinc-900 border border-red-500/30 rounded-lg p-4">
-                    <code className="text-sm text-red-300 font-mono">
-                      {`useEffect(() => {
-  window.addEventListener('resize', fn);
-}, []);`}
-                    </code>
+            {/* Feature 2: Effect Cleanup */}
+            <div className="bg-zinc-900/40 border border-black rounded-2xl p-8 md:p-10 backdrop-blur-sm group hover:border-purple-500/20 transition-all duration-500">
+              <div className="flex flex-col md:flex-row-reverse gap-10 items-start">
+                <div className="flex-1 space-y-6">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-black text-xs font-bold text-purple-400 uppercase tracking-widest">
+                    Lifecycle Hardening
                   </div>
-                  <p className="text-gray-500 text-xs mt-3">Event listeners never removed</p>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+                    Event Listener Auto-Cleanup
+                  </h3>
+                  <p className="text-gray-400 leading-relaxed">
+                    Prevent memory leaks and hydration ghosting. NeuroLint identifies window event listeners and automatically injects the corresponding <code className="text-purple-400">removeEventListener</code> in the useEffect cleanup phase.
+                  </p>
+                  <ul className="space-y-3">
+                    {[
+                      "Matches resize, scroll, and click events",
+                      "Injects proper return cleanup blocks",
+                      "Avoids duplicate listener registration",
+                      "Ensures React 19 compatibility"
+                    ].map((item, i) => (
+                      <li key={i} className="flex items-center gap-3 text-sm text-gray-300">
+                        <Check className="w-4 h-4 text-green-500" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
-                  <p className="text-gray-300 text-sm font-mono mb-3 relative">✓ NeuroLint Fixes:</p>
-                  <div className="bg-zinc-900 border border-green-500/30 rounded-lg p-4 relative">
-                    <code className="text-sm text-green-300 font-mono">
-                      {`useEffect(() => {
-  window.addEventListener('resize', fn);
-  return () => {
-    window.removeEventListener('resize', fn);
-  };
-}, []);`}
-                    </code>
+                <div className="flex-1 w-full bg-black/60 border border-black rounded-xl overflow-hidden p-6 font-mono text-sm relative">
+                  <div className="space-y-4">
+                    <div>
+                      <span className="text-zinc-600 block mb-2">// Before: Potential Leak</span>
+                      <code className="text-red-400 block">
+                        useEffect(() =&gt; {"{"}
+                        <br />
+                        &nbsp;&nbsp;window.addEventListener('resize', fn)
+                        <br />
+                        {"}"}, [])
+                      </code>
+                    </div>
+                    <div className="pt-4 border-t border-white/5">
+                      <span className="text-zinc-400 block mb-2">// After: Safe Cleanup</span>
+                      <code className="text-green-400 block">
+                        useEffect(() =&gt; {"{"}
+                        <br />
+                        &nbsp;&nbsp;window.addEventListener('resize', fn)
+                        <br />
+                        &nbsp;&nbsp;return () =&gt; window.removeEventListener('resize', fn)
+                        <br />
+                        {"}"}, [])
+                      </code>
+                    </div>
                   </div>
-                  <p className="text-gray-500 text-xs mt-3 relative">Automatic cleanup prevents memory leaks</p>
-                </div>
-              </div>
-            </div>
-
-            {/* API Coverage */}
-            <div className="mt-16 p-8 bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl border-2 border-black rounded-2xl">
-              <h3 className="text-2xl font-bold text-white mb-6">Complete API Coverage</h3>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div>
-                  <h4 className="text-lg font-semibold text-white mb-4">7 Window APIs</h4>
-                  <ul className="space-y-2 text-gray-300 text-sm">
-                    <li>• matchMedia</li>
-                    <li>• location</li>
-                    <li>• navigator</li>
-                    <li>• innerWidth</li>
-                    <li>• innerHeight</li>
-                    <li>• scrollY</li>
-                    <li>• scrollX</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-white mb-4">8 Document APIs</h4>
-                  <ul className="space-y-2 text-gray-300 text-sm">
-                    <li>• querySelector</li>
-                    <li>• querySelectorAll</li>
-                    <li>• getElementById</li>
-                    <li>• getElementsByClassName</li>
-                    <li>• getElementsByTagName</li>
-                    <li>• body</li>
-                    <li>• documentElement</li>
-                    <li>• head</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-white mb-4">Storage APIs</h4>
-                  <ul className="space-y-2 text-gray-300 text-sm">
-                    <li><span className="font-mono text-xs">localStorage</span></li>
-                    <li className="text-xs text-gray-400">• getItem</li>
-                    <li className="text-xs text-gray-400">• setItem</li>
-                    <li className="text-xs text-gray-400">• removeItem</li>
-                    <li className="text-xs text-gray-400">• clear</li>
-                    <li><span className="font-mono text-xs">sessionStorage</span></li>
-                    <li className="text-xs text-gray-400">• same methods</li>
-                  </ul>
                 </div>
               </div>
             </div>
           </div>
+
+          <div className="mt-16 flex flex-wrap justify-center gap-4">
+            <Link 
+              to="/fixes/hydration-mismatch" 
+              className="px-6 py-3 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+            >
+              Learn More About Hydration Fixes
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
+        
+        {/* Decorative background glow */}
+        <div className="absolute bottom-0 right-0 w-full max-w-4xl aspect-square bg-purple-500/5 blur-[120px] rounded-full pointer-events-none translate-x-1/2 translate-y-1/2" />
       </section>
 
       {/* FAQ Section */}
