@@ -933,10 +933,10 @@ export default function Index() {
                   </p>
                   <ul className="space-y-3">
                     {[
-                      "Auto-wraps localStorage.getItem()",
-                      "Guards window.innerWidth/Height",
-                      "Protects document.querySelector",
-                      "Handles nested object access safely"
+                      "7 Window APIs (matchMedia, location, navigator, etc.)",
+                      "8 Document APIs (querySelector, body, head, etc.)",
+                      "Storage APIs (localStorage & sessionStorage)",
+                      "Smart detection skips already-guarded code"
                     ].map((item, i) => (
                       <li key={i} className="flex items-center gap-3 text-sm text-gray-300">
                         <Check className="w-4 h-4 text-green-500" />
@@ -982,10 +982,10 @@ export default function Index() {
                   </p>
                   <ul className="space-y-3">
                     {[
-                      "Matches resize, scroll, and click events",
-                      "Injects proper return cleanup blocks",
-                      "Avoids duplicate listener registration",
-                      "Ensures React 19 compatibility"
+                      "Dual-Mode: AST parsing with Regex fallback",
+                      "Expression-level vs Statement-level wrapping",
+                      "Auto-reverts on validation failure",
+                      "1035+ lines of verified transformation logic"
                     ].map((item, i) => (
                       <li key={i} className="flex items-center gap-3 text-sm text-gray-300">
                         <Check className="w-4 h-4 text-green-500" />
