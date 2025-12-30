@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.8] - 2025-12-30
+
+### Added
+
+#### GitHub Actions OIDC Trusted Publishing
+
+- Implemented npm trusted publishing with OpenID Connect (OIDC) for secure, token-free CI/CD deployments
+- Added `publish.yml` GitHub Actions workflow with automated npm publishing on GitHub releases
+- Zero npm token management - uses short-lived, cryptographically-signed OIDC credentials
+- Automatic provenance attestations for supply chain security verification
+
+### Changed
+
+- Updated documentation to reflect 1.5.8 version
+- Enhanced keyword metadata with AST and deterministic transformation terms
+
 ## [1.5.6] - 2025-12-21
 
 ### Added
