@@ -31,15 +31,20 @@ export function LandingFooter() {
 
           <div>
             <h4 className="text-white font-medium mb-4">Engineering</h4>
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center">
-                <span className="text-xs font-bold text-white">NL</span>
+            <a 
+              href="https://justc.live/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 group"
+            >
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center group-hover:border-white transition-colors">
+                <span className="text-xs font-bold text-white">JC</span>
               </div>
               <div>
-                <p className="text-sm text-white font-medium">NeuroLint Team</p>
-                <p className="text-xs text-zinc-500">Core Maintainers</p>
+                <p className="text-sm text-white font-medium group-hover:text-blue-400 transition-colors">JustC.live</p>
+                <p className="text-xs text-zinc-500">Project Author</p>
               </div>
-            </div>
+            </a>
           </div>
 
           <div>
