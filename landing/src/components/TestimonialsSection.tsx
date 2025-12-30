@@ -34,10 +34,11 @@ const testimonials: Testimonial[] = [
     verified: true,
   },
   {
-    quote: "Saved us 40+ hours migrating to React 19. The automated fixes just work.",
-    author: "Sarah Chen",
-    role: "Senior Engineer",
-    company: "Tech Startup",
+    quote: "Simple but actually useful",
+    author: "sayaword",
+    role: "Open Source Contributor",
+    company: "GitHub",
+    verified: true,
   },
   {
     quote: "Finally, a tool that actually fixes code instead of just complaining about it.",
