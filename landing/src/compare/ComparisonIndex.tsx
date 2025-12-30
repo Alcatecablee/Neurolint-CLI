@@ -23,8 +23,8 @@ export function ComparisonIndex() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Link
-            to="/compare/eslint"
-            className="p-6 bg-zinc-900 border border-gray-700 rounded-lg hover:border-blue-500 transition-colors group"
+            to="eslint"
+            className="p-6 bg-zinc-900 border border-black rounded-lg hover:border-zinc-700 transition-colors group"
           >
             <h2 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
               NeuroLint vs ESLint
@@ -35,8 +35,8 @@ export function ComparisonIndex() {
           </Link>
 
           <Link
-            to="/compare/biome"
-            className="p-6 bg-zinc-900 border border-gray-700 rounded-lg hover:border-blue-500 transition-colors group"
+            to="biome"
+            className="p-6 bg-zinc-900 border border-black rounded-lg hover:border-zinc-700 transition-colors group"
           >
             <h2 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
               NeuroLint vs Biome
