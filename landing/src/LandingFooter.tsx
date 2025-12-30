@@ -21,12 +21,25 @@ export function LandingFooter() {
   return (
     <footer className="w-full py-8 px-6 bg-zinc-900 border-t border-black">
       <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-white font-semibold mb-4">NeuroLint</h3>
             <p className="text-zinc-400 text-sm">
               Rule-based code transformation for React and TypeScript projects.
             </p>
+          </div>
+
+          <div>
+            <h4 className="text-white font-medium mb-4">Engineering</h4>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-white">NL</span>
+              </div>
+              <div>
+                <p className="text-sm text-white font-medium">NeuroLint Team</p>
+                <p className="text-xs text-zinc-500">Core Maintainers</p>
+              </div>
+            </div>
           </div>
 
           <div>

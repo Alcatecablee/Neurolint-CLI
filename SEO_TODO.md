@@ -21,11 +21,11 @@ This document outlines the specific, verified tasks required to align the NeuroL
 
 ## 4. Internal Linking & Credibility
 - [ ] **Descriptive Anchor Text**: Audit internal links (especially in `HydrationMismatch.tsx`) to replace generic titles with descriptive anchors (e.g., "how hydration changed in React 19").
-- [ ] **Add Authorship Signals**: Create a small "About the Author" or "Engineering Team" section in `landing/src/LandingFooter.tsx` or individual blog posts.
+- [x] **Add Authorship Signals**: Created an "Engineering Team" section in `landing/src/LandingFooter.tsx`.
 - [ ] **External Authority Links**: Add links to official React/Next.js documentation within migration guides to build reliability.
 
 ## 5. Metadata & Freshness
-- [ ] **Automate Freshness Signal**: Replace the hardcoded `2025-12-30` date in `landing/index.html` with a dynamic year/month variable or a strategy for regular manual updates.
+- [x] **Automate Freshness Signal**: Implemented a script in `landing/index.html` to automatically update the `last-modified` meta tags to the current date.
 - [ ] **Unique Meta Descriptions**: Ensure every page in `landing/src/docs/pages/` and `landing/src/fixes/pages/` has a unique, intent-matched meta description using the `useMetaTags` hook.
 
 ## 6. Technical Schema
