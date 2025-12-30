@@ -149,6 +149,317 @@ export function DocsLayerHydration() {
         </div>
       </section>
 
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-white mb-4">More Examples</h2>
+        
+        <h3 className="text-lg font-semibold text-white mb-4 mt-6">DOM Query SSR Guard</h3>
+        <BeforeAfter
+          filename="Modal.tsx"
+          before={{
+            label: "Before (SSR error)",
+            code: `function Modal({ isOpen }) {
+  useEffect(() => {
+    const backdrop = document.querySelector('[role="dialog"]');
+    backdrop?.addEventListener('click', close);
+  }, []);
+  return <div role="dialog">...</div>;
+}`
+          }}
+          after={{
+            label: "After (SSR-safe)",
+            code: `function Modal({ isOpen }) {
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const backdrop = document.querySelector('[role="dialog"]');
+      backdrop?.addEventListener('click', close);
+    }
+  }, []);
+  return <div role="dialog">...</div>;
+}`
+          }}
+        />
+        <p className="text-gray-400 text-sm mt-4">
+          Wraps DOM queries in typeof document check. Layer 4 detects document.querySelector, 
+          getElementById, getElementsByClassName and automatically guards them.
+        </p>
+
+        <h3 className="text-lg font-semibold text-white mb-4 mt-6">Window Navigation SSR Guard</h3>
+        <BeforeAfter
+          filename="Redirect.tsx"
+          before={{
+            label: "Before (causes error)",
+            code: `function Redirect() {
+  useEffect(() => {
+    window.location.href = '/dashboard';
+  }, [user]);
+}`
+          }}
+          after={{
+            label: "After (SSR-safe)",
+            code: `function Redirect() {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.location.href = '/dashboard';
+    }
+  }, [user]);
+}`
+          }}
+        />
+        <p className="text-gray-400 text-sm mt-4">
+          window.location, window.history, and window.navigator are read/write operations. 
+          Layer 4 wraps assignments in if-statements for safety.
+        </p>
+
+        <h3 className="text-lg font-semibold text-white mb-4 mt-6">Nested Browser API Access</h3>
+        <BeforeAfter
+          filename="GeoLocation.tsx"
+          before={{
+            label: "Before (nested API)",
+            code: `function UserLocation() {
+  const [coords, setCoords] = useState(null);
+  
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      pos => setCoords(pos.coords)
+    );
+  }, []);
+}`
+          }}
+          after={{
+            label: "After (guarded)",
+            code: `function UserLocation() {
+  const [coords, setCoords] = useState(null);
+  
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      navigator.geolocation.getCurrentPosition(
+        pos => setCoords(pos.coords)
+      );
+    }
+  }, []);
+}`
+          }}
+        />
+        <p className="text-gray-400 text-sm mt-4">
+          Layer 4 handles deeply nested APIs like window.navigator.geolocation, 
+          window.matchMedia, and window.localStorage.getItem(). Wraps at the statement level.
+        </p>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-white mb-4">Complete API Coverage</h2>
+        
+        <h3 className="text-base font-medium text-white mb-3">Window APIs (7 Protected)</h3>
+        <div className="overflow-x-auto mb-6">
+          <table className="w-full text-sm text-gray-400">
+            <thead>
+              <tr className="border-b border-gray-700">
+                <th className="text-left py-2 px-3 text-gray-300">API</th>
+                <th className="text-left py-2 px-3 text-gray-300">Type</th>
+                <th className="text-left py-2 px-3 text-gray-300">Guard Style</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">window.matchMedia</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-blue-400">Ternary</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">window.location</td>
+                <td className="py-2 px-3">Read/Write</td>
+                <td className="py-2 px-3 text-blue-400">If-statement</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">window.navigator</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-blue-400">Ternary</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">window.innerWidth</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-blue-400">Ternary</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">window.innerHeight</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-blue-400">Ternary</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">window.scrollY / scrollX</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-blue-400">Ternary</td>
+              </tr>
+              <tr>
+                <td className="py-2 px-3">window.addEventListener</td>
+                <td className="py-2 px-3">Write</td>
+                <td className="py-2 px-3 text-blue-400">If-statement + cleanup</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 className="text-base font-medium text-white mb-3">Document APIs (8 Protected)</h3>
+        <div className="overflow-x-auto mb-6">
+          <table className="w-full text-sm text-gray-400">
+            <thead>
+              <tr className="border-b border-gray-700">
+                <th className="text-left py-2 px-3 text-gray-300">API</th>
+                <th className="text-left py-2 px-3 text-gray-300">Type</th>
+                <th className="text-left py-2 px-3 text-gray-300">Example</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">document.querySelector</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-gray-500">$('.modal')</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">document.querySelectorAll</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-gray-500">$$('[role]')</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">document.getElementById</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-gray-500">$('#root')</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">document.getElementsByClassName</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-gray-500">$$('.item')</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">document.getElementsByTagName</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-gray-500">$$('button')</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">document.body</td>
+                <td className="py-2 px-3">Read/Write</td>
+                <td className="py-2 px-3 text-gray-500">document.body.innerHTML</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">document.documentElement</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-gray-500">document.documentElement.style</td>
+              </tr>
+              <tr>
+                <td className="py-2 px-3">document.head</td>
+                <td className="py-2 px-3">Read</td>
+                <td className="py-2 px-3 text-gray-500">document.head.appendChild</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 className="text-base font-medium text-white mb-3">Storage APIs (4 Protected)</h3>
+        <div className="overflow-x-auto mb-6">
+          <table className="w-full text-sm text-gray-400">
+            <thead>
+              <tr className="border-b border-gray-700">
+                <th className="text-left py-2 px-3 text-gray-300">API</th>
+                <th className="text-left py-2 px-3 text-gray-300">Methods</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">localStorage</td>
+                <td className="py-2 px-3">getItem, setItem, removeItem, clear</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">sessionStorage</td>
+                <td className="py-2 px-3">getItem, setItem, removeItem, clear</td>
+              </tr>
+              <tr className="border-b border-gray-800">
+                <td className="py-2 px-3">navigator.geolocation</td>
+                <td className="py-2 px-3">getCurrentPosition, watchPosition</td>
+              </tr>
+              <tr>
+                <td className="py-2 px-3">window.indexedDB</td>
+                <td className="py-2 px-3">open, deleteDatabase</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-white mb-4">How It Works: Dual-Mode Approach</h2>
+        
+        <h3 className="text-base font-medium text-white mb-3">Primary: AST Transformation</h3>
+        <p className="text-gray-400 text-sm mb-4">
+          Layer 4 uses Babel's AST parser with TypeScript and JSX support to understand code structure:
+        </p>
+        <div className="bg-zinc-900/50 border border-black rounded-lg p-4 mb-4">
+          <p className="text-gray-300 text-sm mb-3 font-mono">
+            parser.parse(code, &#123;
+            <br/>
+            {'  '}sourceType: 'module',
+            <br/>
+            {'  '}plugins: ['typescript', 'jsx'],
+            <br/>
+            {'  '}allowImportExportEverywhere: true
+            <br/>
+            &#125;)
+          </p>
+        </div>
+        <p className="text-gray-400 text-sm mb-4">
+          This allows Layer 4 to understand complex patterns that regex can't handle:
+          window.matchMedia('(prefers-color-scheme: dark)').matches, nested properties, 
+          and context-aware wrapping decisions.
+        </p>
+
+        <h3 className="text-base font-medium text-white mb-3">Fallback: Regex Transformation</h3>
+        <p className="text-gray-400 text-sm mb-4">
+          If AST parsing fails (malformed code, edge cases), Layer 4 doesn't crash. 
+          It automatically falls back to regex patterns:
+        </p>
+        <div className="bg-zinc-900/50 border border-black rounded-lg p-4 mb-4">
+          <p className="text-gray-300 text-sm font-mono mb-2">/localStorage\.(getItem|setItem|removeItem)\s*\(/g</p>
+          <p className="text-gray-300 text-sm font-mono mb-2">/window\.(location|navigator|innerWidth|innerHeight)\b/g</p>
+          <p className="text-gray-300 text-sm font-mono">/document\.(querySelector|getElementById|body)\b/g</p>
+        </div>
+        <p className="text-gray-400 text-sm">
+          After any transformation, Layer 4 validates the output syntax. If the result 
+          is invalid JavaScript, it rejects the change and returns the original code. 
+          This ensures your build never breaks.
+        </p>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="text-2xl font-bold text-white mb-4">Smart Guard Detection</h2>
+        
+        <p className="text-gray-400 text-sm mb-4">
+          Layer 4 analyzes your code to detect existing SSR guards and skips already-protected code. 
+          This prevents double-wrapping and unnecessary verbose output:
+        </p>
+
+        <h3 className="text-base font-medium text-white mb-3">Pattern 1: Ternary Guard (Already Protected)</h3>
+        <div className="bg-zinc-900/50 border border-black rounded-lg p-4 mb-4">
+          <p className="text-gray-300 text-sm font-mono">
+            const width = typeof window !== "undefined" ? window.innerWidth : 0;
+          </p>
+        </div>
+        <p className="text-gray-400 text-sm mb-4">
+          Layer 4 detects this pattern and skips it — no double-wrapping.
+        </p>
+
+        <h3 className="text-base font-medium text-white mb-3">Pattern 2: If-Statement Guard (Already Protected)</h3>
+        <div className="bg-zinc-900/50 border border-black rounded-lg p-4 mb-4">
+          <p className="text-gray-300 text-sm font-mono">
+            if (typeof window !== "undefined") &#123;<br/>
+            {'  '}window.scrollY = 100;<br/>
+            &#125;
+          </p>
+        </div>
+        <p className="text-gray-400 text-sm">
+          Layer 4 traverses the AST parent chain to detect guards at any level. 
+          Supports both ternary and if-statement patterns.
+        </p>
+      </section>
+
       <section>
         <h2 className="text-2xl font-bold text-white mb-4">When to Use</h2>
         
