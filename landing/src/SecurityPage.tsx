@@ -93,7 +93,7 @@ const SecurityPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-14 md:h-16">
             <Link to="/" className="flex items-center group">
-              <img src="/logo.png" alt="NeuroLint" className="h-8 md:h-9 transition-transform duration-200 group-hover:scale-105" />
+              <img src="/logo.png" alt="NeuroLint Logo - Professional Security Forensic Scanner and Automatic Code Fixer for React 19 Server Component Vulnerabilities" className="h-8 md:h-9 transition-transform duration-200 group-hover:scale-105" />
             </Link>
             
             <button

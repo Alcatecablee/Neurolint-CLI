@@ -315,7 +315,7 @@ export default function Index() {
         <nav className="inline-flex items-center gap-8 px-10 py-2.5 rounded-full bg-white/5 border border-black backdrop-blur-sm w-[1100px] justify-between">
           {/* Brand */}
           <a href="/" className="flex items-center shrink-0">
-            <img src="/logo.png" alt="NeuroLint Logo" className="h-7 transition-transform duration-200 hover:scale-105" />
+            <img src="/logo.png" alt="NeuroLint Logo - Open Source CLI Tool for Fixing React 19 and Next.js 15.5 Hydration Mismatches and Security Vulnerabilities" className="h-7 transition-transform duration-200 hover:scale-105" />
           </a>
 
           {/* Desktop Navigation Links */}
@@ -544,7 +544,7 @@ export default function Index() {
             >
               <img 
                 src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1043969&theme=dark&t=1764635497036" 
-                alt="NeuroLint CLI on Product Hunt" 
+                alt="NeuroLint CLI Featured on Product Hunt - Voted as an Essential Tool for React and Next.js Developers to Automate Code Fixes" 
                 width="200" 
                 height="44"
                 className="h-9 sm:h-10 w-auto grayscale hover:grayscale-0 transition-all duration-300"
@@ -560,7 +560,7 @@ export default function Index() {
             >
               <img 
                 src="https://startupfa.me/badges/featured/dark-small-rounded.webp" 
-                alt="Featured on Startup Fame" 
+                alt="NeuroLint CLI Featured on Startup Fame - Recognized as a Top Emerging Open Source Security and Code Quality Tool for Modern Web Apps" 
                 width="180" 
                 height="28"
                 className="h-7 sm:h-8 w-auto grayscale hover:grayscale-0 transition-all duration-300"

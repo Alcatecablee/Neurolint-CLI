@@ -9,8 +9,8 @@ This document outlines the specific, verified tasks required to align the NeuroL
 - [x] **Real Testimonials**: Replaced placeholder feedback with real testimonial from `sayaword`.
 
 ## 2. Image Optimization
-- [ ] **Descriptive Alt Text (Header)**: Update the logo alt text in `landing/src/LandingHeader.tsx` from "NeuroLint Logo" to a 100-150 character keyword-rich description.
-- [ ] **Descriptive Alt Text (Body)**: Audit `landing/src/Index.tsx` and `landing/src/SecurityPage.tsx` to update generic alt tags (e.g., for Product Hunt/Startup Fame badges).
+- [x] **Descriptive Alt Text (Header)**: Updated logo alt text to be descriptive and keyword-rich (100-150 characters).
+- [x] **Descriptive Alt Text (Body)**: Updated Product Hunt and Startup Fame badges with detailed alt text in `landing/src/Index.tsx`.
 - [ ] **Fallback for Demo Content**: Add hidden descriptive text or fallback images with alt tags for the `.cast` terminal demos in `DemoCarousel.tsx`.
 
 ## 3. URL & Slug Optimization

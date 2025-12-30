@@ -24,7 +24,7 @@ export function LandingHeader() {
         <a href="/" className="flex items-center gap-2 shrink-0 pr-2 border-r border-white/10">
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2Faab978f39ff64270b6e29ab49582f574%2F38b5bfac1a6242ebb67f91834016d010?format=webp&width=800"
-            alt="NeuroLint Logo"
+            alt="NeuroLint Logo - Advanced React and Next.js Code Fixer and Security Scanner for Hydration Errors and Vulnerabilities"
             className="w-6 h-6"
             draggable={false}
             loading="eager"
