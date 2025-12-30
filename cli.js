@@ -1275,7 +1275,7 @@ async function handleFix(targetPath, options, spinner, startTime) {
     // Determine requested layers; default to all layers if not specified
     let requestedLayers = null;
     if (options.allLayers) {
-      requestedLayers = [1, 2, 3, 4, 5, 6, 7];
+      requestedLayers = [1, 2, 3, 4, 5, 6, 7, 8];
     } else if (Array.isArray(options.layers) && options.layers.length > 0) {
       requestedLayers = options.layers;
     }
@@ -2800,14 +2800,14 @@ async function fixFile(filePath, options, spinner) {
   const analysisResult = await sharedCore.analyze(code, {
     filename: filePath,
     platform: 'cli',
-    layers: options.layers || [1, 2, 3, 4, 5, 6, 7],
+    layers: options.layers || [1, 2, 3, 4, 5, 6, 7, 8],
     verbose: options.verbose
   });
   
   // Determine which layers to execute
   let layers = [];
   if (options.allLayers) {
-    layers = [1, 2, 3, 4, 5, 6, 7];
+    layers = [1, 2, 3, 4, 5, 6, 7, 8];
   } else if (Array.isArray(options.layers) && options.layers.length > 0) {
     layers = options.layers;
   } else {
@@ -3136,7 +3136,7 @@ Options:
   --backup               Create backups (default: true)
   --no-backup            Skip backup creation
   --layers <list>        Specify layers to run (e.g., 1,2,3)
-  --all-layers           Apply all layers (1-7)
+  --all-layers           Apply all layers (1-8)
   --with-official-codemods  Run official React/Next.js codemods before NeuroLint
   --skip-official           Skip official codemods (use with --with-official-codemods)
   --recipe                  Use migration-recipe for faster all-in-one React 19 migration
@@ -3621,8 +3621,8 @@ Layer Commands:
 Migration Options:
   --dry-run              Show changes without applying them
   --verbose              Show detailed output
-  --layers <list>        Specify layers to run (e.g., 1,2,3,4,5,6,7)
-  --all-layers           Apply all layers (1-7)
+  --layers <list>        Specify layers to run (e.g., 1,2,3,4,5,6,7,8)
+  --all-layers           Apply all layers (1-8)
   --backup               Create backups (default: true)
   --no-backup            Skip backup creation
   --with-official-codemods  Run official React/Next.js codemods first (Phase 1)
@@ -3637,8 +3637,8 @@ Options:
   --backup               Create backups (default: true)
   --no-backup            Skip backup creation
   --production           Use enterprise backup system with encryption, monitoring
-  --layers <list>        Specify layers to run (e.g., 1,2,3)
-  --all-layers           Apply all layers (1-7)
+  --layers <list>        Specify layers to run (e.g., 1,2,3,8)
+  --all-layers           Apply all layers (1-8)
   --include <patterns>   File patterns to include
   --exclude <patterns>   File patterns to exclude
   --format <console|json> Output format
@@ -3714,7 +3714,7 @@ async function handleMigrationCommand() {
     progressive: process.argv.includes('--progressive'),
     layers: process.argv.includes('--layers') ? 
       process.argv[process.argv.indexOf('--layers') + 1]?.split(',').map(Number) : 
-      [1, 2, 3, 4, 5, 6, 7],
+      [1, 2, 3, 4, 5, 6, 7, 8],
     backup: !process.argv.includes('--no-backup'),
     report: process.argv.includes('--report'),
     rollback: process.argv.includes('--rollback'),
@@ -3742,8 +3742,8 @@ Description:
 Options:
   --dry-run              Show changes without applying them
   --verbose              Show detailed output
-  --layers <list>        Specify layers to run (e.g., 1,2,3,4,5,6,7)
-  --all-layers           Apply all layers (1-7)
+  --layers <list>        Specify layers to run (e.g., 1,2,3,4,5,6,7,8)
+  --all-layers           Apply all layers (1-8)
   --backup               Create backups (default: true)
   --no-backup            Skip backup creation
   --report               Generate detailed migration report
