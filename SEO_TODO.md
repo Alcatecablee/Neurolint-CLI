@@ -20,7 +20,7 @@ This document outlines the specific, verified tasks required to align the NeuroL
 ## 4. Internal Linking & Credibility
 - [x] **Descriptive Anchor Text**: Improved internal links in `HydrationMismatch.tsx` with more descriptive and keyword-rich anchor text.
 - [x] **Add Authorship Signals**: Created an "Engineering Team" section in `landing/src/LandingFooter.tsx` and linked it to the author's portfolio with a profile photo.
-- [ ] **External Authority Links**: Add links to official React/Next.js documentation within migration guides to build reliability.
+- [x] **External Authority Links**: Added inline links and official resource sections to migration guides. React19Migration.tsx links to react.dev (React 19, createRoot, hydrateRoot, forwardRef). NextJS16Migration.tsx links to nextjs.org (Next.js 16, cookies, headers, upgrade guide). Resource sections include links to official release notes and API documentation for credibility.
 
 ## 5. Metadata & Freshness
 - [x] **Automate Freshness Signal**: Implemented a script in `landing/index.html` to automatically update the `last-modified` meta tags to the current date.

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Search, AlertCircle, GitBranch, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Search, AlertCircle, GitBranch, CheckCircle2, ExternalLink } from "lucide-react";
 import { ProblemBadge } from "../components/ProblemBadge";
 import { TLDRCommandCard } from "../components/TLDRCommandCard";
 import { CompetitorCompare } from "../components/CompetitorCompare";
@@ -36,7 +36,7 @@ export function NextJS16Migration() {
           Next.js 16 Migration Guide
         </h1>
         <p className="text-lg text-gray-400 mb-8">
-          Next.js 16 introduces async Request APIs and removes legacy patterns.
+          <a href="https://nextjs.org/blog/next-16" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">Next.js 16</a> introduces async Request APIs and removes legacy patterns.
           NeuroLint auto-migrates your codebase with AST transformations.
         </p>
 
@@ -48,7 +48,7 @@ export function NextJS16Migration() {
         <section className="prose prose-invert max-w-none">
           <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Breaking Changes in Next.js 16</h2>
           <p className="text-gray-300">
-            Next.js 16 makes several Request APIs async that were previously synchronous. 
+            Next.js 16 makes several <a href="https://nextjs.org/docs/app/building-your-application/data-fetching" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">Request APIs</a> async that were previously synchronous. 
             This is a <strong className="text-white">breaking change</strong> that affects most apps:
           </p>
 
@@ -58,8 +58,8 @@ export function NextJS16Migration() {
               <div>
                 <p className="text-white font-medium mb-1">APIs Now Async in Next.js 16</p>
                 <ul className="text-gray-400 text-sm space-y-1">
-                  <li>• <code className="text-blue-400">cookies()</code> - Must await or use <code className="text-blue-400">React.use()</code></li>
-                  <li>• <code className="text-blue-400">headers()</code> - Must await or use <code className="text-blue-400">React.use()</code></li>
+                  <li>• <a href="https://nextjs.org/docs/app/api-reference/functions/cookies" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300"><code className="text-blue-400">cookies()</code></a> - Must await or use <code className="text-blue-400">React.use()</code></li>
+                  <li>• <a href="https://nextjs.org/docs/app/api-reference/functions/headers" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300"><code className="text-blue-400">headers()</code></a> - Must await or use <code className="text-blue-400">React.use()</code></li>
                   <li>• <code className="text-blue-400">params</code> - Page/layout prop is now a Promise</li>
                   <li>• <code className="text-blue-400">searchParams</code> - Page prop is now a Promise</li>
                   <li>• <code className="text-blue-400">draftMode()</code> - Must await</li>
@@ -223,6 +223,33 @@ npx @neurolint/cli migrate:nextjs-16 ./app --dry-run
 npx @neurolint/cli migrate:nextjs-16 ./app --update-types`}
             language="bash"
           />
+
+          <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Official Next.js Resources</h2>
+          <div className="bg-zinc-900/50 border border-black rounded-xl p-6 mb-8">
+            <p className="text-gray-300 mb-4">Consult official Next.js documentation for complete upgrade details:</p>
+            <div className="space-y-3">
+              <a href="https://nextjs.org/blog/next-16" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                Next.js 16 Release Notes
+              </a>
+              <a href="https://nextjs.org/docs/app/building-your-application/upgrading/version-16" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                Next.js 16 Upgrade Guide
+              </a>
+              <a href="https://nextjs.org/docs/app/api-reference/functions/cookies" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                cookies() Function Documentation
+              </a>
+              <a href="https://nextjs.org/docs/app/api-reference/functions/headers" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                headers() Function Documentation
+              </a>
+              <a href="https://nextjs.org/docs/app/building-your-application/data-fetching" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                Request Lifecycle & APIs
+              </a>
+            </div>
+          </div>
 
           <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Related Fixes</h2>
           <div className="flex flex-wrap gap-3 my-6">

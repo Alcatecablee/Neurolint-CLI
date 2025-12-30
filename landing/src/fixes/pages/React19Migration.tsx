@@ -32,7 +32,7 @@ export function React19Migration() {
           React 19 Breaking Changes Migration
         </h1>
         <p className="text-lg text-gray-400 mb-8">
-          React 19 removes <code className="text-red-400">ReactDOM.render</code>, <code className="text-red-400">ReactDOM.hydrate</code>, 
+          <a href="https://react.dev/blog/2024/12/05/react-19" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">React 19</a> removes <code className="text-red-400">ReactDOM.render</code>, <code className="text-red-400">ReactDOM.hydrate</code>, 
           and <code className="text-red-400">forwardRef</code>. NeuroLint auto-migrates your entire codebase.
         </p>
 
@@ -107,10 +107,13 @@ root.render(
             filename="index.jsx"
             highlightLines={[1, 4, 5]}
           />
+          <p className="text-gray-300 text-sm mt-2">
+            Learn more: <a href="https://react.dev/reference/react-dom/createRoot" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">createRoot API</a>
+          </p>
 
           <h2 className="text-2xl font-semibold text-white mt-12 mb-4">forwardRef Migration</h2>
           <p className="text-gray-300">
-            React 19 passes ref as a regular prop. No more forwardRef wrapper needed:
+            React 19 passes ref as a regular prop. No more <a href="https://react.dev/reference/react/forwardRef" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline">forwardRef</a> wrapper needed:
           </p>
 
           <h3 className="text-xl font-semibold text-white mt-8 mb-4">Before</h3>
@@ -172,6 +175,29 @@ npx @neurolint/cli fix . --layer=5 --dry-run
 npx @neurolint/cli fix . --all-layers`}
             language="bash"
           />
+
+          <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Official React Resources</h2>
+          <div className="bg-zinc-900/50 border border-black rounded-xl p-6 mb-8">
+            <p className="text-gray-300 mb-4">Deepen your understanding with official React documentation:</p>
+            <div className="space-y-3">
+              <a href="https://react.dev/blog/2024/12/05/react-19" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                React 19 Release Notes & Migration Guide
+              </a>
+              <a href="https://react.dev/reference/react-dom/createRoot" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                createRoot API Documentation
+              </a>
+              <a href="https://react.dev/reference/react-dom/hydrateRoot" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                hydrateRoot API Documentation
+              </a>
+              <a href="https://react.dev/reference/react/forwardRef" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm">
+                <ExternalLink className="w-4 h-4" />
+                forwardRef Migration Guide
+              </a>
+            </div>
+          </div>
 
           <h2 className="text-2xl font-semibold text-white mt-12 mb-4">Related Fixes</h2>
           <div className="flex flex-wrap gap-3 my-6">
