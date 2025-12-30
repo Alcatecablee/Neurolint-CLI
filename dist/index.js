@@ -23,8 +23,14 @@ function getInput(name) {
 }
 
 function setOutput(name, value) {
-  // GitHub Actions output format
-  console.log(`::set-output name=${name}::${value}`);
+  // Use new GitHub Actions output format via environment file
+  const outputFile = process.env.GITHUB_OUTPUT;
+  if (outputFile) {
+    fs.appendFileSync(outputFile, `${name}=${value}\n`);
+  } else {
+    // Fallback for local testing
+    console.log(`::set-output name=${name}::${value}`);
+  }
 }
 
 function setFailed(message) {
@@ -55,7 +61,7 @@ async function main() {
     console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
 
     // Build NeuroLint command
-    let command = 'npx @neurolint/cli fix';
+    let command = 'npx --yes @neurolint/cli fix';
     
     // Add path
     command += ` "${targetPath}"`;
@@ -93,23 +99,22 @@ async function main() {
     try {
       output = execSync(command, {
         encoding: 'utf8',
-        stdio: ['pipe', 'pipe', 'pipe'],
+        stdio: 'inherit',
         cwd: process.cwd()
       });
     } catch (error) {
       exitCode = error.status || 1;
-      output = error.stdout ? error.stdout + '\n' + error.stderr : error.message;
+      output = error.stdout ? error.stdout.toString() : error.message;
+      console.error(`\n⚠️ NeuroLint execution error (exit code: ${exitCode})`);
+      console.error(output);
     }
-
-    // Log output
-    console.log(output);
 
     // Parse results
     const results = parseResults(output);
 
     // Set GitHub Actions outputs
     setOutput('summary', results.summary);
-    setOutput('changes-count', results.changesCount);
+    setOutput('changes-count', results.changesCount.toString());
     setOutput('affected-files', results.affectedFiles.join('\n'));
     setOutput('layers-run', results.layersRun);
 
@@ -127,8 +132,8 @@ async function main() {
       setFailed(`❌ Changes detected (fail-on-changes enabled). ${results.changesCount} changes found.`);
     }
 
-    // Exit with NeuroLint's exit code
-    if (exitCode !== 0) {
+    // Exit with NeuroLint's exit code (only fail on actual errors, not on findings)
+    if (exitCode !== 0 && exitCode !== 1) {
       process.exit(exitCode);
     }
 
@@ -147,6 +152,10 @@ function parseResults(output) {
     affectedFiles: [],
     layersRun: 'all'
   };
+
+  if (!output) {
+    return results;
+  }
 
   // Try to extract change count from output
   const changeMatch = output.match(/(\d+)\s+changes?/i);
