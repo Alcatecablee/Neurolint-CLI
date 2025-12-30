@@ -28,7 +28,7 @@ jobs:
       # This scans the root directory since we don't have ./src yet
       - name: NeuroLint - All Layers (Dry Run)
         id: neurolint-all
-        uses: Alcatecablee/Neurolint-CLI@v1
+        uses: Alcatecablee/Neurolint-CLI@v1.5.8
         with:
           layers: 'all'
           path: '.'
@@ -42,7 +42,7 @@ jobs:
       # Layer 8: Security forensics & CVEs
       - name: NeuroLint - Security Check
         id: neurolint-security
-        uses: Alcatecablee/Neurolint-CLI@v1
+        uses: Alcatecablee/Neurolint-CLI@v1.5.8
         with:
           layers: '1,4,5,8'
           path: '.'
@@ -55,7 +55,7 @@ jobs:
       # Layer 7: Adaptive learning
       - name: NeuroLint - Code Quality Check
         id: neurolint-quality
-        uses: Alcatecablee/Neurolint-CLI@v1
+        uses: Alcatecablee/Neurolint-CLI@v1.5.8
         with:
           layers: '2,3,6,7'
           path: '.'
@@ -64,7 +64,7 @@ jobs:
       # Example 4: Fast security scan (Layer 8 only - IoC & CVE detection)
       - name: NeuroLint - Security Forensics
         id: neurolint-forensics
-        uses: Alcatecablee/Neurolint-CLI@v1
+        uses: Alcatecablee/Neurolint-CLI@v1.5.8
         with:
           layers: '8'
           path: '.'
@@ -73,7 +73,7 @@ jobs:
       # Example 5: Only scan JavaScript/TypeScript files
       - name: NeuroLint - JS/TS Only
         id: neurolint-jsts
-        uses: Alcatecablee/Neurolint-CLI@v1
+        uses: Alcatecablee/Neurolint-CLI@v1.5.8
         with:
           layers: '1,2,3'
           path: '.'
