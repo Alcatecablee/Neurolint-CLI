@@ -38,63 +38,63 @@
   
   <!-- Blog Posts -->
   <url>
-    <loc>https://www.neurolint.dev/blog/cve-2025-55182-react-server-components-rce</loc>
+    <loc>https://www.neurolint.dev/blog/react-rce-patch</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/react2shell-exploit-explained</loc>
+    <loc>https://www.neurolint.dev/blog/react2shell-exploit</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/cve-2025-66478-nextjs-rce-vulnerability</loc>
+    <loc>https://www.neurolint.dev/blog/nextjs-rce-patch</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/detecting-post-exploitation-cve-2025-55182</loc>
+    <loc>https://www.neurolint.dev/blog/cve-detection-guide</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/layer-8-security-forensics-deep-dive</loc>
+    <loc>https://www.neurolint.dev/blog/security-forensics</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/fix-react-nextjs-hydration-errors-complete-guide</loc>
+    <loc>https://www.neurolint.dev/blog/fix-hydration-errors</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/8-layer-code-fixing-pipeline-explained</loc>
+    <loc>https://www.neurolint.dev/blog/8-layer-pipeline</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/eslint-vs-neurolint-why-rule-based-fixing-wins</loc>
+    <loc>https://www.neurolint.dev/blog/eslint-vs-neurolint</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://www.neurolint.dev/blog/react-19-migration-guide-breaking-changes-fixes</loc>
+    <loc>https://www.neurolint.dev/blog/react-19-migration</loc>
     <lastmod>2025-12-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>

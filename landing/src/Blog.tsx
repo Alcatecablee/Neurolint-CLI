@@ -34,7 +34,7 @@ interface BlogPost {
 
 const blogPosts: BlogPost[] = [
   {
-    slug: "cve-2025-55182-react-server-components-rce",
+    slug: "react-rce-patch",
     title: "CVE-2025-55182: Critical React Server Components RCE Vulnerability - Complete Guide",
     description: "A critical remote code execution vulnerability (CVSS 10.0) affects React 19 apps using Server Components. Learn about threat actors, exploitation timeline, detection, and patching.",
     date: "2025-12-08",
@@ -45,7 +45,7 @@ const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    slug: "react2shell-cve-2025-55182-exploit-explained",
+    slug: "react2shell-exploit",
     title: "React2Shell Explained: How CVE-2025-55182 Enables Remote Code Execution in React Apps",
     description: "Deep dive into React2Shell (CVE-2025-55182) - the critical unauthenticated RCE vulnerability in React Server Components Flight protocol. Understand the attack vector, proof of concept, and how to protect your applications.",
     date: "2025-12-08",
@@ -56,7 +56,7 @@ const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    slug: "cve-2025-66478-nextjs-rce-vulnerability",
+    slug: "nextjs-rce-patch",
     title: "CVE-2025-66478: Next.js Server Actions RCE - What You Need to Know",
     description: "CVE-2025-66478 is the Next.js variant of the React2Shell vulnerability. Learn how this critical RCE affects Next.js 14 and 15 applications using Server Actions, and how to patch immediately with NeuroLint.",
     date: "2025-12-07",
@@ -67,7 +67,7 @@ const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    slug: "detecting-post-exploitation-cve-2025-55182",
+    slug: "cve-detection-guide",
     title: "Detecting Post-Exploitation: How to Know If CVE-2025-55182 Was Used Against You",
     description: "Patching isn't enough. Learn how to detect if your React/Next.js application was already compromised by CVE-2025-55182 using NeuroLint's Layer 8 Security Forensics.",
     date: "2025-12-07",
@@ -78,7 +78,7 @@ const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    slug: "layer-8-security-forensics-deep-dive",
+    slug: "security-forensics",
     title: "Layer 8 Security Forensics: Deep Dive into NeuroLint's Compromise Detection Engine",
     description: "Explore NeuroLint's Layer 8 security forensics capabilities - 80+ IoC signatures, AST-based behavioral analysis, RSC-specific patterns, and baseline integrity checking.",
     date: "2025-12-06",
@@ -89,7 +89,7 @@ const blogPosts: BlogPost[] = [
     featured: false,
   },
   {
-    slug: "fix-react-nextjs-hydration-errors-complete-guide",
+    slug: "fix-hydration-errors",
     title: "How to Fix React Hydration Errors Automatically: Complete 2025 Guide",
     description: "Fix 'window is not defined', 'document is not defined', and SSR hydration mismatches in React & Next.js. Learn the exact patterns that cause React hydration errors and how to fix them automatically with AST-based code transformation.",
     date: "2025-12-05",
@@ -100,7 +100,7 @@ const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    slug: "8-layer-code-fixing-pipeline-explained",
+    slug: "8-layer-pipeline",
     title: "Automated React Code Fixer: How the 8-Layer Pipeline Works (ESLint Alternative)",
     description: "Discover how AST-based code transformation automatically fixes 700+ React and Next.js issues. Better than ESLint for automated fixes - deterministic results, no AI hallucinations, instant code repair.",
     date: "2025-12-04",
@@ -111,7 +111,7 @@ const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    slug: "eslint-vs-neurolint-why-rule-based-fixing-wins",
+    slug: "eslint-vs-neurolint",
     title: "ESLint vs NeuroLint: Why Rule-Based Code Fixing Beats Linting in 2025",
     description: "ESLint finds problems, NeuroLint fixes them. Compare the traditional linting approach vs automated AST-based code transformation. See why developers are switching from ESLint warnings to automatic fixes.",
     date: "2025-12-10",
@@ -122,7 +122,7 @@ const blogPosts: BlogPost[] = [
     featured: true,
   },
   {
-    slug: "react-19-migration-guide-breaking-changes-fixes",
+    slug: "react-19-migration",
     title: "React 19 Migration Guide: Fix Breaking Changes Automatically (2025)",
     description: "Upgrade from React 18 to React 19 without the headaches. This guide covers all React 19 breaking changes and shows how to automatically fix ReactDOM.render, act() imports, and deprecated APIs.",
     date: "2025-12-10",
