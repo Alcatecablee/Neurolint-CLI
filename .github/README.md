@@ -1,6 +1,6 @@
 # NeuroLint GitHub Action
 
-Deterministic code transformation for React, Next.js, and TypeScript projects. Fix 50+ code issues across **8 progressive layers** with AST parsing — no AI guessing, no hallucinations.
+Deterministic code transformation for React, Next.js, and TypeScript projects. Fix 50+ code issues across **8 progressive layers** with AST parsing no AI guessing, no hallucinations.
 
 ## What NeuroLint Does
 
@@ -63,7 +63,7 @@ jobs:
 
 ## Usage Examples
 
-### 1️⃣ All Layers (Comprehensive Check)
+### 1. All Layers (Comprehensive Check)
 
 ```yaml
 - uses: ./
@@ -74,7 +74,7 @@ jobs:
 
 Runs all 8 layers, previewing all potential changes.
 
-### 2️⃣ Security Focus (Layers 1, 4, 5, 8)
+### 2. Security Focus (Layers 1, 4, 5, 8)
 
 ```yaml
 - uses: ./
@@ -89,7 +89,7 @@ Runs all 8 layers, previewing all potential changes.
 - **Layer 5:** Next.js optimization
 - **Layer 8:** Security forensics + CVEs
 
-### 3️⃣ Code Quality (Layers 2, 3, 6, 7)
+### 3. Code Quality (Layers 2, 3, 6, 7)
 
 ```yaml
 - uses: ./
@@ -103,7 +103,7 @@ Runs all 8 layers, previewing all potential changes.
 - **Layer 6:** Testing infrastructure
 - **Layer 7:** Adaptive learning
 
-### 4️⃣ React 19 & Next.js 16 Migration (Layer 5)
+### 4. React 19 & Next.js 16 Migration (Layer 5)
 
 ```yaml
 - uses: ./
@@ -115,7 +115,7 @@ Runs all 8 layers, previewing all potential changes.
 
 Checks for deprecated APIs and migration opportunities.
 
-### 5️⃣ Hydration & SSR Issues (Layer 4)
+### 5. Hydration & SSR Issues (Layer 4)
 
 ```yaml
 - uses: ./
@@ -126,7 +126,7 @@ Checks for deprecated APIs and migration opportunities.
 
 Detects and fixes `window is not defined`, SSR safety issues.
 
-### 6️⃣ Security CVE Detection (Layer 8)
+### 6. Security CVE Detection (Layer 8)
 
 ```yaml
 - uses: ./
@@ -137,7 +137,7 @@ Detects and fixes `window is not defined`, SSR safety issues.
 
 Scans for React Server Component CVEs, IoCs, behavioral threats.
 
-### 7️⃣ Custom Include/Exclude Patterns
+### 7. Custom Include/Exclude Patterns
 
 ```yaml
 - uses: ./
@@ -148,7 +148,7 @@ Scans for React Server Component CVEs, IoCs, behavioral threats.
     verbose: 'true'
 ```
 
-### 8️⃣ Apply Fixes (Production Use)
+### 8. Apply Fixes (Production Use)
 
 ```yaml
 - uses: ./
@@ -158,7 +158,7 @@ Scans for React Server Component CVEs, IoCs, behavioral threats.
     path: './src'
 ```
 
-⚠️ **Caution:** Only use `dry-run: false` after reviewing output with `dry-run: true`.
+WARNING: Only use `dry-run: false` after reviewing output with `dry-run: true`.
 
 ## Advanced Workflow Example
 

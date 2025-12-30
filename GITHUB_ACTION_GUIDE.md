@@ -1,10 +1,10 @@
-# 🚀 NeuroLint GitHub Action - Complete Guide
+# NeuroLint GitHub Action - Complete Guide
 
 > **Deterministic code transformation for React, Next.js, and TypeScript projects using 8 progressive AST-based layers**
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
 2. [Quick Start](#quick-start)
@@ -20,11 +20,11 @@
 
 NeuroLint is **NOT an AI tool**. It uses:
 
-- ✅ **Abstract Syntax Tree (AST) parsing** for deep code understanding
-- ✅ **Rule-based transformations** with deterministic, repeatable results
-- ✅ **Multi-layer architecture** (8 layers, each targetable independently)
-- ✅ **Validation & rollback** — changes are only applied if safe
-- ❌ **NO AI guessing**, NO hallucinations, NO unpredictable rewrites
+- **Abstract Syntax Tree (AST) parsing** for deep code understanding
+- **Rule-based transformations** with deterministic, repeatable results
+- **Multi-layer architecture** (8 layers, each targetable independently)
+- **Validation & rollback** — changes are only applied if safe
+- **NO AI guessing**, NO hallucinations, NO unpredictable rewrites
 
 ### Why Use NeuroLint in CI/CD?
 
@@ -172,7 +172,7 @@ exclude: 'node_modules,.next'
 
 ## Layer Guide
 
-### Layer 1: Configuration (⚡ Fast)
+### Layer 1: Configuration (Fast)
 
 **What it fixes:**
 - `tsconfig.json` — Compiler options, strict mode
@@ -186,7 +186,7 @@ exclude: 'node_modules,.next'
 layers: '1'
 ```
 
-### Layer 2: Patterns (⚡ Fast)
+### Layer 2: Patterns (Fast)
 
 **What it fixes:**
 - HTML entities (`&quot;` → `"`)
@@ -201,7 +201,7 @@ layers: '1'
 layers: '2'
 ```
 
-### Layer 3: Components (⚡ Fast)
+### Layer 3: Components (Fast)
 
 **What it fixes:**
 - Missing `key` props on mapped elements
@@ -216,7 +216,7 @@ layers: '2'
 layers: '3'
 ```
 
-### Layer 4: Hydration (🔥 Critical)
+### Layer 4: Hydration (Critical)
 
 **What it fixes:**
 - `window is not defined` errors
@@ -231,7 +231,7 @@ layers: '3'
 layers: '4'
 ```
 
-### Layer 5: Next.js & React Optimization (⚡ Medium)
+### Layer 5: Next.js & React Optimization (Medium)
 
 **What it fixes:**
 - Missing `'use client'` directives
@@ -246,7 +246,7 @@ layers: '4'
 layers: '5'
 ```
 
-### Layer 6: Testing (⚡ Fast)
+### Layer 6: Testing (Fast)
 
 **What it fixes:**
 - Error boundary suggestions
@@ -259,7 +259,7 @@ layers: '5'
 layers: '6'
 ```
 
-### Layer 7: Adaptive Learning (🧠 Smart)
+### Layer 7: Adaptive Learning (Smart)
 
 **What it fixes:**
 - Custom transformation rules (learns from codebase)
@@ -272,7 +272,7 @@ layers: '6'
 layers: '7'
 ```
 
-### Layer 8: Security Forensics (🔐 Critical)
+### Layer 8: Security Forensics (Critical)
 
 **What it fixes:**
 - React Server Component CVEs (CVE-2025-55182, 55183, 55184)
@@ -469,7 +469,7 @@ The action provides these outputs:
 ### Q: Action runs but makes no changes
 
 **Possible reasons:**
-1. Code is already clean ✅
+1. Code is already clean
 2. File patterns don't match (`include` too restrictive)
 3. Excluded patterns are too broad
 4. Selected layers don't detect those issues
