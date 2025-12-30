@@ -34,7 +34,8 @@ export function HydrationMismatch() {
 
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <ProblemBadge type="error" />
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+          <span className="inline-flex items-center gap-2 text-xs font-bold text-purple-400 uppercase tracking-widest">
+            <span className="w-6 h-px bg-purple-500/30"></span>
             <Search className="w-3.5 h-3.5" />
             3,400/mo searches
           </span>
