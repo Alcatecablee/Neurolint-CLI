@@ -892,6 +892,127 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Hydration Errors Section - SEO Keyword Targeting */}
+      <section className="py-20 md:py-32 px-4 bg-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 md:mb-20">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 md:mb-8 tracking-tight text-white">
+              Fix Hydration Errors Automatically
+            </h2>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto font-medium leading-relaxed">
+              Prevents hydration mismatches in Next.js SSR by guarding browser APIs
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            {/* Real Example 1: localStorage SSR Guard */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold text-white mb-4">localStorage SSR Guard</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl">
+                  <p className="text-gray-400 text-sm font-mono mb-3">❌ Causes Hydration Error:</p>
+                  <div className="bg-zinc-900 border border-red-500/30 rounded-lg p-4">
+                    <code className="text-sm text-red-300 font-mono">
+                      localStorage.getItem('theme') || 'light'
+                    </code>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-3">ReferenceError: localStorage is not defined on server</p>
+                </div>
+                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                  <p className="text-gray-300 text-sm font-mono mb-3 relative">✓ NeuroLint Fixes:</p>
+                  <div className="bg-zinc-900 border border-green-500/30 rounded-lg p-4 relative">
+                    <code className="text-sm text-green-300 font-mono">
+                      {`(typeof window !== "undefined" ?
+  localStorage.getItem('theme') : null)
+  || 'light'`}
+                    </code>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-3 relative">Safe on both server and client</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Real Example 2: Event Listener Cleanup */}
+            <div className="mb-12">
+              <h3 className="text-2xl font-bold text-white mb-4">Event Listener Cleanup</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl">
+                  <p className="text-gray-400 text-sm font-mono mb-3">❌ Memory Leak Risk:</p>
+                  <div className="bg-zinc-900 border border-red-500/30 rounded-lg p-4">
+                    <code className="text-sm text-red-300 font-mono">
+                      {`useEffect(() => {
+  window.addEventListener('resize', fn);
+}, []);`}
+                    </code>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-3">Event listeners never removed</p>
+                </div>
+                <div className="bg-black/60 border-2 border-black rounded-xl p-6 backdrop-blur-xl relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                  <p className="text-gray-300 text-sm font-mono mb-3 relative">✓ NeuroLint Fixes:</p>
+                  <div className="bg-zinc-900 border border-green-500/30 rounded-lg p-4 relative">
+                    <code className="text-sm text-green-300 font-mono">
+                      {`useEffect(() => {
+  window.addEventListener('resize', fn);
+  return () => {
+    window.removeEventListener('resize', fn);
+  };
+}, []);`}
+                    </code>
+                  </div>
+                  <p className="text-gray-500 text-xs mt-3 relative">Automatic cleanup prevents memory leaks</p>
+                </div>
+              </div>
+            </div>
+
+            {/* API Coverage */}
+            <div className="mt-16 p-8 bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-xl border-2 border-black rounded-2xl">
+              <h3 className="text-2xl font-bold text-white mb-6">Complete API Coverage</h3>
+              <div className="grid md:grid-cols-3 gap-8">
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-4">7 Window APIs</h4>
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li>• matchMedia</li>
+                    <li>• location</li>
+                    <li>• navigator</li>
+                    <li>• innerWidth</li>
+                    <li>• innerHeight</li>
+                    <li>• scrollY</li>
+                    <li>• scrollX</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-4">8 Document APIs</h4>
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li>• querySelector</li>
+                    <li>• querySelectorAll</li>
+                    <li>• getElementById</li>
+                    <li>• getElementsByClassName</li>
+                    <li>• getElementsByTagName</li>
+                    <li>• body</li>
+                    <li>• documentElement</li>
+                    <li>• head</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-white mb-4">Storage APIs</h4>
+                  <ul className="space-y-2 text-gray-300 text-sm">
+                    <li><span className="font-mono text-xs">localStorage</span></li>
+                    <li className="text-xs text-gray-400">• getItem</li>
+                    <li className="text-xs text-gray-400">• setItem</li>
+                    <li className="text-xs text-gray-400">• removeItem</li>
+                    <li className="text-xs text-gray-400">• clear</li>
+                    <li><span className="font-mono text-xs">sessionStorage</span></li>
+                    <li className="text-xs text-gray-400">• same methods</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <div ref={faqSectionRef} className={`transition-all duration-1000 transform ${
         faqSectionInView
