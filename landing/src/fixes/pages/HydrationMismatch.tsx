@@ -32,7 +32,7 @@ export function HydrationMismatch() {
           Back to Fixes
         </Link>
 
-        <div className="flex flex-wrap items-center gap-3 mb-6">
+        <div className="flex flex-wrap items-center gap-6 mb-6">
           <ProblemBadge type="error" />
           <span className="inline-flex items-center gap-2 text-xs font-bold text-purple-400 uppercase tracking-widest">
             <span className="w-6 h-px bg-purple-500/30"></span>

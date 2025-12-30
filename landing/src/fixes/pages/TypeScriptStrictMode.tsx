@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github, Search } from "lucide-react";
 import { ProblemBadge } from "../components/ProblemBadge";
 import { TLDRCommandCard } from "../components/TLDRCommandCard";
 import { CompetitorCompare } from "../components/CompetitorCompare";
@@ -19,8 +19,13 @@ export function TypeScriptStrictMode() {
           Back to Fixes
         </Link>
 
-        <div className="mb-6">
+        <div className="flex flex-wrap items-center gap-6 mb-6">
           <ProblemBadge type="limitation" tool="tsconfig" />
+          <span className="inline-flex items-center gap-2 text-xs font-bold text-purple-400 uppercase tracking-widest">
+            <span className="w-6 h-px bg-purple-500/30"></span>
+            <Search className="w-3.5 h-3.5" />
+            2,800/mo searches
+          </span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">

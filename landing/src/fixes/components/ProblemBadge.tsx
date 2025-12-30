@@ -8,26 +8,30 @@ interface ProblemBadgeProps {
   tool?: string;
 }
 
-const badgeConfig: Record<BadgeType, { label: string; icon: React.ReactNode; className: string }> = {
+const badgeConfig: Record<BadgeType, { label: string; icon: React.ReactNode; colorClass: string; bgLineClass: string }> = {
   limitation: {
     label: "LIMITATION",
     icon: <AlertTriangle className="w-3.5 h-3.5" />,
-    className: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    colorClass: "text-amber-400",
+    bgLineClass: "bg-amber-500/30",
   },
   breaking: {
     label: "BREAKING CHANGE",
     icon: <XCircle className="w-3.5 h-3.5" />,
-    className: "bg-red-500/10 text-red-400 border-red-500/20",
+    colorClass: "text-red-400",
+    bgLineClass: "bg-red-500/30",
   },
   deprecated: {
     label: "DEPRECATED",
     icon: <AlertTriangle className="w-3.5 h-3.5" />,
-    className: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+    colorClass: "text-orange-400",
+    bgLineClass: "bg-orange-500/30",
   },
   error: {
     label: "COMMON ERROR",
     icon: <Info className="w-3.5 h-3.5" />,
-    className: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+    colorClass: "text-blue-400",
+    bgLineClass: "bg-blue-500/30",
   },
 };
 
@@ -36,7 +40,8 @@ export function ProblemBadge({ type, tool }: ProblemBadgeProps) {
   const displayText = tool ? `${tool} ${config.label}` : config.label;
 
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider border ${config.className}`}>
+    <span className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest ${config.colorClass}`}>
+      <span className={`w-6 h-px ${config.bgLineClass}`}></span>
       {config.icon}
       {displayText}
     </span>
