@@ -327,7 +327,7 @@ export default function Index() {
               Demo
             </a>
             <Link 
-              to="/docs/quickstart" 
+              to="/quickstart" 
               className="text-gray-300 hover:text-white text-sm font-medium transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
             >
               Quick Start
@@ -415,7 +415,7 @@ export default function Index() {
               Demo
             </a>
             <Link 
-              to="/docs/quickstart" 
+              to="/quickstart" 
               onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200 text-base font-medium"
             >

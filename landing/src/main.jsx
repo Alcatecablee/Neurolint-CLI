@@ -76,7 +76,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/security" element={<SecurityPage />} />
-        <Route path="/quick-start" element={<QuickStart />} />
+        <Route path="/quickstart" element={<QuickStart />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         
