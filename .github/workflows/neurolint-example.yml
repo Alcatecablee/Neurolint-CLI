@@ -1,0 +1,138 @@
+name: NeuroLint Security & Quality Checks
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  neurolint:
+    name: Run NeuroLint Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Example 1: Run all 8 layers (comprehensive check)
+      - name: NeuroLint - All Layers (Dry Run)
+        uses: ./
+        with:
+          layers: 'all'
+          path: './src'
+          dry-run: 'true'
+          verbose: 'true'
+
+      # Example 2: Security-focused check (Layers 1, 4, 5, 8)
+      # Layer 1: Config vulnerabilities
+      # Layer 4: Hydration safety (SSR bugs)
+      # Layer 5: Next.js optimization
+      # Layer 8: Security forensics & CVEs
+      - name: NeuroLint - Security Check
+        uses: ./
+        with:
+          layers: '1,4,5,8'
+          path: './src'
+          dry-run: 'true'
+
+      # Example 3: Code quality check (Layers 2, 3, 6, 7)
+      # Layer 2: Pattern fixes
+      # Layer 3: Component best practices
+      # Layer 6: Testing infrastructure
+      # Layer 7: Adaptive learning
+      - name: NeuroLint - Code Quality Check
+        uses: ./
+        with:
+          layers: '2,3,6,7'
+          path: './src'
+          dry-run: 'true'
+
+      # Example 4: Fast security scan (Layer 8 only - IoC & CVE detection)
+      - name: NeuroLint - Security Forensics
+        uses: ./
+        with:
+          layers: '8'
+          path: './src'
+          fail-on-changes: 'true'
+
+      # Example 5: React 19 & Next.js 16 migration check (Layers 5)
+      - name: NeuroLint - Framework Migration
+        uses: ./
+        with:
+          layers: '5'
+          path: './src'
+          dry-run: 'true'
+
+      # Example 6: Hydration errors & SSR issues (Layer 4)
+      - name: NeuroLint - Hydration Safety
+        uses: ./
+        with:
+          layers: '4'
+          path: './src'
+          dry-run: 'true'
+
+      # Example 7: Custom patterns and exclusions
+      - name: NeuroLint - Custom Configuration
+        uses: ./
+        with:
+          layers: '1,2,3'
+          path: './apps'
+          include: '**/*.{ts,tsx}'
+          exclude: '__tests__,*.test.ts'
+          verbose: 'true'
+
+      # Example 8: Apply fixes (remove dry-run)
+      # ⚠️  Only use this if you trust NeuroLint changes
+      # Recommend: Run with dry-run first, review output, then apply
+      - name: NeuroLint - Apply Fixes
+        uses: ./
+        with:
+          layers: '1,2,3,4,5,6,7,8'
+          path: './src'
+          dry-run: 'false'
+          verbose: 'true'
+        if: github.event_name == 'pull_request'
+
+      # Example 9: Security CVE scanning
+      - name: NeuroLint - React CVE Detection
+        uses: ./
+        with:
+          layers: '8'
+          path: '.'
+          fail-on-changes: 'true'
+
+      # Output results in PR comment
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const summary = `
+            ## 🔍 NeuroLint Analysis Results
+            
+            **Summary:** ${{ steps.neurolint.outputs.summary }}
+            **Changes Found:** ${{ steps.neurolint.outputs.changes-count }}
+            **Files Affected:** ${{ steps.neurolint.outputs.affected-files }}
+            **Layers Run:** ${{ steps.neurolint.outputs.layers-run }}
+            
+            > Run \`neurolint fix ./src\` locally to apply fixes
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
