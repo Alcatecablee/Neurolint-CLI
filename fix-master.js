@@ -1613,7 +1613,7 @@ Examples:
 }
 
 /**
- * Handle the migrate-nextjs-16 command
+ * Handle the migrate-nextjs-15/15.5 command
  */
 async function handleMigrationCommand(args) {
   const options = {
@@ -1622,44 +1622,42 @@ async function handleMigrationCommand(args) {
     createRollback: args.includes('--create-rollback') || args.includes('--apply')
   };
 
+  // Detect which command was used
+  const commandName = args.find(arg => arg.startsWith('migrate-nextjs-')) || 'migrate-nextjs-15.5';
+
   // Show migration help
   if (args.includes('--help') || args.includes('-h')) {
     process.stdout.write(`
-NeuroLint Next.js 16 Migration Tool
+NeuroLint Next.js 15/15.5 Migration Tool
 
-Usage: neurolint migrate-nextjs-16 [options] <project-path>
+Usage: neurolint ${commandName} [options] <project-path>
 
 Options:
   --dry-run           Show what would be done without making changes
   --verbose           Show detailed output
-  --create-rollback   Create rollback plan for applied changes
-  --apply             Apply changes (same as --create-rollback)
+  --with-official-codemods  Run official Next.js codemods first
   --help, -h         Show this help message
 
 Examples:
-  neurolint migrate-nextjs-16 .                    # Migrate current directory
-  neurolint migrate-nextjs-16 ./src               # Migrate specific directory
-  neurolint migrate-nextjs-16 --dry-run .         # Preview migration changes
-  neurolint migrate-nextjs-16 --verbose .         # Show detailed migration output
-  neurolint migrate-nextjs-16 --apply .           # Apply changes with rollback plan
+  neurolint ${commandName} .                    # Migrate current directory
+  neurolint ${commandName} ./src               # Migrate specific directory
+  neurolint ${commandName} --dry-run .         # Preview migration changes
+  neurolint ${commandName} --verbose .         # Show detailed migration output
 
 Features:
-  - Validates Next.js version compatibility (13.4.0 - 16.1.0)
-  - Applies Layer 5 optimizations for Next.js 16
-  - Turbopack (now default bundler) configuration
-  - Cache Components and 'use cache' directive support
-  - Async Dynamic APIs migration (params, searchParams, cookies, headers)
-  - React 19.2 compatibility (Activity component, useEffectEvent)
-  - Server Actions enhancement with error handling
-  - Metadata API modernization
+  - Validates Next.js version compatibility (13.4.0 - 15.x)
+  - Applies Layer 5 optimizations for Next.js 15
+  - Server Components and Client Components optimization
+  - Middleware runtime migration
+  - Route Handlers enhancement
+  - API Routes modernization
   - Deprecation detection and warnings
   - Comprehensive migration report
-  - Automatic rollback plan generation
 `);
     return;
   }
 
-  const projectPath = args.find(arg => !arg.startsWith('--') && !['migrate-nextjs-16'].includes(arg)) || '.';
+  const projectPath = args.find(arg => !arg.startsWith('--') && !['migrate-nextjs-16', 'migrate-nextjs-15.5', 'migrate-nextjs-15', 'migrate-react19', 'migrate-biome'].includes(arg)) || '.';
 
   try {
     const migrationOrchestrator = new NextJS16MigrationOrchestrator();
