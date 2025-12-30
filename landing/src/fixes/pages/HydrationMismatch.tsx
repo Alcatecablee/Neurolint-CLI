@@ -212,13 +212,13 @@ npx @neurolint/cli fix:hydration-guards ./src/hooks`}
               to="/fixes/react-keys-auto-fix"
               className="px-4 py-2 bg-zinc-800 border border-black text-gray-300 rounded-lg hover:bg-zinc-700 hover:text-white transition-colors text-sm"
             >
-              Auto-fix missing React keys
+              How to auto-fix missing React keys
             </Link>
             <Link
               to="/fixes/next-lint-deprecated"
               className="px-4 py-2 bg-zinc-800 border border-black text-gray-300 rounded-lg hover:bg-zinc-700 hover:text-white transition-colors text-sm"
             >
-              next lint deprecated migration
+              Migrate from deprecated next lint
             </Link>
           </div>
         </section>

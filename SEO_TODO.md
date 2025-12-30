@@ -20,8 +20,8 @@ This document outlines the specific, verified tasks required to align the NeuroL
 - [ ] **Shorten Doc Slugs**: Update `sitemap.xml` and routes for documentation pages exceeding the length limit.
 
 ## 4. Internal Linking & Credibility
-- [ ] **Descriptive Anchor Text**: Audit internal links (especially in `HydrationMismatch.tsx`) to replace generic titles with descriptive anchors (e.g., "how hydration changed in React 19").
-- [x] **Add Authorship Signals**: Created an "Engineering Team" section in `landing/src/LandingFooter.tsx`.
+- [x] **Descriptive Anchor Text**: Improved internal links in `HydrationMismatch.tsx` with more descriptive and keyword-rich anchor text.
+- [x] **Add Authorship Signals**: Created an "Engineering Team" section in `landing/src/LandingFooter.tsx` and linked it to the author's portfolio with a profile photo.
 - [ ] **External Authority Links**: Add links to official React/Next.js documentation within migration guides to build reliability.
 
 ## 5. Metadata & Freshness
