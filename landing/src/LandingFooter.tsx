@@ -37,8 +37,12 @@ export function LandingFooter() {
               rel="noopener noreferrer"
               className="flex items-center gap-3 group"
             >
-              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full flex items-center justify-center group-hover:border-white transition-colors">
-                <span className="text-xs font-bold text-white">JC</span>
+              <div className="w-10 h-10 bg-zinc-800 border border-black rounded-full overflow-hidden flex items-center justify-center group-hover:border-white transition-colors">
+                <img 
+                  src="/authors/clive-profile.png" 
+                  alt="Clive Makazhu - Creator of NeuroLint and JustC.live Project Author" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <p className="text-sm text-white font-medium group-hover:text-blue-400 transition-colors">JustC.live</p>
