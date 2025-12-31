@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+  <head>
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Primary Meta Tags -->
+    <title>NeuroLint - Automatically Fix React & Next.js Bugs in Seconds</title>
+    <meta name="title" content="NeuroLint - Automatically Fix React & Next.js Bugs in Seconds" />
+    <meta name="description" content="Automatically fix ESLint errors, hydration bugs, and missing React keys. Rule-based AST transformations, no guesswork. Free & open source." />
+    <meta name="keywords" content="React code fixer, Next.js code fixer, ESLint alternative, React CLI tool, hydration error fix, React debugging tool, TypeScript code analyzer, React error fixer, React linter, AST code transformation, React Server Components tool, React 19 migration, Next.js 16 migration, React performance optimization, automated bug fixer, React hooks error fixer, React code cleanup, developer tools, open source CLI" />
+    <meta name="author" content="NeuroLint" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <link rel="canonical" href="https://www.neurolint.dev/" />
+    
+    <!-- Favicons - Multiple sizes for Google and browsers -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.neurolint.dev/" />
+    <meta property="og:title" content="NeuroLint CLI - The Only Tool That Actually Fixes Your Code" />
+    <meta property="og:description" content="Automatically fix 700+ ESLint errors, hydration bugs, missing React keys in seconds. Rule-based AST transformations, not AI hallucinations. Free & open source." />
+    <meta property="og:image" content="https://www.neurolint.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="NeuroLint CLI - Deterministic code fixing for React and Next.js" />
+    <meta property="og:site_name" content="NeuroLint" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@neurolint" />
+    <meta name="twitter:creator" content="@neurolint" />
+    <meta name="twitter:url" content="https://www.neurolint.dev/" />
+    <meta name="twitter:title" content="NeuroLint CLI - The Only Tool That Actually Fixes Your Code" />
+    <meta name="twitter:description" content="Automatically fix 700+ ESLint errors, hydration bugs, missing React keys in seconds. Rule-based AST transformations, not AI. Free & open source." />
+    <meta name="twitter:image" content="https://www.neurolint.dev/og-image.png" />
+    <meta name="twitter:image:alt" content="NeuroLint CLI - Deterministic code fixing for React and Next.js" />
+    
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="application-name" content="NeuroLint CLI" />
+    <meta name="apple-mobile-web-app-title" content="NeuroLint" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Content Freshness Signal -->
+    <meta name="last-modified" content="2025-12-30" />
+    <meta http-equiv="last-modified" content="2025-12-30" />
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
+        
+        document.querySelectorAll('meta[name="last-modified"], meta[http-equiv="last-modified"]').forEach(el => {
+          el.setAttribute('content', dateStr);
+        });
+      });
+    </script>
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "NeuroLint CLI",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Windows, macOS, Linux",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "An 8-layer automated code fixing tool for React, Next.js, and TypeScript apps. Uses deterministic AST transformations to fix ESLint errors, hydration bugs, missing keys, security vulnerabilities, and 600+ common issues.",
+      "url": "https://www.neurolint.dev/",
+      "downloadUrl": "https://www.npmjs.com/package/@neurolint/cli",
+      "softwareVersion": "1.5.2",
+      "author": {
+        "@type": "Organization",
+        "name": "NeuroLint",
+        "url": "https://www.neurolint.dev/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "NeuroLint",
+        "url": "https://www.neurolint.dev/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.neurolint.dev/logo.png"
+        }
+      },
+      "screenshot": "https://www.neurolint.dev/og-image.png",
+      "featureList": [
+        "8-layer progressive code fixing",
+        "AST-based transformations",
+        "React hydration error fixes",
+        "Missing key detection and fixing",
+        "Next.js App Router optimization",
+        "TypeScript and JavaScript support",
+        "SSR guard implementation",
+        "Console.log removal",
+        "Unused import cleanup"
+      ],
+      "softwareRequirements": "Node.js >= 16.0.0",
+      "license": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "NeuroLint",
+      "url": "https://www.neurolint.dev/",
+      "logo": "https://www.neurolint.dev/logo.png",
+      "sameAs": [
+        "https://github.com/Alcatecablee/Neurolint",
+        "https://twitter.com/neurolint",
+        "https://www.npmjs.com/package/@neurolint/cli"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "url": "https://github.com/Alcatecablee/Neurolint/issues",
+        "contactType": "technical support"
+      }
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is NeuroLint?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NeuroLint is an 8-layer automated code fixing tool for React, Next.js, and TypeScript applications. It uses deterministic AST transformations to automatically fix ESLint errors, hydration bugs, missing React keys, security vulnerabilities, and 600+ common issues in seconds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is NeuroLint free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, NeuroLint is completely free and open source under the Apache 2.0 license. All 8 layers are available without any paywalls or premium tiers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is NeuroLint different from AI code fixers?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Unlike AI tools that can hallucinate or produce unpredictable results, NeuroLint uses rule-based AST transformations. This means the same input always produces the same output - deterministic, reliable fixes every time."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What languages does NeuroLint support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NeuroLint supports TypeScript, JavaScript, React (JSX/TSX), and Next.js applications. It works with both the Pages Router and App Router in Next.js."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I install NeuroLint?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Install NeuroLint globally using npm: npm install -g @neurolint/cli. Then run 'neurolint analyze ./src' to scan your code or 'neurolint fix --all-layers' to automatically fix issues."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NeuroLint",
+      "url": "https://www.neurolint.dev/",
+      "description": "The only tool that actually fixes your code. Deterministic code fixing for React and Next.js.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.neurolint.dev/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <h1 style="position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden;">NeuroLint - Automatically Fix React & Next.js Bugs in Seconds</h1>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
