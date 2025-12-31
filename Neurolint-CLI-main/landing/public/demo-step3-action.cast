@@ -1,0 +1,10 @@
+{"version":2,"width":80,"height":24,"timestamp":1765189182,"idle_time_limit":2,"env":{"SHELL":null,"TERM":null}}
+[0.023784,"o","\r\nCOMPLETE FIX: Your Action Plan\r\n================================\r\n\r\n"]
+[2.037226,"o","Step 1: Patch the vulnerability\r\n$ npx @neurolint/cli security:cve-2025-55182 . --fix\r\n\r\nRunning security:cve-2025-55182......\r\n[OK] Updated react to 19.2.1\r\n[OK] Updated react-dom to 19.2.1\r\n[OK] Updated next to 15.2.6\r\n[SUCCESS] Patched\r\n\r\n"]
+[6.049296,"o","Step 2: Install patched dependencies\r\n$ npm install\r\n[SUCCESS] Dependencies updated\r\n\r\n"]
+[10.060448,"o","Step 3: Scan for existing compromise\r\n$ npx @neurolint/cli security:scan-compromise . --mode=deep\r\n"]
+[12.071612,"o","\r\nRunning security:scan-compromise......\r\n[INFO] NeuroLint Security Forensics - Layer 8\r\n[INFO] Post-Exploitation Detection & Incident Response\r\n\r\nScanning...\r\n"]
+[16.08493,"o","[INFO] SCAN SUMMARY\r\n[INFO] Status: CLEAN\r\n[INFO] Files: 47 scanned, 0 skipped\r\n[INFO] Findings: 0 total\r\n\r\n[SUCCESS] No infections found\r\n\r\n"]
+[20.106832,"o","Step 4: Create security baseline\r\n$ npx @neurolint/cli security:create-baseline .\r\n"]
+[22.13602,"o","\r\nRunning security:create-baseline......\r\n[OK] Security baseline created!\r\n\r\n  Baseline saved to: .neurolint/security-baseline.json\r\n  Files indexed: 47\r\n\r\n  Use \"neurolint security:compare-baseline\" to detect drift.\r\n\r\n[SUCCESS] Baseline created - future drift will be detected\r\n\r\n"]
+[26.150914,"o","------------------------------------------------------\r\n[SUCCESS] COMPLETE FIX APPLIED\r\n\r\nYour application is now:\r\n  - Patched against CVE-2025-55182\r\n  - Scanned for post-breach infections\r\n  - Protected with security baseline\r\n\r\nNeuroLint: The only tool that handles BOTH.\r\n\r\n"]

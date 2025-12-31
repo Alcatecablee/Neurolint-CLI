@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Recording Player - CVE-2025-55182</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .player-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .player-section h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .player-section p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        .terminal-container {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            min-height: 400px;
+        }
+        
+        .terminal-container iframe {
+            border: none;
+            width: 100%;
+            min-height: 400px;
+        }
+        
+        .svg-container {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            overflow: auto;
+        }
+        
+        .svg-container svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: #333;
+        }
+        
+        .instructions h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        .code {
+            background: #1e293b;
+            color: #22c55e;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            opacity: 0.9;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.7.1/dist/bundle/asciinema-player.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.7.1/dist/bundle/asciinema-player.min.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Terminal Recording Player</h1>
+            <p class="subtitle">CVE-2025-55182 Complete Fix Demonstrations</p>
+        </header>
+        
+        <!-- Demo 1 -->
+        <div class="player-section">
+            <h2>🔧 Demo 1: Patch the Vulnerability</h2>
+            <div class="meta">
+                <span class="badge">Duration: ~40s</span>
+                <span class="badge">Video: 3:30-4:30</span>
+            </div>
+            <p>Shows the patching process with --dry-run preview and --fix application.</p>
+            
+            <div class="terminal-container">
+                <div id="demo1"></div>
+            </div>
+            
+            <div class="button-group">
+                <a href="demo1-patch-vulnerability.cast" download class="btn">Download .cast</a>
+                <a href="demo1-patch-vulnerability.svg" download class="btn btn-secondary">Download SVG</a>
+            </div>
+        </div>
+        
+        <!-- Demo 2 -->
+        <div class="player-section">
+            <h2>🔍 Demo 2: Scan for Compromise</h2>
+            <div class="meta">
+                <span class="badge">Duration: ~90s</span>
+                <span class="badge">Video: 4:30-6:00</span>
+            </div>
+            <p>Demonstrates deep compromise scanning with 70 IoC signatures across 11 categories, showing detected infections.</p>
+            
+            <div class="terminal-container">
+                <div id="demo2"></div>
+            </div>
+            
+            <div class="button-group">
+                <a href="demo2-scan-compromise.cast" download class="btn">Download .cast</a>
+                <a href="demo2-scan-compromise.svg" download class="btn btn-secondary">Download SVG</a>
+            </div>
+        </div>
+        
+        <!-- Demo 3 -->
+        <div class="player-section">
+            <h2>✅ Demo 3: Complete Workflow</h2>
+            <div class="meta">
+                <span class="badge">Duration: ~45s</span>
+                <span class="badge">Video: 6:00-7:00</span>
+            </div>
+            <p>Shows the complete fix workflow: patch → install → scan → create baseline.</p>
+            
+            <div class="terminal-container">
+                <div id="demo3"></div>
+            </div>
+            
+            <div class="button-group">
+                <a href="demo3-complete-workflow.cast" download class="btn">Download .cast</a>
+                <a href="demo3-complete-workflow.svg" download class="btn btn-secondary">Download SVG</a>
+            </div>
+        </div>
+        
+        <!-- Instructions -->
+        <div class="player-section">
+            <h2>📹 How to Convert to MP4 for Video Editing</h2>
+            
+            <div class="instructions">
+                <h3>Method 1: Screen Recording (Easiest)</h3>
+                <ol>
+                    <li>Open this page in full screen</li>
+                    <li>Use screen recording software:
+                        <ul>
+                            <li><strong>Mac:</strong> Shift+Cmd+5 (built-in)</li>
+                            <li><strong>Windows:</strong> Win+G (Game Bar) or OBS Studio</li>
+                            <li><strong>Linux:</strong> SimpleScreenRecorder or OBS Studio</li>
+                        </ul>
+                    </li>
+                    <li>Play each recording and capture the terminal window</li>
+                    <li>Trim and export as MP4</li>
+                </ol>
+            </div>
+            
+            <div class="instructions">
+                <h3>Method 2: Terminal Playback + Recording</h3>
+                <div class="code">asciinema play demo1-patch-vulnerability.cast
+# While playing, use screen recorder to capture terminal window</div>
+            </div>
+            
+            <div class="instructions">
+                <h3>Method 3: Online Conversion Tools</h3>
+                <ol>
+                    <li>Download the SVG files (buttons above)</li>
+                    <li>Use online converters:
+                        <ul>
+                            <li><a href="https://cloudconvert.com/svg-to-mp4" target="_blank">CloudConvert</a></li>
+                            <li><a href="https://convertio.co/svg-mp4/" target="_blank">Convertio</a></li>
+                        </ul>
+                    </li>
+                    <li>Or embed SVG in video editor directly</li>
+                </ol>
+            </div>
+            
+            <div class="instructions">
+                <h3>Method 4: Upload to asciinema.org (Web Hosting)</h3>
+                <div class="code">asciinema upload demo1-patch-vulnerability.cast
+# Get shareable link for embedding</div>
+                <p>You can then embed the hosted version in websites or screen record from the web player.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p><strong>NeuroLint CLI</strong> - CVE-2025-55182 Video Production</p>
+            <p>All recordings ready for video editing</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Initialize asciinema players
+        AsciinemaPlayer.create('demo1-patch-vulnerability.cast', document.getElementById('demo1'), {
+            cols: 80,
+            rows: 24,
+            autoPlay: false,
+            loop: false,
+            speed: 1,
+            theme: 'asciinema'
+        });
+        
+        AsciinemaPlayer.create('demo2-scan-compromise.cast', document.getElementById('demo2'), {
+            cols: 80,
+            rows: 24,
+            autoPlay: false,
+            loop: false,
+            speed: 1,
+            theme: 'asciinema'
+        });
+        
+        AsciinemaPlayer.create('demo3-complete-workflow.cast', document.getElementById('demo3'), {
+            cols: 80,
+            rows: 24,
+            autoPlay: false,
+            loop: false,
+            speed: 1,
+            theme: 'asciinema'
+        });
+    </script>
+</body>
+</html>

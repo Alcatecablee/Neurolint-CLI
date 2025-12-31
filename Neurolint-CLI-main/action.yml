@@ -1,0 +1,59 @@
+name: NeuroLint - Deterministic Code Fixer
+<<<<<<< HEAD
+description: Fix 50+ code issues across React, Next.js, and TypeScript with deterministic transformations.
+=======
+description: Fix 50+ code issues automatically across React, Next.js, and TypeScript with deterministic transformations.
+>>>>>>> 608ce25ca67c4db7a520200ae019efb38cc658ca
+author: NeuroLint
+
+inputs:
+  layers:
+    description: 'Comma-separated layer numbers to run (1-8), or "all" for all layers. Default: all layers'
+    required: false
+    default: 'all'
+  path:
+    description: 'Target directory or file to scan and fix'
+    required: false
+    default: '.'
+  dry-run:
+    description: 'Preview changes without applying them'
+    required: false
+    default: 'false'
+  verbose:
+    description: 'Enable verbose logging for debugging'
+    required: false
+    default: 'false'
+  fail-on-changes:
+    description: 'Fail the workflow if any changes are detected (strict mode)'
+    required: false
+    default: 'false'
+  include:
+    description: 'Comma-separated file patterns to include (e.g., "**/*.{ts,tsx,js,jsx}")'
+    required: false
+    default: '**/*.{ts,tsx,js,jsx,json}'
+  exclude:
+    description: 'Comma-separated file patterns to exclude (e.g., "node_modules,dist,.next")'
+    required: false
+    default: 'node_modules,dist,.next,coverage,build'
+
+outputs:
+  summary:
+    description: 'Summary of changes made'
+    value: ${{ steps.neurolint.outputs.summary }}
+  changes-count:
+    description: 'Number of files changed'
+    value: ${{ steps.neurolint.outputs.changes-count }}
+  affected-files:
+    description: 'List of affected files'
+    value: ${{ steps.neurolint.outputs.affected-files }}
+  layers-run:
+    description: 'Which layers were executed'
+    value: ${{ steps.neurolint.outputs.layers-run }}
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'cpu'
+  color: 'blue'
