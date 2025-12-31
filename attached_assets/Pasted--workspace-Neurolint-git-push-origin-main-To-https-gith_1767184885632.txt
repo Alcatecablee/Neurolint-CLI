@@ -1,0 +1,65 @@
+~/workspace/Neurolint$ git push origin main
+To https://github.com/Alcatecablee/Neurolint-CLI
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/Alcatecablee/Neurolint-CLI'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. If you want to integrate the remote changes,
+hint: use 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+~/workspace/Neurolint$ git pull
+hint: You have divergent branches and need to specify how to reconcile them.
+hint: You can do so by running one of the following commands sometime before
+hint: your next pull:
+hint:
+hint:   git config pull.rebase false  # merge
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint:
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+fatal: Need to specify how to reconcile divergent branches.
+~/workspace/Neurolint$ git push -f origin
+Enumerating objects: 341, done.
+Counting objects: 100% (341/341), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (294/294), done.
+Writing objects: 100% (341/341), 15.03 MiB | 6.10 MiB/s, done.
+Total 341 (delta 53), reused 241 (delta 36), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (53/53), done.
+remote: warning: See https://gh.io/lfs for more information.
+remote: warning: File Neurolint/landing/public/cli-demo.mp4 is 53.82 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+remote: error: GH013: Repository rule violations found for refs/heads/main.
+remote: 
+remote: - GITHUB PUSH PROTECTION
+remote:   —————————————————————————————————————————
+remote:     Resolve the following violations before pushing again
+remote: 
+remote:     - Push cannot contain secrets
+remote: 
+remote:     
+remote:      (?) Learn how to resolve a blocked push
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push
+remote:     
+remote:     
+remote:       —— GitHub Personal Access Token ——————————————————————
+remote:        locations:
+remote:          - commit: 30cb3a9916dbbf9f0e129d2e85f0798e8f13890d
+remote:            path: attached_assets/Pasted--workspace-cd-neurolint-bash-cd-neurolint-No-such-file-_1767184590027.txt:10
+remote:          - commit: 30cb3a9916dbbf9f0e129d2e85f0798e8f13890d
+remote:            path: attached_assets/Pasted--workspace-cd-neurolint-bash-cd-neurolint-No-such-file-_1767184590027.txt:15
+remote:          - commit: 30cb3a9916dbbf9f0e129d2e85f0798e8f13890d
+remote:            path: attached_assets/Pasted--workspace-cd-neurolint-bash-cd-neurolint-No-such-file-_1767184590027.txt:16
+remote:     
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.
+remote:        https://github.com/Alcatecablee/Neurolint-CLI/security/secret-scanning/unblock-secret/37bw4BGWXzg7c8l9rWjQwMUhyJG
+remote:     
+remote: 
+remote: 
+To https://github.com/Alcatecablee/Neurolint-CLI
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/Alcatecablee/Neurolint-CLI'
+~/workspace/Neurolint$ ^C
+~/workspace/Neurolint$ 
