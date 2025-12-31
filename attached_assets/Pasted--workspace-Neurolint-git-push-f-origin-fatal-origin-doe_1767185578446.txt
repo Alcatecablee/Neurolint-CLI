@@ -1,0 +1,58 @@
+~/workspace/Neurolint$ git push -f origin~
+fatal: 'origin~' does not appear to be a git repository
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+~/workspace/Neurolint$ git rebase --abort
+git push -f origin main
+fatal: no rebase in progress
+Enumerating objects: 361, done.
+Counting objects: 100% (361/361), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (314/314), done.
+Writing objects: 100% (361/361), 15.04 MiB | 6.02 MiB/s, done.
+Total 361 (delta 66), reused 241 (delta 36), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (66/66), done.
+remote: warning: See https://gh.io/lfs for more information.
+remote: warning: File Neurolint/landing/public/cli-demo.mp4 is 53.82 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+remote: error: GH013: Repository rule violations found for refs/heads/main.
+remote: 
+remote: - GITHUB PUSH PROTECTION
+remote:   —————————————————————————————————————————
+remote:     Resolve the following violations before pushing again
+remote: 
+remote:     - Push cannot contain secrets
+remote: 
+remote:     
+remote:      (?) Learn how to resolve a blocked push
+remote:      https://docs.github.com/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/working-with-push-protection-from-the-command-line#resolving-a-blocked-push
+remote:     
+remote:     
+remote:       —— GitHub Personal Access Token ——————————————————————
+remote:        locations:
+remote:          - commit: 03b88fd585693d21aaa85521cf5248c0dfdb4ce0
+remote:            path: attached_assets/Pasted--workspace-Neurolint-Delete-the-current-git-history-rm-_1767185208828.txt:9
+remote:     
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.
+remote:        https://github.com/Alcatecablee/Neurolint-CLI/security/secret-scanning/unblock-secret/37bxIEHynhqAsNHUPgysKOvr4qW
+remote:     
+remote:     
+remote:       —— GitHub Personal Access Token ——————————————————————
+remote:        locations:
+remote:          - commit: 30cb3a9916dbbf9f0e129d2e85f0798e8f13890d
+remote:            path: attached_assets/Pasted--workspace-cd-neurolint-bash-cd-neurolint-No-such-file-_1767184590027.txt:10
+remote:          - commit: 30cb3a9916dbbf9f0e129d2e85f0798e8f13890d
+remote:            path: attached_assets/Pasted--workspace-cd-neurolint-bash-cd-neurolint-No-such-file-_1767184590027.txt:15
+remote:          - commit: 30cb3a9916dbbf9f0e129d2e85f0798e8f13890d
+remote:            path: attached_assets/Pasted--workspace-cd-neurolint-bash-cd-neurolint-No-such-file-_1767184590027.txt:16
+remote:     
+remote:        (?) To push, remove secret from commit(s) or follow this URL to allow the secret.
+remote:        https://github.com/Alcatecablee/Neurolint-CLI/security/secret-scanning/unblock-secret/37bw4BGWXzg7c8l9rWjQwMUhyJG
+remote:     
+remote: 
+remote: 
+To https://github.com/Alcatecablee/Neurolint-CLI
+ ! [remote rejected] main -> main (push declined due to repository rule violations)
+error: failed to push some refs to 'https://github.com/Alcatecablee/Neurolint-CLI'
