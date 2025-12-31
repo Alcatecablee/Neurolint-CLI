@@ -1,0 +1,130 @@
+~/workspace$ cd neurolint
+bash: cd: neurolint: No such file or directory
+~/workspace$ cd Neurolint
+~/workspace/Neurolint$ git init
+Initialized empty Git repository in /home/runner/workspace/Neurolint/.git/
+~/workspace/Neurolint$ # Remove old credential
+git remote remove origin
+
+# Add new remote with token
+git remote add origin https://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@github.com/Alcatecablee/Neurolint-CLI.git
+
+# Verify
+git remote -v
+error: No such remote: 'origin'
+origin  https://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@github.com/Alcatecablee/Neurolint-CLI.git (fetch)
+origin  https://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@github.com/Alcatecablee/Neurolint-CLI.git (push)
+~/workspace/Neurolint$ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+    CHANGELOG.md
+    CLI_USAGE.md
+    CODE_OF_CONDUCT.md
+    CONTRIBUTING.md
+    DEPLOYMENT-PACKAGE.md
+    DOCUMENTATION-UPDATE-SUMMARY.md
+    GITHUB_ACTION_GUIDE.md
+    GITHUB_ACTION_IMPLEMENTATION.md
+    ISSUE3-IMPLEMENTATION-COMPLETE.md
+    LICENSE
+    QUICK-REFERENCE-UPDATES.md
+    README.md
+    ROADMAP-ISSUE3-IMPLEMENTATION.md
+    ROADMAP-UPDATED.md
+    __tests__/
+    action.yml
+    ast-transformer.js
+    backup-encryption.js
+    backup-error-handler.js
+    backup-manager-production.js
+    backup-manager.js
+    cli.js
+    demo-issue4.js
+    demo-project/
+    docs/
+    fix-master.js
+    jest.config.cjs
+    landing/
+    package-lock.json
+    package.json
+    postcss.config.js
+    recordings/
+    replit.md
+    scripts/
+    selector.js
+    shared-core/
+    simple-ora.js
+    tailwind.config.js
+    test-edge-cases/
+    test-issue4-cross-session.js
+    test-scripts/
+    tsconfig.json
+    validator.js
+    vercel.json
+    verify-issue3.js
+    verify-issue4-final.js
+    vite.config.mjs
+
+nothing added to commit but untracked files present (use "git add" to track)
+~/workspace/Neurolint$ git commit
+On branch main
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+    CHANGELOG.md
+    CLI_USAGE.md
+    CODE_OF_CONDUCT.md
+    CONTRIBUTING.md
+    DEPLOYMENT-PACKAGE.md
+    DOCUMENTATION-UPDATE-SUMMARY.md
+    GITHUB_ACTION_GUIDE.md
+    GITHUB_ACTION_IMPLEMENTATION.md
+    ISSUE3-IMPLEMENTATION-COMPLETE.md
+    LICENSE
+    QUICK-REFERENCE-UPDATES.md
+    README.md
+    ROADMAP-ISSUE3-IMPLEMENTATION.md
+    ROADMAP-UPDATED.md
+    __tests__/
+    action.yml
+    ast-transformer.js
+    backup-encryption.js
+    backup-error-handler.js
+    backup-manager-production.js
+    backup-manager.js
+    cli.js
+    demo-issue4.js
+    demo-project/
+    docs/
+    fix-master.js
+    jest.config.cjs
+    landing/
+    package-lock.json
+    package.json
+    postcss.config.js
+    recordings/
+    replit.md
+    scripts/
+    selector.js
+    shared-core/
+    simple-ora.js
+    tailwind.config.js
+    test-edge-cases/
+    test-issue4-cross-session.js
+    test-scripts/
+    tsconfig.json
+    validator.js
+    vercel.json
+    verify-issue3.js
+    verify-issue4-final.js
+    vite.config.mjs
+
+nothing added to commit but untracked files present (use "git add" to track)
+~/workspace/Neurolint$ ^C
+~/workspace/Neurolint$ 
