@@ -24,23 +24,32 @@
  * unless explicitly requested (quarantine mode). This follows the NeuroLint
  * principle of "never break code".
  * 
- * Signature Coverage (90 IoC Signatures):
+ * Signature Coverage (100 IoC Signatures):
  * - CVE-2025-55182: React Server Components RCE (CRITICAL, CVSS 10.0)
  * - CVE-2025-55183: Source Code Exposure (MEDIUM, CVSS 5.3)
  * - CVE-2025-55184: Denial of Service (HIGH, CVSS 7.5)
  * - CVE-2025-67779: Incomplete DoS Fix (HIGH, CVSS 7.5)
+ * - CVE-2025-66478: Next.js downstream RSC RCE (CRITICAL, CVSS 10.0) — added 2026-07-12
+ * - CVE-2026-23864: Next.js RSC DoS / resource exhaustion (HIGH, CVSS 7.5) — added 2026-07-12
  * - Next.js 13-16 specific attack patterns
  * - General supply-chain and persistence patterns
- * 
- * IMPORTANT PATCH HISTORY:
+ *
+ * IMPORTANT REACT PATCH HISTORY:
  * - 19.0.1, 19.1.2, 19.2.1 patched CVE-2025-55182 only
  * - 19.0.2, 19.1.3, 19.2.2 have INCOMPLETE DoS fix (CVE-2025-67779)
- * - Fully patched versions: 19.0.3, 19.1.4, 19.2.3
+ * - Minimum fully patched React versions: 19.0.3, 19.1.4, 19.2.3
+ * - Latest React releases (June 1, 2026): 19.0.7, 19.1.8, 19.2.7
+ *
+ * IMPORTANT NEXT.JS PATCH HISTORY (CVE-2025-66478 + CVE-2026-23864):
+ * - Affected: Next.js 15.x, 16.x App Router; 14.3.0-canary.77+
+ * - NOT affected: Next.js 13.x, 14.x stable, Pages Router, Edge Runtime
+ * - CVE-2025-66478 fixed: 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7, 16.0.7
+ * - CVE-2026-23864 fixed: 15.0.8, 15.1.12, 15.2.9, 15.3.9, 15.4.11, 15.5.10
  */
 
 'use strict';
 
-const LAYER_8_VERSION = '2.3.0';
+const LAYER_8_VERSION = '2.4.0';
 
 const SEVERITY_LEVELS = {
   CRITICAL: 'critical',
@@ -74,7 +83,7 @@ const IOC_CATEGORIES = {
 
 const IOC_SIGNATURES = {
   version: LAYER_8_VERSION,
-  lastUpdated: '2025-12-20',
+  lastUpdated: '2026-07-12',
   
   signatures: [
     // ============================================================
@@ -1164,6 +1173,162 @@ const IOC_SIGNATURES = {
       references: ['CVE-2025-55183'],
       remediation: 'Sanitize error messages before sending to client',
       fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+
+    // ============================================================
+    // CVE-2025-66478 SIGNATURES (IOC-091 to IOC-095)
+    // Next.js downstream RSC RCE — Disclosed: December 3, 2025
+    // CVSS 10.0 (CRITICAL) — GitHub Advisory GHSA-9qr9-h5gf-34mp
+    //
+    // Affects: Next.js 15.x, 16.x (App Router); 14.3.0-canary.77+
+    // NOT affected: Next.js 13.x, 14.x stable, Pages Router, Edge Runtime
+    //
+    // Fixed versions: 15.0.5 / 15.1.9 / 15.2.6 / 15.3.6 / 15.4.8 / 15.5.7 / 16.0.7
+    // Emergency patch tool: npx fix-react2shell-next
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-091',
+      name: 'Vulnerable Next.js Version (CVE-2025-66478)',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      // Matches Next.js 15.x before fix or 16.0.x before 16.0.7 in package.json
+      pattern: /"next"\s*:\s*"[^"]*(?:15\.0\.[0-4][^0-9]|15\.1\.[0-8][^0-9]|15\.2\.[0-5][^0-9]|15\.3\.[0-5][^0-9]|15\.4\.[0-7][^0-9]|15\.5\.[0-6][^0-9]|16\.0\.[0-6][^0-9])/gi,
+      type: 'regex',
+      description: 'Package.json declares a Next.js version vulnerable to CVE-2025-66478 (RSC RCE, CVSS 10.0)',
+      references: ['CVE-2025-66478', 'CVE-2025-55182', 'GHSA-9qr9-h5gf-34mp'],
+      remediation: 'Upgrade Next.js immediately: npm install next@15.5.7 (or latest in your minor line). Run: npx fix-react2shell-next',
+      fileTypes: ['package.json']
+    },
+    {
+      id: 'NEUROLINT-IOC-092',
+      name: 'React2Shell — Unvalidated searchParams in Server Context',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.CRITICAL,
+      // searchParams used directly in a server component / action without validation
+      pattern: /(?:searchParams|params)\s*(?:\.\w+|\[['"][^'"]+['"]\])\s*(?:&&|,|\)|\s*\n)[\s\S]{0,300}(?:eval|exec|spawn|Function\s*\(|import\s*\(|child_process)/gi,
+      type: 'regex',
+      description: 'Unvalidated URL searchParams or route params flowing into code execution — primary React2Shell (CVE-2025-66478) attack vector',
+      references: ['CVE-2025-66478', 'CVE-2025-55182'],
+      remediation: 'Validate and sanitise all searchParams/params before use in server-side logic. Never pass URL inputs to eval, exec, or dynamic imports.',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-093',
+      name: 'React2Shell — Server Action Without Origin Check',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      // Server actions that use headers() but never check origin/host
+      pattern: /['"]use server['"][\s\S]{0,400}headers\s*\(\s*\)[\s\S]{0,200}(?:get\s*\(\s*['"](?:cookie|authorization|x-forwarded)[^'"]*['"])/gi,
+      type: 'regex',
+      description: 'Server action reads sensitive headers without origin validation — exploitable via CVE-2025-66478 cross-origin request forgery',
+      references: ['CVE-2025-66478', 'GHSA-9qr9-h5gf-34mp'],
+      remediation: 'Add origin header validation at the top of server actions that process sensitive headers. Consider using Next.js CSRF protection middleware.',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-094',
+      name: 'React2Shell — Dynamic App Router Page with Unauthenticated Server Action',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      // dynamic() / generateStaticParams missing + server action present on same page
+      pattern: /export\s+const\s+dynamic\s*=\s*['"]force-dynamic['"][\s\S]{0,2000}['"]use server['"]/gi,
+      type: 'regex',
+      description: 'Force-dynamic App Router page with server action — maximises attack surface for CVE-2025-66478; every request re-runs server execution with attacker-supplied inputs',
+      references: ['CVE-2025-66478'],
+      remediation: 'Ensure server actions on dynamic pages validate authentication and input before any execution. Prefer ISR over force-dynamic where possible.',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-095',
+      name: 'React2Shell — Instrumentation Register Hook with External Call',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      // instrumentation.ts register() making outbound calls — used in React2Shell exploitation chain
+      pattern: /export\s+(?:async\s+)?function\s+register\s*\(\s*\)[\s\S]{0,500}(?:fetch|axios|http\.get|https\.get)\s*\(\s*(?:process\.env|[`'"][^'"` ]*\$\{)/gi,
+      type: 'regex',
+      description: 'Instrumentation register() with dynamic outbound request — used as persistence mechanism in React2Shell (CVE-2025-66478) post-exploitation',
+      references: ['CVE-2025-66478', 'CVE-2025-55182', 'MITRE T1041'],
+      remediation: 'Audit instrumentation.ts register(). Use only static URLs; never use environment variables or user-controlled values in outbound calls here.',
+      fileTypes: ['.ts', '.js']
+    },
+
+    // ============================================================
+    // CVE-2026-23864 SIGNATURES (IOC-096 to IOC-100)
+    // Next.js RSC Denial of Service — Disclosed: January 26, 2026
+    // CVSS 7.5 (HIGH) — Allocation of Resources Without Limits or Throttling
+    //
+    // A malicious RSC payload can cause memory exhaustion or excessive CPU.
+    // Affects: next >=13.0.0 <15.0.8 | >=15.1.0 <15.1.12 | >=15.2.0 <15.2.9
+    //          >=15.3.0 <15.3.9 | >=15.4.0 <15.4.11 | >=15.5.0 <15.5.10
+    // Fixed: 15.0.8 / 15.1.12 / 15.2.9 / 15.3.9 / 15.4.11 / 15.5.10
+    // ============================================================
+    {
+      id: 'NEUROLINT-IOC-096',
+      name: 'Vulnerable Next.js Version (CVE-2026-23864)',
+      category: IOC_CATEGORIES.NEXTJS_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      // Matches Next.js versions before the CVE-2026-23864 DoS fix
+      pattern: /"next"\s*:\s*"[^"]*(?:15\.0\.[0-7][^0-9]|15\.1\.(?:[0-9]|1[01])[^0-9]|15\.2\.[0-8][^0-9]|15\.3\.[0-8][^0-9]|15\.4\.(?:[0-9]|10)[^0-9]|15\.5\.[0-9][^0-9])/gi,
+      type: 'regex',
+      description: 'Package.json declares a Next.js version vulnerable to CVE-2026-23864 (RSC DoS via resource exhaustion, CVSS 7.5)',
+      references: ['CVE-2026-23864', 'GHSA-h25m-26qc-wcjf'],
+      remediation: 'Upgrade Next.js: npm install next@15.5.10 (or latest patch in your minor line). See https://nextjs.org for patched version per minor.',
+      fileTypes: ['package.json']
+    },
+    {
+      id: 'NEUROLINT-IOC-097',
+      name: 'Unbounded JSON Parsing of Request Body (CVE-2026-23864 amplifier)',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      // JSON.parse on request.json() / req.body without size guard
+      pattern: /(?:await\s+)?(?:request|req)\.json\s*\(\s*\)[\s\S]{0,100}JSON\.parse|JSON\.parse\s*\([\s\S]{0,50}(?:request|req)\.(?:body|text|json)/gi,
+      type: 'regex',
+      description: 'Request body parsed with JSON.parse without size limit — amplifies CVE-2026-23864 by accepting arbitrarily large payloads that exhaust memory',
+      references: ['CVE-2026-23864', 'MITRE T1499.004'],
+      remediation: 'Add a Content-Length check before parsing: if body size exceeds limit (e.g. 1 MB), return 413. Use a middleware like next-body-parser with size limits.',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js']
+    },
+    {
+      id: 'NEUROLINT-IOC-098',
+      name: 'Unthrottled Server Action — No Rate Limit (CVE-2026-23864 amplifier)',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      // Server actions with no rate limiting / throttle import visible
+      pattern: /['"]use server['"](?:(?!rateLimit|throttle|upstash|limit|redis).){0,2000}(?:await\s+)?(?:db|prisma|sql|supabase|mongoose)\.\w+\s*\(/gi,
+      type: 'regex',
+      description: 'Server action performs DB operations with no visible rate limiting — repeated large-payload requests can cause CPU/memory exhaustion (CVE-2026-23864)',
+      references: ['CVE-2026-23864'],
+      remediation: 'Add rate limiting to server actions that perform heavy operations. Use Upstash Ratelimit, next-rate-limit, or a Redis-backed token bucket.',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js'],
+      contextRequired: true
+    },
+    {
+      id: 'NEUROLINT-IOC-099',
+      name: 'Deep Object Spread Without Depth Guard (CVE-2026-23864 amplifier)',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.MEDIUM,
+      // Recursive spread or Object.assign with user-supplied data — stack-exhaustion vector
+      pattern: /(?:function\s+\w*(?:deep|recursive|merge|clone)\w*[\s\S]{0,200}(?:\.\.\.|\bObject\.assign\b)[\s\S]{0,200}\1\s*\(|(?:\.\.\.|\bObject\.assign\b)\s*\([^)]*(?:req|request|body|params|data)\b)/gi,
+      type: 'regex',
+      description: 'Deep object merge/clone on user-supplied data without depth guard — attacker-crafted nested payload can cause stack exhaustion (CVE-2026-23864)',
+      references: ['CVE-2026-23864', 'MITRE T1499.004'],
+      remediation: 'Add a max-depth check before recursive operations on untrusted data. Use a hardened clone utility (e.g. klona or structuredClone with size guards).',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js'],
+      contextRequired: true
+    },
+    {
+      id: 'NEUROLINT-IOC-100',
+      name: 'RSC Flight Response Without Payload Size Cap (CVE-2026-23864)',
+      category: IOC_CATEGORIES.RSC_SPECIFIC,
+      severity: SEVERITY_LEVELS.HIGH,
+      // createFromFetch / createFromReadableStream with no size guard around it
+      pattern: /(?:createFromFetch|createFromReadableStream|createFromXHR)\s*\([^)]*\)(?:(?!maxSize|limit|byteLength|length\s*[<>]).){0,500}(?:render|hydrate|use\s*\()/gi,
+      type: 'regex',
+      description: 'RSC Flight payload consumed without size cap — oversized attacker payload exhausts renderer memory (CVE-2026-23864)',
+      references: ['CVE-2026-23864', 'CVE-2025-55184'],
+      remediation: 'Ensure RSC packages are updated to patched versions (15.0.8+ / 15.1.12+ / 15.5.10+). Add server-side response size limits before streaming Flight payloads to clients.',
+      fileTypes: ['.tsx', '.ts', '.jsx', '.js'],
+      contextRequired: true
     }
   ]
 };

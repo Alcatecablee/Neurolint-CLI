@@ -64,10 +64,10 @@
 > **Target headline:** "One command patched every vulnerable React component after CVE-2025-55182."
 
 ### 2.1 Layer 8 — Keep It Current
-- [ ] Verify CVE tracking is current: fully patched React versions = 19.0.3, 19.1.4, 19.2.3
-- [ ] Check if any new React 19.x patch versions shipped since Dec 2025
-- [ ] Update `incompleteDoSPatched` and `rceOnlyPatched` version lists if needed
-- [ ] Add any new RSC CVEs disclosed in 2026
+- [x] Verify CVE tracking is current: fully patched React versions = 19.0.3, 19.1.4, 19.2.3 (minimum; latest June 2026: 19.0.7, 19.1.8, 19.2.7)
+- [x] Check if any new React 19.x patch versions shipped since Dec 2025 — confirmed 19.0.7 / 19.1.8 / 19.2.7 (June 1, 2026)
+- [x] Update `incompleteDoSPatched` and `rceOnlyPatched` version lists if needed — patch history updated in constants.js header
+- [x] Add any new RSC CVEs disclosed in 2026 — added CVE-2025-66478 (Next.js RSC RCE, CVSS 10.0, IOC-091–095) and CVE-2026-23864 (Next.js RSC DoS, CVSS 7.5, IOC-096–100). Layer 8 v2.4.0, 100 signatures total.
 
 ### 2.2 Security Marketing
 - [ ] Write one long-form technical post: "How NeuroLint auto-patches React CVEs without touching your business logic"

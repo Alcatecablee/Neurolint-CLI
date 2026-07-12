@@ -1,12 +1,19 @@
 # Layer 8: Security Forensics
 
-## Specification Document v2.3
+## Specification Document v2.4
 
 **Status**: Implemented  
 **Author**: NeuroLint Team  
 **Created**: December 2025  
-**Updated**: December 11, 2025 (v2.3 - New CVE Detection)  
+**Updated**: July 12, 2026 (v2.4 - CVE-2025-66478 + CVE-2026-23864)  
 **Related CVEs**: CVE-2025-55182 (CVSS 10.0), CVE-2025-55184 (CVSS 7.5), CVE-2025-55183 (CVSS 5.3)
+
+### Version 2.4 Highlights (July 12, 2026)
+
+- **100 IoC Signatures** covering 11 detection categories (10 new for CVE-2025-66478 and CVE-2026-23864)
+- **CVE-2025-66478** (Next.js RSC RCE, CVSS 10.0): 5 new signatures (IOC-091–095) detect vulnerable Next.js versions, React2Shell attack patterns, missing origin validation, and force-dynamic pages with unauthenticated server actions
+- **CVE-2026-23864** (Next.js RSC DoS, CVSS 7.5): 5 new signatures (IOC-096–100) detect vulnerable Next.js versions, unbounded JSON parsing, unthrottled server actions, deep object spread on user input, and uncapped RSC Flight payloads
+- React patch version history updated: latest releases 19.0.7 / 19.1.8 / 19.2.7 (June 1, 2026)
 
 ### Version 2.3 Highlights
 
