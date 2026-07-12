@@ -27,6 +27,9 @@ const fs = require('fs').promises;
 const path = require('path');
 const BackupManager = require('../backup-manager');
 const parser = require('@babel/parser');
+const traverse = require('@babel/traverse').default;
+const generate = require('@babel/generator').default;
+const t = require('@babel/types');
 const ASTTransformer = require('../ast-transformer');
 
 /**
@@ -92,6 +95,84 @@ function applyRegexPatternFallbacks(input) {
   }
   
   return { code, changes };
+}
+
+/**
+ * AST-based annotation for setTimeout calls and mock data arrays.
+ * Replaces the two transforms that were previously done with raw regex.
+ *
+ * @param {string} input - Source code to annotate
+ * @returns {{ code: string, changes: Array }}
+ */
+function applyASTMockAndTimerAnnotations(input) {
+  const changes = [];
+  let ast;
+
+  try {
+    ast = parser.parse(input, {
+      sourceType: 'module',
+      plugins: ['typescript', 'jsx'],
+      allowImportExportEverywhere: true,
+      strictMode: false,
+    });
+  } catch (e) {
+    return { code: input, changes };
+  }
+
+  let modified = false;
+
+  traverse(ast, {
+    // setTimeout: replace the entire statement with a leading-comment empty statement
+    ExpressionStatement(path) {
+      const expr = path.node.expression;
+      if (
+        t.isCallExpression(expr) &&
+        t.isIdentifier(expr.callee, { name: 'setTimeout' })
+      ) {
+        const argsCode = expr.arguments
+          .map(a => generate(a, {}, input).code)
+          .join(', ');
+        const commentText = `[NeuroLint] Replace setTimeout with actual API call: ${argsCode}`;
+        const emptyStmt = t.emptyStatement();
+        emptyStmt.leadingComments = [{ type: 'CommentLine', value: ` ${commentText}` }];
+        path.replaceWith(emptyStmt);
+        changes.push({ type: 'Comment', description: `// ${commentText}`, location: null });
+        modified = true;
+      }
+    },
+
+    // Mock data: add a leading comment to variable declarations with array-of-objects init
+    VariableDeclaration(path) {
+      const hasMockArray = path.node.declarations.some(
+        decl =>
+          decl.init &&
+          t.isArrayExpression(decl.init) &&
+          decl.init.elements.some(el => el && t.isObjectExpression(el))
+      );
+      if (hasMockArray) {
+        const commentText = '[NeuroLint] Replace mock data with API fetch:';
+        path.node.leadingComments = path.node.leadingComments || [];
+        // Only annotate once
+        const alreadyAnnotated = path.node.leadingComments.some(c =>
+          c.value.includes('[NeuroLint]')
+        );
+        if (!alreadyAnnotated) {
+          path.node.leadingComments.push({ type: 'CommentLine', value: ` ${commentText}` });
+          changes.push({ type: 'Comment', description: `// ${commentText}`, location: null });
+          modified = true;
+        }
+      }
+    },
+  });
+
+  if (!modified) return { code: input, changes };
+
+  try {
+    const output = generate(ast, { retainLines: false, compact: false }, input);
+    return { code: output.code, changes };
+  } catch (e) {
+    return { code: input, changes: [] };
+  }
 }
 
 /**
@@ -546,24 +627,39 @@ async function transform(code, options = {}) {
       }
     }
 
-    // 3) Mock data and setTimeout
+    // 3) Mock data and setTimeout — AST-first, regex fallback if AST fails
     const beforeMock = updatedCode;
-    updatedCode = updatedCode.replace(/\b(setTimeout)\(([^)]*)\);?/g, (m, fn) => {
-      // Skip if this is inside a string
-      const beforeMatch = updatedCode.substring(0, updatedCode.indexOf(m));
-      const quoteCount = (beforeMatch.match(/['"`]/g) || []).length;
-      if (quoteCount % 2 === 1) return m; // Inside a string
-      
-      const c = `// [NeuroLint] Replace setTimeout with actual API call: ${fn}`;
-      changes.push({ type: 'Comment', description: c, location: null });
-      return c;
-    });
-    // Mock data detection - only for arrays with object literals or specific patterns
-    updatedCode = updatedCode.replace(/(const|let|var)\s+\w+\s*=\s*\[[^\]]*\{[^\}]*\}[^\]]*\];?/g, (m) => {
-      const c = `// [NeuroLint] Replace mock data with API fetch:`;
-      changes.push({ type: 'Comment', description: c, location: null });
-      return `${c}\n${m}`;
-    });
+    {
+      const astResult = applyASTMockAndTimerAnnotations(updatedCode);
+      const astValid = astResult.code !== updatedCode && validateSyntax(astResult.code);
+
+      if (astValid) {
+        updatedCode = astResult.code;
+        astResult.changes.forEach(c => changes.push(c));
+        if (verbose) {
+          process.stdout.write(`[INFO] AST-based timer/mock annotations: ${astResult.changes.length} changes\n`);
+        }
+      } else {
+        // Regex fallback: only runs when AST parse/transform failed entirely
+        const regexBefore = updatedCode;
+        updatedCode = updatedCode.replace(/\b(setTimeout)\(([^)]*)\);?/g, (m, fn) => {
+          const beforeMatch = updatedCode.substring(0, updatedCode.indexOf(m));
+          const quoteCount = (beforeMatch.match(/['"`]/g) || []).length;
+          if (quoteCount % 2 === 1) return m;
+          const c = `// [NeuroLint] Replace setTimeout with actual API call: ${fn}`;
+          changes.push({ type: 'Comment', description: c, location: null });
+          return c;
+        });
+        updatedCode = updatedCode.replace(/(const|let|var)\s+\w+\s*=\s*\[[^\]]*\{[^\}]*\}[^\]]*\];?/g, (m) => {
+          const c = `// [NeuroLint] Replace mock data with API fetch:`;
+          changes.push({ type: 'Comment', description: c, location: null });
+          return `${c}\n${m}`;
+        });
+        if (verbose && updatedCode !== regexBefore) {
+          process.stdout.write(`[INFO] Regex fallback used for timer/mock annotations\n`);
+        }
+      }
+    }
     if (updatedCode !== beforeMock) states.push(updatedCode);
 
     // 4) HTML entities (apply the same replacements to the main code)

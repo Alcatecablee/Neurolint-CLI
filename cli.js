@@ -786,6 +786,9 @@ function parseOptions(args) {
       options.codemodVersion = args[i + 1];
     } else if (args[i].startsWith('--codemod-version=')) {
       options.codemodVersion = args[i].split('=')[1];
+    } else if (args[i] === '--json') {
+      // --json is a shorthand alias for --format json, consistent across all commands
+      options.format = 'json';
     }
   }
   
@@ -5505,7 +5508,7 @@ async function handleCVE202555182(targetPath, options, spinner, args) {
 async function handleSecurityScanCompromise(targetPath, options, spinner, args) {
   const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
   const isVerbose = args.includes('--verbose') || args.includes('-v');
-  const isJsonOutput = args.includes('--json');
+  const isJsonOutput = options.format === 'json';
   const mode = args.includes('--deep') ? 'deep' : 
                args.includes('--quick') ? 'quick' : 
                args.includes('--paranoid') ? 'paranoid' : 'standard';
@@ -5625,7 +5628,7 @@ async function handleSecurityCreateBaseline(targetPath, options, spinner, args) 
 async function handleSecurityCompareBaseline(targetPath, options, spinner, args) {
   const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
   const isVerbose = args.includes('--verbose') || args.includes('-v');
-  const isJsonOutput = args.includes('--json');
+  const isJsonOutput = options.format === 'json';
   
   const baselineArg = args.find(a => a.startsWith('--baseline='));
   const baselinePath = baselineArg 
@@ -5731,7 +5734,7 @@ async function handleSecurityCompareBaseline(targetPath, options, spinner, args)
 async function handleSecurityIncidentResponse(targetPath, options, spinner, args) {
   const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
   const isVerbose = args.includes('--verbose') || args.includes('-v');
-  const isJsonOutput = args.includes('--json');
+  const isJsonOutput = options.format === 'json';
   const isQuick = args.includes('--quick');
   const isFull = args.includes('--full');
   
@@ -5824,7 +5827,7 @@ async function handleSecurityIncidentResponse(targetPath, options, spinner, args
 async function handleSecurityHardenActions(targetPath, options, spinner, args) {
   const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
   const isVerbose = args.includes('--verbose') || args.includes('-v');
-  const isJsonOutput = args.includes('--json');
+  const isJsonOutput = options.format === 'json';
   const isQuarantine = args.includes('--quarantine');
   const isDryRun = args.includes('--dry-run');
   
@@ -5965,7 +5968,7 @@ async function handleSecurityHardenActions(targetPath, options, spinner, args) {
 async function handleSecurityMitigationPlaybook(targetPath, options, spinner, args) {
   const resolvedPath = targetPath ? path.resolve(targetPath) : process.cwd();
   const isVerbose = args.includes('--verbose') || args.includes('-v');
-  const isJsonOutput = args.includes('--json');
+  const isJsonOutput = options.format === 'json';
   
   const outputArg = args.find(a => a.startsWith('--output=') || a.startsWith('-o='));
   const outputPath = outputArg ? outputArg.split('=')[1] : null;

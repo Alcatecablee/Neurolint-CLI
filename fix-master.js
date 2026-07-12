@@ -1657,10 +1657,10 @@ Options:
 Layers:
   1. Configuration fixes (TypeScript, Next.js, package.json)
   2. Pattern fixes (HTML entities, console statements, browser APIs)
-  3. Component-specific fixes (coming soon)
-  4. Hydration and SSR fixes (coming soon)
+  3. Component fixes (React keys, alt attributes, ARIA labels, button types)
+  4. Hydration and SSR fixes (window/document guards, localStorage SSR safety)
   5. Next.js App Router fixes (use client, imports, metadata)
-  6. Testing and Validation Fixes (coming soon)
+  6. Testing and Validation fixes (error boundaries, test scaffolding)
   7. Adaptive Pattern Learning (learns from previous layers)
 
 Examples:
