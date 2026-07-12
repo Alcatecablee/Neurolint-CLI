@@ -121,11 +121,10 @@ Every layer script MUST export a `transform` function with this exact signature 
 ```javascript
 /**
  * @param {string} code - Source code to transform
- * @param {string} filePath - Absolute path to the file being transformed
- * @param {object} options - CLI options (dryRun, verbose, etc.)
+ * @param {object} options - CLI options: { filePath, dryRun, verbose, ... }
  * @returns {{ success: boolean, code: string, changeCount: number, changes: string[], error?: string }}
  */
-async function transform(code, filePath, options) {
+async function transform(code, options = {}) {
   try {
     // ... AST transformation logic ...
     return {
@@ -305,7 +304,7 @@ All changes to the transformation pipeline require tests.
 - **Framework**: Jest (config in `jest.config.cjs`)
 - **Pattern**: input code string → call `transform()` → assert output code and `changeCount`
 - **Edge cases**: empty file, already-correct file (idempotency), syntax errors in input
-- **676 tests currently passing** — every PR must keep this green
+- **738 tests currently passing** — every PR must keep this green
 
 ```javascript
 // Example pattern
@@ -313,7 +312,7 @@ const { transform } = require('../scripts/fix-layer-3-components');
 
 test('adds missing alt attribute to img', async () => {
   const input = `<img src="logo.png" />`;
-  const result = await transform(input, 'test.jsx', {});
+  const result = await transform(input, { filePath: 'test.jsx', dryRun: true });
   expect(result.success).toBe(true);
   expect(result.changeCount).toBeGreaterThan(0);
   expect(result.code).toContain('alt=');
@@ -321,7 +320,7 @@ test('adds missing alt attribute to img', async () => {
 
 test('is idempotent when alt already exists', async () => {
   const input = `<img src="logo.png" alt="Logo" />`;
-  const result = await transform(input, 'test.jsx', {});
+  const result = await transform(input, { filePath: 'test.jsx', dryRun: true });
   expect(result.changeCount).toBe(0);
 });
 ```
