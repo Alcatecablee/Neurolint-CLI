@@ -93,14 +93,15 @@ function generateTurbopackSuggestions(nextVersion) {
     suggestions.push({
       type: 'turbopack',
       message: 'Turbopack configuration can be added to next.config.js',
-      recommendation: `Add experimental.turbo configuration to next.config.js:
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js'
-        }
+      // IMPORTANT: `experimental.turbo` was removed in Next.js 16 (Sept 2025).
+      // Use the top-level `turbopack:` key for Next.js 16+.
+      // `experimental.turbo` was only valid in Next.js 13.0.0–15.2.x.
+      recommendation: `Add turbopack configuration to next.config.js (Next.js 16+):
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js'
       }
     }
   }`

@@ -42,8 +42,8 @@ describe('Layer 8 Security Forensics', () => {
   });
 
   describe('IoC Signature Constants', () => {
-    test('should have 90 IoC signatures defined', () => {
-      expect(constants.IOC_SIGNATURES.signatures.length).toBe(90);
+    test('should have 100 IoC signatures defined', () => {
+      expect(constants.IOC_SIGNATURES.signatures.length).toBe(100);
     });
 
     test('should have required fields for each signature', () => {

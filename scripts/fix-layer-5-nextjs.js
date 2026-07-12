@@ -1331,15 +1331,12 @@ function detectDeprecations(code) {
     });
   }
   
-  // Check for old metadata patterns
-  if (code.includes('export const metadata =')) {
-    warnings.push({
-      type: 'deprecation',
-      message: 'export const metadata is deprecated. Use generateMetadata function instead.',
-      recommendation: 'Convert to async generateMetadata function'
-    });
-  }
-  
+  // NOTE: `export const metadata` is NOT deprecated.
+  // It is the standard static metadata export in the Next.js App Router
+  // (see https://nextjs.org/docs/app/api-reference/functions/generate-metadata).
+  // Both `export const metadata` (static) and `generateMetadata()` (dynamic)
+  // are valid and recommended patterns. Do not warn users to change it.
+
   return warnings;
 }
 
@@ -1358,16 +1355,17 @@ function configureTurbopack(code) {
     
     // Check if Turbopack is already configured
     if (!configBlock.includes('turbo') && !configBlock.includes('turbopack')) {
-      // Add Turbopack configuration
+      // Add Turbopack configuration using the top-level `turbopack` key.
+      // NOTE: `experimental.turbo` was the key in Next.js 13.0.0–15.2.x.
+      //       It was removed in Next.js 16 (commit #84109, Sep 2025).
+      //       All Next.js 16+ projects must use the top-level `turbopack:` object.
       const enhancedConfig = configBlock.replace(
         /(\})\s*$/,
-        `  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js'
-        }
+        `  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js'
       }
     }
   }
@@ -1376,7 +1374,7 @@ function configureTurbopack(code) {
       
       code = code.replace(configBlock, enhancedConfig);
       changes.push({
-        description: 'Added Turbopack configuration for Next.js 16',
+        description: 'Added Turbopack configuration for Next.js 16 (top-level turbopack key)',
         location: { line: code.substring(0, match.index).split('\n').length }
       });
     }
@@ -1398,13 +1396,15 @@ function suggestCachingOptimizations(code) {
   while ((match = fetchPattern.exec(code)) !== null) {
     const fetchCall = match[0];
     
-    // Check if already has cache configuration
-    if (!fetchCall.includes('cache:') && !fetchCall.includes('force-cache')) {
+    // Check if already has cache configuration.
+    // Next.js 15+/16 changed the fetch default from force-cache to no-store.
+    // Suggest explicit cache control rather than assuming force-cache is desired.
+    if (!fetchCall.includes('cache:') && !fetchCall.includes('force-cache') && !fetchCall.includes('no-store')) {
       suggestions.push({
         type: 'caching',
-        message: 'Consider adding cache: "force-cache" for static data fetching',
+        message: 'fetch() has no explicit cache option. Next.js 15+/16 defaults to no-store (uncached).',
         location: { line: code.substring(0, match.index).split('\n').length },
-        recommendation: `Add cache option: fetch(url, { cache: 'force-cache' })`
+        recommendation: `Add explicit cache option: fetch(url, { cache: 'force-cache' }) for static data, or fetch(url, { next: { revalidate: 60 } }) for ISR. Omitting the option means no-store in Next.js 15+/16.`
       });
     }
   }

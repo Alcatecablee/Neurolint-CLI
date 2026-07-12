@@ -228,10 +228,11 @@ All commands in `cli.js` must follow these conventions:
 
 Layer 8 is the security forensics engine. Handle it with extra care:
 
-- **90 IoC signatures** covering code injection, DoS, data exfiltration, and RSC-specific exploits
+- **100 IoC signatures** covering code injection, DoS, data exfiltration, RSC-specific exploits, and Next.js CVEs (updated 2026-07-12)
 - **33 AST behavioral patterns** for React 19 hook anomalies
-- **CVE coverage**: CVE-2025-55182 (RCE), CVE-2025-55183 (Source Code Exposure), CVE-2025-55184 (DoS), CVE-2025-67779 (Incomplete DoS Fix)
-- **Partially patched version tracking**: `rceOnlyPatched` (19.0.1/19.1.2/19.2.1) vs `incompleteDoSPatched` (19.0.2/19.1.3/19.2.2). Fully patched: 19.0.3, 19.1.4, 19.2.3
+- **CVE coverage**: CVE-2025-55182 (RCE), CVE-2025-55183 (Source Code Exposure), CVE-2025-55184 (DoS), CVE-2025-67779 (Incomplete DoS Fix), CVE-2025-66478 (Next.js RSC RCE, CVSS 10.0), CVE-2026-23864 (Next.js RSC DoS, CVSS 7.5)
+- **Partially patched version tracking**: `rceOnlyPatched` (19.0.1/19.1.2/19.2.1) vs `incompleteDoSPatched` (19.0.2/19.1.3/19.2.2). Fully patched: 19.0.3+, 19.1.4+, 19.2.3+. Latest (June 2026): 19.0.7, 19.1.8, 19.2.7
+- **Next.js CVE-2025-66478**: fixed in 15.5.7 / 16.0.7. **CVE-2026-23864**: fixed in 15.5.10
 
 ### Rules
 - ❌ Never auto-apply Layer 8 fixes without user confirmation — security transforms are destructive

@@ -86,20 +86,21 @@
 > Keep the rules current. A tool that fires false positives loses trust immediately.
 
 ### 3.1 React 19 Rules
-- [ ] Audit Layer 5 `forwardRef` removal rules against React 19 stable docs
-- [ ] Verify Layer 3 component fixes still match current React 19 patterns
+- [x] Audit Layer 5 `forwardRef` removal rules against React 19 stable docs — `forwardRef` is deprecated (not removed) in React 19; transform logic is directionally correct
+- [ ] **PENDING USER APPROVAL** — Rewrite Layer 3 `convertForwardRefToDirectRef` from regex to AST (rules.md violation: regex used instead of @babel/traverse; current regex is brittle on complex components and strips TS type annotations)
+- [x] Verify Layer 3 component fixes still match current React 19 patterns — confirmed correct; only the implementation (regex vs AST) is the issue
 
 ### 3.2 Next.js Rules
-- [ ] Check current stable Next.js version (was targeting 16.x when last worked on)
-- [ ] Audit Layer 1 config fixes against current `next.config.js` schema
-- [ ] Audit Layer 5 App Router / `'use client'` rules — any new directives or deprecations?
-- [ ] Verify Turbopack-as-default assumptions are still correct
-- [ ] Clarify Layer 5 vs `@next/codemod` — document what NeuroLint fixes that official codemods don't
+- [x] Check current stable Next.js version — **16.2.10** as of July 2026 (was targeting 16.0, still correct)
+- [x] Audit Layer 1 config fixes against current `next.config.js` schema — **FIXED**: `experimental.turbo` was removed in Next.js 16 (Sep 2025); Layer 1 suggestion updated to use top-level `turbopack:` key
+- [x] Audit Layer 5 App Router / `'use client'` rules — **FIXED**: removed false positive warning on `export const metadata` (valid static metadata API, not deprecated); updated `next lint` deprecation warning (still correct); improved fetch caching suggestion to reflect Next.js 15+/16 `no-store` default
+- [x] Verify Turbopack-as-default assumptions are still correct — confirmed; Layer 5 `configureTurbopack` **FIXED**: was writing removed `experimental.turbo` key; now writes `turbopack:` at top level
+- [x] Clarify Layer 5 vs `@next/codemod` — `@next/codemod upgrade` handles: middleware→proxy rename, `next lint`→ESLint CLI, `experimental_ppr` removal, `experimental.turbo`→`turbopack` rename. NeuroLint covers: React 19 DOM API migrations, hydration guards, `forwardRef` deprecation, supply-chain IoC scanning — none of which the official codemod touches.
 
 ### 3.3 React Compiler
-- [ ] Check React Compiler adoption/stable status
-- [ ] Update memo/useMemo detection rules if compiler's stable release changed patterns
-- [ ] Verify Layer 7 pattern confidence thresholds are still appropriate
+- [x] Check React Compiler adoption/stable status — **Stable**, documented at react.dev/learn/react-compiler; automatically handles useMemo, useCallback, React.memo
+- [ ] **PENDING USER APPROVAL** — Add React Compiler detection to Layer 7: if `babel-plugin-react-compiler` is present, skip memo-pattern application (Layer 7 learning memo patterns fights the compiler)
+- [x] Verify Layer 7 pattern confidence thresholds are still appropriate — threshold of 0.7 is fine; the concern is React Compiler presence, not the threshold value
 
 ---
 
