@@ -14,11 +14,14 @@
 - [x] Fixed: `extractPatterns()` now filters out patterns with no `pattern` field (prevents downstream `.toString()` crash)
 - [x] Fixed: one test's `toBe(0)` check tightened to check actual semantic intent
 
-### 1.2 Fix Security Vulnerabilities
-- [ ] Run `npm audit` — 14 known vulns (9 high, 4 moderate, 1 low) found on import
-- [ ] Run `npm audit fix` for non-breaking fixes
-- [ ] Manually review any breaking-change fixes before applying
-- [ ] Re-run audit to confirm clean bill of health
+### 1.2 Fix Security Vulnerabilities ✅ DONE
+- [x] Ran `npm audit` — confirmed 14 vulns (9 high, 4 moderate, 1 low)
+- [x] Ran `npm audit fix` — resolved 12 vulns (all non-breaking transitive deps)
+- [x] Evaluated vite separately: vuln range ≤6.4.2, upgraded `vite ^4.5.14 → ^6.4.3` (minimum safe version)
+- [x] Confirmed `@vitejs/plugin-react@4.7.0` supports vite ^6 before upgrading
+- [x] Re-ran `npm audit` — **0 vulnerabilities**
+- [x] 727/727 tests still passing after all changes
+- [x] Landing page verified running on VITE v6.4.3
 
 ### 1.3 Dependency Updates
 - [ ] Check for outdated packages: `npm outdated`
