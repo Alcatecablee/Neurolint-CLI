@@ -519,8 +519,12 @@ async function extractPatterns(before, after, layerId) {
     const legacyPatterns = extractLegacyPatterns(before, after, layerId);
     patterns.push(...legacyPatterns);
     
+    // Filter out patterns that have no usable `pattern` field — they cannot
+    // be applied as rules and would cause downstream toString() errors.
+    const validPatterns = patterns.filter(p => p && p.pattern != null);
+
     // Deduplicate patterns
-    return deduplicatePatterns(patterns);
+    return deduplicatePatterns(validPatterns);
     
   } catch (error) {
     if (process.env.NEUROLINT_DEBUG === 'true') {
