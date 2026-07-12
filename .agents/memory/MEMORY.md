@@ -1,0 +1,1 @@
+- [NeuroLint project rules](neurolint-rules.md) — rules.md is MANDATORY; must be followed at all times for all work on this project
