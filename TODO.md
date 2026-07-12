@@ -1,134 +1,208 @@
-# NeuroLint — Revival TODO
+# NeuroLint — Product Roadmap
 
-> Created: July 12, 2026 · Context: Project dormant for ~6 months (last release v1.5.9, Dec 30 2025)
-
----
-
-## Phase 1 — Technical Catch-Up (Do This First)
-
-### 1.1 Run the Full Test Suite ✅ DONE
-- [x] Ran `npm test` — 727 tests total (up from 676 baseline), 727 passing
-- [x] Found 10 failing tests in `__tests__/fix-layer-7-adaptive.test.js`
-- [x] Root cause: `extractPatterns()` became `async` but test calls lacked `await`
-- [x] Fixed: added `async`/`await` to all 10 affected tests
-- [x] Fixed: `extractPatterns()` now filters out patterns with no `pattern` field (prevents downstream `.toString()` crash)
-- [x] Fixed: one test's `toBe(0)` check tightened to check actual semantic intent
-
-### 1.2 Fix Security Vulnerabilities ✅ DONE
-- [x] Ran `npm audit` — confirmed 14 vulns (9 high, 4 moderate, 1 low)
-- [x] Ran `npm audit fix` — resolved 12 vulns (all non-breaking transitive deps)
-- [x] Evaluated vite separately: vuln range ≤6.4.2, upgraded `vite ^4.5.14 → ^6.4.3` (minimum safe version)
-- [x] Confirmed `@vitejs/plugin-react@4.7.0` supports vite ^6 before upgrading
-- [x] Re-ran `npm audit` — **0 vulnerabilities**
-- [x] 727/727 tests still passing after all changes
-- [x] Landing page verified running on VITE v6.4.3
-
-### 1.3 Dependency Updates ✅ DONE
-- [x] Ran `npm outdated` — 18 packages behind
-- [x] Updated within semver range (non-breaking): `jest` 30.2→30.4, `react`/`react-dom` 19.2.3→19.2.7, `asciinema-player`, `autoprefixer`, `react-syntax-highlighter`
-- [x] Upgraded landing-page major deps after compatibility checks: `lucide-react` 0→1 (all 25 icons confirmed present), `@vercel/analytics` 1→2, `@vercel/speed-insights` 1→2
-- [x] **Intentional skips (documented):**
-  - `ora` 5→9, `strip-ansi` 6→7, `cli-cursor` 3→5, `log-symbols` 4→7, `restore-cursor` 3→5 — all ESM-only at latest; project uses CommonJS `require()`, upgrading would break `cli.js`
-  - `glob` 12→13 — ESM-only at v13; used via `require('glob')` in `cli.js`
-  - `@vitejs/plugin-react` 4→6 — requires vite `^8.0.0`; incompatible with our vite 6.4.3
-  - `vite` 6→8 — intentionally pinned at 6.4.3 (minimum safe version from Phase 1.2)
-  - `tailwindcss` 3→4 — major config format rewrite; skip until dedicated migration task
-- [x] `npm audit` still shows 0 vulnerabilities
-- [x] 727/727 tests still passing
-- [x] Landing page verified intact after all upgrades
+> Last updated: July 12, 2026
+>
+> **North star:** Stop positioning NeuroLint as "a better ESLint." Position it as **the maintenance and modernisation platform for React and Next.js applications.** The CLI is the entry point. The SaaS is the product. The data the CLI generates is the moat.
+>
+> **Real competitor:** Not ESLint (that's infrastructure — 141M downloads, like competing with Git). Not Grit (too abstract for solo developers). The real competitor is a developer opening Cursor and typing "fix my React errors." That's the daily behaviour NeuroLint has to complement.
+>
+> **Positioning reframe:** "NeuroLint runs *after* ESLint." Complementary, not competitive.
 
 ---
 
-## Phase 2 — Ecosystem Drift Audit
+## Completed Work
 
-### 2.1 React 19 Rule Accuracy
-- [ ] Verify CVE tracking is current: fully patched versions should be 19.0.3, 19.1.4, 19.2.3
-- [ ] Check if any new React 19.x patch versions have shipped since Dec 2025
-- [ ] Update `incompleteDoSPatched` and `rceOnlyPatched` version lists in Layer 8 if needed
+### Phase 0 — Technical Foundation ✅
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Run full test suite | ✅ Done | 727/727 passing. Fixed 10 Layer 7 async/await regressions. |
+| Fix security vulnerabilities | ✅ Done | 0 vulnerabilities (was 14: 9 high, 4 moderate, 1 low). |
+| Dependency updates | ✅ Done | 18 packages updated. ESM-only skips documented. |
+
+**Skip decisions on record:**
+- `ora`, `strip-ansi`, `cli-cursor`, `log-symbols`, `restore-cursor` — ESM-only at latest; project uses CommonJS `require()` in `cli.js`
+- `glob` — ESM-only at v13; pinned at v12
+- `@vitejs/plugin-react` — major upgrade requires vite ^8; incompatible with pinned vite 6.4.3
+- `vite` — pinned at 6.4.3 (minimum safe version)
+- `tailwindcss` — major config rewrite required; deferred to dedicated task
+
+---
+
+## Phase 1 — SaaS MVP (Highest Priority)
+
+> **Why first:** CLI tools rarely make money. The dashboard does. This is the business. Every other phase supports it.
+
+### 1.1 Core Dashboard
+- [ ] Define MVP scope: repo health scores per layer, not a full feature product
+- [ ] Build the repository health view — single number per dimension:
+  - Hydration score
+  - Security score  
+  - Accessibility score
+  - Technical debt score
+  - Estimated engineering hours saved
+- [ ] Connect CLI output (JSON) to dashboard as data source
+- [ ] Auth: email/password to start; no OAuth complexity in MVP
+
+### 1.2 Pricing Page (Ship Before MVP Is Done)
+- [ ] Publish a pricing page immediately — even "Coming soon / join the waitlist" counts
+- [ ] The absence of any monetisation signal makes the project look abandoned
+- [ ] Three tiers sketch: Free (CLI, open source), Pro (dashboard, single repo), Team (multi-repo, CI reports)
+
+### 1.3 Messaging
+- [ ] Managers don't buy AST transforms. They buy dashboards.
+- [ ] Rewrite all copy away from: AST, rules, layers, deterministic, transform, pipeline
+- [ ] Rewrite toward: "My build passes." "My deployment succeeds." "My React upgrade doesn't take three weeks." "My codebase isn't vulnerable."
+- [ ] Homepage headline test: does a non-technical engineering manager understand it in 5 seconds?
+
+---
+
+## Phase 2 — Own the Security Niche
+
+> **Why this niche:** Security budgets are enormous. Nobody is building "automatic CVE patching for React codebases." Semgrep scans. NeuroLint patches. That gap is real and defensible.
+>
+> **Target headline:** "One command patched every vulnerable React component after CVE-2025-55182."
+
+### 2.1 Layer 8 — Keep It Current
+- [ ] Verify CVE tracking is current: fully patched React versions = 19.0.3, 19.1.4, 19.2.3
+- [ ] Check if any new React 19.x patch versions shipped since Dec 2025
+- [ ] Update `incompleteDoSPatched` and `rceOnlyPatched` version lists if needed
+- [ ] Add any new RSC CVEs disclosed in 2026
+
+### 2.2 Security Marketing
+- [ ] Write one long-form technical post: "How NeuroLint auto-patches React CVEs without touching your business logic"
+- [ ] Target audience: security engineers, DevSecOps teams — not just frontend devs
+- [ ] Submit to: OWASP community, r/netsec, security-focused newsletters
+- [ ] Add a dedicated `/security` page on the landing site listing every CVE covered, what it patches, and how to verify
+
+### 2.3 Security as a Sales Argument
+- [ ] Add to every sales touch: "We create a full backup before touching your files and auto-revert on failure" — no competitor ships this
+- [ ] Backup/rollback system belongs on the homepage, not buried in docs
+
+---
+
+## Phase 3 — Ecosystem Accuracy Audit
+
+> Keep the rules current. A tool that fires false positives loses trust immediately.
+
+### 3.1 React 19 Rules
 - [ ] Audit Layer 5 `forwardRef` removal rules against React 19 stable docs
+- [ ] Verify Layer 3 component fixes still match current React 19 patterns
 
-### 2.2 Next.js Rule Accuracy
-- [ ] Check current stable Next.js version (was targeting 16.x)
+### 3.2 Next.js Rules
+- [ ] Check current stable Next.js version (was targeting 16.x when last worked on)
 - [ ] Audit Layer 1 config fixes against current `next.config.js` schema
 - [ ] Audit Layer 5 App Router / `'use client'` rules — any new directives or deprecations?
-- [ ] Verify Turbopack-as-default assumptions are still correct in Layer 5
+- [ ] Verify Turbopack-as-default assumptions are still correct
+- [ ] Clarify Layer 5 vs `@next/codemod` — document what NeuroLint fixes that official codemods don't
 
-### 2.3 React Compiler
-- [ ] Check React Compiler adoption status (Layer 7 adaptive patterns)
-- [ ] Update memo/useMemo detection rules if the compiler's stable release changed patterns
+### 3.3 React Compiler
+- [ ] Check React Compiler adoption/stable status
+- [ ] Update memo/useMemo detection rules if compiler's stable release changed patterns
 - [ ] Verify Layer 7 pattern confidence thresholds are still appropriate
 
 ---
 
-## Phase 3 — VS Code Extension
+## Phase 4 — Build Credibility (Run In Parallel With Phases 1–3)
 
-### 3.1 Bring Extension Up to Date
-- [ ] Check extension version (currently v1.5.1, 51 installs, 1 review)
-- [ ] Sync extension with CLI v1.5.9 feature set (Layer 8, CVE commands, etc.)
-- [ ] Test extension locally against a real Next.js project
+> **The trust problem is the business problem.** No testimonials, no case studies, no public roadmap, no users telling stories. Every item here is a trust-builder, not a vanity metric.
 
-### 3.2 Improve Extension UX
-- [ ] Add inline diagnostic decorations (underline issues in-editor, not just in problems panel)
-- [ ] Add one-click "Fix this file" code action via VS Code Quick Fix
-- [ ] Add a NeuroLint sidebar panel showing layer-by-layer issue counts
-- [ ] Add `--dry-run` preview mode accessible from the command palette
+### 4.1 One Real Case Study
+- [ ] Find one real codebase (open source is fine) to run NeuroLint against with permission
+- [ ] Publish before/after: files changed, issues fixed, time saved, backup log
+- [ ] This single case study is worth more than 100 GitHub stars
 
----
+### 4.2 Weekly Case Study Cadence (Once SaaS Launches)
+- [ ] Real repositories, real metrics, before/after format
+- [ ] Publish every week — the consistency signal matters as much as the content
 
-## Phase 4 — Launch & Awareness
-
-### 4.1 Demo Asset
-- [ ] Create a 30-second GIF/video: messy React file → NeuroLint → clean code
-- [ ] Show at least 3 concrete fixes: missing key, hydration guard, use client
-- [ ] Make it shareable without audio (most dev content is watched muted)
-
-### 4.2 Proper Product Hunt Launch
-- [ ] Prep launch assets: tagline, description, screenshots, demo GIF
-- [ ] Line up a few hunters/supporters ahead of time
-- [ ] Launch Tuesday–Thursday, 12:01 AM PT for full day cycle
+### 4.3 Proper Product Hunt Launch
+- [ ] Not the self-promotion forum — a full launch
+- [ ] Lead with the CVE/security angle: "One command. React CVEs patched, hydration fixed, backup included."
+- [ ] Prep: tagline, screenshots, demo GIF, 3–5 hunters lined up
+- [ ] Launch Tuesday–Thursday, 12:01 AM PT
 - [ ] Respond to every comment on launch day
 
-### 4.3 Community Presence
-- [ ] Enable GitHub Discussions on the repo
-- [ ] Answer 3–5 genuine hydration/ESLint questions on r/reactjs and r/nextjs (be helpful, not promotional)
-- [ ] Submit to more developer tool directories (there.so, toools.io, etc.)
-- [ ] Write a genuine DEV.to post: "I built a tool that fixes React bugs without AI — here's what I learned"
+### 4.4 Demo Asset
+- [ ] 30-second GIF: messy React file → NeuroLint → clean diff, backup confirmed
+- [ ] Show the concrete comparison: "Cursor changed 93 files. NeuroLint changed 12. Every change is deterministic."
+- [ ] Watchable muted — no audio dependency
 
-### 4.4 Landing Page Polish
-- [ ] Verify all nav links and demo sections work correctly
-- [ ] Add a live "try it" section if feasible (paste code, see fix)
-- [ ] Add real download/usage numbers once they're worth showing
-- [ ] Add a changelog section to homepage (latest release highlights)
+### 4.5 Community Presence
+- [ ] Enable GitHub Discussions on the repo
+- [ ] Register on G2 and Capterra — currently zero reviews anywhere; buyers look here first
+- [ ] Answer genuine hydration/ESLint questions on r/reactjs and r/nextjs (helpful first, not promotional)
+- [ ] Write DEV.to post: "Why I built a deterministic React fixer instead of using AI"
 
 ---
 
-## Phase 5 — Documentation
+## Phase 5 — CI Integrations
 
-### 5.1 Docs Completeness
+> Once there are users, CI is how they keep using it. This is the retention layer.
+
+- [ ] GitHub Actions — official action (already in marketplace, needs promotion)
+- [ ] GitLab CI — `.gitlab-ci.yml` example and docs
+- [ ] Azure DevOps — YAML pipeline example
+- [ ] Pre-commit hook — `npx @neurolint/cli fix . --staged` pattern
+- [ ] Status check: fail PR if security layer detects CVE; pass if clean
+- [ ] PR comment summary: "NeuroLint found 3 issues, fixed 2 automatically. 1 requires manual review."
+
+---
+
+## Phase 6 — Enterprise Reporting
+
+> This is where the money is. Managers buy reports. Compliance teams buy audit trails. CFOs buy "hours saved."
+
+- [ ] PDF report output: repo health over time, issues fixed, hours saved, CVEs patched
+- [ ] Compliance export: SARIF format (already built in Layer 8 — expose it prominently)
+- [ ] PR summary comments with per-layer breakdown
+- [ ] Technical debt trending: week-over-week, which releases increased/decreased debt
+- [ ] Engineering intelligence layer:
+  - Which patterns keep reappearing?
+  - Which releases introduced the most regressions?
+  - Which dependencies cause the most issues?
+  - How much debt has been removed this quarter?
+
+---
+
+## Phase 7 — VS Code Extension
+
+> Deferred from original priority — SaaS and credibility come first.
+
+- [ ] Sync extension with CLI v1.5.9 feature set (Layer 8, CVE commands)
+- [ ] Add inline diagnostic decorations (underline issues in-editor)
+- [ ] Add one-click "Fix this file" Quick Fix code action
+- [ ] Add NeuroLint sidebar panel: layer-by-layer issue counts
+- [ ] Add `--dry-run` preview accessible from command palette
+
+---
+
+## Phase 8 — Documentation
+
 - [ ] Verify every Layer has a doc page in `landing/src/docs/pages/`
-- [ ] Add Layer 8 (Security Forensics) doc page if missing
-- [ ] Document the `migrate-nextjs-16` command with full examples
-- [ ] Document the `security:cve-2025-55182` commands
-
-### 5.2 Contributing Guide
-- [ ] Update `CONTRIBUTING.md` with the Layer API contract from `rules.md`
-- [ ] Add a "how to add a new transformation rule" guide
-- [ ] Add a "how to add a new CVE signature" guide for Layer 8
+- [ ] Add Layer 8 Security Forensics doc page if missing
+- [ ] Document `migrate-nextjs-16` command with full examples
+- [ ] Document `security:cve-2025-55182` commands
+- [ ] Update `CONTRIBUTING.md` with Layer API contract from `rules.md`
+- [ ] Add "how to add a new transformation rule" guide
+- [ ] Add "how to add a new CVE signature" guide for Layer 8
 
 ---
 
 ## Tracking
 
-| Phase | Status | Notes |
-|-------|--------|-------|
-| 1.1 Run tests | ✅ Done | 727/727 passing. Fixed 10 Layer 7 async/await regressions. |
-| 1.2 Fix vulns | ⬜ Pending | |
-| 1.3 Dep updates | ⬜ Pending | |
-| 2.x Ecosystem audit | ⬜ Pending | |
-| 3.x VS Code extension | ⬜ Pending | |
-| 4.x Launch & awareness | ⬜ Pending | |
-| 5.x Documentation | ⬜ Pending | |
+| Phase | Priority | Status | Blocker |
+|-------|----------|--------|---------|
+| 0 — Technical foundation | — | ✅ Done | — |
+| 1 — SaaS MVP | 🔴 Highest | ⬜ Not started | Needs product decisions |
+| 2 — Own security niche | 🔴 High | ⬜ Not started | — |
+| 3 — Ecosystem accuracy | 🟡 Medium | ⬜ Not started | — |
+| 4 — Build credibility | 🟡 Medium | ⬜ Not started | Run in parallel with 1–3 |
+| 5 — CI integrations | 🟡 Medium | ⬜ Not started | Needs users first |
+| 6 — Enterprise reporting | 🟢 Later | ⬜ Not started | Needs SaaS first |
+| 7 — VS Code extension | 🟢 Later | ⬜ Not started | Deferred |
+| 8 — Documentation | 🟢 Later | ⬜ Not started | — |
 
 ---
 
-**Rule**: Complete Phase 1 fully before starting Phase 2. Tests must be green before any rule changes.
+> **Single rule:** Don't add more transformation rules until Phase 1 (SaaS MVP) is shipped. The tool already fixes more than any competitor in its niche. The gap is not technical depth — it's visibility, trust, and a business model.
