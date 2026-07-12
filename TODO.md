@@ -23,11 +23,19 @@
 - [x] 727/727 tests still passing after all changes
 - [x] Landing page verified running on VITE v6.4.3
 
-### 1.3 Dependency Updates
-- [ ] Check for outdated packages: `npm outdated`
-- [ ] Update `@babel/parser`, `@babel/traverse`, `@babel/generator`, `@babel/types` to latest
-- [ ] Update dev dependencies: Jest 30.x, `@types/jest`, `@testing-library/user-event`
-- [ ] Re-run tests after each batch update to catch regressions early
+### 1.3 Dependency Updates ✅ DONE
+- [x] Ran `npm outdated` — 18 packages behind
+- [x] Updated within semver range (non-breaking): `jest` 30.2→30.4, `react`/`react-dom` 19.2.3→19.2.7, `asciinema-player`, `autoprefixer`, `react-syntax-highlighter`
+- [x] Upgraded landing-page major deps after compatibility checks: `lucide-react` 0→1 (all 25 icons confirmed present), `@vercel/analytics` 1→2, `@vercel/speed-insights` 1→2
+- [x] **Intentional skips (documented):**
+  - `ora` 5→9, `strip-ansi` 6→7, `cli-cursor` 3→5, `log-symbols` 4→7, `restore-cursor` 3→5 — all ESM-only at latest; project uses CommonJS `require()`, upgrading would break `cli.js`
+  - `glob` 12→13 — ESM-only at v13; used via `require('glob')` in `cli.js`
+  - `@vitejs/plugin-react` 4→6 — requires vite `^8.0.0`; incompatible with our vite 6.4.3
+  - `vite` 6→8 — intentionally pinned at 6.4.3 (minimum safe version from Phase 1.2)
+  - `tailwindcss` 3→4 — major config format rewrite; skip until dedicated migration task
+- [x] `npm audit` still shows 0 vulnerabilities
+- [x] 727/727 tests still passing
+- [x] Landing page verified intact after all upgrades
 
 ---
 
